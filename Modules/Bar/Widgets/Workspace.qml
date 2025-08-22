@@ -16,7 +16,7 @@ Item {
   property ListModel localWorkspaces: ListModel {}
   property real masterProgress: 0.0
   property bool effectsActive: false
-  property color effectColor: Color.mPrimary
+  property color effectColor: "#c4a7e7"
 
   property int horizontalPadding: Math.round(16 * scaling)
   property int spacingBetweenPills: Math.round(8 * scaling)
@@ -70,7 +70,7 @@ Item {
   }
 
   function triggerUnifiedWave() {
-    effectColor = Color.mPrimary
+    effectColor = "#c4a7e7"
     masterAnimation.restart()
   }
 
@@ -106,7 +106,7 @@ Item {
       const ws = localWorkspaces.get(i)
       if (ws.isFocused === true) {
         root.triggerUnifiedWave()
-        root.workspaceChanged(ws.id, Color.mPrimary)
+        root.workspaceChanged(ws.id, "#c4a7e7d")
         break
       }
     }
@@ -164,7 +164,7 @@ Item {
           }
           color: {
             if (model.isFocused)
-              return Color.mPrimary
+              return "#c4a7e7"
             if (model.isUrgent)
               return Color.mError
             if (model.isActive || model.isOccupied)
