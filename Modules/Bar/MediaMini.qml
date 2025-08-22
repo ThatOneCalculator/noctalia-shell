@@ -145,11 +145,11 @@ Row {
         NText {
           id: titleText
 
-          // If hovered or just switched window, show up to 500 pixels
-          // If not hovered show up to 220 pixels
+          // If hovered or just switched window, show up to 400 pixels
+          // If not hovered show up to 180 pixels
           width: (mouseArea.containsMouse) ? Math.min(fullTitleMetrics.contentWidth,
-                                                      500 * scaling) : Math.min(fullTitleMetrics.contentWidth,
-                                                                                220 * scaling)
+                                                      400 * scaling) : Math.min(fullTitleMetrics.contentWidth,
+                                                                                180 * scaling)
           text: getTitle()
           font.pointSize: Style.fontSizeS * scaling
           font.weight: Style.fontWeightMedium
