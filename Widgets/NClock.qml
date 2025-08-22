@@ -18,7 +18,8 @@ Rectangle {
     id: textItem
     text: Time.time
     anchors.centerIn: parent
-    font.weight: Style.fontWeightBold
+    // font.weight: Style.fontWeightBold
+    color: Color.mPrimary
   }
 
   MouseArea {
