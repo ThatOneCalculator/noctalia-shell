@@ -55,9 +55,9 @@ Singleton {
   property real opacityFull: 1.0
 
   // Animation duration (ms)
-  property int animationFast: 150
-  property int animationNormal: 300
-  property int animationSlow: 450
+  property int animationFast: 100
+  property int animationNormal: 200
+  property int animationSlow: 300
 
   // Dimensions
   property int barHeight: 36
