@@ -56,6 +56,8 @@ Variants {
         anchors.leftMargin: Style.marginS * scaling
         anchors.verticalCenter: parent.verticalCenter
         spacing: Style.marginS * scaling
+        
+        SidePanelToggle {}
 
         SystemMonitor {}
 
@@ -94,10 +96,6 @@ Variants {
           anchors.verticalCenter: parent.verticalCenter
         }
 
-        NotificationHistory {
-          anchors.verticalCenter: parent.verticalCenter
-        }
-
         WiFi {
           anchors.verticalCenter: parent.verticalCenter
         }
@@ -121,8 +119,12 @@ Variants {
         Clock {
           anchors.verticalCenter: parent.verticalCenter
         }
-
-        SidePanelToggle {}
+        
+        NotificationHistory {
+          anchors.verticalCenter: parent.verticalCenter
+        }
+        
+        PowerToggle {}
       }
     }
   }

@@ -15,7 +15,7 @@ NIconButton {
   icon: "notifications"
   tooltipText: "Notification History"
   colorBg: Color.mSurfaceVariant
-  colorFg: Color.mOnSurface
+  colorFg: "#f6c177"
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
 
