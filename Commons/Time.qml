@@ -18,7 +18,7 @@ Singleton {
       dayName = dayName.charAt(0).toUpperCase() + dayName.slice(1)
       let day = date.getDate()
       let month = date.toLocaleDateString(Qt.locale(), "MMM")
-      return timeString + " - " + dayName + ", " + day + " " + month
+      return timeString + " - " + dayName + ", " + month + " " + day
     }
 
     return timeString
