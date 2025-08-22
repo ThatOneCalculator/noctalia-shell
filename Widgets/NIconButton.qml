@@ -14,6 +14,7 @@ Rectangle {
   property string tooltipText
   property bool enabled: true
   property bool hovering: false
+  property bool nerd: false
   property real fontPointSize: Style.fontSizeM
 
   property color colorBg: Color.mSurfaceVariant
@@ -37,6 +38,7 @@ Rectangle {
 
   NIcon {
     anchors.centerIn: parent
+    visible: !root.nerd
     // Little hack to keep things centered at high scaling
     anchors.horizontalCenterOffset: -1 * (scaling - 1.0)
     anchors.verticalCenterOffset: 0
@@ -47,6 +49,20 @@ Rectangle {
     verticalAlignment: Text.AlignVCenter
     opacity: root.enabled ? Style.opacityFull : Style.opacityMedium
   }
+  
+  NNerdIcon {
+    anchors.centerIn: parent
+    visible: root.nerd
+    // Little hack to keep things centered at high scaling
+    anchors.horizontalCenterOffset: -1 * (scaling - 1.0) + 1
+    anchors.verticalCenterOffset: 0
+    text: root.icon
+    font.pointSize: root.fontPointSize * scaling
+    color: root.hovering ? colorFgHover : colorFg
+    horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignVCenter
+    opacity: root.enabled ? Style.opacityFull : Style.opacityMedium
+}
 
   NTooltip {
     id: tooltip
