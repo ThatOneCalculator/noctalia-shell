@@ -14,7 +14,7 @@ Singleton {
   property var config: ({
                           "general": {
                             "bars": barsCount,
-                            "framerate": 120,
+                            "framerate": 60,
                             "autosens": 1,
                             "sensitivity": 100,
                             "lower_cutoff_freq": 50,
