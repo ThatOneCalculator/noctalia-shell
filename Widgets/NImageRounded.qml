@@ -51,6 +51,8 @@ Rectangle {
       anchors.fill: parent
       layer.enabled: true
       visible: false
+      smooth: true
+      antialiasing: true
       Rectangle {
         anchors.fill: parent
         radius: scaledRadius
