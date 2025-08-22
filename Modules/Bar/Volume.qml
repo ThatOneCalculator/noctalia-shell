@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Services.Pipewire
+import Quickshell.Io
 import qs.Commons
 import qs.Modules.SettingsPanel
 import qs.Services
@@ -45,6 +46,12 @@ Item {
       pill.hide()
     }
   }
+  
+  Process {
+    id: openPwvucontrol
+    running: false
+    command: ["pwvucontrol"]
+  }
 
   NPill {
     id: pill
@@ -64,8 +71,9 @@ Item {
       }
     }
     onClicked: {
-      settingsPanel.requestedTab = SettingsPanel.Tab.AudioService
-      settingsPanel.open(screen)
+      openPwvucontrol.running = true
+      // settingsPanel.requestedTab = SettingsPanel.Tab.AudioService
+      // settingsPanel.open(screen)
     }
   }
 }
