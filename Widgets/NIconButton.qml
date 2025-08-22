@@ -53,8 +53,6 @@ Rectangle {
   NNerdIcon {
     anchors.centerIn: parent
     visible: root.nerd
-    // Little hack to keep things centered at high scaling
-    anchors.horizontalCenterOffset: -1 * (scaling - 1.0) + 1
     anchors.verticalCenterOffset: 0
     text: root.icon
     font.pointSize: root.fontPointSize * scaling

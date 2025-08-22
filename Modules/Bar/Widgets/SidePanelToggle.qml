@@ -4,7 +4,7 @@ import qs.Widgets
 
 NIconButton {
   id: sidePanelToggle
-  icon: ""
+  icon: "󰣇"
   nerd: true
   tooltipText: "Open Side Panel"
   sizeMultiplier: 0.8
