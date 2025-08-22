@@ -111,7 +111,7 @@ Row {
           elide: Text.ElideRight
           anchors.verticalCenter: parent.verticalCenter
           verticalAlignment: Text.AlignVCenter
-          color: Color.mSecondary
+          color: "#c4a7e7"
 
           Behavior on width {
             NumberAnimation {
