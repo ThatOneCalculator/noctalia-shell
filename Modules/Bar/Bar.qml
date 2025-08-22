@@ -57,8 +57,6 @@ Variants {
         anchors.verticalCenter: parent.verticalCenter
         spacing: Style.marginS * scaling
         
-        SidePanelToggle {}
-
         Repeater {
           model: Settings.data.bar.widgets.left
           delegate: Loader {
