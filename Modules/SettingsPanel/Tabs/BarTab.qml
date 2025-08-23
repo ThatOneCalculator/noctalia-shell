@@ -33,7 +33,6 @@ ColumnLayout {
         spacing: Style.marginL * scaling
         Layout.fillWidth: true
 
-
         ColumnLayout {
           spacing: Style.marginXXS * scaling
           Layout.fillWidth: true
@@ -72,7 +71,7 @@ ColumnLayout {
           }
         }
 
-                ColumnLayout {
+        ColumnLayout {
           spacing: Style.marginXXS * scaling
           Layout.fillWidth: true
 
@@ -111,7 +110,6 @@ ColumnLayout {
           }
         }
 
-
         NToggle {
           label: "Show Active Window's Icon"
           description: "Display the app icon next to the title of the currently focused window."
@@ -130,7 +128,6 @@ ColumnLayout {
                      }
         }
 
-
         NDivider {
           Layout.fillWidth: true
           Layout.topMargin: Style.marginL * scaling
@@ -144,13 +141,14 @@ ColumnLayout {
 
           NText {
             text: "Widgets Positioning"
-            font.pointSize: Style.fontSizeL * scaling
+            font.pointSize: Style.fontSizeXXL * scaling
             font.weight: Style.fontWeightBold
             color: Color.mOnSurface
+            Layout.bottomMargin: Style.marginS * scaling
           }
 
           NText {
-            text: "Add, remove, or reorder widgets in each section of the bar using the control buttons."
+            text: "Drag and drop widgets to reorder them within each section, or use the add/remove buttons to manage widgets."
             font.pointSize: Style.fontSizeXS * scaling
             color: Color.mOnSurfaceVariant
             wrapMode: Text.WordWrap
@@ -220,6 +218,8 @@ ColumnLayout {
   function removeWidgetFromSection(section, index) {
     console.log("Removing widget from section", section, "at index", index)
     var sectionArray = Settings.data.bar.widgets[section]
+    console.log("Current section array:", JSON.stringify(sectionArray))
+    
     if (sectionArray && index >= 0 && index < sectionArray.length) {
       // Create a new array to avoid modifying the original
       var newArray = sectionArray.slice()
@@ -228,6 +228,17 @@ ColumnLayout {
 
       // Assign the new array
       Settings.data.bar.widgets[section] = newArray
+      
+      // Force a settings save
+      console.log("Settings updated, triggering save...")
+      
+      // Verify the change was applied
+      Qt.setTimeout(function() {
+        var updatedArray = Settings.data.bar.widgets[section]
+        console.log("Verification - updated section array:", JSON.stringify(updatedArray))
+      }, 100)
+    } else {
+      console.log("Invalid section or index:", section, index, "array length:", sectionArray ? sectionArray.length : "null")
     }
   }
 

@@ -7,6 +7,7 @@ import qs.Commons
 import qs.Services
 import qs.Widgets
 
+
 Row {
   id: root
   anchors.verticalCenter: parent.verticalCenter
@@ -19,7 +20,7 @@ Row {
   // Timer to hide full title after window switch
   Timer {
     id: fullTitleTimer
-    interval: Style.animationSlow * 4 // Show full title for 2 seconds
+    interval: 2000
     repeat: false
     onTriggered: {
       showingFullTitle = false
@@ -40,8 +41,10 @@ Row {
   }
 
   function getTitle() {
-    const focusedWindow = CompositorService.getFocusedWindow()
-    return focusedWindow ? (focusedWindow.title || focusedWindow.appId || "") : ""
+    // Use the service's focusedWindowTitle property which is updated immediately
+    // when WindowOpenedOrChanged events are received
+    return CompositorService.focusedWindowTitle !== "(No active window)" ? 
+           CompositorService.focusedWindowTitle : ""
   }
 
   function getAppIcon() {
@@ -62,6 +65,7 @@ Row {
 
   Rectangle {
     // Let the Rectangle size itself based on its content (the Row)
+    visible: root.visible
     width: row.width + Style.marginM * scaling * 2
     height: Math.round(Style.capsuleHeight * scaling)
     radius: Math.round(Style.radiusM * scaling)
