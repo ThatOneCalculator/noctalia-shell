@@ -56,7 +56,7 @@ Variants {
         anchors.leftMargin: Style.marginS * scaling
         anchors.verticalCenter: parent.verticalCenter
         spacing: Style.marginS * scaling
-        
+
         Repeater {
           model: Settings.data.bar.widgets.left
           delegate: Loader {
