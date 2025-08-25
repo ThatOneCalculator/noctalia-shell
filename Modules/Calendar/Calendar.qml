@@ -12,7 +12,7 @@ NPanel {
 
   panelWidth: 340 * scaling
   panelHeight: 320 * scaling
-  panelAnchorRight: true
+  // panelAnchorRight: true
 
   // Main Column
   panelContent: ColumnLayout {
