@@ -49,12 +49,6 @@ Item {
       pill.hide()
     }
   }
-  
-  Process {
-    id: openPwvucontrol
-    running: false
-    command: ["pwvucontrol"]
-  }
 
   NPill {
     id: pill
@@ -74,7 +68,7 @@ Item {
       }
     }
     onClicked: {
-      openPwvucontrol.running = true
+      Quickshell.execDetached(["pwvucontrol"])
       // var settingsPanel = PanelService.getPanel("settingsPanel")
       // settingsPanel.requestedTab` = SettingsPanel.Tab.AudioService
       // settingsPanel.open(screen)`
