@@ -1,27 +1,30 @@
+import QtQuick
+import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Services
 import qs.Widgets
 
 NIconButton {
-  id: powerToggle
-  icon: "power_settings_new"
-  tooltipText: "Power Settings"
-  sizeMultiplier: 0.8
+    id: root
 
-  colorBg: Color.mSurfaceVariant
-  colorFg: "#eb6f92"
-  colorBorder: Color.transparent
-  colorBorderHover: Color.transparent
+    property ShellScreen screen
+    property real scaling: ScalingService.scale(screen)
 
-  anchors.verticalCenter: parent.verticalCenter
-  onClicked: {
-      openWleave.running = true
-  }
+    Process {
+        id: openWleave
+        running: false
+        command: ["wleave"]
+    }
 
-  Process {
-    id: openWleave
-    running: false
-    command: ["wleave"]
-  }
+    sizeMultiplier: 0.8
+
+    icon: "power_settings_new"
+    tooltipText: "Power Settings"
+    colorBg: Color.mSurfaceVariant
+    colorFg: "#eb6f92"
+    colorBorder: Color.transparent
+    colorBorderHover: Color.transparent
+    onClicked: openWleave.running = true
 }
