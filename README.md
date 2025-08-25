@@ -79,6 +79,7 @@ Features a modern modular architecture with a status bar, notification system, c
 - `gpu-screen-recorder` - Screen recording functionality
 - `brightnessctl` - For internal/laptop monitor brightness
 - `ddcutil` - For desktop monitor brightness (might introduce some system instability with certain monitors)
+If you want to use the ArchUpdater Widget, make sure you have any polkit agent installed.
 
 ---
 
@@ -100,8 +101,27 @@ mkdir -p ~/.config/quickshell && curl -sL https://github.com/noctalia-dev/noctal
 # Start the shell
 qs
 
-# Toggle launcher
-qs ipc call appLauncher toggle
+# Launcher
+qs ipc call launcher toggle
+
+# Clipboard History
+qs ipc call launcher clipboard
+
+# Calculator
+qs ipc call launcher calculator
+
+# Brightness
+qs ipc call brightness increase
+qs ipc call brightness decrease
+
+# Power Panel
+qs ipc call powerPanel toggle
+
+# Idle Inhibitor
+qs ipc call idleInhibitor toggle
+
+# Settings Window
+qs ipc call settings toggle
 
 # Toggle lock screen
 qs ipc call lockScreen toggle
@@ -249,6 +269,7 @@ While I actually didn't want to accept donations, more and more people are askin
 
 Thank you to everyone who supports me and this project 💜!
 * Gohma
+* <a href="https://pika-os.com/" target="_blank">PikaOS</a>
 
 ---
 
