@@ -94,11 +94,6 @@ ShellRoot {
     objectName: "bluetoothPanel"
   }
 
-  ArchUpdaterPanel {
-    id: archUpdaterPanel
-    objectName: "archUpdaterPanel"
-  }
-
   Component.onCompleted: {
     // Save a ref. to our lockScreen so we can access it  easily
     PanelService.lockScreen = lockScreen
