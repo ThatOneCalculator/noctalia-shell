@@ -19,6 +19,7 @@ Rectangle {
     text: Time.time
     anchors.centerIn: parent
     // font.weight: Style.fontWeightBold
+    font.pointSize: Style.fontSizeS * scaling
     color: Color.mPrimary
   }
 
