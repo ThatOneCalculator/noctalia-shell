@@ -10,11 +10,14 @@ import qs.Widgets
 Item {
   id: root
 
-  width: pill.width
-  height: pill.height
+  property ShellScreen screen
+  property real scaling: ScalingService.scale(screen)
 
   // Used to avoid opening the pill on Quickshell startup
   property bool firstVolumeReceived: false
+
+  implicitWidth: pill.width
+  implicitHeight: pill.height
 
   function getIcon() {
     if (AudioService.muted) {
@@ -72,8 +75,9 @@ Item {
     }
     onClicked: {
       openPwvucontrol.running = true
-      // settingsPanel.requestedTab = SettingsPanel.Tab.AudioService
-      // settingsPanel.open(screen)
+      // var settingsPanel = PanelService.getPanel("settingsPanel")
+      // settingsPanel.requestedTab` = SettingsPanel.Tab.AudioService
+      // settingsPanel.open(screen)`
     }
   }
 }
