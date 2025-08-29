@@ -7,6 +7,13 @@ Item {
   id: root
 
   IpcHandler {
+    target: "screenRecorder"
+    function toggle() {
+      ScreenRecorderService.toggleRecording()
+    }
+  }
+
+  IpcHandler {
     target: "settings"
     function toggle() {
       settingsPanel.toggle(Quickshell.screens[0])
@@ -89,6 +96,24 @@ Item {
     }
     function decrease() {
       BrightnessService.decreaseBrightness()
+    }
+  }
+
+  IpcHandler {
+    target: "volume"
+    function increase() {
+      AudioService.increaseVolume()
+    }
+    function decrease() {
+      AudioService.decreaseVolume()
+    }
+    function muteOutput() {
+      AudioService.setMuted(!AudioService.muted)
+    }
+    function muteInput() {
+      if (AudioService.source?.ready && AudioService.source?.audio) {
+        AudioService.source.audio.muted = !AudioService.source.audio.muted
+      }
     }
   }
 

@@ -28,8 +28,7 @@ Singleton {
   // Used to access via Settings.data.xxx.yyy
   property alias data: adapter
 
-  // Flag to prevent unnecessary wallpaper calls during reloads
-  property bool isInitialLoad: true
+  property bool isLoaded: false
 
   // Function to validate monitor configurations
   function validateMonitorConfigurations() {
@@ -91,9 +90,10 @@ Singleton {
     }
     onLoaded: function () {
       Qt.callLater(function () {
-        if (isInitialLoad) {
-          Logger.log("Settings", "OnLoaded")
-          // Only set wallpaper on initial load, not on reloads
+        // Some stuff like wallpaper setup and settings validation should just be executed once on startup
+        // And not on every reload
+        if (!isLoaded) {
+          Logger.log("Settings", "JSON completed loading")
           if (adapter.wallpaper.current !== "") {
             Logger.log("Settings", "Set current wallpaper", adapter.wallpaper.current)
             WallpaperService.setCurrentWallpaper(adapter.wallpaper.current, true)
@@ -102,9 +102,9 @@ Singleton {
           // Validate monitor configurations, only once
           // if none of the configured monitors exist, clear the lists
           validateMonitorConfigurations()
-        }
 
-        isInitialLoad = false
+          isLoaded = true
+        }
       })
     }
     onLoadFailed: function (error) {
@@ -122,6 +122,7 @@ Singleton {
         property bool showActiveWindowIcon: true
         property bool alwaysShowBatteryPercentage: false
         property real backgroundOpacity: 1.0
+        property string showWorkspaceLabel: "none"
         property list<string> monitors: []
 
         // Widget configuration for modular bar system
@@ -129,7 +130,7 @@ Singleton {
         widgets: JsonObject {
           property list<string> left: ["SystemMonitor", "ActiveWindow", "MediaMini"]
           property list<string> center: ["Workspace"]
-          property list<string> right: ["ScreenRecorderIndicator", "Tray", "ArchUpdater", "NotificationHistory", "WiFi", "Bluetooth", "Battery", "Volume", "Brightness", "Clock", "SidePanelToggle"]
+          property list<string> right: ["ScreenRecorderIndicator", "Tray", "NotificationHistory", "WiFi", "Bluetooth", "Battery", "Volume", "Brightness", "NightLight", "Clock", "SidePanelToggle"]
         }
       }
 
@@ -139,6 +140,10 @@ Singleton {
         property bool dimDesktop: false
         property bool showScreenCorners: false
         property real radiusRatio: 1.0
+        // Animation speed multiplier (0.1x - 2.0x)
+        property real animationSpeed: 1.0
+        // Replace sidepanel toggle with distro logo (shown in bar and/or side panel)
+        property bool useDistroLogoForSidepanel: false
       }
 
       // location
@@ -188,8 +193,9 @@ Singleton {
       property JsonObject appLauncher: JsonObject {
         // When disabled, Launcher hides clipboard command and ignores cliphist
         property bool enableClipboardHistory: true
-        // Position: center, top_left, top_right, bottom_left, bottom_right
+        // Position: center, top_left, top_right, bottom_left, bottom_right, bottom_center, top_center
         property string position: "center"
+        property real backgroundOpacity: 1.0
         property list<string> pinnedExecs: []
       }
 
@@ -218,6 +224,9 @@ Singleton {
         property string visualizerType: "linear"
         property int volumeStep: 5
         property int cavaFrameRate: 60
+        // MPRIS controls
+        property list<string> mprisBlacklist: []
+        property string preferredPlayer: ""
       }
 
       // ui
@@ -247,8 +256,28 @@ Singleton {
         property bool useWallpaperColors: false
         property string predefinedScheme: ""
         property bool darkMode: true
-        // External app theming (GTK & Qt)
-        property bool themeApps: false
+      }
+
+      // matugen templates toggles
+      property JsonObject matugen: JsonObject {
+        // Per-template flags to control dynamic config generation
+        property bool gtk4: false
+        property bool gtk3: false
+        property bool qt6: false
+        property bool qt5: false
+        property bool kitty: false
+      }
+
+      // night light
+      property JsonObject nightLight: JsonObject {
+        property bool enabled: false
+        property real intensity: 0.8
+        property string startTime: "20:00"
+        property string stopTime: "07:00"
+        property bool autoSchedule: false
+        // wlsunset temperatures (Kelvin)
+        property int lowTemp: 3500
+        property int highTemp: 6500
       }
     }
   }

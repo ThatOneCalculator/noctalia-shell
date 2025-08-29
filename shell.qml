@@ -47,12 +47,12 @@ ShellRoot {
     id: lockScreen
   }
 
-  ToastManager {}
+  ToastOverlay {}
 
   IPCManager {}
 
   // ------------------------------
-  // All the panels
+  // All the NPanels
   Launcher {
     id: launcherPanel
     objectName: "launcherPanel"

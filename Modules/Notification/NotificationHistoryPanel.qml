@@ -46,14 +46,14 @@ NPanel {
         NIconButton {
           icon: "delete"
           tooltipText: "Clear History"
-          sizeMultiplier: 0.8
+          sizeRatio: 0.8
           onClicked: NotificationService.clearHistory()
         }
 
         NIconButton {
           icon: "close"
           tooltipText: "Close"
-          sizeMultiplier: 0.8
+          sizeRatio: 0.8
           onClicked: {
             root.close()
           }
@@ -77,19 +77,19 @@ NPanel {
           NIcon {
             text: "notifications_off"
             font.pointSize: Style.fontSizeXXXL * scaling
-            color: Color.mOnSurfaceVariant
+            color: Color.mOnSurface
             Layout.alignment: Qt.AlignHCenter
           }
 
           NText {
             text: "No notifications"
             font.pointSize: Style.fontSizeL * scaling
-            color: Color.mOnSurfaceVariant
+            color: Color.mOnSurface
             Layout.alignment: Qt.AlignHCenter
           }
 
           NText {
-            text: "Notifications will appear here when you receive them"
+            text: "Your notifications will show up here as they arrive."
             font.pointSize: Style.fontSizeNormal * scaling
             color: Color.mOnSurfaceVariant
             Layout.alignment: Qt.AlignHCenter
@@ -159,7 +159,7 @@ NPanel {
             NIconButton {
               icon: "delete"
               tooltipText: "Delete Notification"
-              sizeMultiplier: 0.7
+              sizeRatio: 0.7
 
               onClicked: {
                 Logger.log("NotificationHistory", "Removing notification:", summary)

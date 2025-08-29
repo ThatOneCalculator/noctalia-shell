@@ -2,17 +2,52 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import Quickshell
+import Quickshell.Io
 import qs.Commons
 import qs.Services
 import qs.Widgets
 
-Item {
-  readonly property real scaling: ScalingService.scale(screen)
-  readonly property string tabIcon: "monitor"
-  readonly property string tabLabel: "Display"
-  readonly property int tabIndex: 5
-  Layout.fillWidth: true
-  Layout.fillHeight: true
+ColumnLayout {
+  id: root
+
+  // Time dropdown options (00:00 .. 23:30)
+  ListModel {
+    id: timeOptions
+  }
+  Component.onCompleted: {
+    for (var h = 0; h < 24; h++) {
+      for (var m = 0; m < 60; m += 30) {
+        var hh = ("0" + h).slice(-2)
+        var mm = ("0" + m).slice(-2)
+        var key = hh + ":" + mm
+        timeOptions.append({
+                             "key": key,
+                             "name": key
+                           })
+      }
+    }
+  }
+
+  // Check for wlsunset availability when enabling Night Light
+  Process {
+    id: wlsunsetCheck
+    command: ["which", "wlsunset"]
+    running: false
+
+    onExited: function (exitCode) {
+      if (exitCode === 0) {
+        Settings.data.nightLight.enabled = true
+        NightLightService.apply()
+        ToastService.showNotice("Night Light", "Enabled")
+      } else {
+        Settings.data.nightLight.enabled = false
+        ToastService.showWarning("Night Light", "wlsunset not installed")
+      }
+    }
+
+    stdout: StdioCollector {}
+    stderr: StdioCollector {}
+  }
 
   // Helper functions to update arrays immutably
   function addMonitor(list, name) {
@@ -27,196 +62,375 @@ Item {
     })
   }
 
-  ScrollView {
-    anchors.fill: parent
-    clip: true
-    ScrollBar.vertical.policy: ScrollBar.AsNeeded
-    ScrollBar.horizontal.policy: ScrollBar.AsNeeded
-    contentWidth: parent.width
+  NText {
+    text: "Monitor-specific configuration"
+    font.pointSize: Style.fontSizeL * scaling
+    font.weight: Style.fontWeightBold
+  }
 
-    ColumnLayout {
-      id: contentColumn
-      width: Math.max(parent.width, 300) // Minimum reasonable width without scaling
+  NText {
+    text: "Bars and notifications appear on all displays by default. Choose specific displays below to limit where they're shown."
+    font.pointSize: Style.fontSizeM * scaling
+    color: Color.mOnSurfaceVariant
+    wrapMode: Text.WordWrap
+    Layout.fillWidth: true
+  }
 
-      ColumnLayout {
-        spacing: Style.marginL * scaling
-        Layout.margins: Style.marginL * scaling
+  ColumnLayout {
+    spacing: Style.marginL * scaling
+    Layout.topMargin: Style.marginL * scaling
+
+    Repeater {
+      model: Quickshell.screens || []
+      delegate: Rectangle {
         Layout.fillWidth: true
+        Layout.minimumWidth: 550 * scaling
+        radius: Style.radiusM * scaling
+        color: Color.mSurface
+        border.color: Color.mOutline
+        border.width: Math.max(1, Style.borderS * scaling)
+        implicitHeight: contentCol.implicitHeight + Style.marginXL * 2 * scaling
 
-        NText {
-          text: "Per‑monitor configuration"
-          font.pointSize: Style.fontSizeXXL * scaling
-          font.weight: Style.fontWeightBold
-          color: Color.mOnSurface
-        }
+        ColumnLayout {
+          id: contentCol
+          anchors.fill: parent
+          anchors.margins: Style.marginL * scaling
+          spacing: Style.marginXXS * scaling
 
-        NText {
-          text: "By default, bars and notifications are shown on all displays. Select one or more below to narrow your view."
-          font.pointSize: Style.fontSize * scaling
-          color: Color.mOnSurfaceVariant
-        }
+          NText {
+            text: (modelData.name || "Unknown")
+            font.pointSize: Style.fontSizeXL * scaling
+            font.weight: Style.fontWeightBold
+            color: Color.mSecondary
+          }
 
-        Repeater {
-          model: Quickshell.screens || []
-          delegate: Rectangle {
+          NText {
+            text: `Resolution: ${modelData.width}x${modelData.height} - Position: (${modelData.x}, ${modelData.y})`
+            font.pointSize: Style.fontSizeXS * scaling
+            color: Color.mOnSurfaceVariant
+            wrapMode: Text.WordWrap
             Layout.fillWidth: true
-            // Remove the scaling-based minimum width that causes issues at low scaling
-            // Layout.minimumWidth: 400 * scaling
-            radius: Style.radiusM * scaling
-            color: Color.mSurface
-            border.color: Color.mOutline
-            border.width: Math.max(1, Style.borderS * scaling)
-            implicitHeight: contentCol.implicitHeight + Style.marginXL * 2 * scaling
+          }
+
+          ColumnLayout {
+            spacing: Style.marginL * scaling
+            Layout.fillWidth: true
+
+            NToggle {
+              Layout.fillWidth: true
+              label: "Bar"
+              description: "Enable the bar on this monitor."
+              checked: (Settings.data.bar.monitors || []).indexOf(modelData.name) !== -1
+              onToggled: checked => {
+                           if (checked) {
+                             Settings.data.bar.monitors = addMonitor(Settings.data.bar.monitors, modelData.name)
+                           } else {
+                             Settings.data.bar.monitors = removeMonitor(Settings.data.bar.monitors, modelData.name)
+                           }
+                         }
+            }
+
+            NToggle {
+              Layout.fillWidth: true
+              label: "Notifications"
+              description: "Enable notifications on this monitor."
+              checked: (Settings.data.notifications.monitors || []).indexOf(modelData.name) !== -1
+              onToggled: checked => {
+                           if (checked) {
+                             Settings.data.notifications.monitors = addMonitor(Settings.data.notifications.monitors,
+                                                                               modelData.name)
+                           } else {
+                             Settings.data.notifications.monitors = removeMonitor(Settings.data.notifications.monitors,
+                                                                                  modelData.name)
+                           }
+                         }
+            }
+
+            NToggle {
+              Layout.fillWidth: true
+              label: "Dock"
+              description: "Enable the dock on this monitor."
+              checked: (Settings.data.dock.monitors || []).indexOf(modelData.name) !== -1
+              onToggled: checked => {
+                           if (checked) {
+                             Settings.data.dock.monitors = addMonitor(Settings.data.dock.monitors, modelData.name)
+                           } else {
+                             Settings.data.dock.monitors = removeMonitor(Settings.data.dock.monitors, modelData.name)
+                           }
+                         }
+            }
 
             ColumnLayout {
-              id: contentCol
-              anchors.fill: parent
-              anchors.margins: Style.marginL * scaling
-              spacing: Style.marginXXS * scaling
-              Layout.minimumWidth: 0
+              spacing: Style.marginS * scaling
+              Layout.fillWidth: true
 
-              NText {
-                text: (modelData.name || "Unknown")
-                font.pointSize: Style.fontSizeXL * scaling
-                font.weight: Style.fontWeightBold
-                color: Color.mSecondary
-              }
-
-              NText {
-                text: `Resolution: ${modelData.width}x${modelData.height} - Position: (${modelData.x}, ${modelData.y})`
-                font.pointSize: Style.fontSizeXS * scaling
-                color: Color.mOnSurfaceVariant
-              }
-
-              ColumnLayout {
-                spacing: Style.marginL * scaling
-                Layout.minimumWidth: 0
+              RowLayout {
                 Layout.fillWidth: true
-
-                NToggle {
-                  Layout.fillWidth: true
-                  Layout.minimumWidth: 0
-                  label: "Bar"
-                  description: "Enable the bar on this monitor."
-                  checked: (Settings.data.bar.monitors || []).indexOf(modelData.name) !== -1
-                  onToggled: checked => {
-                               if (checked) {
-                                 Settings.data.bar.monitors = addMonitor(Settings.data.bar.monitors, modelData.name)
-                               } else {
-                                 Settings.data.bar.monitors = removeMonitor(Settings.data.bar.monitors, modelData.name)
-                               }
-                             }
-                }
-
-                NToggle {
-                  Layout.fillWidth: true
-                  Layout.minimumWidth: 0
-                  label: "Notifications"
-                  description: "Enable notifications on this monitor."
-                  checked: (Settings.data.notifications.monitors || []).indexOf(modelData.name) !== -1
-                  onToggled: checked => {
-                               if (checked) {
-                                 Settings.data.notifications.monitors = addMonitor(
-                                   Settings.data.notifications.monitors, modelData.name)
-                               } else {
-                                 Settings.data.notifications.monitors = removeMonitor(
-                                   Settings.data.notifications.monitors, modelData.name)
-                               }
-                             }
-                }
-
-                NToggle {
-                  Layout.fillWidth: true
-                  Layout.minimumWidth: 0
-                  label: "Dock"
-                  description: "Enable the dock on this monitor."
-                  checked: (Settings.data.dock.monitors || []).indexOf(modelData.name) !== -1
-                  onToggled: checked => {
-                               if (checked) {
-                                 Settings.data.dock.monitors = addMonitor(Settings.data.dock.monitors, modelData.name)
-                               } else {
-                                 Settings.data.dock.monitors = removeMonitor(Settings.data.dock.monitors,
-                                                                             modelData.name)
-                               }
-                             }
-                }
+                spacing: Style.marginL * scaling
 
                 ColumnLayout {
-                  spacing: Style.marginL * scaling
+                  spacing: Style.marginXXS * scaling
                   Layout.fillWidth: true
 
-                  RowLayout {
-                    Layout.fillWidth: true
-
-                    ColumnLayout {
-                      spacing: Style.marginXXS * scaling
-                      Layout.fillWidth: true
-                      Layout.minimumWidth: 0
-
-                      NText {
-                        text: "Scale"
-                        font.pointSize: Style.fontSizeM * scaling
-                        font.weight: Style.fontWeightBold
-                        color: Color.mOnSurface
-                      }
-                      NText {
-                        text: "Scale the user interface on this monitor."
-                        font.pointSize: Style.fontSizeS * scaling
-                        color: Color.mOnSurfaceVariant
-                        wrapMode: Text.WordWrap
-                        Layout.fillWidth: true
-                      }
-                    }
-
-                    NText {
-                      text: `${Math.round(ScalingService.scaleByName(modelData.name) * 100)}%`
-                      Layout.alignment: Qt.AlignVCenter
-                      Layout.minimumWidth: implicitWidth
-                    }
+                  NText {
+                    text: "Scale"
+                    font.pointSize: Style.fontSizeM * scaling
+                    font.weight: Style.fontWeightBold
+                    color: Color.mOnSurface
                   }
-
-                  RowLayout {
-                    spacing: Style.marginS * scaling
+                  NText {
+                    text: "Scale the user interface on this monitor."
+                    font.pointSize: Style.fontSizeS * scaling
+                    color: Color.mOnSurfaceVariant
+                    wrapMode: Text.WordWrap
                     Layout.fillWidth: true
-                    Layout.minimumWidth: 0
+                  }
+                }
 
-                    NSlider {
-                      id: scaleSlider
-                      from: 0.6
-                      to: 1.8
-                      stepSize: 0.01
-                      value: ScalingService.scaleByName(modelData.name)
-                      onPressedChanged: {
-                        var data = Settings.data.monitorsScaling || {}
-                        data[modelData.name] = value
-                        Settings.data.monitorsScaling = data
-                      }
-                      Layout.fillWidth: true
-                      Layout.minimumWidth: 50 // Ensure minimum slider width
-                    }
+                NText {
+                  text: `${Math.round(ScalingService.scaleByName(modelData.name) * 100)}%`
+                  Layout.alignment: Qt.AlignVCenter
+                  Layout.minimumWidth: 50 * scaling
+                  horizontalAlignment: Text.AlignRight
+                }
+              }
 
-                    NIconButton {
-                      icon: "refresh"
-                      tooltipText: "Reset Scaling"
-                      fontPointSize: Style.fontSizeL * scaling
-                      Layout.preferredWidth: implicitWidth
-                      Layout.minimumWidth: implicitWidth
-                      onClicked: {
-                        var data = Settings.data.monitorsScaling || {}
-                        data[modelData.name] = 1.0
-                        Settings.data.monitorsScaling = data
-                      }
-                    }
+              RowLayout {
+                spacing: Style.marginS * scaling
+                Layout.fillWidth: true
+
+                NSlider {
+                  id: scaleSlider
+                  from: 0.7
+                  to: 1.8
+                  stepSize: 0.01
+                  value: ScalingService.scaleByName(modelData.name)
+                  onPressedChanged: {
+                    var data = Settings.data.monitorsScaling || {}
+                    data[modelData.name] = value
+                    Settings.data.monitorsScaling = data
+                  }
+                  Layout.fillWidth: true
+                  Layout.minimumWidth: 150 * scaling
+                }
+
+                NIconButton {
+                  icon: "refresh"
+                  tooltipText: "Reset Scaling"
+                  onClicked: {
+                    var data = Settings.data.monitorsScaling || {}
+                    data[modelData.name] = 1.0
+                    Settings.data.monitorsScaling = data
                   }
                 }
               }
             }
           }
         }
-        Item {
-          Layout.fillHeight: true
+      }
+    }
+
+    NDivider {
+      Layout.fillWidth: true
+      Layout.topMargin: Style.marginXL * scaling
+      Layout.bottomMargin: Style.marginXL * scaling
+    }
+
+    // Night Light Section
+    ColumnLayout {
+      spacing: Style.marginXS * scaling
+      NText {
+        text: "Night Light"
+        font.pointSize: Style.fontSizeXXL * scaling
+        font.weight: Style.fontWeightBold
+        color: Color.mSecondary
+      }
+
+      NText {
+        text: "Reduce blue light emission to help you sleep better and reduce eye strain."
+        font.pointSize: Style.fontSizeM * scaling
+        color: Color.mOnSurfaceVariant
+        wrapMode: Text.WordWrap
+        Layout.fillWidth: true
+      }
+    }
+
+    NToggle {
+      label: "Enable Night Light"
+      description: "Apply a warm color filter to reduce blue light emission."
+      checked: Settings.data.nightLight.enabled
+      onToggled: checked => {
+                   if (checked) {
+                     // Verify wlsunset exists before enabling
+                     wlsunsetCheck.running = true
+                   } else {
+                     Settings.data.nightLight.enabled = false
+                     NightLightService.apply()
+                     ToastService.showNotice("Night Light", "Disabled")
+                   }
+                 }
+    }
+
+    // Intensity settings
+    ColumnLayout {
+      visible: Settings.data.nightLight.enabled
+      NLabel {
+        label: "Intensity"
+        description: "Higher values create warmer tones."
+      }
+      RowLayout {
+        spacing: Style.marginS * scaling
+
+        NSlider {
+          from: 0
+          to: 1
+          stepSize: 0.01
+          value: Settings.data.nightLight.intensity
+          onMoved: {
+            Settings.data.nightLight.intensity = value
+            NightLightService.apply()
+          }
+          Layout.fillWidth: true
+          Layout.minimumWidth: 150 * scaling
+        }
+
+        NText {
+          text: `${Math.round(Settings.data.nightLight.intensity * 100)}%`
+          Layout.alignment: Qt.AlignVCenter
+          Layout.minimumWidth: 60 * scaling
+          horizontalAlignment: Text.AlignRight
         }
       }
     }
+
+    // Temperature
+    ColumnLayout {
+      spacing: Style.marginXS * scaling
+      Layout.alignment: Qt.AlignVCenter
+
+      NLabel {
+        label: "Color temperature"
+        description: "Select two temperatures in Kelvin"
+      }
+
+      RowLayout {
+        visible: Settings.data.nightLight.enabled
+        spacing: Style.marginM * scaling
+        Layout.fillWidth: false
+        Layout.fillHeight: true
+        Layout.alignment: Qt.AlignVCenter
+
+        NText {
+          text: "Low"
+          font.pointSize: Style.fontSizeM * scaling
+          color: Color.mOnSurfaceVariant
+          Layout.alignment: Qt.AlignVCenter
+        }
+
+        NTextInput {
+          text: Settings.data.nightLight.lowTemp.toString()
+          inputMethodHints: Qt.ImhDigitsOnly
+          Layout.alignment: Qt.AlignVCenter
+          onEditingFinished: {
+            var v = parseInt(text)
+            if (!isNaN(v)) {
+              Settings.data.nightLight.lowTemp = Math.max(1000, Math.min(6500, v))
+              NightLightService.apply()
+            }
+          }
+        }
+
+        Item {}
+
+        NText {
+          text: "High"
+          font.pointSize: Style.fontSizeM * scaling
+          color: Color.mOnSurfaceVariant
+          Layout.alignment: Qt.AlignVCenter
+        }
+        NTextInput {
+          text: Settings.data.nightLight.highTemp.toString()
+          inputMethodHints: Qt.ImhDigitsOnly
+          Layout.alignment: Qt.AlignVCenter
+          onEditingFinished: {
+            var v = parseInt(text)
+            if (!isNaN(v)) {
+              Settings.data.nightLight.highTemp = Math.max(1000, Math.min(10000, v))
+              NightLightService.apply()
+            }
+          }
+        }
+      }
+    }
+
+    NToggle {
+      label: "Auto Schedule"
+      description: "Automatically enable night light based on time schedule."
+      checked: Settings.data.nightLight.autoSchedule
+      onToggled: checked => {
+                   Settings.data.nightLight.autoSchedule = checked
+                   NightLightService.apply()
+                 }
+      visible: Settings.data.nightLight.enabled
+    }
+
+    // Schedule settings
+    ColumnLayout {
+      spacing: Style.marginXS * scaling
+      visible: Settings.data.nightLight.enabled && Settings.data.nightLight.autoSchedule
+
+      NLabel {
+        label: "Schedule"
+        description: "Set a start and end time for automatic schedule."
+      }
+
+      RowLayout {
+        Layout.fillWidth: false
+        spacing: Style.marginM * scaling
+
+        NText {
+          text: "Start Time"
+          font.pointSize: Style.fontSizeM * scaling
+          color: Color.mOnSurfaceVariant
+        }
+
+        NComboBox {
+          model: timeOptions
+          currentKey: Settings.data.nightLight.startTime
+          placeholder: "Select start time"
+          onSelected: key => {
+                        Settings.data.nightLight.startTime = key
+                        NightLightService.apply()
+                      }
+          preferredWidth: 120 * scaling
+        }
+
+        Item {// add a little more spacing
+        }
+
+        NText {
+          text: "Stop Time"
+          font.pointSize: Style.fontSizeM * scaling
+          color: Color.mOnSurfaceVariant
+        }
+        NComboBox {
+          model: timeOptions
+          currentKey: Settings.data.nightLight.stopTime
+          placeholder: "Select stop time"
+          onSelected: key => {
+                        Settings.data.nightLight.stopTime = key
+                        NightLightService.apply()
+                      }
+          preferredWidth: 120 * scaling
+        }
+      }
+    }
+  }
+
+  NDivider {
+    Layout.fillWidth: true
+    Layout.topMargin: Style.marginXL * scaling
+    Layout.bottomMargin: Style.marginXL * scaling
+    visible: Settings.data.nightLight.enabled
   }
 }

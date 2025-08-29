@@ -15,7 +15,7 @@ NIconButton {
 
   visible: Settings.data.network.wifiEnabled
 
-  sizeMultiplier: 0.8
+  sizeRatio: 0.8
 
   Component.onCompleted: {
     Logger.log("WiFi", "Widget component completed")
@@ -32,8 +32,9 @@ NIconButton {
 
   icon: {
     try {
-      if (NetworkService.ethernet)
+      if (NetworkService.ethernet) {
         return "lan"
+      }
       let connected = false
       let signalStrength = 0
       for (const net in NetworkService.networks) {
@@ -50,12 +51,5 @@ NIconButton {
     }
   }
   tooltipText: "Network / WiFi"
-  onClicked: {
-    try {
-      Logger.log("WiFi", "Button clicked, toggling panel")
-      PanelService.getPanel("wifiPanel")?.toggle(screen)
-    } catch (error) {
-      Logger.error("WiFi", "Error toggling panel:", error)
-    }
-  }
+  onClicked: PanelService.getPanel("wifiPanel")?.toggle(screen, this)
 }

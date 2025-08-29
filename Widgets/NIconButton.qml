@@ -8,8 +8,9 @@ Rectangle {
   id: root
 
   // Multiplier to control how large the button container is relative to Style.baseWidgetSize
-  property real sizeMultiplier: 1.0
-  property real size: Style.baseWidgetSize * sizeMultiplier * scaling
+  property real sizeRatio: 1.0
+  readonly property real size: Style.baseWidgetSize * sizeRatio * scaling
+
   property string icon
   property string tooltipText
   property bool enabled: true
@@ -37,30 +38,28 @@ Rectangle {
   border.width: Math.max(1, Style.borderS * scaling)
 
   NIcon {
-    anchors.centerIn: parent
-    visible: !root.nerd
-    // Little hack to keep things centered at high scaling
-    anchors.horizontalCenterOffset: -1 * (scaling - 1.0)
-    anchors.verticalCenterOffset: 0
     text: root.icon
+    visible: !root.nerd
     font.pointSize: root.fontPointSize * scaling
     color: root.hovering ? colorFgHover : colorFg
-    horizontalAlignment: Text.AlignHCenter
-    verticalAlignment: Text.AlignVCenter
     opacity: root.enabled ? Style.opacityFull : Style.opacityMedium
+    // Center horizontally
+    x: (root.width - width) / 2
+    // Center vertically accounting for font metrics
+    y: (root.height - height) / 2 + (height - contentHeight) / 2
   }
   
   NNerdIcon {
-    anchors.centerIn: parent
-    visible: root.nerd
-    anchors.verticalCenterOffset: 0
     text: root.icon
+    visible: root.nerd
     font.pointSize: root.fontPointSize * scaling
     color: root.hovering ? colorFgHover : colorFg
-    horizontalAlignment: Text.AlignHCenter
-    verticalAlignment: Text.AlignVCenter
     opacity: root.enabled ? Style.opacityFull : Style.opacityMedium
-}
+    // Center horizontally
+    x: (root.width - width) / 2
+    // Center vertically accounting for font metrics
+    y: (root.height - height) / 2 + (height - contentHeight) / 2
+  }
 
   NTooltip {
     id: tooltip

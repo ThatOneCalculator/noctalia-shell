@@ -13,7 +13,8 @@ NPanel {
 
   panelWidth: Math.max(screen?.width * 0.5, 1280) * scaling
   panelHeight: Math.max(screen?.height * 0.5, 720) * scaling
-  panelAnchorCentered: true
+  panelAnchorHorizontalCenter: true
+  panelAnchorVerticalCenter: true
 
   // Tabs enumeration, order is NOT relevant
   enum Tab {
@@ -266,7 +267,7 @@ NPanel {
             // Tab label on the main right side
             NText {
               text: root.tabsModel[currentTabIndex].label
-              font.pointSize: Style.fontSizeL * scaling
+              font.pointSize: Style.fontSizeXL * scaling
               font.weight: Style.fontWeightBold
               color: Color.mPrimary
               Layout.fillWidth: true
@@ -286,21 +287,29 @@ NPanel {
           Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            clip: true
 
             Repeater {
               model: root.tabsModel
-
-              onItemAdded: function (index, item) {
-                item.sourceComponent = root.tabsModel[index].source
-              }
-
               delegate: Loader {
-                // All loaders will occupy the same space, stacked on top of each other.
                 anchors.fill: parent
-                visible: index === root.currentTabIndex
-                // The loader is only active (and uses memory) when its page is visible.
-                active: visible
+                active: index === root.currentTabIndex
+                sourceComponent: ColumnLayout {
+                  ScrollView {
+                    id: scrollView
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+                    ScrollBar.vertical.policy: ScrollBar.AsNeeded
+                    padding: Style.marginL * scaling
+                    clip: true
+
+                    Loader {
+                      active: true
+                      sourceComponent: root.tabsModel[index].source
+                      width: scrollView.availableWidth
+                    }
+                  }
+                }
               }
             }
           }

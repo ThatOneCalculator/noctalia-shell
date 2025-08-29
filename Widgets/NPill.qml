@@ -14,7 +14,7 @@ Item {
   property color iconCircleColor: Color.mPrimary
   property color iconTextColor: Color.mSurface
   property color collapsedIconColor: Color.mOnSurface
-  property real sizeMultiplier: 0.8
+  property real sizeRatio: 0.8
   property bool autoHide: false
   property bool forceOpen: false
   property bool disableOpen: false
@@ -27,6 +27,7 @@ Item {
   signal entered
   signal exited
   signal clicked
+  signal rightClicked
   signal wheel(int delta)
 
   // Internal state
@@ -34,8 +35,8 @@ Item {
   property bool shouldAnimateHide: false
 
   // Exposed width logic
-  readonly property int pillHeight: Style.baseWidgetSize * sizeMultiplier * scaling
-  readonly property int iconSize: Style.baseWidgetSize * sizeMultiplier * scaling
+  readonly property int pillHeight: Style.baseWidgetSize * sizeRatio * scaling
+  readonly property int iconSize: Style.baseWidgetSize * sizeRatio * scaling
   readonly property int pillPaddingHorizontal: Style.marginM * scaling
   readonly property int pillOverlap: iconSize * 0.5
   readonly property int maxPillWidth: Math.max(1, textItem.implicitWidth + pillPaddingHorizontal * 2 + pillOverlap)
@@ -102,7 +103,10 @@ Item {
       font.pointSize: Style.fontSizeM * scaling
       // When forced shown, use pill text color; otherwise accent color when hovered
       color: forceOpen ? textColor : (showPill ? iconTextColor : Color.mOnSurface)
-      anchors.centerIn: parent
+      // Center horizontally
+      x: (iconCircle.width - width) / 2
+      // Center vertically accounting for font metrics
+      y: (iconCircle.height - height) / 2 + (height - contentHeight) / 2
     }
   }
 
@@ -194,6 +198,7 @@ Item {
   MouseArea {
     anchors.fill: parent
     hoverEnabled: true
+    acceptedButtons: Qt.LeftButton | Qt.RightButton
     onEntered: {
       root.entered()
       tooltip.show()
@@ -211,8 +216,12 @@ Item {
       }
       tooltip.hide()
     }
-    onClicked: {
-      root.clicked()
+    onClicked: function (mouse) {
+      if (mouse.button === Qt.LeftButton) {
+        root.clicked()
+      } else if (mouse.button === Qt.RightButton) {
+        root.rightClicked()
+      }
     }
     onWheel: wheel => {
                root.wheel(wheel.angleDelta.y)

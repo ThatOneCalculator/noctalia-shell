@@ -50,7 +50,7 @@ Row {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         active: Settings.data.audio.showMiniplayerCava && Settings.data.audio.visualizerType == "linear"
-                && MediaService.isPlaying
+                && MediaService.isPlaying && MediaService.trackLength > 0
         z: 0
 
         sourceComponent: LinearSpectrum {
@@ -65,7 +65,7 @@ Row {
           anchors.verticalCenter: parent.verticalCenter
           anchors.horizontalCenter: parent.horizontalCenter
           active: Settings.data.audio.showMiniplayerCava && Settings.data.audio.visualizerType == "mirrored"
-                  && MediaService.isPlaying
+                  && MediaService.isPlaying && MediaService.trackLength > 0
           z: 0
 
           sourceComponent: MirroredSpectrum {
@@ -81,7 +81,7 @@ Row {
           anchors.verticalCenter: parent.verticalCenter
           anchors.horizontalCenter: parent.horizontalCenter
           active: Settings.data.audio.showMiniplayerCava && Settings.data.audio.visualizerType == "wave"
-                  && MediaService.isPlaying
+                  && MediaService.isPlaying && MediaService.trackLength > 0
           z: 0
 
           sourceComponent: WaveSpectrum {
@@ -97,7 +97,7 @@ Row {
       Row {
         id: row
         anchors.verticalCenter: parent.verticalCenter
-        spacing: Style.marginXS * scaling
+        spacing: Style.marginS * scaling
         z: 1 // Above the visualizer
 
         NIcon {
@@ -113,34 +113,17 @@ Row {
           anchors.verticalCenter: parent.verticalCenter
           visible: Settings.data.audio.showMiniplayerAlbumArt
 
-          Rectangle {
-            width: 18 * scaling
-            height: 18 * scaling
-            radius: width * 0.5
-            color: Color.transparent
-            antialiasing: true
-            clip: true
+          Item {
+            width: Math.round(18 * scaling)
+            height: Math.round(18 * scaling)
 
             NImageCircled {
               id: trackArt
-              visible: MediaService.trackArtUrl.toString() !== ""
               anchors.fill: parent
-              anchors.verticalCenter: parent.verticalCenter
-              anchors.margins: scaling
               imagePath: MediaService.trackArtUrl
               fallbackIcon: MediaService.isPlaying ? "pause" : "play_arrow"
               borderWidth: 0
               border.color: Color.transparent
-            }
-
-            // Fallback icon when no album art available
-            NIcon {
-              id: windowIconFallback
-              text: MediaService.isPlaying ? "pause" : "play_arrow"
-              font.pointSize: Style.fontSizeL * scaling
-              verticalAlignment: Text.AlignVCenter
-              anchors.verticalCenter: parent.verticalCenter
-              visible: getTitle() !== "" && !trackArt.visible
             }
           }
         }

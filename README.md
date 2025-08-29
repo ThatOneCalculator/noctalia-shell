@@ -27,11 +27,11 @@ Features a modern modular architecture with a status bar, notification system, c
 
 ## Preview
 
-![Launcher](https://assets.noctalia.dev/screenshots/launcher.png)
+![Launcher](https://assets.noctalia.dev/screenshots/launcher.png?v=2)
 
-![SettingsPanel](https://assets.noctalia.dev/screenshots/settings-panel.png)  
+![SettingsPanel](https://assets.noctalia.dev/screenshots/settings-panel.png?v=2)  
 
-![SidePanel](https://assets.noctalia.dev/screenshots/light-mode.png)  
+![SidePanel](https://assets.noctalia.dev/screenshots/light-mode.png?v=2)  
 
 ---
 
@@ -67,7 +67,9 @@ Features a modern modular architecture with a status bar, notification system, c
 - `ttf-roboto` - The default font used for most of the UI
 - `inter-font` - The default font used for Headers (ex: clock on the LockScreen)
 - `ttf-material-symbols-variable-git` - Icon font for UI elements
-- `xdg-desktop-portal-gnome` - Desktop integration (or alternative portal)
+- `gpu-screen-recorder` - Screen recording functionality
+- `brightnessctl` - For internal/laptop monitor brightness
+- `ddcutil` - For desktop monitor brightness (might introduce some system instability with certain monitors)
 
 
 ### Optional
@@ -76,10 +78,11 @@ Features a modern modular architecture with a status bar, notification system, c
 - `swww` - Wallpaper animations and effects
 - `matugen` - Material You color scheme generation
 - `cava` - Audio visualizer component
-- `gpu-screen-recorder` - Screen recording functionality
-- `brightnessctl` - For internal/laptop monitor brightness
-- `ddcutil` - For desktop monitor brightness (might introduce some system instability with certain monitors)
-If you want to use the ArchUpdater Widget, make sure you have any polkit agent installed.
+- `wlsunset` - To be able to use NightLight
+
+> There are 2 more optional dependencies.  
+> Any `polkit agent` to be able to use the ArchUpdater widget.   
+> And also any `xdg-desktop-portal` to be able to use the "Portal" option from the screenRecorder. 
 
 ---
 
@@ -87,59 +90,145 @@ If you want to use the ArchUpdater Widget, make sure you have any polkit agent i
 
 ### Installation
 
+#### Arch Linux
+
+<details>
+<summary><strong>AUR</strong></summary>
+
+You can install Noctalia from the [AUR](https://aur.archlinux.org/packages/noctalia-shell). This method will install the shell system-wide.
+
+```bash
+paru -S noctalia-shell
+```
+
+If you want the latest development version directly from the git repository, you can use the `noctalia-shell-git` package:
+
+```bash
+paru -S noctalia-shell-git
+```
+This will always build the most recent commit from the Noctalia repository. Note that it may be less stable than the release version.
+
+</details>
+
+<details>
+<summary><strong>Manual Installation</strong></summary>
+
+This method installs the shell to your local user configuration.
+
 ```bash
 # Install Quickshell
-yay -S quickshell-git
-
+paru -S quickshell-git
 # Download and install Noctalia (latest release)
 mkdir -p ~/.config/quickshell && curl -sL https://github.com/noctalia-dev/noctalia-shell/releases/latest/download/noctalia-latest.tar.gz | tar -xz --strip-components=1 -C ~/.config/quickshell
 ```
 
-### Usage
+</details>
 
+#### Nix
+
+<details>
+<summary><strong>Nix Installation</strong></summary>
+
+You can run Noctalia directly using the `nix run` command:
 ```bash
-# Start the shell
-qs
-
-# Launcher
-qs ipc call launcher toggle
-
-# SidePanel
-qs ipc call sidePanel toggle
-
-# Clipboard History
-qs ipc call launcher clipboard
-
-# Calculator
-qs ipc call launcher calculator
-
-# Brightness
-qs ipc call brightness increase
-qs ipc call brightness decrease
-
-# Power Panel
-qs ipc call powerPanel toggle
-
-# Idle Inhibitor
-qs ipc call idleInhibitor toggle
-
-# Settings Window
-qs ipc call settings toggle
-
-# Toggle lock screen
-qs ipc call lockScreen toggle
+nix run github:noctalia-dev/noctalia-shell
 ```
 
-### Keybinds
+Alternatively, you can add it to your NixOS configuration or flake:
 
-| Action | Command |
-|--------|---------|
-| Toggle Application Launcher | `qs ipc call appLauncher toggle` |
-| Toggle Lock Screen | `qs ipc call lockScreen toggle` |
+**Step 1**: Add Quickshell and Noctalia flakes to your `flake.nix`:
+```nix
+{
+  description = "Example Nix flake with Noctalia + Quickshell";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    quickshell = {
+      url = "github:outfoxxed/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.quickshell.follows = "quickshell"
+    };
+  };
+
+  outputs = { self, nixpkgs, noctalia, quickshell, ... }:
+   {
+    nixosConfigurations.my-host = nixpkgs.lib.nixosSystem {
+      modules = [
+        ./configuration.nix
+      ];
+    };
+  };
+}
+```
+
+**Step 2**: Add the packages to your `configuration.nix`:
+```nix
+{
+  environment.systemPackages = with pkgs; [
+    inputs.noctalia.packages.${system}.default
+    inputs.quickshell.packages.${system}.default
+  ];
+}
+```
+
+</details>
+
+### Usage
+
+<details>
+<summary> Nix/AUR </summary>
+The following commands apply to the Nix flake and also the AUR package installation.
+
+| Action                      | Command                                   |
+| --------------------------- | ----------------------------------------- |
+| Start the Shell             | `noctalia-shell`                                      |
+| Toggle Application Launcher | `noctalia-shell ipc call launcher toggle`             |
+| Toggle Side Panel           | `noctalia-shell ipc call sidePanel toggle`            |
+| Open Clipboard History      | `noctalia-shell ipc call launcher clipboard`          |
+| Open Calculator             | `noctalia-shell ipc call launcher calculator`         |
+| Increase Brightness         | `noctalia-shell ipc call brightness increase`         |
+| Decrease Brightness         | `noctalia-shell ipc call brightness decrease`         |
+| Increase Output Volume      | `noctalia-shell ipc call volume increase`             |
+| Decrease Output Volume      | `noctalia-shell ipc call volume decrease`             |
+| Toggle Mute Audio Output    | `noctalia-shell ipc call volume muteOutput`           |
+| Toggle Mute Audio Input     | `noctalia-shell ipc call volume muteInput`            |
+| Toggle Power Panel          | `noctalia-shell ipc call powerPanel toggle`           |
+| Toggle Idle Inhibitor       | `noctalia-shell ipc call idleInhibitor toggle`        |
+| Toggle Settings Window      | `noctalia-shell ipc call settings toggle`             |
+| Toggle Lock Screen          | `noctalia-shell ipc call lockScreen toggle`           |
+| Toggle Notification History | `noctalia-shell ipc call notifications toggleHistory` |
+
+</details>
+
+
+<details>
+<summary> Manual install </summary>
+
+The following commands apply to a manual installation.
+
+| Action                      | Command                                   |
+| --------------------------- | ----------------------------------------- |
+| Start the Shell             | `qs`                                      |
+| Toggle Application Launcher | `qs ipc call launcher toggle`             |
+| Toggle Side Panel           | `qs ipc call sidePanel toggle`            |
+| Open Clipboard History      | `qs ipc call launcher clipboard`          |
+| Open Calculator             | `qs ipc call launcher calculator`         |
+| Increase Brightness         | `qs ipc call brightness increase`         |
+| Decrease Brightness         | `qs ipc call brightness decrease`         |
+| Toggle Power Panel          | `qs ipc call powerPanel toggle`           |
+| Toggle Idle Inhibitor       | `qs ipc call idleInhibitor toggle`        |
+| Toggle Settings Window      | `qs ipc call settings toggle`             |
+| Toggle Lock Screen          | `qs ipc call lockScreen toggle`           |
 | Toggle Notification History | `qs ipc call notifications toggleHistory` |
-| Toggle Settings Panel | `qs ipc call settings toggle` |
-| Increase Brightness | `qs ipc call brightness increase` |
-| Decrease Brightness | `qs ipc call brightness decrease` |
+
+</details>
+
 
 ### Configuration
 

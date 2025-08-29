@@ -12,36 +12,17 @@ Row {
 
   property ShellScreen screen
   property real scaling: ScalingService.scale(screen)
+  // Title stays collapsed by default; expands only on hover
   property bool showingFullTitle: false
-  property int lastWindowIndex: -1
+  readonly property int minWidth: 120
 
   anchors.verticalCenter: parent.verticalCenter
   spacing: Style.marginS * scaling
   visible: getTitle() !== ""
 
-  // Timer to hide full title after window switch
-  Timer {
-    id: fullTitleTimer
-    interval: 2000
-    repeat: false
-    onTriggered: {
-      showingFullTitle = false
-    }
-  }
+  // Remove auto-expand timer; we rely solely on hover
 
-  // Update text when window changes
-  Connections {
-    target: CompositorService
-    function onActiveWindowChanged() {
-      // Check if window actually changed
-      if (CompositorService.focusedWindowIndex !== lastWindowIndex) {
-        lastWindowIndex = CompositorService.focusedWindowIndex
-        showingFullTitle = true
-        fullTitleTimer.restart()
-      }
-    }
-  }
-
+  // No auto-expansion on window change; keep collapsed unless hovered
   function getTitle() {
     // Use the service's focusedWindowTitle property which is updated immediately
     // when WindowOpenedOrChanged events are received
@@ -83,7 +64,7 @@ Row {
       Row {
         id: row
         anchors.verticalCenter: parent.verticalCenter
-        spacing: Style.marginXS * scaling
+        spacing: Style.marginS * scaling
 
         // Window icon
         Item {

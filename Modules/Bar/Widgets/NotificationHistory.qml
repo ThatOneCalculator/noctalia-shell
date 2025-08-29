@@ -13,12 +13,12 @@ NIconButton {
   property ShellScreen screen
   property real scaling: ScalingService.scale(screen)
 
-  sizeMultiplier: 0.8
+  sizeRatio: 0.8
   icon: "notifications"
   tooltipText: "Notification History"
   colorBg: Color.mSurfaceVariant
   colorFg: "#f6c177"
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
-  onClicked: PanelService.getPanel("notificationHistoryPanel")?.toggle(screen)
+  onClicked: PanelService.getPanel("notificationHistoryPanel")?.toggle(screen, this)
 }
