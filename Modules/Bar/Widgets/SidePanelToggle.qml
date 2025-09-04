@@ -11,14 +11,16 @@ NIconButton {
   property ShellScreen screen
   property real scaling: 1.0
 
-  icon: Settings.data.bar.useDistroLogo ? "" : "widgets"
+  icon: Settings.data.bar.useDistroLogo ? "" : ""
+  nerd: true
   tooltipText: "Open side panel"
   sizeRatio: 0.8
 
   colorBg: Color.mSurfaceVariant
-  colorFg: Color.mOnSurface
+  colorFg: Color.mTertiary
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
+  fontPointSize: Style.fontSizeM
 
   anchors.verticalCenter: parent.verticalCenter
   onClicked: PanelService.getPanel("sidePanel")?.toggle(screen)

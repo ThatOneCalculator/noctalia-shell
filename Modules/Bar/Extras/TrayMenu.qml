@@ -167,13 +167,13 @@ PopupWindow {
                 wrapMode: Text.WordWrap
               }
 
-              Image {
-                Layout.preferredWidth: Style.marginL * scaling
-                Layout.preferredHeight: Style.marginL * scaling
-                source: modelData?.icon ?? ""
-                visible: (modelData?.icon ?? "") !== ""
-                fillMode: Image.PreserveAspectFit
-              }
+              // Image {
+              //   Layout.preferredWidth: Style.marginL * scaling
+              //   Layout.preferredHeight: Style.marginL * scaling
+              //   source: modelData?.icon ?? ""
+              //   visible: (modelData?.icon ?? "") !== ""
+              //   fillMode: Image.PreserveAspectFit
+              // }
 
               NIcon {
                 text: modelData?.hasChildren ? "menu" : ""

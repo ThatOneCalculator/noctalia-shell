@@ -38,6 +38,16 @@ NIconButton {
     if (powerProfiles.profile === PowerProfile.PowerSaver)
       return "Power Saver"
   }
+  
+  function profileColor() {
+    if (!hasPP) return "#e0def4";
+    if (powerProfiles.profile === PowerProfile.Performance)
+        return "#ebbcba"
+    else if (powerProfiles.profile === PowerProfile.Balanced)
+        return "#c4a7e7"
+    else if (powerProfiles.profile === PowerProfile.PowerSaver)
+        return "#9ccfd8"
+  }
 
   function changeProfile() {
     if (!hasPP)
@@ -53,7 +63,7 @@ NIconButton {
   icon: root.profileIcon()
   tooltipText: root.profileName()
   colorBg: Color.mSurfaceVariant
-  colorFg: Color.mOnSurface
+  colorFg: root.profileColor()
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
   onClicked: root.changeProfile()

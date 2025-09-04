@@ -23,7 +23,8 @@ Rectangle {
   property color colorFgHover: Color.mOnPrimary
   property color colorBorder: Color.mOutline
   property color colorBorderHover: Color.mOutline
-
+  property bool nerd: false
+  
   signal entered
   signal exited
   signal clicked
@@ -41,6 +42,19 @@ Rectangle {
 
   NIcon {
     text: root.icon
+    visible: !root.nerd
+    font.pointSize: root.fontPointSize * scaling
+    color: root.hovering ? colorFgHover : colorFg
+    opacity: root.enabled ? Style.opacityFull : Style.opacityMedium
+    // Center horizontally
+    x: (root.width - width) / 2
+    // Center vertically accounting for font metrics
+    y: (root.height - height) / 2 + (height - contentHeight) / 2
+  }
+
+  NNerdIcon {
+    text: root.icon
+    visible: root.nerd
     font.pointSize: root.fontPointSize * scaling
     color: root.hovering ? colorFgHover : colorFg
     // Center horizontally

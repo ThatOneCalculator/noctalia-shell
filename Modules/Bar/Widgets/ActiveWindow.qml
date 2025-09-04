@@ -99,7 +99,7 @@ Row {
           elide: mouseArea.containsMouse ? Text.ElideNone : Text.ElideRight
           anchors.verticalCenter: parent.verticalCenter
           verticalAlignment: Text.AlignVCenter
-          color: Color.mSecondary
+          color: "#c4a7e7"
           clip: true
 
           Behavior on width {

@@ -68,7 +68,7 @@ Row {
           width: mainContainer.width - Style.marginS * scaling
           height: 20 * scaling
           values: CavaService.values
-          fillColor: Color.mOnSurfaceVariant
+          fillColor: Color.mPrimary
           opacity: 0.4
         }
 
@@ -83,7 +83,7 @@ Row {
             width: mainContainer.width - Style.marginS * scaling
             height: mainContainer.height - Style.marginS * scaling
             values: CavaService.values
-            fillColor: Color.mOnSurfaceVariant
+            fillColor: Color.mPrimary
             opacity: 0.4
           }
         }
@@ -99,7 +99,7 @@ Row {
             width: mainContainer.width - Style.marginS * scaling
             height: mainContainer.height - Style.marginS * scaling
             values: CavaService.values
-            fillColor: Color.mOnSurfaceVariant
+            fillColor: Color.mPrimary
             opacity: 0.4
           }
         }
@@ -156,7 +156,7 @@ Row {
           elide: Text.ElideRight
           anchors.verticalCenter: parent.verticalCenter
           verticalAlignment: Text.AlignVCenter
-          color: Color.mTertiary
+          color: Color.mSecondary
 
           Behavior on width {
             NumberAnimation {

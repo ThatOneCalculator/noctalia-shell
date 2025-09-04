@@ -17,7 +17,7 @@ NIconButton {
   icon: "notifications"
   tooltipText: "Notification history"
   colorBg: Color.mSurfaceVariant
-  colorFg: Color.mOnSurface
+  colorFg: "#f6c177"
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
   onClicked: PanelService.getPanel("notificationHistoryPanel")?.toggle(screen, this)
