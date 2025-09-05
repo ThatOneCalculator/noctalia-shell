@@ -49,7 +49,7 @@ RowLayout {
         width: mediaMini.width - Style.marginS * scaling
         height: 20 * scaling
         values: CavaService.values
-        fillColor: Color.mOnSurfaceVariant
+        fillColor: Color.mPrimary
         opacity: 0.4
       }
     }
@@ -63,7 +63,7 @@ RowLayout {
         width: mediaMini.width - Style.marginS * scaling
         height: mediaMini.height - Style.marginS * scaling
         values: CavaService.values
-        fillColor: Color.mOnSurfaceVariant
+        fillColor: Color.mPrimary
         opacity: 0.4
       }
     }
@@ -77,7 +77,7 @@ RowLayout {
         width: mediaMini.width - Style.marginS * scaling
         height: mediaMini.height - Style.marginS * scaling
         values: CavaService.values
-        fillColor: Color.mOnSurfaceVariant
+        fillColor: Color.mPrimary
         opacity: 0.4
       }
     }
@@ -124,7 +124,7 @@ RowLayout {
         font.pointSize: Style.fontSizeS * scaling
         font.weight: Style.fontWeightMedium
         elide: Text.ElideRight
-        color: Color.mTertiary
+        color: Color.mSecondary
         Layout.alignment: Qt.AlignVCenter
 
         Behavior on Layout.preferredWidth {
