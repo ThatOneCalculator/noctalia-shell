@@ -149,16 +149,6 @@ Variants {
           }
         }
 
-        // Drop shadow for better visibility when bar is transparent
-        layer.enabled: true
-        layer.effect: MultiEffect {
-          shadowEnabled: true
-          shadowColor: Qt.rgba(0, 0, 0, 0.3)
-          shadowBlur: 0.5
-          shadowVerticalOffset: 2
-          shadowHorizontalOffset: 0
-        }
-
         MouseArea {
           id: dockMouseArea
           anchors.fill: parent
@@ -222,22 +212,6 @@ Variants {
                 property bool hovered: appMouseArea.containsMouse
                 property string appId: modelData ? modelData.appId : ""
                 property string appTitle: modelData ? modelData.title : ""
-
-                // Hover background
-                Rectangle {
-                  id: hoverBackground
-                  anchors.fill: parent
-                  color: appButton.hovered ? Color.mSurfaceVariant : Color.transparent
-                  radius: parent.radius
-                  opacity: appButton.hovered ? 0.8 : 0
-
-                  Behavior on opacity {
-                    NumberAnimation {
-                      duration: Style.animationFast
-                      easing.type: Easing.OutQuad
-                    }
-                  }
-                }
 
                 // The icon
                 Image {
@@ -324,7 +298,7 @@ Variants {
 
                 Rectangle {
                   visible: isActive
-                  width: iconSize * 0.75
+                  width: iconSize * 0.25
                   height: 4 * scaling
                   color: Color.mPrimary
                   radius: Style.radiusXS

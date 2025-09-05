@@ -23,7 +23,7 @@ NIconButton {
   fontPointSize: Style.fontSizeM
 
   anchors.verticalCenter: parent.verticalCenter
-  onClicked: PanelService.getPanel("sidePanel")?.toggle(screen)
+  onClicked: PanelService.getPanel("sidePanel")?.toggle(screen, this)
   onRightClicked: PanelService.getPanel("settingsPanel")?.toggle(screen)
 
   // When enabled, draw the distro logo instead of the icon glyph
