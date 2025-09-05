@@ -124,8 +124,8 @@ RowLayout {
           spacing: 0
 
           Item {
-            Layout.preferredWidth: Math.round(18 * scaling)
-            Layout.preferredHeight: Math.round(18 * scaling)
+            Layout.preferredWidth: Math.round(22 * scaling)
+            Layout.preferredHeight: Math.round(22 * scaling)
 
             NImageCircled {
               id: trackArt

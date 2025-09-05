@@ -64,8 +64,8 @@ RowLayout {
 
         // Window icon
         Item {
-          Layout.preferredWidth: Style.fontSizeL * scaling * 1.2
-          Layout.preferredHeight: Style.fontSizeL * scaling * 1.2
+          Layout.preferredWidth: Math.round(22 * scaling)
+          Layout.preferredHeight: Math.round(22 * scaling)
           Layout.alignment: Qt.AlignVCenter
           visible: getTitle() !== "" && Settings.data.bar.showActiveWindowIcon
 
