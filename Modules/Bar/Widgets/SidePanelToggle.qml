@@ -20,7 +20,7 @@ NIconButton {
   colorFg: Color.mTertiary
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
-  fontPointSize: Style.fontSizeM
+  // font.PointSize: Style.fontSizeM
 
   anchors.verticalCenter: parent.verticalCenter
   onClicked: PanelService.getPanel("sidePanel")?.toggle(screen, this)
