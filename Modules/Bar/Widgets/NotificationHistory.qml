@@ -17,7 +17,7 @@ NIconButton {
   icon: Settings.data.notifications.doNotDisturb ? "notifications_off" : "notifications"
   tooltipText: Settings.data.notifications.doNotDisturb ? "Notification history (Do Not Disturb ON)\nRight-click to toggle Do Not Disturb" : "Notification history\nRight-click to toggle Do Not Disturb"
   colorBg: Color.mSurfaceVariant
-  colorFg: Settings.data.notifications.doNotDisturb ? Color.mError : Color.mTertiary
+  colorFg: Settings.data.notifications.doNotDisturb ? Color.mError : "#f6c177"
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
 
