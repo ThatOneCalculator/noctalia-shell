@@ -76,25 +76,15 @@ Item {
       }
     }
     onClicked: {
-      muteToggleProcess.running = true
-      // var settingsPanel = PanelService.getPanel("settingsPanel")
-      // settingsPanel.requestedTab = SettingsPanel.Tab.Audio
-      // settingsPanel.open(screen)
+      Quickshell.execDetached(["swayosd-client", "--output-volume", "mute-toggle"])
     }
     onRightClicked: {
-      pwvucontrolProcess.running = true
+      Quickshell.execDetached(["pwvucontrol"]);
     }
-  }
-
-  Process {
-    id: pwvucontrolProcess
-    command: ["pwvucontrol"]
-    running: false
-  }
-  
-  Process {
-    id: muteToggleProcess
-    command: ["swayosd-client", "--output-volume", "mute-toggle"]
-    running: false
+    onMiddleClicked: {
+      var settingsPanel = PanelService.getPanel("settingsPanel")
+      settingsPanel.requestedTab = SettingsPanel.Tab.Audio
+      settingsPanel.open(screen)
+    }
   }
 }

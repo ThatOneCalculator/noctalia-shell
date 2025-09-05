@@ -92,18 +92,15 @@ Item {
       }
     }
     onClicked: {
+      Quickshell.execDetached(["swayosd-client", "--input-volume", "mute-toggle"])
+    }
+    onRightClicked: {
+      Quickshell.execDetached(["pwvucontrol"]);
+    }
+    onMiddleClicked: {
       var settingsPanel = PanelService.getPanel("settingsPanel")
       settingsPanel.requestedTab = SettingsPanel.Tab.Audio
       settingsPanel.open(screen)
     }
-    onRightClicked: {
-      AudioService.setInputMuted(!AudioService.inputMuted)
-    }
-  }
-
-  Process {
-    id: pwvucontrolProcess
-    command: ["pwvucontrol"]
-    running: false
   }
 }
