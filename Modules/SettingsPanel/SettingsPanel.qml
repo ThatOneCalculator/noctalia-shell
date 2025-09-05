@@ -477,11 +477,16 @@ NPanel {
                   }
                 }
 
-                sourceComponent: ColumnLayout {
+                sourceComponent: Flickable {
+                  // Using a Flickable here with a pressDelay to fix conflict between
+                  // ScrollView and NTextInput. This fix the weird text selection issue.
+                  id: flickable
+                  anchors.fill: parent
+                  pressDelay: 200
+
                   ScrollView {
                     id: scrollView
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    anchors.fill: parent
                     ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
                     ScrollBar.vertical.policy: ScrollBar.AsNeeded
                     padding: Style.marginL * scaling

@@ -22,9 +22,11 @@ ColumnLayout {
       fallbackIcon: "person"
       borderColor: Color.mPrimary
       borderWidth: Math.max(1, Style.borderM * scaling)
+      Layout.alignment: Qt.AlignTop
     }
 
     NTextInput {
+      Layout.fillWidth: true
       label: `${Quickshell.env("USER") || "user"}'s profile picture`
       description: "Your profile picture that appears throughout the interface."
       text: Settings.data.general.avatarImage
@@ -73,6 +75,45 @@ ColumnLayout {
       description: "Automatically hide the dock when not in use."
       checked: Settings.data.dock.autoHide
       onToggled: checked => Settings.data.dock.autoHide = checked
+    }
+
+    ColumnLayout {
+      spacing: Style.marginXXS * scaling
+      Layout.fillWidth: true
+
+      NText {
+        text: "Dock Background Opacity"
+        font.pointSize: Style.fontSizeL * scaling
+        font.weight: Style.fontWeightBold
+        color: Color.mOnSurface
+      }
+
+      NText {
+        text: "Adjust the background opacity of the dock."
+        font.pointSize: Style.fontSizeXS * scaling
+        color: Color.mOnSurfaceVariant
+        wrapMode: Text.WordWrap
+        Layout.fillWidth: true
+      }
+
+      RowLayout {
+        NSlider {
+          Layout.fillWidth: true
+          from: 0
+          to: 1
+          stepSize: 0.01
+          value: Settings.data.dock.backgroundOpacity
+          onMoved: Settings.data.dock.backgroundOpacity = value
+          cutoutColor: Color.mSurface
+        }
+
+        NText {
+          text: Math.floor(Settings.data.dock.backgroundOpacity * 100) + "%"
+          Layout.alignment: Qt.AlignVCenter
+          Layout.leftMargin: Style.marginS * scaling
+          color: Color.mOnSurface
+        }
+      }
     }
 
     ColumnLayout {

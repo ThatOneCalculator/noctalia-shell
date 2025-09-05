@@ -3,7 +3,8 @@ import QtQuick.Layouts
 import qs.Commons
 import qs.Widgets
 
-ColumnLayout {
+// Input and button row
+RowLayout {
   id: root
 
   // Public properties
@@ -21,57 +22,35 @@ ColumnLayout {
 
   // Internal properties
   property real scaling: 1.0
+  spacing: Style.marginM * scaling
 
-  // Label
-  NText {
-    text: root.label
-    font.pointSize: Style.fontSizeL * scaling
-    font.weight: Style.fontWeightBold
-    color: Color.mOnSurface
+  NTextInput {
+    id: textInput
+    label: root.label
+    description: root.description
+    placeholderText: root.placeholderText
+    text: root.text
+    onEditingFinished: {
+      root.text = text
+      root.editingFinished()
+    }
     Layout.fillWidth: true
   }
 
-  // Description
-  NText {
-    text: root.description
-    font.pointSize: Style.fontSizeS * scaling
-    color: Color.mOnSurfaceVariant
-    wrapMode: Text.Wrap
-    Layout.fillWidth: true
-  }
+  NButton {
+    Layout.fillWidth: false
+    Layout.alignment: Qt.AlignBottom
 
-  // Input and button row
-  RowLayout {
-    spacing: Style.marginM * scaling
-    Layout.fillWidth: true
+    text: root.actionButtonText
+    icon: root.actionButtonIcon
+    backgroundColor: Color.mSecondary
+    textColor: Color.mOnSecondary
+    hoverColor: Color.mTertiary
+    pressColor: Color.mPrimary
+    enabled: root.actionButtonEnabled
 
-    NTextInput {
-      id: textInput
-      placeholderText: root.placeholderText
-      text: root.text
-      onEditingFinished: {
-        root.text = text
-        root.editingFinished()
-      }
-      Layout.fillWidth: true
-    }
-
-    Item {
-      Layout.fillWidth: true
-    }
-
-    NButton {
-      text: root.actionButtonText
-      icon: root.actionButtonIcon
-      backgroundColor: Color.mSecondary
-      textColor: Color.mOnSecondary
-      hoverColor: Color.mTertiary
-      pressColor: Color.mPrimary
-      enabled: root.actionButtonEnabled
-      Layout.fillWidth: false
-      onClicked: {
-        root.actionClicked()
-      }
+    onClicked: {
+      root.actionClicked()
     }
   }
 }

@@ -284,6 +284,7 @@ Singleton {
       property JsonObject dock: JsonObject {
         property bool autoHide: false
         property bool exclusive: false
+        property real backgroundOpacity: 1.0
         property list<string> monitors: []
       }
 
@@ -295,6 +296,7 @@ Singleton {
 
       // notifications
       property JsonObject notifications: JsonObject {
+        property bool doNotDisturb: false
         property list<string> monitors: []
       }
 
