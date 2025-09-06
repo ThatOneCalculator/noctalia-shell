@@ -15,7 +15,7 @@ NIconButton {
 
   sizeRatio: 0.8
   icon: Settings.data.notifications.doNotDisturb ? "notifications_off" : "notifications"
-  tooltipText: Settings.data.notifications.doNotDisturb ? "Notification history (Do Not Disturb ON)\nRight-click to toggle Do Not Disturb" : "Notification history\nRight-click to toggle Do Not Disturb"
+  tooltipText: Settings.data.notifications.doNotDisturb ? "Notification history.\nRight-click to disable 'Do Not Disturb'." : "Notification history.\nRight-click to enable 'Do Not Disturb'."
   colorBg: Color.mSurfaceVariant
   colorFg: Settings.data.notifications.doNotDisturb ? Color.mError : "#f6c177"
   colorBorder: Color.transparent
@@ -23,11 +23,5 @@ NIconButton {
 
   onClicked: PanelService.getPanel("notificationHistoryPanel")?.toggle(screen, this)
 
-  onRightClicked: {
-    Settings.data.notifications.doNotDisturb = !Settings.data.notifications.doNotDisturb
-    ToastService.showNotice(
-          Settings.data.notifications.doNotDisturb ? "Do Not Disturb enabled" : "Do Not Disturb disabled",
-          Settings.data.notifications.doNotDisturb ? "Notifications will be hidden but saved to history" : "Notifications will be shown normally",
-          "notice", false, 2000)
-  }
+  onRightClicked: Settings.data.notifications.doNotDisturb = !Settings.data.notifications.doNotDisturb
 }

@@ -78,23 +78,34 @@ Singleton {
 }
 
 // Format an easy to read approximate duration ex: 4h32m
-// Used to display the time remaining on the Battery widget
+// Used to display the time remaining on the Battery widget, computer uptime, etc..
 function formatVagueHumanReadableDuration(totalSeconds) {
-  const hours = Math.floor(totalSeconds / 3600)
-  const minutes = Math.floor((totalSeconds - (hours * 3600)) / 60)
-  const seconds = totalSeconds - (hours * 3600) - (minutes * 60)
+  if (typeof totalSeconds !== 'number' || totalSeconds < 0) {
+    return '0s'
+  }
 
-  var str = ""
-  if (hours) {
-    str += hours.toString() + "h"
-  }
-  if (minutes) {
-    str += minutes.toString() + "m"
-  }
+  // Floor the input to handle decimal seconds
+  totalSeconds = Math.floor(totalSeconds)
+
+  const days = Math.floor(totalSeconds / 86400)
+  const hours = Math.floor((totalSeconds % 86400) / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+
+  const parts = []
+  if (days)
+    parts.push(`${days}d`)
+  if (hours)
+    parts.push(`${hours}h`)
+  if (minutes)
+    parts.push(`${minutes}m`)
+
+  // Only show seconds if no hours and no minutes
   if (!hours && !minutes) {
-    str += seconds.toString() + "s"
+    parts.push(`${seconds}s`)
   }
-  return str
+
+  return parts.join('')
 }
 
 Timer {

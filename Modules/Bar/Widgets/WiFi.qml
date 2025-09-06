@@ -13,17 +13,7 @@ NIconButton {
   property ShellScreen screen
   property real scaling: 1.0
 
-  visible: Settings.data.network.wifiEnabled
-
   sizeRatio: 0.8
-
-  Component.onCompleted: {
-    Logger.log("WiFi", "Widget component completed")
-    Logger.log("WiFi", "NetworkService available:", !!NetworkService)
-    if (NetworkService) {
-      Logger.log("WiFi", "NetworkService.networks available:", !!NetworkService.networks)
-    }
-  }
 
   colorBg: Color.mSurfaceVariant
   colorFg: Color.mOnSurface
@@ -32,7 +22,7 @@ NIconButton {
 
   icon: {
     try {
-      if (NetworkService.ethernet) {
+      if (NetworkService.ethernetConnected) {
         return "lan"
       }
       let connected = false
@@ -46,10 +36,10 @@ NIconButton {
       }
       return connected ? NetworkService.signalIcon(signalStrength) : "wifi_find"
     } catch (error) {
-      Logger.error("WiFi", "Error getting icon:", error)
+      Logger.error("Wi-Fi", "Error getting icon:", error)
       return "signal_wifi_bad"
     }
   }
-  tooltipText: "Network / Wi-Fi"
+  tooltipText: "Network / Wi-Fi."
   onClicked: PanelService.getPanel("wifiPanel")?.toggle(screen, this)
 }
