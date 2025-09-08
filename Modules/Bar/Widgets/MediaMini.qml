@@ -78,8 +78,8 @@ RowLayout {
     Item {
       id: mainContainer
       anchors.fill: parent
-      anchors.leftMargin: Style.marginS * scaling
-      anchors.rightMargin: Style.marginS * scaling
+      anchors.leftMargin: Style.marginXS * scaling
+      anchors.rightMargin: Style.marginXS * scaling
 
       Loader {
         anchors.verticalCenter: parent.verticalCenter
