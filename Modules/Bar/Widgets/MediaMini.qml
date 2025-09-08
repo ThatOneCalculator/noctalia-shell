@@ -167,7 +167,7 @@ RowLayout {
                 duration: BeatDetectorService.bpm * 2
                 easing.type: Easing.InOutQuad
                 loops: Animation.Infinite
-                alwaysRunToEnd: true
+                alwaysRunToEnd: false
                 running: MediaService.isPlaying
               }
             }
