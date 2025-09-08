@@ -157,6 +157,19 @@ RowLayout {
               fallbackIcon: MediaService.isPlaying ? "pause" : "play_arrow"
               borderWidth: 0
               border.color: Color.transparent
+
+              PropertyAnimation {
+                id: pulseAnimation
+                target: trackArt
+                property: "scale"
+                from: 1.0
+                to: 1.1
+                duration: BeatDetectorService.bpm * 2
+                easing.type: Easing.InOutQuad
+                loops: Animation.Infinite
+                alwaysRunToEnd: true
+                running: MediaService.isPlaying
+              }
             }
           }
         }
