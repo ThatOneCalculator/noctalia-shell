@@ -21,8 +21,8 @@ Singleton {
                             "higher_cutoff_freq": 12000
                           },
                           "smoothing": {
-                            "monstercat": 0,
-                            "noise_reduction": 77
+                            "monstercat": 1,
+                            "noise_reduction": 18
                           },
                           "output": {
                             "method": "raw",
