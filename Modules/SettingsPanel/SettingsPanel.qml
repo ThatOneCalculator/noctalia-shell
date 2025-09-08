@@ -39,7 +39,7 @@ NPanel {
     General,
     Network,
     ScreenRecorder,
-    TimeWeather,
+    Weather,
     Wallpaper,
     WallpaperSelector
   }
@@ -90,8 +90,8 @@ NPanel {
     Tabs.NetworkTab {}
   }
   Component {
-    id: timeWeatherTab
-    Tabs.TimeWeatherTab {}
+    id: weatherTab
+    Tabs.WeatherTab {}
   }
   Component {
     id: colorSchemeTab
@@ -156,10 +156,10 @@ NPanel {
                      "icon": "brightness_6",
                      "source": brightnessTab
                    }, {
-                     "id": SettingsPanel.Tab.TimeWeather,
-                     "label": "Time & Weather",
-                     "icon": "schedule",
-                     "source": timeWeatherTab
+                     "id": SettingsPanel.Tab.Weather,
+                     "label": "Weather",
+                     "icon": "partly_cloudy_day",
+                     "source": weatherTab
                    }, {
                      "id": SettingsPanel.Tab.ColorScheme,
                      "label": "Color Scheme",
@@ -368,7 +368,7 @@ NPanel {
           ColumnLayout {
             anchors.fill: parent
             anchors.margins: Style.marginS * scaling
-            spacing: Style.marginXS * 1.5 * scaling
+            spacing: Style.marginXS * scaling
 
             Repeater {
               id: sections
@@ -398,7 +398,8 @@ NPanel {
                 RowLayout {
                   id: tabEntryRow
                   anchors.fill: parent
-                  anchors.margins: Style.marginS * scaling
+                  anchors.leftMargin: Style.marginS * scaling
+                  anchors.rightMargin: Style.marginS * scaling
                   spacing: Style.marginS * scaling
 
                   // Tab icon

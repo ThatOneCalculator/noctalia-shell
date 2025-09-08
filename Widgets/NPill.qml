@@ -14,6 +14,8 @@ Item {
   property color iconCircleColor: Color.mPrimary
   property color iconTextColor: Color.mSurface
   property color collapsedIconColor: Color.mOnSurface
+
+  property real iconRotation: 0
   property real sizeRatio: 0.8
   property bool autoHide: false
   property bool forceOpen: false
@@ -37,13 +39,13 @@ Item {
   property bool shouldAnimateHide: false
 
   // Exposed width logic
-  readonly property int pillHeight: Style.baseWidgetSize * sizeRatio * scaling
-  readonly property int iconSize: Style.baseWidgetSize * sizeRatio * scaling
-  readonly property int pillPaddingHorizontal: Style.marginM * scaling
+  readonly property int iconSize: Math.round(Style.baseWidgetSize * sizeRatio * scaling)
+  readonly property int pillHeight: iconSize
+  readonly property int pillPaddingHorizontal: Style.marginS * scaling
   readonly property int pillOverlap: iconSize * 0.5
   readonly property int maxPillWidth: Math.max(1, textItem.implicitWidth + pillPaddingHorizontal * 2 + pillOverlap)
 
-  width: iconSize + (effectiveShown ? maxPillWidth - pillOverlap : 0)
+  width: iconSize + Math.max(0, pill.width - pillOverlap)
   height: pillHeight
 
   Rectangle {
@@ -65,7 +67,13 @@ Item {
 
     NText {
       id: textItem
-      anchors.centerIn: parent
+      anchors.verticalCenter: parent.verticalCenter
+      x: {
+        // Little tweak to have a better text horizontal centering
+        var centerX = (parent.width - width) / 2
+        var offset = rightOpen ? Style.marginXS * scaling : -Style.marginXS * scaling
+        return centerX + offset
+      }
       text: root.text
       font.pointSize: Style.fontSizeXS * scaling
       font.weight: Style.fontWeightBold
@@ -97,9 +105,10 @@ Item {
     // When forced shown, match pill background; otherwise use accent when hovered
     color: forceOpen ? pillColor : (showPill ? iconCircleColor : Color.mSurfaceVariant)
     anchors.verticalCenter: parent.verticalCenter
+    border.width: Math.max(1, Style.borderS * scaling)
+    border.color: forceOpen ? Qt.alpha(Color.mOutline, 0.5) : Color.transparent
 
-    anchors.left: rightOpen ? parent.left : undefined
-    anchors.right: rightOpen ? undefined : parent.right
+    x: rightOpen ? 0 : (parent.width - width)
 
     Behavior on color {
       ColorAnimation {
@@ -110,6 +119,7 @@ Item {
 
     NIcon {
       text: root.icon
+      rotation: root.iconRotation
       font.pointSize: Style.fontSizeM * scaling
       // When forced shown, use pill text color; otherwise accent color when hovered
       color: forceOpen ? textColor : (showPill ? iconTextColor : Color.mOnSurface)

@@ -10,9 +10,27 @@ Item {
 
   property ShellScreen screen
   property real scaling: 1.0
+
+  // Widget properties passed from Bar.qml for per-instance settings
+  property string widgetId: ""
   property string barSection: ""
-  property int sectionWidgetIndex: 0
+  property int sectionWidgetIndex: -1
   property int sectionWidgetsCount: 0
+
+  property var widgetMetadata: BarWidgetRegistry.widgetMetadata[widgetId]
+  property var widgetSettings: {
+    var section = barSection.replace("Section", "").toLowerCase()
+    if (section && sectionWidgetIndex >= 0) {
+      var widgets = Settings.data.bar.widgets[section]
+      if (widgets && sectionWidgetIndex < widgets.length) {
+        return widgets[sectionWidgetIndex]
+      }
+    }
+    return {}
+  }
+
+  readonly property bool userAlwaysShowPercentage: (widgetSettings.alwaysShowPercentage
+                                                    !== undefined) ? widgetSettings.alwaysShowPercentage : widgetMetadata.alwaysShowPercentage
 
   // Used to avoid opening the pill on Quickshell startup
   property bool firstBrightnessReceived: false
@@ -37,26 +55,24 @@ Item {
     target: getMonitor()
     ignoreUnknownSignals: true
     function onBrightnessUpdated() {
-      Logger.log("Bar-Brightness", "OnBrightnessUpdated")
-      var monitor = getMonitor()
-      if (!monitor)
-        return
-      var currentBrightness = monitor.brightness
-
-      // Ignore if this is the first time or if brightness hasn't actually changed
+      // Ignore if this is the first time we receive an update.
+      // Most likely service just kicked off.
       if (!firstBrightnessReceived) {
         firstBrightnessReceived = true
-        monitor.lastBrightness = currentBrightness
         return
       }
 
-      // Only show pill if brightness actually changed (not just loaded from settings)
-      if (Math.abs(currentBrightness - monitor.lastBrightness) > 0.1) {
-        pill.show()
-      }
-
-      monitor.lastBrightness = currentBrightness
+      pill.show()
+      hideTimerAfterChange.restart()
     }
+  }
+
+  Timer {
+    id: hideTimerAfterChange
+    interval: 2500
+    running: false
+    repeat: false
+    onTriggered: pill.hide()
   }
 
   NPill {
@@ -71,6 +87,7 @@ Item {
       var monitor = getMonitor()
       return monitor ? (Math.round(monitor.brightness * 100) + "%") : ""
     }
+    forceOpen: userAlwaysShowPercentage
     tooltipText: {
       var monitor = getMonitor()
       if (!monitor)

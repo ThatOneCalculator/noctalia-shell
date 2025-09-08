@@ -18,6 +18,9 @@ Singleton {
   property string disconnectingFrom: ""
   property string forgettingNetwork: ""
 
+  property bool ignoreScanResults: false
+  property bool scanPending: false
+
   // Persistent cache
   property string cacheFile: Settings.cacheDir + "network.json"
   readonly property string cachedLastConnected: cacheAdapter.lastConnected
@@ -27,6 +30,7 @@ Singleton {
   FileView {
     id: cacheFileView
     path: root.cacheFile
+    printErrors: false
 
     JsonAdapter {
       id: cacheAdapter
@@ -54,7 +58,7 @@ Singleton {
   Component.onCompleted: {
     Logger.log("Network", "Service initialized")
     syncWifiState()
-    refresh()
+    scan()
   }
 
   // Save cache with debounce
@@ -75,6 +79,16 @@ Singleton {
     onTriggered: scan()
   }
 
+  // Ethernet check timer
+  // Always running every 30s
+  Timer {
+    id: ethernetCheckTimer
+    interval: 30000
+    running: true
+    repeat: true
+    onTriggered: ethernetStateProcess.running = true
+  }
+
   // Core functions
   function syncWifiState() {
     wifiStateProcess.running = true
@@ -82,26 +96,26 @@ Singleton {
 
   function setWifiEnabled(enabled) {
     Settings.data.network.wifiEnabled = enabled
-
-    wifiToggleProcess.action = enabled ? "on" : "off"
-    wifiToggleProcess.running = true
-  }
-
-  function refresh() {
-    ethernetStateProcess.running = true
-
-    if (Settings.data.network.wifiEnabled) {
-      scan()
-    }
   }
 
   function scan() {
-    if (scanning)
+    if (!Settings.data.network.wifiEnabled)
       return
+
+    if (scanning) {
+      // Mark current scan results to be ignored and schedule a new scan
+      Logger.log("Network", "Scan already in progress, will ignore results and rescan")
+      ignoreScanResults = true
+      scanPending = true
+      return
+    }
 
     scanning = true
     lastError = ""
-    scanProcess.running = true
+    ignoreScanResults = false
+
+    // Get existing profiles first, then scan
+    profileCheckProcess.running = true
     Logger.log("Network", "Wi-Fi scan in progress...")
   }
 
@@ -174,8 +188,7 @@ Singleton {
         "ssid": ssid,
         "security": "--",
         "signal": 100,
-        "connected"// Default to good signal until real scan
-        : true,
+        "connected": true,
         "existing": true,
         "cached": true
       }
@@ -206,7 +219,7 @@ Singleton {
   // Processes
   Process {
     id: ethernetStateProcess
-    running: false
+    running: true
     command: ["nmcli", "-t", "-f", "DEVICE,TYPE,STATE", "device"]
 
     stdout: StdioCollector {
@@ -239,30 +252,34 @@ Singleton {
     }
   }
 
+  // Helper process to get existing profiles
   Process {
-    id: wifiToggleProcess
-    property string action: "on"
+    id: profileCheckProcess
     running: false
-    command: ["nmcli", "radio", "wifi", action]
+    command: ["nmcli", "-t", "-f", "NAME", "connection", "show"]
 
-    onRunningChanged: {
-      if (!running) {
-        if (action === "on") {
-          // Clear networks immediately and start delayed scan
-          root.networks = ({})
-          delayedScanTimer.interval = 8000
-          delayedScanTimer.restart()
-        } else {
-          root.networks = ({})
-        }
-      }
-    }
-
-    stderr: StdioCollector {
+    stdout: StdioCollector {
       onStreamFinished: {
-        if (text.trim()) {
-          Logger.warn("Network", "WiFi toggle error: " + text)
+        if (root.ignoreScanResults) {
+          Logger.log("Network", "Ignoring profile check results (new scan requested)")
+          root.scanning = false
+
+          // Check if we need to start a new scan
+          if (root.scanPending) {
+            root.scanPending = false
+            delayedScanTimer.interval = 100
+            delayedScanTimer.restart()
+          }
+          return
         }
+
+        const profiles = {}
+        const lines = text.split("\n").filter(l => l.trim())
+        for (const line of lines) {
+          profiles[line.trim()] = true
+        }
+        scanProcess.existingProfiles = profiles
+        scanProcess.running = true
       }
     }
   }
@@ -270,74 +287,103 @@ Singleton {
   Process {
     id: scanProcess
     running: false
-    command: ["sh", "-c", `
-      # Get list of saved connection profiles (just the names)
-      profiles=$(nmcli -t -f NAME connection show | tr '\n' '|')
+    command: ["nmcli", "-t", "-f", "SSID,SECURITY,SIGNAL,IN-USE", "device", "wifi", "list", "--rescan", "yes"]
 
-      # Get WiFi networks
-      nmcli -t -f SSID,SECURITY,SIGNAL,IN-USE device wifi list --rescan yes | while read line; do
-      ssid=$(echo "$line" | cut -d: -f1)
-      security=$(echo "$line" | cut -d: -f2)
-      signal=$(echo "$line" | cut -d: -f3)
-      in_use=$(echo "$line" | cut -d: -f4)
-
-      # Skip empty SSIDs
-      if [ -z "$ssid" ]; then
-      continue
-      fi
-
-      # Check if SSID matches any profile name (simple check)
-      # This covers most cases where profile name equals or contains the SSID
-      existing=false
-      if echo "$profiles" | grep -qF "$ssid|"; then
-      existing=true
-      fi
-
-      echo "$ssid|$security|$signal|$in_use|$existing"
-      done
-      `]
+    property var existingProfiles: ({})
 
     stdout: StdioCollector {
       onStreamFinished: {
-        const nets = {}
-        const lines = text.split("\n").filter(l => l.trim())
+        if (root.ignoreScanResults) {
+          Logger.log("Network", "Ignoring scan results (new scan requested)")
+          root.scanning = false
 
-        for (const line of lines) {
-          const parts = line.split("|")
-          if (parts.length < 5)
+          // Check if we need to start a new scan
+          if (root.scanPending) {
+            root.scanPending = false
+            delayedScanTimer.interval = 100
+            delayedScanTimer.restart()
+          }
+          return
+        }
+
+        // Process the scan results as before...
+        const lines = text.split("\n")
+        const networksMap = {}
+
+        for (var i = 0; i < lines.length; ++i) {
+          const line = lines[i].trim()
+          if (!line)
           continue
 
-          const ssid = parts[0]
-          if (!ssid || ssid.trim() === "")
-          continue
-
-          const network = {
-            "ssid": ssid,
-            "security": parts[1] || "--",
-            "signal": parseInt(parts[2]) || 0,
-            "connected": parts[3] === "*",
-            "existing": parts[4] === "true",
-            "cached": ssid in cacheAdapter.knownNetworks
+          // Parse from the end to handle SSIDs with colons
+          // Format is SSID:SECURITY:SIGNAL:IN-USE
+          // We know the last 3 fields, so everything else is SSID
+          const lastColonIdx = line.lastIndexOf(":")
+          if (lastColonIdx === -1) {
+            Logger.warn("Network", "Malformed nmcli output line:", line)
+            continue
           }
 
-          // Track connected network
-          if (network.connected && cacheAdapter.lastConnected !== ssid) {
-            cacheAdapter.lastConnected = ssid
-            saveCache()
+          const inUse = line.substring(lastColonIdx + 1)
+          const remainingLine = line.substring(0, lastColonIdx)
+
+          const secondLastColonIdx = remainingLine.lastIndexOf(":")
+          if (secondLastColonIdx === -1) {
+            Logger.warn("Network", "Malformed nmcli output line:", line)
+            continue
           }
 
-          // Keep best signal for duplicate SSIDs
-          if (!nets[ssid] || network.signal > nets[ssid].signal) {
-            nets[ssid] = network
+          const signal = remainingLine.substring(secondLastColonIdx + 1)
+          const remainingLine2 = remainingLine.substring(0, secondLastColonIdx)
+
+          const thirdLastColonIdx = remainingLine2.lastIndexOf(":")
+          if (thirdLastColonIdx === -1) {
+            Logger.warn("Network", "Malformed nmcli output line:", line)
+            continue
+          }
+
+          const security = remainingLine2.substring(thirdLastColonIdx + 1)
+          const ssid = remainingLine2.substring(0, thirdLastColonIdx)
+
+          if (ssid) {
+            const signalInt = parseInt(signal) || 0
+            const connected = inUse === "*"
+
+            // Track connected network in cache
+            if (connected && cacheAdapter.lastConnected !== ssid) {
+              cacheAdapter.lastConnected = ssid
+              saveCache()
+            }
+
+            if (!networksMap[ssid]) {
+              networksMap[ssid] = {
+                "ssid": ssid,
+                "security": security || "--",
+                "signal": signalInt,
+                "connected": connected,
+                "existing": ssid in scanProcess.existingProfiles,
+                "cached": ssid in cacheAdapter.knownNetworks
+              }
+            } else {
+              // Keep the best signal for duplicate SSIDs
+              const existingNet = networksMap[ssid]
+              if (connected) {
+                existingNet.connected = true
+              }
+              if (signalInt > existingNet.signal) {
+                existingNet.signal = signalInt
+                existingNet.security = security || "--"
+              }
+            }
           }
         }
 
-        // For logging purpose only
-        Logger.log("Network", "Wi-Fi scan completed")
+        // Logging
         const oldSSIDs = Object.keys(root.networks)
-        const newSSIDs = Object.keys(nets)
+        const newSSIDs = Object.keys(networksMap)
         const newNetworks = newSSIDs.filter(ssid => !oldSSIDs.includes(ssid))
         const lostNetworks = oldSSIDs.filter(ssid => !newSSIDs.includes(ssid))
+
         if (newNetworks.length > 0 || lostNetworks.length > 0) {
           if (newNetworks.length > 0) {
             Logger.log("Network", "New Wi-Fi SSID discovered:", newNetworks.join(", "))
@@ -345,12 +391,19 @@ Singleton {
           if (lostNetworks.length > 0) {
             Logger.log("Network", "Wi-Fi SSID disappeared:", lostNetworks.join(", "))
           }
-          Logger.log("Network", "Total Wi-Fi SSIDs:", Object.keys(nets).length)
+          Logger.log("Network", "Total Wi-Fi SSIDs:", Object.keys(networksMap).length)
         }
 
-        // Assign the results
-        root.networks = nets
+        Logger.log("Network", "Wi-Fi scan completed")
+        root.networks = networksMap
         root.scanning = false
+
+        // Check if we need to start a new scan
+        if (root.scanPending) {
+          root.scanPending = false
+          delayedScanTimer.interval = 100
+          delayedScanTimer.restart()
+        }
       }
     }
 
@@ -359,16 +412,14 @@ Singleton {
         root.scanning = false
         if (text.trim()) {
           Logger.warn("Network", "Scan error: " + text)
-          // If scan fails, set a short retry
-          if (Settings.data.network.wifiEnabled) {
-            delayedScanTimer.interval = 5000
-            delayedScanTimer.restart()
-          }
+
+          // If scan fails, retry
+          delayedScanTimer.interval = 5000
+          delayedScanTimer.restart()
         }
       }
     }
   }
-
   Process {
     id: connectProcess
     property string mode: "new"
@@ -390,6 +441,17 @@ Singleton {
 
     stdout: StdioCollector {
       onStreamFinished: {
+        // Check if the output actually indicates success
+        // nmcli outputs "Device '...' successfully activated" or "Connection successfully activated"
+        // on success. Empty output or other messages indicate failure.
+        const output = text.trim()
+
+        if (!output || (!output.includes("successfully activated") && !output.includes("Connection successfully"))) {
+          // No success message - likely an error occurred
+          // Don't update anything, let stderr handler deal with it
+          return
+        }
+
         // Success - update cache
         let known = cacheAdapter.knownNetworks
         known[connectProcess.ssid] = {
@@ -408,7 +470,7 @@ Singleton {
         Logger.log("Network", `Connected to network: "${connectProcess.ssid}"`)
 
         // Still do a scan to get accurate signal and security info
-        delayedScanTimer.interval = 1000
+        delayedScanTimer.interval = 5000
         delayedScanTimer.restart()
       }
     }
@@ -464,7 +526,7 @@ Singleton {
           Logger.warn("Network", "Disconnect error: " + text)
         }
         // Still trigger a scan even on error
-        delayedScanTimer.interval = 1000
+        delayedScanTimer.interval = 5000
         delayedScanTimer.restart()
       }
     }
@@ -522,8 +584,8 @@ Singleton {
 
         root.forgettingNetwork = ""
 
-        // Quick scan to verify the profile is gone
-        delayedScanTimer.interval = 500
+        // Scan to verify the profile is gone
+        delayedScanTimer.interval = 5000
         delayedScanTimer.restart()
       }
     }
@@ -535,7 +597,7 @@ Singleton {
           Logger.warn("Network", "Forget error: " + text)
         }
         // Still Trigger a scan even on error
-        delayedScanTimer.interval = 500
+        delayedScanTimer.interval = 5000
         delayedScanTimer.restart()
       }
     }

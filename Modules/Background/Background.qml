@@ -3,6 +3,8 @@ import Quickshell
 import Quickshell.Wayland
 import qs.Commons
 import qs.Services
+import qs.Modules.SettingsPanel
+import qs.Widgets
 
 Variants {
   id: backgroundVariants
