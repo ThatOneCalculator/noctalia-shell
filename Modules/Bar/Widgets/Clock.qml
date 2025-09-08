@@ -53,13 +53,13 @@ Rectangle {
         dayName = dayName.charAt(0).toUpperCase() + dayName.slice(1)
         let day = now.getDate()
         let month = now.toLocaleDateString(Qt.locale(), "MMM")
-        return timeString + " - " + (reverseDayMonth ? `${dayName}, ${month} ${day}` : `${dayName}, ${day} ${month}`)
+        return timeString + " · " + (reverseDayMonth ? `${dayName}, ${month} ${day}` : `${dayName}, ${day} ${month}`)
       }
       return timeString
     }
     anchors.centerIn: parent
     font.pointSize: Style.fontSizeS * scaling
-    font.weight: Style.fontWeightBold
+    color: Color.mPrimary
   }
 
   NTooltip {
