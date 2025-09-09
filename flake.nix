@@ -52,7 +52,6 @@
 
         fontconfig = pkgs.makeFontsConf {
           fontDirectories = [
-            pkgs.material-symbols
             pkgs.roboto
             pkgs.inter-nerdfont
           ];

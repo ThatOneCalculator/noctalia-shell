@@ -21,6 +21,8 @@
   </a>
 </p>
 
+---
+
 A sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell.
 
 Features a modern modular architecture with a status bar, notification system, control panel, comprehensive system integration, and more — all styled with a warm lavender palette, or your favorite color scheme!
@@ -66,7 +68,6 @@ Features a modern modular architecture with a status bar, notification system, c
 - `quickshell-git` - Core shell framework
 - `ttf-roboto` - The default font used for most of the UI
 - `inter-font` - The default font used for Headers (ex: clock on the LockScreen)
-- `ttf-material-symbols-variable-git` - Icon font for UI elements
 - `gpu-screen-recorder` - Screen recording functionality
 - `brightnessctl` - For internal/laptop monitor brightness
 - `ddcutil` - For desktop monitor brightness (might introduce some system instability with certain monitors)
@@ -341,7 +342,7 @@ Special thanks to the creators of [**Caelestia**](https://github.com/caelestia-d
 
 While all donations are greatly appreciated, they are completely voluntary.
 
-<a href="https://ko-fi.com/soramane">
+<a href="https://ko-fi.com/lysec">
   <img src="https://img.shields.io/badge/donate-ko--fi-A8AEFF?style=for-the-badge&logo=kofi&logoColor=FFFFFF&labelColor=0C0D11" alt="Ko-Fi" />
 </a>
 

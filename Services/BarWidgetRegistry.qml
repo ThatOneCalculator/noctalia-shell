@@ -60,7 +60,7 @@ Singleton {
                                   },
                                   "CustomButton": {
                                     "allowUserSettings": true,
-                                    "icon": "favorite",
+                                    "icon": "heart",
                                     "leftClickExec": "",
                                     "rightClickExec": "",
                                     "middleClickExec": ""
@@ -84,7 +84,8 @@ Singleton {
                                     "showCpuTemp": true,
                                     "showMemoryUsage": true,
                                     "showMemoryAsPercent": false,
-                                    "showNetworkStats": false
+                                    "showNetworkStats": false,
+                                    "showDiskUsage": false
                                   },
                                   "Workspace": {
                                     "allowUserSettings": true,

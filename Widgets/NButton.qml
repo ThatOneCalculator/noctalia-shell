@@ -82,9 +82,9 @@ Rectangle {
     // Icon (optional)
     NIcon {
       Layout.alignment: Qt.AlignVCenter
-      layoutTopMargin: 1 * scaling
       visible: root.icon !== ""
-      text: root.icon
+
+      icon: root.icon
       font.pointSize: root.iconSize
       color: {
         if (!root.enabled)
