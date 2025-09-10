@@ -38,7 +38,7 @@ Item {
 
   // Test mode
   readonly property bool testMode: false
-  readonly property int testPercent: 50
+  readonly property int testPercent: 90
   readonly property bool testCharging: false
 
   // Main properties

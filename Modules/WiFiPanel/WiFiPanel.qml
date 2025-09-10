@@ -55,7 +55,7 @@ NPanel {
         }
 
         NIconButton {
-          icon: "arrow-repeat"
+          icon: "refresh"
           tooltipText: "Refresh"
           sizeRatio: 0.8
           enabled: Settings.data.network.wifiEnabled && !NetworkService.scanning
@@ -63,7 +63,7 @@ NPanel {
         }
 
         NIconButton {
-          icon: "x-lg"
+          icon: "close"
           tooltipText: "Close"
           sizeRatio: 0.8
           onClicked: root.close()
@@ -91,7 +91,7 @@ NPanel {
           spacing: Style.marginS * scaling
 
           NIcon {
-            icon: "exclamation-triangle"
+            icon: "warning"
             font.pointSize: Style.fontSizeL * scaling
             color: Color.mError
           }
@@ -105,7 +105,7 @@ NPanel {
           }
 
           NIconButton {
-            icon: "x-lg"
+            icon: "close"
             sizeRatio: 0.6
             onClicked: NetworkService.lastError = ""
           }
@@ -492,7 +492,7 @@ NPanel {
                       }
 
                       NIconButton {
-                        icon: "x-lg"
+                        icon: "close"
                         sizeRatio: 0.8
                         onClicked: {
                           passwordSsid = ""
@@ -521,7 +521,7 @@ NPanel {
 
                       RowLayout {
                         NIcon {
-                          text: "delete_outline"
+                          icon: "trash"
                           font.pointSize: Style.fontSizeL * scaling
                           color: Color.mError
                         }
@@ -547,7 +547,7 @@ NPanel {
                       }
 
                       NIconButton {
-                        icon: "x-lg"
+                        icon: "close"
                         sizeRatio: 0.8
                         onClicked: expandedSsid = ""
                       }
@@ -586,7 +586,7 @@ NPanel {
 
           NButton {
             text: "Scan again"
-            icon: "arrow-repeat"
+            icon: "refresh"
             Layout.alignment: Qt.AlignHCenter
             onClicked: NetworkService.scan()
           }

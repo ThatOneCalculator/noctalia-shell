@@ -48,9 +48,9 @@ Rectangle {
   }
 
   NIcon {
-    text: root.icon
+    icon: root.icon
     visible: !root.nerd
-    font.pointSize: Math.max(1, root.width * 0.4)
+    font.pointSize: Math.max(1, root.width * 0.47)
     color: root.enabled && root.hovering ? colorFgHover : colorFg
     opacity: root.enabled ? Style.opacityFull : Style.opacityMedium
     // Center horizontally

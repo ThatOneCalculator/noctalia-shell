@@ -96,7 +96,7 @@ ColumnLayout {
     }
 
     NIconButton {
-      icon: "arrow-repeat"
+      icon: "refresh"
       tooltipText: "Refresh wallpaper list"
       onClicked: {
         WallpaperService.refreshWallpapersList()
@@ -181,7 +181,7 @@ ColumnLayout {
           visible: isSelected
 
           NIcon {
-            icon: "check-lg"
+            icon: "check"
             font.pointSize: Style.fontSizeM * scaling
             font.weight: Style.fontWeightBold
             color: Color.mOnSecondary
@@ -246,8 +246,8 @@ ColumnLayout {
       }
 
       NIcon {
-        text: "folder_open"
-        font.pointSize: Style.fontSizeXL * scaling
+        icon: "folder-open"
+        font.pointSize: Style.fontSizeXXL * scaling
         color: Color.mOnSurface
         Layout.alignment: Qt.AlignHCenter
       }

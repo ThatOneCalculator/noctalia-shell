@@ -130,7 +130,7 @@ Popup {
           spacing: Style.marginS * scaling
 
           NIcon {
-            icon: "eyedropper"
+            icon: "color-picker"
             font.pointSize: Style.fontSizeXXL * scaling
             color: Color.mPrimary
           }
@@ -148,7 +148,7 @@ Popup {
         }
 
         NIconButton {
-          icon: "x-lg"
+          icon: "close"
           onClicked: root.close()
         }
       }
@@ -492,7 +492,6 @@ Popup {
         NButton {
           id: cancelButton
           text: "Cancel"
-          icon: "x-lg"
           outlined: cancelButton.hovered ? false : true
           customHeight: 36 * scaling
           customWidth: 100 * scaling
@@ -503,7 +502,7 @@ Popup {
 
         NButton {
           text: "Apply"
-          icon: "check-lg"
+          icon: "check"
           customHeight: 36 * scaling
           customWidth: 100 * scaling
           onClicked: {

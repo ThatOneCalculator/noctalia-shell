@@ -118,7 +118,7 @@ Item {
       // Icon
       NIcon {
         id: icon
-        icon: (root.type == "warning") ? "exclamation-triangle" : "check-circle"
+        icon: (root.type == "warning") ? "toast-warning" : "toast-notice"
         color: {
           switch (root.type) {
           case "warning":
@@ -162,7 +162,7 @@ Item {
 
       // Close button (only if persistent or manual dismiss needed)
       NIconButton {
-        icon: "x-lg"
+        icon: "close"
         visible: root.persistent || root.duration === 0
 
         colorBg: Color.mSurfaceVariant

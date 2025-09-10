@@ -44,7 +44,7 @@ NBox {
 
     // Idle Inhibitor
     NIconButton {
-      icon: "cup"
+      icon: IdleInhibitorService.isInhibited ? "keep-awake-on" : "keep-awake-off"
       tooltipText: IdleInhibitorService.isInhibited ? "Disable keep awake." : "Enable keep awake."
       colorBg: IdleInhibitorService.isInhibited ? Color.mPrimary : Color.mSurfaceVariant
       colorFg: IdleInhibitorService.isInhibited ? Color.mOnPrimary : Color.mPrimary
@@ -56,7 +56,7 @@ NBox {
     // Wallpaper
     NIconButton {
       visible: Settings.data.wallpaper.enabled
-      icon: "image"
+      icon: "wallpaper-selector"
       tooltipText: "Left click: Open wallpaper selector.\nRight click: Set random wallpaper."
       onClicked: {
         var settingsPanel = PanelService.getPanel("settingsPanel")

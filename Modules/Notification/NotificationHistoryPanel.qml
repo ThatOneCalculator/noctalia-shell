@@ -45,10 +45,11 @@ NPanel {
         }
 
         NIconButton {
-          icon: Settings.data.notifications.doNotDisturb ? "bell-slash" : "bell"
+          icon: Settings.data.notifications.doNotDisturb ? "bell-off" : "bell"
           tooltipText: Settings.data.notifications.doNotDisturb ? "'Do Not Disturb' is enabled." : "'Do Not Disturb' is disabled."
           sizeRatio: 0.8
           onClicked: Settings.data.notifications.doNotDisturb = !Settings.data.notifications.doNotDisturb
+          onRightClicked: Settings.data.notifications.doNotDisturb = !Settings.data.notifications.doNotDisturb
         }
 
         NIconButton {
@@ -59,7 +60,7 @@ NPanel {
         }
 
         NIconButton {
-          icon: "x-lg"
+          icon: "close"
           tooltipText: "Close"
           sizeRatio: 0.8
           onClicked: {
@@ -85,7 +86,7 @@ NPanel {
         }
 
         NIcon {
-          icon: "bell-slash"
+          icon: "bell-off"
           font.pointSize: 64 * scaling
           color: Color.mOnSurfaceVariant
           Layout.alignment: Qt.AlignHCenter

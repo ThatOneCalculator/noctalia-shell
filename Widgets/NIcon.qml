@@ -4,22 +4,23 @@ import qs.Commons
 import qs.Widgets
 
 Text {
-  readonly property string defaultIcon: "balloon"
-  property string icon: defaultIcon
+  id: root
+
+  property string icon: Icons.defaultIcon
 
   visible: (icon !== undefined) && (icon !== "")
   text: {
     if ((icon === undefined) || (icon === "")) {
       return ""
     }
-    if (Bootstrap.icons[icon] === undefined) {
-      Logger.warn("Icon", `"${icon}"`, "doesn't exist in the bootstrap font")
+    if (Icons.get(icon) === undefined) {
+      Logger.warn("Icon", `"${icon}"`, "doesn't exist in the icons font")
       Logger.callStack()
-      return Bootstrap.icons[defaultIcon]
+      return Icons.get(Icons.defaultIcon)
     }
-    return Bootstrap.icons[icon]
+    return Icons.get(icon)
   }
-  font.family: Bootstrap.fontFamily
+  font.family: Icons.fontFamily
   font.pointSize: Style.fontSizeL * scaling
   color: Color.mOnSurface
   verticalAlignment: Text.AlignVCenter
