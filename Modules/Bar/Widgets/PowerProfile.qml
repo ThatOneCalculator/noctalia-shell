@@ -39,12 +39,13 @@ NIconButton {
   }
   
   function profileColor() {
-    if (!hasPP) return "#e0def4";
-    if (powerProfiles.profile === PowerProfile.Performance)
+    if (!hasPP)
+      return "#e0def4"
+    if (PowerProfileService.profile === PowerProfile.Performance)
         return "#ebbcba"
-    else if (powerProfiles.profile === PowerProfile.Balanced)
+    else if (PowerProfileService.profile === PowerProfile.Balanced)
         return "#c4a7e7"
-    else if (powerProfiles.profile === PowerProfile.PowerSaver)
+    else if (PowerProfileService.profile === PowerProfile.PowerSaver)
         return "#9ccfd8"
   }
 
