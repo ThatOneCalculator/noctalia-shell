@@ -34,7 +34,7 @@ Singleton {
     "cpu-usage": "brand-speedtest",
     "cpu-temperature": "flame-filled",
     "memory": "cpu",
-    "performance": "gauge-filled",
+    "performance": "gauge",
     "balanced": "scale",
     "powersaver": "leaf",
     "storage": "database",
