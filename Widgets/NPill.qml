@@ -15,7 +15,6 @@ Item {
   property bool disableOpen: false
   property bool rightOpen: false
   property bool hovered: false
-  property real fontSize: Style.fontSizeXS
 
   // Effective shown state (true if hovered/animated open or forced)
   readonly property bool revealed: forceOpen || showPill
@@ -70,7 +69,7 @@ Item {
         return centerX + offset
       }
       text: root.text
-      font.pointSize: root.fontSize * scaling
+      font.pointSize: Style.fontSizeXS * scaling
       font.weight: Style.fontWeightBold
       color: Color.mPrimary
       visible: revealed

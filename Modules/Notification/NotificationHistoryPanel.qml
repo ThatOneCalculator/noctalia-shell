@@ -12,8 +12,8 @@ import qs.Widgets
 NPanel {
   id: root
 
-  preferredWidth: 380
-  preferredHeight: 500
+  panelWidth: 408 * scaling
+  panelHeight: 500 * scaling
   panelAnchorRight: true
 
   panelContent: Rectangle {
@@ -138,24 +138,6 @@ NPanel {
             anchors.fill: parent
             anchors.margins: Style.marginM * scaling
             spacing: Style.marginM * scaling
-
-            // App icon (same style as popup)
-            NImageCircled {
-              Layout.preferredWidth: 28 * scaling
-              Layout.preferredHeight: 28 * scaling
-              Layout.alignment: Qt.AlignVCenter
-              // Prefer stable themed icons over transient image paths
-              imagePath: (appIcon
-                          && appIcon !== "") ? (AppIcons.iconFromName(appIcon, "application-x-executable")
-                                                || appIcon) : ((AppIcons.iconForAppId(desktopEntry
-                                                                                      || appName, "application-x-executable")
-                                                                || (image && image
-                                                                    !== "" ? image : AppIcons.iconFromName("application-x-executable",
-                                                                                                           "application-x-executable"))))
-              borderColor: Color.transparent
-              borderWidth: 0
-              visible: true
-            }
 
             // Notification content column
             ColumnLayout {

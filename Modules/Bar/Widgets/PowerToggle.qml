@@ -8,6 +8,9 @@ import qs.Widgets
 NIconButton {
   id: root
 
+  property ShellScreen screen
+  property real scaling: 1.0
+
   sizeRatio: 0.8
 
   icon: "power"
@@ -16,6 +19,6 @@ NIconButton {
   colorFg: Color.mError
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
-  // onClicked: PanelService.getPanel("powerPanel")?.toggle()
+  // onClicked: PanelService.getPanel("powerPanel")?.toggle(screen)
   onClicked: Quickshell.execDetached(["wleave"])
 }

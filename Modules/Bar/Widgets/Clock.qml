@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import qs.Commons
 import qs.Services
@@ -30,106 +29,43 @@ Rectangle {
   }
 
   // Resolve settings: try user settings or defaults from BarWidgetRegistry
+  readonly property bool showDate: widgetSettings.showDate !== undefined ? widgetSettings.showDate : widgetMetadata.showDate
   readonly property bool use12h: widgetSettings.use12HourClock !== undefined ? widgetSettings.use12HourClock : widgetMetadata.use12HourClock
+  readonly property bool showSeconds: widgetSettings.showSeconds !== undefined ? widgetSettings.showSeconds : widgetMetadata.showSeconds
   readonly property bool reverseDayMonth: widgetSettings.reverseDayMonth
                                           !== undefined ? widgetSettings.reverseDayMonth : widgetMetadata.reverseDayMonth
-  readonly property string displayFormat: widgetSettings.displayFormat
-                                          !== undefined ? widgetSettings.displayFormat : widgetMetadata.displayFormat
 
-  implicitWidth: Math.round(layout.implicitWidth + Style.marginM * 2 * scaling)
+  implicitWidth: clock.width + Style.marginM * 2 * scaling
   implicitHeight: Math.round(Style.capsuleHeight * scaling)
-  radius: Math.round(Style.radiusS * scaling)
+  radius: Math.round(Style.radiusM * scaling)
   color: Color.mSurfaceVariant
 
-  Item {
-    id: clockContainer
-    anchors.fill: parent
-    anchors.margins: Style.marginXS * scaling
+  // Clock Icon with attached calendar
+  NText {
+    id: clock
+    text: {
+      const now = Time.date
+      const timeFormat = use12h ? (showSeconds ? "h:mm:ss AP" : "h:mm AP") : (showSeconds ? "HH:mm:ss" : "HH:mm")
+      const timeString = Qt.formatDateTime(now, timeFormat)
 
-    ColumnLayout {
-      id: layout
-      anchors.centerIn: parent
-      spacing: -3 * scaling
-
-      // First line
-      NText {
-        readonly property bool showSeconds: (displayFormat === "time-seconds")
-        readonly property bool inlineDate: (displayFormat === "time-date")
-
-        text: {
-          const now = Time.date
-          let timeStr = ""
-
-          if (use12h) {
-            // 12-hour format with proper padding and consistent spacing
-            const hours = now.getHours()
-            const displayHours = hours === 0 ? 12 : (hours > 12 ? hours - 12 : hours)
-            const paddedHours = displayHours.toString().padStart(2, '0')
-            const minutes = now.getMinutes().toString().padStart(2, '0')
-            const ampm = hours < 12 ? 'AM' : 'PM'
-
-            if (showSeconds) {
-              const seconds = now.getSeconds().toString().padStart(2, '0')
-              timeStr = `${paddedHours}:${minutes}:${seconds} ${ampm}`
-            } else {
-              timeStr = `${paddedHours}:${minutes} ${ampm}`
-            }
-          } else {
-            // 24-hour format with padding
-            const hours = now.getHours().toString().padStart(2, '0')
-            const minutes = now.getMinutes().toString().padStart(2, '0')
-
-            if (showSeconds) {
-              const seconds = now.getSeconds().toString().padStart(2, '0')
-              timeStr = `${hours}:${minutes}:${seconds}`
-            } else {
-              timeStr = `${hours}:${minutes}`
-            }
-          }
-
-          // Add inline date if needed
-          if (inlineDate) {
-            let dayName = now.toLocaleDateString(Qt.locale(), "ddd")
-            dayName = dayName.charAt(0).toUpperCase() + dayName.slice(1)
-            const day = now.getDate().toString().padStart(2, '0')
-            let month = now.toLocaleDateString(Qt.locale(), "MMM")
-            timeStr += " - " + (reverseDayMonth ? `${dayName}, ${month} ${day}` : `${dayName}, ${day} ${month}`)
-          }
-
-          return timeStr
-        }
-
-        //font.family: Settings.data.ui.fontFixed
-        font.pointSize: Style.fontSizeXS * scaling
-        font.weight: Style.fontWeightBold
-        color: Color.mPrimary
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+      if (showDate) {
+        let dayName = now.toLocaleDateString(Qt.locale(), "ddd")
+        dayName = dayName.charAt(0).toUpperCase() + dayName.slice(1)
+        let day = now.getDate()
+        let month = now.toLocaleDateString(Qt.locale(), "MMM")
+        return timeString + " · " + (reverseDayMonth ? `${dayName}, ${month} ${day}` : `${dayName}, ${day} ${month}`)
       }
-
-      // Second line
-      NText {
-        visible: (displayFormat === "time-date-short")
-        text: {
-          const now = Time.date
-          const day = now.getDate().toString().padStart(2, '0')
-          const month = (now.getMonth() + 1).toString().padStart(2, '0')
-          return reverseDayMonth ? `${month}/${day}` : `${day}/${month}`
-        }
-
-        // Enable fixed-width font for consistent spacing
-        //font.family: Settings.data.ui.fontFixed
-        font.pointSize: Style.fontSizeXXS * scaling
-        font.weight: Style.fontWeightRegular
-        color: Color.mPrimary
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-      }
+      return timeString
     }
+    anchors.centerIn: parent
+    font.pointSize: Style.fontSizeS * scaling
+    color: Color.mPrimary
   }
 
   NTooltip {
     id: tooltip
     text: `${Time.formatDate(reverseDayMonth)}.`
-    target: clockContainer
+    target: clock
     positionAbove: Settings.data.bar.position === "bottom"
   }
 
@@ -148,7 +84,7 @@ Rectangle {
     }
     onClicked: {
       tooltip.hide()
-      PanelService.getPanel("calendarPanel")?.toggle(this)
+      PanelService.getPanel("calendarPanel")?.toggle(screen, this)
     }
   }
 }

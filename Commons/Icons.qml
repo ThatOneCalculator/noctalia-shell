@@ -14,7 +14,7 @@ Singleton {
   readonly property string defaultIcon: TablerIcons.defaultIcon
   readonly property var icons: TablerIcons.icons
   readonly property var aliases: TablerIcons.aliases
-  readonly property string fontPath: "/Assets/Fonts/tabler/tabler-icons.ttf"
+  readonly property string fontPath: "/Assets/Fonts/tabler/tabler-icons.woff2"
 
   Component.onCompleted: {
     Logger.log("Icons", "Service started")

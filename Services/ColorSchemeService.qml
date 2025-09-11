@@ -48,26 +48,8 @@ Singleton {
     folderModel.folder = "file://" + schemesDirectory
   }
 
-  function getBasename(path) {
-    if (!path)
-      return ""
-    var chunks = path.split("/")
-    var last = chunks[chunks.length - 1]
-    return last.endsWith(".json") ? last.slice(0, -5) : last
-  }
-
-  function resolveSchemePath(nameOrPath) {
-    if (!nameOrPath)
-      return ""
-    if (nameOrPath.indexOf("/") !== -1) {
-      return nameOrPath
-    }
-    return schemesDirectory + "/" + nameOrPath.replace(".json", "") + ".json"
-  }
-
-  function applyScheme(nameOrPath) {
+  function applyScheme(filePath) {
     // Force reload by bouncing the path
-    var filePath = resolveSchemePath(nameOrPath)
     schemeReader.path = ""
     schemeReader.path = filePath
   }
@@ -87,17 +69,6 @@ Singleton {
         schemes = files
         scanning = false
         Logger.log("ColorScheme", "Listed", schemes.length, "schemes")
-        // Normalize stored scheme to basename and re-apply if necessary
-        var stored = Settings.data.colorSchemes.predefinedScheme
-        if (stored) {
-          var basename = getBasename(stored)
-          if (basename !== stored) {
-            Settings.data.colorSchemes.predefinedScheme = basename
-          }
-          if (!Settings.data.colorSchemes.useWallpaperColors) {
-            applyScheme(basename)
-          }
-        }
       }
     }
   }
@@ -118,7 +89,7 @@ Singleton {
           }
         }
         writeColorsToDisk(variant)
-        Logger.log("ColorScheme", "Applying color scheme:", getBasename(path))
+        Logger.log("ColorScheme", "Applying color scheme:", path)
       } catch (e) {
         Logger.error("ColorScheme", "Failed to parse scheme JSON:", e)
       }

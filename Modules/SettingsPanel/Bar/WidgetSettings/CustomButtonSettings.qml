@@ -48,16 +48,18 @@ ColumnLayout {
   Popup {
     id: iconPicker
     modal: true
-    width: {
+    property real panelWidth: {
       var w = Math.round(Math.max(Screen.width * 0.35, 900) * scaling)
       w = Math.min(w, Screen.width - Style.marginL * 2)
       return w
     }
-    height: {
+    property real panelHeight: {
       var h = Math.round(Math.max(Screen.height * 0.65, 700) * scaling)
       h = Math.min(h, Screen.height - Style.barHeight * scaling - Style.marginL * 2)
       return h
     }
+    width: panelWidth
+    height: panelHeight
     anchors.centerIn: Overlay.overlay
     padding: Style.marginXL * scaling
 
@@ -67,7 +69,8 @@ ColumnLayout {
     property var filteredIcons: allIcons.filter(function (name) {
       return query === "" || name.toLowerCase().indexOf(query.toLowerCase()) !== -1
     })
-    readonly property int columns: 6
+    readonly property int tileBase: Math.round(112 * scaling)
+    readonly property int columns: Math.max(3, Math.floor(grid.width / (tileBase + Style.marginS * 2)))
     readonly property int cellW: Math.floor(grid.width / columns)
     readonly property int cellH: Math.round(cellW * 0.7 + 36 * scaling)
 
@@ -157,7 +160,7 @@ ColumnLayout {
               NIcon {
                 Layout.alignment: Qt.AlignHCenter
                 icon: modelData
-                font.pointSize: 42 * scaling
+                font.pointSize: Style.fontSizeXXXL * scaling
               }
               NText {
                 Layout.alignment: Qt.AlignHCenter

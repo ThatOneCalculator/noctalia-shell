@@ -10,13 +10,31 @@ import qs.Widgets
 NPanel {
   id: root
 
-  preferredWidth: 510
-  preferredHeight: 734
+  panelWidth: 510 * scaling
+  panelHeight: contentHeight
+
+  // Default height, will be modified via binding when the content is fully loaded
+  property real contentHeight: 720 * scaling
 
   panelContent: Item {
     id: content
 
     property real cardSpacing: Style.marginL * scaling
+
+    width: root.panelWidth
+    implicitHeight: layout.implicitHeight + (2 * cardSpacing)
+    height: implicitHeight
+
+    // Update parent's contentHeight whenever our height changes
+    onHeightChanged: {
+      root.contentHeight = height
+    }
+
+    onImplicitHeightChanged: {
+      if (implicitHeight > 0) {
+        root.contentHeight = implicitHeight
+      }
+    }
 
     // Layout content
     ColumnLayout {
@@ -28,52 +46,57 @@ NPanel {
 
       // Cards (consistent inter-card spacing via ColumnLayout spacing)
       ProfileCard {
+        id: profileCard
         Layout.fillWidth: true
-        Layout.preferredHeight: Math.max(64 * scaling)
       }
 
       WeatherCard {
+        id: weatherCard
         Layout.fillWidth: true
-        Layout.preferredHeight: Math.max(220 * scaling)
       }
 
       // Middle section: media + stats column
       RowLayout {
+        id: middleRow
         Layout.fillWidth: true
-        Layout.preferredHeight: Math.max(310 * scaling)
+        Layout.minimumHeight: 280 * scaling
+        Layout.preferredHeight: Math.max(280 * scaling, statsCard.implicitHeight)
         spacing: content.cardSpacing
 
         // Media card
         MediaCard {
+          id: mediaCard
           Layout.fillWidth: true
           Layout.fillHeight: true
         }
 
         // System monitors combined in one card
         SystemMonitorCard {
-          Layout.preferredWidth: Style.baseWidgetSize * 2.625 * scaling
-          Layout.fillHeight: true
+          id: statsCard
+          Layout.alignment: Qt.AlignTop
         }
       }
 
       // Bottom actions (two grouped rows of round buttons)
       RowLayout {
+        id: bottomRow
         Layout.fillWidth: true
-        Layout.preferredHeight: Math.max(60 * scaling)
+        Layout.minimumHeight: 60 * scaling
+        Layout.preferredHeight: Math.max(60 * scaling, powerProfilesCard.implicitHeight, utilitiesCard.implicitHeight)
         spacing: content.cardSpacing
 
         // Power Profiles switcher
         PowerProfilesCard {
-          Layout.fillWidth: true
-          Layout.fillHeight: true
+          id: powerProfilesCard
           spacing: content.cardSpacing
+          Layout.fillWidth: true
         }
 
         // Utilities buttons
         UtilitiesCard {
-          Layout.fillWidth: true
-          Layout.fillHeight: true
+          id: utilitiesCard
           spacing: content.cardSpacing
+          Layout.fillWidth: true
         }
       }
     }

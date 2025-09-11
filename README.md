@@ -29,20 +29,11 @@ Features a modern modular architecture with a status bar, notification system, c
 
 ## Preview
 
-https://github.com/user-attachments/assets/72c6d6dc-48b0-48a0-bd8b-c7e70990edc4
+![Launcher](/Assets/Screenshots/launcher.png)
 
-<details>
-<summary>Screenshots</summary>
+![SettingsPanel](/Assets/Screenshots/settings-panel.png?v=2)  
 
-![Dark 1](/Assets/Screenshots/noctalia-dark-1.png)
-![Dark 2](/Assets/Screenshots/noctalia-dark-2.png)
-![Dark 3](/Assets/Screenshots/noctalia-dark-3.png)
-
-![Light 1](/Assets/Screenshots/noctalia-light-1.png)
-![Light 2](/Assets/Screenshots/noctalia-light-2.png)
-![Light 3](/Assets/Screenshots/noctalia-light-3.png)
-
-</details>
+![SidePanel](/Assets/Screenshots/light-mode.png?v=2)  
 
 ---
 
@@ -91,6 +82,15 @@ https://github.com/user-attachments/assets/72c6d6dc-48b0-48a0-bd8b-c7e70990edc4
 
 > There is one more optional dependency.    
 > `xdg-desktop-portal` to be able to use the "Portal" option from the screenRecorder. 
+
+If you want to use the `ArchUpdater` widget, you will have to set your `TERMINAL` environment variable.
+
+Example command (you can edit the /etc/environment file manually too):
+
+`sudo sed -i '/^TERMINAL=/d' /etc/environment && echo 'TERMINAL=/usr/bin/kitty' | sudo tee -a /etc/environment
+`
+
+Please do not forget to edit `TERMINAL=/usr/bin/kitty` to match your terminal.
 
 ---
 

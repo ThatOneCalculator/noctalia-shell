@@ -11,10 +11,16 @@ NPanel {
   id: root
 
   // Panel configuration
-  preferredWidth: 500
-  preferredWidthRatio: 0.3
-  preferredHeight: 600
-  preferredHeightRatio: 0.5
+  panelWidth: {
+    var w = Math.round(Math.max(screen?.width * 0.3, 500) * scaling)
+    w = Math.min(w, screen?.width - Style.marginL * 2)
+    return w
+  }
+  panelHeight: {
+    var h = Math.round(Math.max(screen?.height * 0.5, 600) * scaling)
+    h = Math.min(h, screen?.height - Style.barHeight * scaling - Style.marginL * 2)
+    return h
+  }
 
   panelKeyboardFocus: true
   panelBackgroundColor: Qt.alpha(Color.mSurface, Settings.data.appLauncher.backgroundOpacity)

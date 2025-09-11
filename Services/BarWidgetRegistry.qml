@@ -52,8 +52,9 @@ Singleton {
                                   },
                                   "Clock": {
                                     "allowUserSettings": true,
-                                    "displayFormat": "time-date-short",
+                                    "showDate": false,
                                     "use12HourClock": false,
+                                    "showSeconds": false,
                                     "reverseDayMonth": true
                                   },
                                   "CustomButton": {
@@ -102,10 +103,6 @@ Singleton {
                                   "Volume": {
                                     "allowUserSettings": true,
                                     "alwaysShowPercentage": false
-                                  },
-                                  "KeyboardLayout": {
-                                    "allowUserSettings": true,
-                                    "forceOpen": false
                                   }
                                 })
 

@@ -13,8 +13,8 @@ import qs.Widgets
 NPanel {
   id: root
 
-  preferredWidth: 440
-  preferredHeight: 380
+  panelWidth: 440 * scaling
+  panelHeight: 380 * scaling
   panelAnchorHorizontalCenter: true
   panelAnchorVerticalCenter: true
   panelKeyboardFocus: true
@@ -224,7 +224,6 @@ NPanel {
           root.close()
         }
       }
-      context: Qt.WidgetShortcut
       enabled: root.opened
     }
 

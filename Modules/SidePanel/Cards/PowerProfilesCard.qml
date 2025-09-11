@@ -9,12 +9,14 @@ import qs.Widgets
 
 // Power Profiles: performance, balanced, eco
 NBox {
-
-  property real spacing: 0
+  Layout.fillWidth: true
+  Layout.preferredWidth: 1
+  implicitHeight: powerRow.implicitHeight + Style.marginM * 2 * scaling
 
   // Centralized service
   readonly property bool hasPP: PowerProfileService.available
-  
+  property real spacing: 0
+
   RowLayout {
     id: powerRow
     anchors.fill: parent

@@ -12,7 +12,9 @@ NBox {
 
   property real spacing: 0
 
-
+  Layout.fillWidth: true
+  Layout.preferredWidth: 1
+  implicitHeight: utilRow.implicitHeight + Style.marginM * 2 * scaling
   RowLayout {
     id: utilRow
     anchors.fill: parent
@@ -59,7 +61,7 @@ NBox {
       onClicked: {
         var settingsPanel = PanelService.getPanel("settingsPanel")
         settingsPanel.requestedTab = SettingsPanel.Tab.WallpaperSelector
-        settingsPanel.open()
+        settingsPanel.open(screen)
       }
       onRightClicked: {
         WallpaperService.setRandomWallpaper()
