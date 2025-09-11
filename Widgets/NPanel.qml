@@ -7,24 +7,14 @@ import qs.Services
 Loader {
   id: root
 
-  active: false
-  asynchronous: true
-
   property ShellScreen screen
-  property real scaling: ScalingService.getScreenScale(screen)
-
-  Connections {
-    target: ScalingService
-    function onScaleChanged(screenName, scale) {
-      if ((screen !== null) && (screenName === screen.name)) {
-        scaling = scale
-      }
-    }
-  }
+  property real scaling: 1.0
 
   property Component panelContent: null
-  property int panelWidth: 1500
-  property int panelHeight: 400
+  property real preferredWidth: 700
+  property real preferredHeight: 900
+  property real preferredWidthRatio
+  property real preferredHeightRatio
   property color panelBackgroundColor: Color.mSurface
 
   property bool panelAnchorHorizontalCenter: false
@@ -40,8 +30,8 @@ Loader {
   property int buttonWidth: 0
   property int buttonHeight: 0
 
-  // Whether this panel should accept keyboard focus
   property bool panelKeyboardFocus: false
+  property bool backgroundClickEnabled: true
 
   // Animation properties
   readonly property real originalScale: 0.7
@@ -50,45 +40,46 @@ Loader {
   property real opacityValue: originalOpacity
 
   property alias isClosing: hideTimer.running
-  readonly property real barHeight: Math.round(Style.barHeight * scaling)
-  readonly property bool barAtBottom: Settings.data.bar.position === "bottom"
-  readonly property bool barIsVisible: (screen !== null) && (Settings.data.bar.monitors.includes(screen.name)
-                                                             || (Settings.data.bar.monitors.length === 0))
 
   signal opened
   signal closed
+
+  active: false
+  asynchronous: true
 
   Component.onCompleted: {
     PanelService.registerPanel(root)
   }
 
   // -----------------------------------------
-  function toggle(aScreen, buttonItem) {
-    // Don't toggle if screen is null or invalid
-    if (!aScreen || !aScreen.name) {
-      Logger.warn("NPanel", "Cannot toggle panel: invalid screen object")
-      return
-    }
+  // Functions to control background click behavior
+  function disableBackgroundClick() {
+    backgroundClickEnabled = false
+  }
 
+  function enableBackgroundClick() {
+    // Add a small delay to prevent immediate close after drag release
+    enableBackgroundClickTimer.restart()
+  }
+
+  Timer {
+    id: enableBackgroundClickTimer
+    interval: 100
+    repeat: false
+    onTriggered: backgroundClickEnabled = true
+  }
+
+  // -----------------------------------------
+  function toggle(buttonItem) {
     if (!active || isClosing) {
-      open(aScreen, buttonItem)
+      open(buttonItem)
     } else {
       close()
     }
   }
 
   // -----------------------------------------
-  function open(aScreen, buttonItem) {
-    // Don't open if screen is null or invalid
-    if (!aScreen || !aScreen.name) {
-      Logger.warn("NPanel", "Cannot open panel: invalid screen object")
-      return
-    }
-
-    if (aScreen !== null) {
-      screen = aScreen
-    }
-
+  function open(buttonItem) {
     // Get the button position if provided
     if (buttonItem !== undefined && buttonItem !== null) {
       useButtonPosition = true
@@ -110,6 +101,7 @@ Loader {
 
     PanelService.willOpenPanel(root)
 
+    backgroundClickEnabled = true
     active = true
     root.opened()
   }
@@ -125,7 +117,8 @@ Loader {
   function closeCompleted() {
     root.closed()
     active = false
-    useButtonPosition = false // Reset button position usage
+    useButtonPosition = false
+    backgroundClickEnabled = true
     PanelService.closedPanel(root)
   }
 
@@ -144,6 +137,34 @@ Loader {
   sourceComponent: Component {
     PanelWindow {
       id: panelWindow
+
+      // PanelWindow has its own screen property inherited of QsWindow
+      property real scaling: ScalingService.getScreenScale(screen)
+      readonly property real barHeight: Math.round(Style.barHeight * scaling)
+      readonly property bool barAtBottom: Settings.data.bar.position === "bottom"
+      readonly property bool barIsVisible: (screen !== null) && (Settings.data.bar.monitors.includes(screen.name)
+                                                                 || (Settings.data.bar.monitors.length === 0))
+
+      Connections {
+        target: ScalingService
+        function onScaleChanged(screenName, scale) {
+          if ((screen !== null) && (screenName === screen.name)) {
+            root.scaling = scale
+          }
+        }
+      }
+
+      Connections {
+        target: panelWindow
+        function onScreenChanged() {
+          root.screen = screen
+          root.scaling = ScalingService.getScreenScale(screen)
+
+          // It's mandatory to force refresh the subloader to ensure the scaling is properly dispatched
+          panelContentLoader.active = false
+          panelContentLoader.active = true
+        }
+      }
 
       visible: true
 
@@ -179,6 +200,7 @@ Loader {
       // Clicking outside of the rectangle to close
       MouseArea {
         anchors.fill: parent
+        enabled: root.backgroundClickEnabled
         onClicked: root.close()
       }
 
@@ -188,8 +210,27 @@ Loader {
         radius: Style.radiusL * scaling
         border.color: Color.mOutline
         border.width: Math.max(1, Style.borderS * scaling)
-        width: panelWidth
-        height: panelHeight
+        width: {
+          var w
+          if (preferredWidthRatio !== undefined) {
+            w = Math.round(Math.max(screen?.width * preferredWidthRatio, preferredWidth) * scaling)
+          } else {
+            w = preferredWidth * scaling
+          }
+          // Clamp width so it is never bigger than the screen
+          return Math.min(w, screen?.width - Style.marginL * 2)
+        }
+        height: {
+          var h
+          if (preferredHeightRatio !== undefined) {
+            h = Math.round(Math.max(screen?.height * preferredHeightRatio, preferredHeight) * scaling)
+          } else {
+            h = preferredHeight * scaling
+          }
+
+          // Clamp width so it is never bigger than the screen
+          return Math.min(h, screen?.height - Style.barHeight * scaling - Style.marginL * 2)
+        }
 
         scale: root.scaleValue
         opacity: root.opacityValue
@@ -200,27 +241,27 @@ Loader {
         property int calculatedX: {
           if (root.useButtonPosition) {
             // Position panel relative to button
-            var targetX = root.buttonPosition.x + (root.buttonWidth / 2) - (panelWidth / 2)
+            var targetX = root.buttonPosition.x + (root.buttonWidth / 2) - (preferredWidth / 2)
 
             // Keep panel within screen bounds
-            var maxX = panelWindow.width - panelWidth - (Style.marginS * scaling)
+            var maxX = panelWindow.width - panelBackground.width - (Style.marginS * scaling)
             var minX = Style.marginS * scaling
 
             return Math.round(Math.max(minX, Math.min(targetX, maxX)))
           } else if (!panelAnchorHorizontalCenter && panelAnchorLeft) {
-            return Math.round(marginS * scaling)
+            return Math.round(Style.marginS * scaling)
           } else if (!panelAnchorHorizontalCenter && panelAnchorRight) {
-            return Math.round(panelWindow.width - panelWidth - (Style.marginS * scaling))
+            return Math.round(panelWindow.width - panelBackground.width - (Style.marginS * scaling))
           } else {
-            return Math.round((panelWindow.width - panelWidth) / 2)
+            return Math.round((panelWindow.width - panelBackground.width) / 2)
           }
         }
 
         property int calculatedY: {
           if (panelAnchorVerticalCenter) {
-            return Math.round((panelWindow.height - panelHeight) / 2)
+            return Math.round((panelWindow.height - panelBackground.height) / 2)
           } else if (panelAnchorBottom) {
-            return Math.round(panelWindow.height - panelHeight - (Style.marginS * scaling))
+            return Math.round(panelWindow.height - panelBackground.height - (Style.marginS * scaling))
           } else if (panelAnchorTop) {
             return Math.round(Style.marginS * scaling)
           } else if (!barAtBottom) {
@@ -228,7 +269,7 @@ Loader {
             return Math.round(Style.marginS * scaling)
           } else {
             // Above the bottom bar
-            return Math.round(panelWindow.height - panelHeight - (Style.marginS * scaling))
+            return Math.round(panelWindow.height - panelBackground.height - (Style.marginS * scaling))
           }
         }
 
@@ -259,6 +300,7 @@ Loader {
         }
 
         Loader {
+          id: panelContentLoader
           anchors.fill: parent
           sourceComponent: root.panelContent
         }

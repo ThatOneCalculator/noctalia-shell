@@ -45,8 +45,8 @@ NIconButton {
   // font.PointSize: Style.fontSizeM
 
   anchors.verticalCenter: parent.verticalCenter
-  onClicked: PanelService.getPanel("sidePanel")?.toggle(screen, this)
-  onRightClicked: PanelService.getPanel("settingsPanel")?.toggle(screen)
+  onClicked: PanelService.getPanel("sidePanel")?.toggle(this)
+  onRightClicked: PanelService.getPanel("settingsPanel")?.toggle()
 
   IconImage {
     id: logo

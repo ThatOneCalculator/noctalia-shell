@@ -11,8 +11,8 @@ import qs.Widgets
 NPanel {
   id: root
 
-  panelWidth: 380 * scaling
-  panelHeight: 500 * scaling
+  preferredWidth: 380
+  preferredHeight: 500
 
   panelContent: Rectangle {
     color: Color.transparent
@@ -75,7 +75,7 @@ NPanel {
       }
 
       Rectangle {
-        visible: !Settings.data.network.bluetoothEnabled
+        visible: !(BluetoothService.adapter && BluetoothService.adapter.enabled)
         Layout.fillWidth: true
         Layout.fillHeight: true
         color: Color.transparent

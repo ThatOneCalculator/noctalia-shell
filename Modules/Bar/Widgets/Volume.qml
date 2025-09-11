@@ -101,7 +101,7 @@ Item {
     onMiddleClicked: {
       var settingsPanel = PanelService.getPanel("settingsPanel")
       settingsPanel.requestedTab = SettingsPanel.Tab.Audio
-      settingsPanel.open(screen)
+      settingsPanel.open()
     }
   }
 }

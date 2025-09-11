@@ -79,7 +79,7 @@ RowLayout {
           NText {
             text: `${SystemStatService.cpuUsage}%`
             font.family: Settings.data.ui.fontFixed
-            font.pointSize: Style.fontSizeS * scaling
+            font.pointSize: Style.fontSizeXS * scaling
             font.weight: Style.fontWeightMedium
             Layout.alignment: Qt.AlignVCenter
             verticalAlignment: Text.AlignVCenter
@@ -110,7 +110,7 @@ RowLayout {
           NText {
             text: `${SystemStatService.cpuTemp}°C`
             font.family: Settings.data.ui.fontFixed
-            font.pointSize: Style.fontSizeS * scaling
+            font.pointSize: Style.fontSizeXS * scaling
             font.weight: Style.fontWeightMedium
             Layout.alignment: Qt.AlignVCenter
             verticalAlignment: Text.AlignVCenter
@@ -140,7 +140,7 @@ RowLayout {
           NText {
             text: showMemoryAsPercent ? `${SystemStatService.memPercent}%` : `${SystemStatService.memGb}G`
             font.family: Settings.data.ui.fontFixed
-            font.pointSize: Style.fontSizeS * scaling
+            font.pointSize: Style.fontSizeXS * scaling
             font.weight: Style.fontWeightMedium
             Layout.alignment: Qt.AlignVCenter
             verticalAlignment: Text.AlignVCenter
@@ -170,7 +170,7 @@ RowLayout {
           NText {
             text: SystemStatService.formatSpeed(SystemStatService.rxSpeed)
             font.family: Settings.data.ui.fontFixed
-            font.pointSize: Style.fontSizeS * scaling
+            font.pointSize: Style.fontSizeXS * scaling
             font.weight: Style.fontWeightMedium
             Layout.alignment: Qt.AlignVCenter
             verticalAlignment: Text.AlignVCenter
@@ -200,7 +200,7 @@ RowLayout {
           NText {
             text: SystemStatService.formatSpeed(SystemStatService.txSpeed)
             font.family: Settings.data.ui.fontFixed
-            font.pointSize: Style.fontSizeS * scaling
+            font.pointSize: Style.fontSizeXS * scaling
             font.weight: Style.fontWeightMedium
             Layout.alignment: Qt.AlignVCenter
             verticalAlignment: Text.AlignVCenter
@@ -230,7 +230,7 @@ RowLayout {
           NText {
             text: `${SystemStatService.diskPercent}%`
             font.family: Settings.data.ui.fontFixed
-            font.pointSize: Style.fontSizeS * scaling
+            font.pointSize: Style.fontSizeXS * scaling
             font.weight: Style.fontWeightMedium
             Layout.alignment: Qt.AlignVCenter
             verticalAlignment: Text.AlignVCenter

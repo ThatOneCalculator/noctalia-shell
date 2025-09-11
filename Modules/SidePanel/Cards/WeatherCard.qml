@@ -11,11 +11,6 @@ NBox {
 
   readonly property bool weatherReady: (LocationService.data.weather !== null)
 
-  // TBC weatherReady is not turning to false when we reset weather...
-  Layout.fillWidth: true
-  // Height driven by content
-  implicitHeight: content.implicitHeight + Style.marginL * 2 * scaling
-
   ColumnLayout {
     id: content
     anchors.left: parent.left
@@ -84,7 +79,7 @@ NBox {
     RowLayout {
       visible: weatherReady
       Layout.fillWidth: true
-      Layout.alignment: Qt.AlignHCenter
+      Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
       spacing: Style.marginL * scaling
       Repeater {
         model: weatherReady ? LocationService.data.weather.daily.time : []

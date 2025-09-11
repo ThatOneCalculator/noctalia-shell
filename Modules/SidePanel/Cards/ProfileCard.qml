@@ -16,10 +16,6 @@ NBox {
 
   property string uptimeText: "--"
 
-  Layout.fillWidth: true
-  // Height driven by content
-  implicitHeight: content.implicitHeight + Style.marginM * 2 * scaling
-
   RowLayout {
     id: content
     anchors.left: parent.left
@@ -63,7 +59,7 @@ NBox {
         tooltipText: "Open settings."
         onClicked: {
           settingsPanel.requestedTab = SettingsPanel.Tab.General
-          settingsPanel.open(screen)
+          settingsPanel.open()
         }
       }
 
@@ -72,7 +68,7 @@ NBox {
         icon: "power"
         tooltipText: "Power menu."
         onClicked: {
-          powerPanel.open(screen)
+          powerPanel.open()
           sidePanel.close()
         }
       }

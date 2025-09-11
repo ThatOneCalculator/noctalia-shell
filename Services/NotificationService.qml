@@ -161,6 +161,7 @@ Singleton {
                                "summary": notification.summary,
                                "body": notification.body,
                                "appName": resolvedAppName,
+                               "desktopEntry": notification.desktopEntry,
                                "image": resolvedImage,
                                "appIcon": notification.appIcon,
                                "urgency": notification.urgency,
@@ -211,14 +212,17 @@ Singleton {
     }
   }
 
-  // Add a simplified copy into persistent history
   function addToHistory(notification) {
     const resolvedAppName = resolveAppName(notification)
+    const resolvedImage = resolveNotificationImage(notification)
 
     historyModel.insert(0, {
                           "summary": notification.summary,
                           "body": notification.body,
                           "appName": resolvedAppName,
+                          "desktopEntry": notification.desktopEntry || "",
+                          "image": resolvedImage,
+                          "appIcon": notification.appIcon || "",
                           "urgency": notification.urgency,
                           "timestamp": new Date()
                         })
@@ -249,6 +253,9 @@ Singleton {
                               "summary": it.summary || "",
                               "body": it.body || "",
                               "appName": it.appName || "",
+                              "desktopEntry": it.desktopEntry || "",
+                              "image": it.image || "",
+                              "appIcon": it.appIcon || "",
                               "urgency": it.urgency,
                               "timestamp": ts ? new Date(ts) : new Date()
                             })
@@ -268,6 +275,9 @@ Singleton {
                    "summary": n.summary,
                    "body": n.body,
                    "appName": n.appName,
+                   "desktopEntry": n.desktopEntry,
+                   "image": n.image,
+                   "appIcon": n.appIcon,
                    "urgency": n.urgency,
                    "timestamp"// Always persist in milliseconds
                    : (n.timestamp instanceof Date) ? n.timestamp.getTime(

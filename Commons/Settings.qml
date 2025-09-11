@@ -142,9 +142,15 @@ Singleton {
           !== undefined ? widget.alwaysShowPercentage : adapter.bar.alwaysShowBatteryPercentage
       break
     case "Clock":
-      widget.showDate = widget.showDate !== undefined ? widget.showDate : adapter.location.showDateWithClock
       widget.use12HourClock = widget.use12HourClock !== undefined ? widget.use12HourClock : adapter.location.use12HourClock
       widget.reverseDayMonth = widget.reverseDayMonth !== undefined ? widget.reverseDayMonth : adapter.location.reverseDayMonth
+      if (widget.showDate !== undefined) {
+        widget.displayFormat = "time-date"
+      } else if (widget.showSeconds) {
+        widget.displayFormat = "time-seconds"
+      }
+      delete widget.showDate
+      delete widget.showSeconds
       break
     case "MediaMini":
       widget.showAlbumArt = widget.showAlbumArt !== undefined ? widget.showAlbumArt : adapter.audio.showMiniplayerAlbumArt
@@ -174,7 +180,7 @@ Singleton {
       }
     }
 
-    // Backup the widget definition before altering
+    // Compare settings, to detect if something has been upgraded
     const widgetAfter = JSON.stringify(widget)
     return (widgetAfter !== widgetBefore)
   }
@@ -258,7 +264,7 @@ Singleton {
     JsonAdapter {
       id: adapter
 
-      property int settingsVersion: 1
+      property int settingsVersion: 2
 
       // bar
       property JsonObject bar: JsonObject {
@@ -443,6 +449,7 @@ Singleton {
       // night light
       property JsonObject nightLight: JsonObject {
         property bool enabled: false
+        property bool forced: false
         property bool autoSchedule: true
         property string nightTemp: "4000"
         property string dayTemp: "6500"

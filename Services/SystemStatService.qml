@@ -108,6 +108,7 @@ Singleton {
   }
 
   // --------------------------------------------
+  // --------------------------------------------
   // CPU Temperature
   // It's more complex.
   // ----
@@ -115,9 +116,10 @@ Singleton {
   FileView {
     id: cpuTempNameReader
     property int currentIndex: 0
+    printErrors: false
 
     function checkNext() {
-      if (currentIndex >= 10) {
+      if (currentIndex >= 16) {
         // Check up to hwmon10
         Logger.warn("No supported temperature sensor found")
         return
@@ -182,6 +184,7 @@ Singleton {
     }
   }
 
+  // -------------------------------------------------------
   // -------------------------------------------------------
   // Parse memory info from /proc/meminfo
   function parseMemoryInfo(text) {
