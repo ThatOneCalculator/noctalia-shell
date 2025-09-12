@@ -95,7 +95,6 @@ Item {
     text: Math.floor(AudioService.inputVolume * 100) + "%"
     forceOpen: alwaysShowPercentage
     tooltipText: "Microphone: " + Math.round(AudioService.inputVolume * 100)
-                 + "%\nLeft click for advanced settings.\nScroll up/down to change volume.\nRight click to toggle mute."
 
     onWheel: function (delta) {
       wheelAccumulator += delta
@@ -108,15 +107,15 @@ Item {
       }
     }
     onClicked: {
+      Quickshell.execDetached(["swayosd-client", "--input-volume", "mute-toggle"])
+    }
+    onRightClicked: {
+      Quickshell.execDetached(["pwvucontrol"])
+    }
+    onMiddleClicked: {
       var settingsPanel = PanelService.getPanel("settingsPanel")
       settingsPanel.requestedTab = SettingsPanel.Tab.Audio
       settingsPanel.open()
-    }
-    onRightClicked: {
-      AudioService.setInputMuted(!AudioService.inputMuted)
-    }
-    onMiddleClicked: {
-      Quickshell.execDetached(["pwvucontrol"])
     }
   }
 }

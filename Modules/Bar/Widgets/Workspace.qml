@@ -39,7 +39,7 @@ Item {
   property ListModel localWorkspaces: ListModel {}
   property real masterProgress: 0.0
   property bool effectsActive: false
-  property color effectColor: Color.mPrimary
+  property color effectColor: "#c4a7e7"
 
   property int horizontalPadding: Math.round(Style.marginS * scaling)
   property int spacingBetweenPills: Math.round(Style.marginXS * scaling)
@@ -99,7 +99,7 @@ Item {
   }
 
   function triggerUnifiedWave() {
-    effectColor = Color.mPrimary
+    effectColor = "#c4a7e7"
     masterAnimation.restart()
   }
 
@@ -191,7 +191,7 @@ Item {
                 wrapMode: Text.Wrap
                 color: {
                   if (model.isFocused)
-                    return Color.mOnPrimary
+                    return "#c4a7e7"
                   if (model.isUrgent)
                     return Color.mOnError
                   if (model.isActive || model.isOccupied)
@@ -208,7 +208,7 @@ Item {
           radius: width * 0.5
           color: {
             if (model.isFocused)
-              return Color.mPrimary
+              return "#c4a7e7"
             if (model.isUrgent)
               return Color.mError
             if (model.isActive || model.isOccupied)

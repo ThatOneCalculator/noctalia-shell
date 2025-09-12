@@ -44,10 +44,21 @@ NIconButton {
     PowerProfileService.cycleProfile()
   }
 
+  function profileColor() {
+    if (!hasPP)
+      return "#e0def4"
+    if (PowerProfileService.profile === PowerProfile.Performance)
+        return "#ebbcba"
+    else if (PowerProfileService.profile === PowerProfile.Balanced)
+        return "#c4a7e7"
+    else if (PowerProfileService.profile === PowerProfile.PowerSaver)
+        return "#9ccfd8"
+  }
+
   icon: root.profileIcon()
   tooltipText: root.profileName()
-  colorBg: (PowerProfileService.profile === PowerProfile.Balanced) ? Color.mSurfaceVariant : Color.mPrimary
-  colorFg: (PowerProfileService.profile === PowerProfile.Balanced) ? Color.mOnSurface : Color.mOnPrimary
+  colorBg: Color.mSurfaceVariant
+  colorFg: root.profileColor()
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
   onClicked: root.changeProfile()

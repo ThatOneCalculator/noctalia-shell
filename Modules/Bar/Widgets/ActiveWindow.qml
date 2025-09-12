@@ -110,8 +110,7 @@ RowLayout {
     Item {
       id: mainContainer
       anchors.fill: parent
-      anchors.leftMargin: Style.marginS * scaling
-      anchors.rightMargin: Style.marginS * scaling
+      anchors.rightMargin: Style.marginXS * scaling
       clip: true
 
       RowLayout {
@@ -121,8 +120,8 @@ RowLayout {
 
         // Window icon
         Item {
-          Layout.preferredWidth: Style.fontSizeL * scaling * 1.2
-          Layout.preferredHeight: Style.fontSizeL * scaling * 1.2
+          Layout.preferredWidth: Math.round(18 * scaling)
+          Layout.preferredHeight: Math.round(18 * scaling)
           Layout.alignment: Qt.AlignVCenter
           visible: getTitle() !== "" && showIcon
 
@@ -164,7 +163,7 @@ RowLayout {
           font.weight: Style.fontWeightMedium
           elide: mouseArea.containsMouse ? Text.ElideNone : Text.ElideRight
           verticalAlignment: Text.AlignVCenter
-          color: Color.mPrimary
+          color: "#c4a7e7"
           clip: true
 
           Behavior on Layout.preferredWidth {

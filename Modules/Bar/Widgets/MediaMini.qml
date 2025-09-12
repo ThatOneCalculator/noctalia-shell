@@ -78,8 +78,8 @@ RowLayout {
     Item {
       id: mainContainer
       anchors.fill: parent
-      anchors.leftMargin: Style.marginS * scaling
-      anchors.rightMargin: Style.marginS * scaling
+      anchors.leftMargin: Style.marginXS * scaling
+      anchors.rightMargin: Style.marginXS * scaling
 
       Loader {
         anchors.verticalCenter: parent.verticalCenter
@@ -91,7 +91,7 @@ RowLayout {
           width: mainContainer.width - Style.marginS * scaling
           height: 20 * scaling
           values: CavaService.values
-          fillColor: Color.mOnSurfaceVariant
+          fillColor: Color.primary
           opacity: 0.4
         }
       }
@@ -106,7 +106,7 @@ RowLayout {
           width: mainContainer.width - Style.marginS * scaling
           height: mainContainer.height - Style.marginS * scaling
           values: CavaService.values
-          fillColor: Color.mOnSurfaceVariant
+          fillColor: Color.primary
           opacity: 0.4
         }
       }
@@ -121,7 +121,7 @@ RowLayout {
           width: mainContainer.width - Style.marginS * scaling
           height: mainContainer.height - Style.marginS * scaling
           values: CavaService.values
-          fillColor: Color.mOnSurfaceVariant
+          fillColor: Color.primary
           opacity: 0.4
         }
       }
@@ -147,8 +147,8 @@ RowLayout {
           spacing: 0
 
           Item {
-            Layout.preferredWidth: Math.round(18 * scaling)
-            Layout.preferredHeight: Math.round(18 * scaling)
+            Layout.preferredWidth: Math.round(22 * scaling)
+            Layout.preferredHeight: Math.round(22 * scaling)
 
             NImageCircled {
               id: trackArt

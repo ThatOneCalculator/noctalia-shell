@@ -92,15 +92,15 @@ Rectangle {
             dayName = dayName.charAt(0).toUpperCase() + dayName.slice(1)
             const day = now.getDate().toString().padStart(2, '0')
             let month = now.toLocaleDateString(Qt.locale(), "MMM")
-            timeStr += " - " + (reverseDayMonth ? `${dayName}, ${month} ${day}` : `${dayName}, ${day} ${month}`)
+            timeStr += " · " + (reverseDayMonth ? `${dayName}, ${month} ${day}` : `${dayName}, ${day} ${month}`)
           }
 
           return timeStr
         }
 
         //font.family: Settings.data.ui.fontFixed
-        font.pointSize: Style.fontSizeXS * scaling
-        font.weight: Style.fontWeightBold
+        font.pointSize: Style.fontSizeS * scaling
+        //font.weight: Style.fontWeightBold
         color: Color.mPrimary
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
       }

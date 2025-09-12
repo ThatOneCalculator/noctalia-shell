@@ -16,6 +16,7 @@ Rectangle {
   property bool enabled: true
   property bool allowClickWhenDisabled: false
   property bool hovering: false
+  property bool nerd: false
 
   property color colorBg: Color.mSurfaceVariant
   property color colorFg: Color.mPrimary
@@ -48,6 +49,25 @@ Rectangle {
 
   NIcon {
     icon: root.icon
+    visible: !root.nerd
+    font.pointSize: Math.max(1, root.width * 0.47)
+    color: root.enabled && root.hovering ? colorFgHover : colorFg
+    // Center horizontally
+    x: (root.width - width) / 2
+    // Center vertically accounting for font metrics
+    y: (root.height - height) / 2 + (height - contentHeight) / 2
+
+    Behavior on color {
+      ColorAnimation {
+        duration: Style.animationFast
+        easing.type: Easing.InOutQuad
+      }
+    }
+  }
+
+  NNerdIcon {
+    text: root.icon
+    visible: root.nerd
     font.pointSize: Math.max(1, root.width * 0.47)
     color: root.enabled && root.hovering ? colorFgHover : colorFg
     // Center horizontally
