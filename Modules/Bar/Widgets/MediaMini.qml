@@ -91,7 +91,7 @@ RowLayout {
           width: mainContainer.width - Style.marginS * scaling
           height: 20 * scaling
           values: CavaService.values
-          fillColor: Color.primary
+          fillColor: Color.mPrimary
           opacity: 0.4
         }
       }
@@ -106,7 +106,7 @@ RowLayout {
           width: mainContainer.width - Style.marginS * scaling
           height: mainContainer.height - Style.marginS * scaling
           values: CavaService.values
-          fillColor: Color.primary
+          fillColor: Color.mPrimary
           opacity: 0.4
         }
       }
@@ -121,7 +121,7 @@ RowLayout {
           width: mainContainer.width - Style.marginS * scaling
           height: mainContainer.height - Style.marginS * scaling
           values: CavaService.values
-          fillColor: Color.primary
+          fillColor: Color.mPrimary
           opacity: 0.4
         }
       }
@@ -158,6 +158,23 @@ RowLayout {
               fallbackIconSize: 10 * scaling
               borderWidth: 0
               border.color: Color.transparent
+              
+              SequentialAnimation on scale {
+                running: MediaService.isPlaying
+                loops: Animation.Infinite
+                NumberAnimation {
+                  from: 1.0
+                  to: 1.1
+                  duration: BeatDetectorService.bpm
+                  easing.type: Easing.InOutSine
+                }
+                NumberAnimation {
+                  from: 1.1
+                  to: 1.0
+                  duration: BeatDetectorService.bpm
+                  easing.type: Easing.InOutSine
+                }
+              }
             }
           }
         }
