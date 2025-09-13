@@ -23,8 +23,7 @@ Variants {
     }
 
     // Only show on screens that have notifications enabled
-    active: Settings.isLoaded && modelData ? (Settings.data.notifications.monitors.includes(modelData.name)
-                                              || (Settings.data.notifications.monitors.length === 0)) : false
+    active: Settings.isLoaded && modelData ? (Settings.data.notifications.monitors.includes(modelData.name) || (Settings.data.notifications.monitors.length === 0)) : false
 
     sourceComponent: PanelWindow {
       id: root
@@ -44,8 +43,8 @@ Variants {
       implicitHeight: Math.round(toast.visible ? toast.height + Style.marginM * scaling : 1)
 
       // Set margins based on bar position
-      margins.top: Settings.data.bar.position === "top" ? (Style.barHeight + Style.marginS) * scaling : 0
-      margins.bottom: Settings.data.bar.position === "bottom" ? (Style.barHeight + Style.marginS) * scaling : 0
+      margins.top: Settings.data.bar.position === "top" ? (Style.barHeight + Style.marginS + (Settings.data.bar.floating ? Settings.data.bar.marginTop : 0)) * scaling : 0
+      margins.bottom: Settings.data.bar.position === "bottom" ? (Style.barHeight + Style.marginS + (Settings.data.bar.floating ? Settings.data.bar.marginBottom : 0)) * scaling : 0
 
       // Transparent background
       color: Color.transparent

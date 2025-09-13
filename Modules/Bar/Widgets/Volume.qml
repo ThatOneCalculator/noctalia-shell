@@ -30,8 +30,7 @@ Item {
     return {}
   }
 
-  readonly property bool alwaysShowPercentage: (widgetSettings.alwaysShowPercentage
-                                                !== undefined) ? widgetSettings.alwaysShowPercentage : widgetMetadata.alwaysShowPercentage
+  readonly property bool alwaysShowPercentage: (widgetSettings.alwaysShowPercentage !== undefined) ? widgetSettings.alwaysShowPercentage : widgetMetadata.alwaysShowPercentage
 
   // Used to avoid opening the pill on Quickshell startup
   property bool firstVolumeReceived: false

@@ -7,7 +7,7 @@ import qs.Services
 import qs.Widgets
 
 Loader {
-  active: Settings.data.general.showScreenCorners
+  active: Settings.data.general.showScreenCorners && !Settings.data.bar.floating
 
   sourceComponent: Variants {
     model: Quickshell.screens
@@ -46,12 +46,8 @@ Loader {
       }
 
       margins {
-        top: ((modelData && Settings.data.bar.monitors.includes(modelData.name))
-              || (Settings.data.bar.monitors.length === 0)) && Settings.data.bar.position === "top"
-             && Settings.data.bar.backgroundOpacity > 0 ? Math.round(Style.barHeight * scaling) : 0
-        bottom: ((modelData && Settings.data.bar.monitors.includes(modelData.name))
-                 || (Settings.data.bar.monitors.length === 0)) && Settings.data.bar.position === "bottom"
-                && Settings.data.bar.backgroundOpacity > 0 ? Math.round(Style.barHeight * scaling) : 0
+        top: ((modelData && Settings.data.bar.monitors.includes(modelData.name)) || (Settings.data.bar.monitors.length === 0)) && Settings.data.bar.position === "top" && Settings.data.bar.backgroundOpacity > 0 ? Math.round(Style.barHeight * scaling) : 0
+        bottom: ((modelData && Settings.data.bar.monitors.includes(modelData.name)) || (Settings.data.bar.monitors.length === 0)) && Settings.data.bar.position === "bottom" && Settings.data.bar.backgroundOpacity > 0 ? Math.round(Style.barHeight * scaling) : 0
       }
 
       mask: Region {}

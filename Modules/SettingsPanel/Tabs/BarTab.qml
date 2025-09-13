@@ -86,6 +86,93 @@ ColumnLayout {
         }
       }
     }
+
+    NToggle {
+      Layout.fillWidth: true
+      label: "Floating Bar"
+      description: "Make the bar float with rounded corners and margins. This will hide screen corners."
+      checked: Settings.data.bar.floating
+      onToggled: checked => Settings.data.bar.floating = checked
+    }
+
+    // Floating bar options - only show when floating is enabled
+    ColumnLayout {
+      visible: Settings.data.bar.floating
+      spacing: Style.marginS * scaling
+      Layout.fillWidth: true
+
+      NLabel {
+        label: "Margins"
+        description: "Adjust the margins around the floating bar."
+      }
+
+      RowLayout {
+        Layout.fillWidth: true
+        spacing: Style.marginL * scaling
+
+        ColumnLayout {
+          spacing: Style.marginXXS * scaling
+
+          NText {
+            text: "Vertical"
+            font.pointSize: Style.fontSizeXS * scaling
+            color: Color.mOnSurfaceVariant
+          }
+
+          RowLayout {
+            NSlider {
+              Layout.fillWidth: true
+              from: 0
+              to: 1
+              stepSize: 0.01
+              value: Settings.data.bar.marginVertical
+              onMoved: Settings.data.bar.marginVertical = value
+              cutoutColor: Color.mSurface
+            }
+
+            NText {
+              text: Math.round(Settings.data.bar.marginVertical * 100) + "%"
+              Layout.alignment: Qt.AlignVCenter
+              Layout.leftMargin: Style.marginXS * scaling
+              Layout.preferredWidth: 50
+              horizontalAlignment: Text.AlignRight
+              color: Color.mOnSurface
+            }
+          }
+        }
+
+        ColumnLayout {
+          spacing: Style.marginXXS * scaling
+
+          NText {
+            text: "Horizontal"
+            font.pointSize: Style.fontSizeXS * scaling
+            color: Color.mOnSurfaceVariant
+          }
+
+          RowLayout {
+            NSlider {
+              Layout.fillWidth: true
+              from: 0
+              to: 1
+              stepSize: 0.01
+              value: Settings.data.bar.marginHorizontal
+              onMoved: Settings.data.bar.marginHorizontal = value
+              cutoutColor: Color.mSurface
+            }
+
+            NText {
+              text: Math.round(Settings.data.bar.marginHorizontal * 100) + "%"
+              Layout.alignment: Qt.AlignVCenter
+              Layout.leftMargin: Style.marginXS * scaling
+              Layout.preferredWidth: 50
+              horizontalAlignment: Text.AlignRight
+              color: Color.mOnSurface
+            }
+          }
+        }
+      }
+    }
   }
 
   NDivider {
@@ -201,8 +288,7 @@ ColumnLayout {
   }
 
   function _reorderWidgetInSection(section, fromIndex, toIndex) {
-    if (fromIndex >= 0 && fromIndex < Settings.data.bar.widgets[section].length && toIndex >= 0
-        && toIndex < Settings.data.bar.widgets[section].length) {
+    if (fromIndex >= 0 && fromIndex < Settings.data.bar.widgets[section].length && toIndex >= 0 && toIndex < Settings.data.bar.widgets[section].length) {
 
       // Create a new array to avoid modifying the original
       var newArray = Settings.data.bar.widgets[section].slice()

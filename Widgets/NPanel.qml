@@ -142,8 +142,7 @@ Loader {
       property real scaling: ScalingService.getScreenScale(screen)
       readonly property real barHeight: Math.round(Style.barHeight * scaling)
       readonly property bool barAtBottom: Settings.data.bar.position === "bottom"
-      readonly property bool barIsVisible: (screen !== null) && (Settings.data.bar.monitors.includes(screen.name)
-                                                                 || (Settings.data.bar.monitors.length === 0))
+      readonly property bool barIsVisible: (screen !== null) && (Settings.data.bar.monitors.includes(screen.name) || (Settings.data.bar.monitors.length === 0))
 
       Connections {
         target: ScalingService
@@ -169,8 +168,7 @@ Loader {
       visible: true
 
       // Dim desktop if required
-      color: (root.active && !root.isClosing
-              && Settings.data.general.dimDesktop) ? Qt.alpha(Color.mShadow, Style.opacityHeavy) : Color.transparent
+      color: (root.active && !root.isClosing && Settings.data.general.dimDesktop) ? Qt.alpha(Color.mShadow, Style.opacityHeavy) : Color.transparent
 
       WlrLayershell.exclusionMode: ExclusionMode.Ignore
       WlrLayershell.namespace: "noctalia-panel"
@@ -186,8 +184,8 @@ Loader {
       anchors.left: true
       anchors.right: true
       anchors.bottom: true
-      margins.top: (barIsVisible && !barAtBottom) ? barHeight : 0
-      margins.bottom: (barIsVisible && barAtBottom) ? barHeight : 0
+      margins.top: (barIsVisible && !barAtBottom) ? (barHeight + ((Settings.data.bar.floating && !panelAnchorVerticalCenter) ? Settings.data.bar.marginTop : 0)) : 0
+      margins.bottom: (barIsVisible && barAtBottom) ? (barHeight + ((Settings.data.bar.floating && !panelAnchorVerticalCenter) ? Settings.data.bar.marginBottom : 0)) : 0
 
       // Close any panel with Esc without requiring focus
       Shortcut {
