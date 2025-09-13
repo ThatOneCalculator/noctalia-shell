@@ -12,7 +12,7 @@ Singleton {
   property real bpm: 1.0
 
   Process {
-    running: true
+    running: false//true
     command: ["/usr/local/bin/beat_detector", "--no-log", "--no-stats", "--no-visual"]
     stdout: SplitParser {
       onRead: data => {

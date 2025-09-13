@@ -156,23 +156,23 @@ RowLayout {
               borderWidth: 0
               border.color: Color.transparent
               
-              SequentialAnimation on scale {
-                running: MediaService.isPlaying
-                loops: Animation.Infinite
-                alwaysRunToEnd: false
-                NumberAnimation {
-                  from: 1.0
-                  to: 1.1
-                  duration: BeatDetectorService.bpm * 0.1
-                  easing.type: Easing.InOutSine
-                }
-                NumberAnimation {
-                  from: 1.1
-                  to: 1.0
-                  duration: BeatDetectorService.bpm * 1.9
-                  easing.type: Easing.InOutSine
-                }
-              }
+              // SequentialAnimation on scale {
+              //   running: MediaService.isPlaying
+              //   loops: Animation.Infinite
+              //   alwaysRunToEnd: false
+              //   NumberAnimation {
+              //     from: 1.0
+              //     to: 1.1
+              //     duration: BeatDetectorService.bpm * 0.1
+              //     easing.type: Easing.InOutSine
+              //   }
+              //   NumberAnimation {
+              //     from: 1.1
+              //     to: 1.0
+              //     duration: BeatDetectorService.bpm * 1.9
+              //     easing.type: Easing.InOutSine
+              //   }
+              // }
             }
           }
         }
