@@ -45,7 +45,7 @@ Item {
   // Sizing logic for horizontal bars
   readonly property int iconSize: Math.round(Style.baseWidgetSize * sizeRatio * scaling)
   readonly property int pillWidth: iconSize
-  readonly property int pillPaddingHorizontal: Style.marginS * scaling
+  readonly property int pillPaddingHorizontal: Style.marginS - 2 * scaling
   readonly property int pillPaddingVertical: Style.marginS * scaling
   readonly property int pillOverlap: iconSize * 0.5
   readonly property int maxPillWidth: Math.max(1, textItem.implicitWidth + pillPaddingHorizontal * 4)
@@ -67,11 +67,11 @@ Item {
     opacity: revealed ? Style.opacityFull : Style.opacityNone
     color: Color.mSurfaceVariant
     border.color: Color.mOutline
-    border.width: Math.max(1, Style.borderS * scaling)
+    border.width: 0 // Math.max(1, Style.borderS * scaling)
 
     // Radius logic for horizontal expansion - rounded on the side that connects to icon
-    topLeftRadius: openLeftward ? iconSize * 0.5 : 0
-    bottomLeftRadius: openLeftward ? iconSize * 0.5 : 0
+    topLeftRadius: openLeftward ? iconSize * 1 : 0
+    bottomLeftRadius: openLeftward ? iconSize * 1 : 0
     topRightRadius: openRightward ? iconSize * 0.5 : 0
     bottomRightRadius: openRightward ? iconSize * 0.5 : 0
 
@@ -100,14 +100,14 @@ Item {
     Behavior on height {
       enabled: showAnim.running || hideAnim.running
       NumberAnimation {
-        duration: Style.animationNormal
+        duration: Style.animationFast
         easing.type: Easing.OutCubic
       }
     }
     Behavior on opacity {
       enabled: showAnim.running || hideAnim.running
       NumberAnimation {
-        duration: Style.animationNormal
+        duration: Style.animationFast
         easing.type: Easing.OutCubic
       }
     }
