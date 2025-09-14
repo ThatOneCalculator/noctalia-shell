@@ -86,7 +86,7 @@ Item {
 
     rightOpen: BarWidgetRegistry.getNPillDirection(root)
     icon: testMode ? BatteryService.getIcon(testPercent, testCharging, true) : BatteryService.getIcon(percent, charging, isReady)
-    text: (isReady || testMode) ? Math.round(percent) + "%" : "-"
+    text: (isReady || testMode) ? Math.round(percent) : "-"
     autoHide: false
     forceOpen: isReady && (testMode || battery.isLaptopBattery) && displayMode === "alwaysShow"
     forceClose: displayMode === "alwaysHide"
