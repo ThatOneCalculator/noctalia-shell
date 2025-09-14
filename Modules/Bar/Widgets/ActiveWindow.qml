@@ -140,7 +140,7 @@ Item {
       id: mainContainer
       anchors.fill: parent
       anchors.leftMargin: (barPosition === "left" || barPosition === "right") ? 0 : Style.marginXS * scaling
-      anchors.rightMargin: (barPosition === "left" || barPosition === "right") ? 0 : Style.marginXS * scaling
+      anchors.rightMargin: (barPosition === "left" || barPosition === "right") ? 0 : Style.marginS * scaling
       clip: true
 
       // Horizontal layout for top/bottom bars
@@ -152,11 +152,10 @@ Item {
 
         // Window icon
         Item {
-          // Layout.preferredWidth: Math.round(18 * scaling)
-          // Layout.preferredHeight: Math.round(18 * scaling)
-          Layout.preferredWidth: Style.baseWidgetSize * 0.5 * scaling
-          Layout.preferredHeight: Style.baseWidgetSize * 0.5 * scaling
+          Layout.preferredWidth: Style.baseWidgetSize * 0.55 * scaling
+          Layout.preferredHeight: Style.baseWidgetSize * 0.55 * scaling
           Layout.alignment: Qt.AlignVCenter
+          Layout.rightMargin: (barPosition === "left" || barPosition === "right") ? 0 : Style.marginXS * scaling
           visible: getTitle() !== "" && showIcon
 
           IconImage {
@@ -183,7 +182,7 @@ Item {
               if (mouseArea.containsMouse) {
                 return Math.round(Math.min(fullTitleMetrics.contentWidth, root.maxWidth * scaling))
               } else {
-                return Math.round(Math.min(fullTitleMetrics.contentWidth, 80 * scaling)) // Limited width for horizontal bars
+                return Math.round(Math.min(fullTitleMetrics.contentWidth, 200 * scaling)) // Limited width for horizontal bars
               }
             } catch (e) {
               Logger.warn("ActiveWindow", "Error calculating width:", e)

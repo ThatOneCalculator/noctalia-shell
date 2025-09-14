@@ -126,8 +126,8 @@ Rectangle {
           }
 
           font.family: Settings.data.ui.fontFixed
-          font.pointSize: useCompactMode ? Style.fontSizeXXS * scaling : Style.fontSizeXS * scaling
-          font.weight: Style.fontWeightBold
+          font.pointSize: useCompactMode ? Style.fontSizeXXS * scaling : Style.fontSizeS * scaling
+          // font.weight: Style.fontWeightBold
           color: Color.mPrimary
           Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
