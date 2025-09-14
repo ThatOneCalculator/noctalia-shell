@@ -30,7 +30,7 @@ Item {
     return {}
   }
 
-  readonly property bool alwaysShowPercentage: (widgetSettings.alwaysShowPercentage !== undefined) ? widgetSettings.alwaysShowPercentage : widgetMetadata.alwaysShowPercentage
+  readonly property string displayMode: (widgetSettings.displayMode !== undefined) ? widgetSettings.displayMode : widgetMetadata.displayMode
 
   // Used to avoid opening the pill on Quickshell startup
   property bool firstInputVolumeReceived: false
@@ -91,9 +91,10 @@ Item {
     rightOpen: BarWidgetRegistry.getNPillDirection(root)
     icon: getIcon()
     autoHide: false // Important to be false so we can hover as long as we want
-    text: Math.floor(AudioService.inputVolume * 100) + "%"
-    forceOpen: alwaysShowPercentage
-    tooltipText: "Microphone: " + Math.round(AudioService.inputVolume * 100)
+    text: Math.floor(AudioService.inputVolume * 100)
+    forceOpen: displayMode === "alwaysShow"
+    forceClose: displayMode === "alwaysHide"
+    tooltipText: "Microphone: " + Math.round(AudioService.inputVolume * 100) + "%\nLeft click for advanced settings.\nScroll up/down to change volume.\nRight click to toggle mute."
 
     onWheel: function (delta) {
       wheelAccumulator += delta

@@ -12,6 +12,7 @@ Item {
   property real sizeRatio: 0.8
   property bool autoHide: false
   property bool forceOpen: false
+  property bool forceClose: false
   property bool disableOpen: false
   property bool rightOpen: false
   property bool hovered: false
@@ -25,8 +26,8 @@ Item {
   readonly property bool openRightward: rightOpen
   readonly property bool openLeftward: !rightOpen
 
-  // Effective shown state (true if animated open or forced)
-  readonly property bool revealed: forceOpen || showPill
+  // Effective shown state (true if animated open or forced, but not if force closed)
+  readonly property bool revealed: !forceClose && (forceOpen || showPill)
 
   signal shown
   signal hidden
@@ -80,7 +81,7 @@ Item {
       id: textItem
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.verticalCenter: parent.verticalCenter
-      anchors.horizontalCenterOffset: openLeftward ? -6 * scaling : 6 * scaling // Adjust based on opening direction
+      anchors.horizontalCenterOffset: -pillPaddingHorizontal * 0.5 // Position text slightly left in the pill
       text: root.text
       font.family: Settings.data.ui.fontFixed
       font.pointSize: Style.fontSizeXXS * scaling
@@ -253,7 +254,7 @@ Item {
       hovered = true
       root.entered()
       tooltip.show()
-      if (disableOpen) {
+      if (disableOpen || forceClose) {
         return
       }
       if (!forceOpen) {
@@ -263,7 +264,7 @@ Item {
     onExited: {
       hovered = false
       root.exited()
-      if (!forceOpen) {
+      if (!forceOpen && !forceClose) {
         hide()
       }
       tooltip.hide()
