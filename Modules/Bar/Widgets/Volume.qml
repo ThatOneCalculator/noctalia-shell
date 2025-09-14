@@ -80,7 +80,7 @@ Item {
     text: `${Math.floor(AudioService.volume * 100)}${isVertical ? "" : "%"}`
     forceOpen: displayMode === "alwaysShow"
     forceClose: displayMode === "alwaysHide"
-    tooltipText: "Volume: " + Math.round(AudioService.volume * 100) + "%\nLeft click for advanced settings.\nScroll up/down to change volume.\nRight click to toggle mute."
+    tooltipText: "Volume: " + Math.round(AudioService.volume * 100) + "%"
 
     onWheel: function (delta) {
       wheelAccumulator += delta
