@@ -54,7 +54,6 @@ Singleton {
     "bell-off": "bell-off",
     "keep-awake-on": "mug-filled",
     "keep-awake-off": "mug",
-    "panel": "clipboard-filled",
     "disc": "disc-filled",
     "image": "photo",
     "dark-mode": "contrast-filled",
