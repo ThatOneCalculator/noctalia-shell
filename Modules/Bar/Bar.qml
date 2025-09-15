@@ -91,7 +91,7 @@ Variants {
             anchors.fill: parent
 
             // Top section (left widgets)
-            Column {
+            ColumnLayout {
               anchors.horizontalCenter: parent.horizontalCenter
               anchors.top: parent.top
               anchors.topMargin: Style.marginM * root.scaling
@@ -109,13 +109,13 @@ Variants {
                     "sectionWidgetIndex": index,
                     "sectionWidgetsCount": Settings.data.bar.widgets.left.length
                   }
-                  anchors.horizontalCenter: parent.horizontalCenter
+                  Layout.alignment: Qt.AlignHCenter 
                 }
               }
             }
 
             // Center section (center widgets)
-            Column {
+            ColumnLayout {
               anchors.horizontalCenter: parent.horizontalCenter
               anchors.verticalCenter: parent.verticalCenter
               spacing: Style.marginS * root.scaling
@@ -132,13 +132,13 @@ Variants {
                     "sectionWidgetIndex": index,
                     "sectionWidgetsCount": Settings.data.bar.widgets.center.length
                   }
-                  anchors.horizontalCenter: parent.horizontalCenter
+                  Layout.alignment: Qt.AlignHCenter 
                 }
               }
             }
 
             // Bottom section (right widgets)
-            Column {
+            ColumnLayout {
               anchors.horizontalCenter: parent.horizontalCenter
               anchors.bottom: parent.bottom
               anchors.bottomMargin: Style.marginM * root.scaling
@@ -156,7 +156,7 @@ Variants {
                     "sectionWidgetIndex": index,
                     "sectionWidgetsCount": Settings.data.bar.widgets.right.length
                   }
-                  anchors.horizontalCenter: parent.horizontalCenter
+                  Layout.alignment: Qt.AlignHCenter 
                 }
               }
             }
@@ -169,7 +169,7 @@ Variants {
             anchors.fill: parent
 
             // Left Section
-            RowLayout {
+            RowLayout{
               id: leftSection
               objectName: "leftSection"
               anchors.left: parent.left
@@ -189,6 +189,7 @@ Variants {
                     "sectionWidgetIndex": index,
                     "sectionWidgetsCount": Settings.data.bar.widgets.left.length
                   }
+                  Layout.alignment: Qt.AlignVCenter
                 }
               }
             }
@@ -213,6 +214,7 @@ Variants {
                     "sectionWidgetIndex": index,
                     "sectionWidgetsCount": Settings.data.bar.widgets.center.length
                   }
+                  Layout.alignment: Qt.AlignVCenter
                 }
               }
             }
@@ -238,6 +240,7 @@ Variants {
                     "sectionWidgetIndex": index,
                     "sectionWidgetsCount": Settings.data.bar.widgets.right.length
                   }
+                  Layout.alignment: Qt.AlignVCenter
                 }
               }
             }
