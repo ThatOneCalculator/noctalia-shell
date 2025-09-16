@@ -121,6 +121,12 @@ Singleton {
         }
       }
     }
+
+    // Upgrade the density of the bar so the look stay the same for people who upgrade.
+    if (adapter.settingsVersion == 2) {
+      adapter.bar.density = "comfortable"
+      adapter.settingsVersion++
+    }
   }
 
   // -----------------------------------------------------
@@ -259,13 +265,15 @@ Singleton {
     JsonAdapter {
       id: adapter
 
-      property int settingsVersion: 2
+      property int settingsVersion: 3
 
       // bar
       property JsonObject bar: JsonObject {
         property string position: "top" // "top", "bottom", "left", or "right"
         property real backgroundOpacity: 1.0
         property list<string> monitors: []
+        property string density: "default" // "compact", "default", "comfortable"
+        property bool showCapsule: true
 
         // Floating bar settings
         property bool floating: false
@@ -322,6 +330,7 @@ Singleton {
         property string avatarImage: defaultAvatar
         property bool dimDesktop: false
         property bool showScreenCorners: false
+        property bool forceBlackScreenCorners: false
         property real radiusRatio: 1.0
         property real screenRadiusRatio: 1.0
         // Animation speed multiplier (0.1x - 2.0x)
@@ -449,6 +458,7 @@ Singleton {
         property bool foot: false
         property bool fuzzel: false
         property bool vesktop: false
+        property bool pywalfox: false
         property bool enableUserTemplates: false
       }
 

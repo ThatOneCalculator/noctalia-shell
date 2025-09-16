@@ -7,8 +7,7 @@ import qs.Services
 Rectangle {
   id: root
 
-  // Multiplier to control how large the button container is relative to Style.baseWidgetSize
-  property real sizeRatio: 1.0
+  property real baseSize: Style.baseWidgetSize
 
   property string icon
   property string tooltipText
@@ -16,6 +15,7 @@ Rectangle {
   property bool allowClickWhenDisabled: false
   property bool hovering: false
   property bool nerd: false
+  property bool compact: false
 
   property color colorBg: Color.mSurfaceVariant
   property color colorFg: Color.mPrimary
@@ -30,11 +30,11 @@ Rectangle {
   signal rightClicked
   signal middleClicked
 
-  implicitWidth: Math.round(Style.baseWidgetSize * scaling * sizeRatio)
-  implicitHeight: Math.round(Style.baseWidgetSize * scaling * sizeRatio)
+  implicitWidth: Math.round(baseSize * scaling)
+  implicitHeight: Math.round(baseSize * scaling)
 
   opacity: root.enabled ? Style.opacityFull : Style.opacityMedium
-  color: root.enabled && root.hovering ? colorBgHover : colorBg
+  color: root.enabled && root.hovering ? colorBgHover : Settings.data.bar.showCapsule ? colorBg : Color.transparent
   radius: width * 0.5
   border.color: root.enabled && root.hovering ? colorBorderHover : colorBorder
   border.width: Math.max(1, Style.borderS * scaling)
@@ -49,7 +49,7 @@ Rectangle {
   NIcon {
     icon: root.icon
     visible: !root.nerd
-    font.pointSize: Math.max(1, root.width * 0.47)
+    font.pointSize: Math.max(1, root.compact ? root.width * 0.65 : root.width * 0.48)
     color: root.enabled && root.hovering ? colorFgHover : colorFg
     // Center horizontally
     x: (root.width - width) / 2
@@ -67,10 +67,10 @@ Rectangle {
   NNerdIcon {
     text: root.icon
     visible: root.nerd
-    font.pointSize: Math.max(1, root.width * 0.47)
+    font.pointSize: Math.max(1, root.compact ? root.width * 0.65 : root.width * 0.48)
     color: root.enabled && root.hovering ? colorFgHover : colorFg
     // Center horizontally
-    x: (root.width - width) / 2
+    x: ((root.width - width) / 2) + 0.5
     // Center vertically accounting for font metrics
     y: (root.height - height) / 2 + (height - contentHeight) / 2
 

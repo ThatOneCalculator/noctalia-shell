@@ -93,15 +93,15 @@ ColumnLayout {
 
     NHeader {
       label: "Monitors Configuration"
-      description: "Choose which monitors should display the dock."
+      description: "Show dock on specific monitors."
     }
 
     Repeater {
       model: Quickshell.screens || []
       delegate: NCheckbox {
         Layout.fillWidth: true
-        label: `${modelData.name || "Unknown"}${modelData.model ? `: ${modelData.model}` : ""}`
-        description: `${modelData.width}x${modelData.height} at (${modelData.x}, ${modelData.y})`
+        label: modelData.name || "Unknown"
+        description: `${modelData.model} - ${modelData.width}x${modelData.height} [x:${modelData.x} y:${modelData.y}]`
         checked: (Settings.data.dock.monitors || []).indexOf(modelData.name) !== -1
         onToggled: checked => {
                      if (checked) {

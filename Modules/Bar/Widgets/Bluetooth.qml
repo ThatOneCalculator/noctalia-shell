@@ -13,7 +13,8 @@ NIconButton {
   property ShellScreen screen
   property real scaling: 1.0
 
-  sizeRatio: 0.8
+  baseSize: Style.capsuleHeight
+  compact: (Settings.data.bar.density === "compact")
   colorBg: Color.mSurfaceVariant
   colorFg: Color.mOnSurface
   colorBorder: Color.transparent

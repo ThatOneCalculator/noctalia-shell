@@ -53,15 +53,15 @@ ColumnLayout {
 
     NHeader {
       label: "Monitors Configuration"
-      description: "Choose which monitors should display notifications."
+      description: "Show bar on specific monitors. Defaults to all if none are chosen."
     }
 
     Repeater {
       model: Quickshell.screens || []
       delegate: NCheckbox {
         Layout.fillWidth: true
-        label: `${modelData.name || "Unknown"}${modelData.model ? `: ${modelData.model}` : ""}`
-        description: `${modelData.width}x${modelData.height} at (${modelData.x}, ${modelData.y})`
+        label: modelData.name || "Unknown"
+        description: `${modelData.model} - ${modelData.width}x${modelData.height} [x:${modelData.x} y:${modelData.y}]`
         checked: (Settings.data.notifications.monitors || []).indexOf(modelData.name) !== -1
         onToggled: checked => {
                      if (checked) {

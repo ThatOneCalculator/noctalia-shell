@@ -32,6 +32,15 @@ Item {
   }
 
   readonly property string barPosition: Settings.data.bar.position
+  readonly property bool isVertical: barPosition === "left" || barPosition === "right"
+  readonly property bool compact: (Settings.data.bar.density === "compact")
+  readonly property real baseDimensionRatio: {
+    const b = compact ? 0.85 : 0.65
+    if (widgetSettings.labelMode === "none") {
+      return b * 0.75
+    }
+    return b
+  }
 
   readonly property string labelMode: (widgetSettings.labelMode !== undefined) ? widgetSettings.labelMode : widgetMetadata.labelMode
   readonly property bool hideUnoccupied: (widgetSettings.hideUnoccupied !== undefined) ? widgetSettings.hideUnoccupied : widgetMetadata.hideUnoccupied
@@ -49,47 +58,45 @@ Item {
 
   signal workspaceChanged(int workspaceId, color accentColor)
 
-  implicitHeight: (barPosition === "left" || barPosition === "right") ? calculatedVerticalHeight() : Math.round(Style.barHeight * scaling)
-  implicitWidth: (barPosition === "left" || barPosition === "right") ? Math.round(Style.barHeight * scaling) : calculatedHorizontalWidth()
+  implicitWidth: isVertical ? Math.round(Style.barHeight * scaling) : computeWidth()
+  implicitHeight: isVertical ? computeHeight() : Math.round(Style.barHeight * scaling)
 
-  function calculatedWsWidth(ws) {
+  function getWorkspaceWidth(ws) {
+    const d = Style.capsuleHeight * root.baseDimensionRatio
     if (ws.isFocused)
-      return Math.round(44 * scaling)
-    else if (ws.isActive)
-      return Math.round(28 * scaling)
+      return d * 2.5
     else
-      return Math.round(20 * scaling)
+      return d
   }
 
-  function calculatedWsHeight(ws) {
+  function getWorkspaceHeight(ws) {
+    const d = Style.capsuleHeight * root.baseDimensionRatio
     if (ws.isFocused)
-      return Math.round(44 * scaling)
-    else if (ws.isActive)
-      return Math.round(28 * scaling)
+      return d * 3
     else
-      return Math.round(20 * scaling)
+      return d
   }
 
-  function calculatedVerticalHeight() {
+  function computeWidth() {
     let total = 0
     for (var i = 0; i < localWorkspaces.count; i++) {
       const ws = localWorkspaces.get(i)
-      total += calculatedWsHeight(ws)
+      total += getWorkspaceWidth(ws)
     }
     total += Math.max(localWorkspaces.count - 1, 0) * spacingBetweenPills
     total += horizontalPadding * 2
-    return total
+    return Math.round(total)
   }
 
-  function calculatedHorizontalWidth() {
+  function computeHeight() {
     let total = 0
     for (var i = 0; i < localWorkspaces.count; i++) {
       const ws = localWorkspaces.get(i)
-      total += calculatedWsWidth(ws)
+      total += getWorkspaceHeight(ws)
     }
     total += Math.max(localWorkspaces.count - 1, 0) * spacingBetweenPills
     total += horizontalPadding * 2
-    return total
+    return Math.round(total)
   }
 
   Component.onCompleted: {
@@ -173,10 +180,10 @@ Item {
 
   Rectangle {
     id: workspaceBackground
-    width: (barPosition === "left" || barPosition === "right") ? Math.round(Style.capsuleHeight * scaling) : parent.width
-    height: (barPosition === "left" || barPosition === "right") ? parent.height : Math.round(Style.capsuleHeight * scaling)
+    width: isVertical ? Math.round(Style.capsuleHeight * scaling) : parent.width
+    height: isVertical ? parent.height : Math.round(Style.capsuleHeight * scaling)
     radius: Math.round(Style.radiusM * scaling)
-    color: Color.mSurfaceVariant
+    color: Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent
 
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter
@@ -187,17 +194,16 @@ Item {
     id: pillRow
     spacing: spacingBetweenPills
     anchors.verticalCenter: workspaceBackground.verticalCenter
-    width: root.width - horizontalPadding * 2
     x: horizontalPadding
-    visible: barPosition === "top" || barPosition === "bottom"
+    visible: !isVertical
 
     Repeater {
       id: workspaceRepeaterHorizontal
       model: localWorkspaces
       Item {
         id: workspacePillContainer
-        height: (labelMode !== "none") ? Math.round(18 * scaling) : Math.round(14 * scaling)
-        width: root.calculatedWsWidth(model)
+        width: root.getWorkspaceWidth(model)
+        height: Style.capsuleHeight * root.baseDimensionRatio
 
         Rectangle {
           id: pill
@@ -216,7 +222,7 @@ Item {
                     return model.idx.toString()
                   }
                 }
-                font.pointSize: model.isFocused ? Style.fontSizeXS * scaling : Style.fontSizeXXS * scaling
+                font.pointSize: model.isFocused ? workspacePillContainer.height * 0.45 : workspacePillContainer.height * 0.42
                 font.capitalization: Font.AllUppercase
                 font.family: Settings.data.ui.fontFixed
                 font.weight: Style.fontWeightBold
@@ -332,17 +338,16 @@ Item {
     id: pillColumn
     spacing: spacingBetweenPills
     anchors.horizontalCenter: workspaceBackground.horizontalCenter
-    height: root.height - horizontalPadding * 2
     y: horizontalPadding
-    visible: barPosition === "left" || barPosition === "right"
+    visible: isVertical
 
     Repeater {
       id: workspaceRepeaterVertical
       model: localWorkspaces
       Item {
         id: workspacePillContainerVertical
-        width: (labelMode !== "none") ? Math.round(18 * scaling) : Math.round(14 * scaling)
-        height: root.calculatedWsHeight(model)
+        width: Style.capsuleHeight * root.baseDimensionRatio
+        height: root.getWorkspaceHeight(model)
 
         Rectangle {
           id: pillVertical
@@ -361,7 +366,7 @@ Item {
                     return model.idx.toString()
                   }
                 }
-                font.pointSize: model.isFocused ? Style.fontSizeXS * scaling : Style.fontSizeXXS * scaling
+                font.pointSize: model.isFocused ? workspacePillContainerVertical.width * 0.45 : workspacePillContainerVertical.width * 0.42
                 font.capitalization: Font.AllUppercase
                 font.family: Settings.data.ui.fontFixed
                 font.weight: Style.fontWeightBold

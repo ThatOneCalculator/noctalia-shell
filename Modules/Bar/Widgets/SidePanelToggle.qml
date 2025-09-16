@@ -34,33 +34,24 @@ NIconButton {
   icon: useDistroLogo ? "" : "" // "noctalia"
   nerd: !useDistroLogo
   tooltipText: "Open side panel."
-  sizeRatio: 0.8
-
+  baseSize: Style.capsuleHeight
+  compact: (Settings.data.bar.density === "compact")
   colorBg: Color.mSurfaceVariant
   colorFg: "#31748f"
+  colorBgHover: useDistroLogo ? Color.mSurfaceVariant : Color.mTertiary
   colorBorder: Color.transparent
-  colorBorderHover: Color.transparent
-
+  colorBorderHover: useDistroLogo ? Color.mTertiary : Color.transparent
   onClicked: PanelService.getPanel("sidePanel")?.toggle(this)
   onRightClicked: PanelService.getPanel("settingsPanel")?.toggle()
 
   IconImage {
     id: logo
     anchors.centerIn: parent
-    width: root.width * 0.6
+    width: root.width * 0.8
     height: width
     source: useDistroLogo ? DistroLogoService.osLogo : ""
     visible: useDistroLogo && source !== ""
     smooth: true
-  }
-
-  MultiEffect {
-    anchors.fill: logo
-    source: logo
-    //visible: logo.visible
-    colorization: 1
-    brightness: 1
-    saturation: 1
-    colorizationColor: root.hovering ? Color.mSurfaceVariant : Color.mOnSurface
+    asynchronous: true
   }
 }

@@ -68,23 +68,12 @@ Variants {
           radius: Settings.data.bar.floating ? Style.radiusL : 0
         }
 
-        // For vertical bars, use a single column layout
         Loader {
-          id: verticalBarLayout
           anchors.fill: parent
-          visible: Settings.data.bar.position === "left" || Settings.data.bar.position === "right"
-          sourceComponent: verticalBarComponent
+          sourceComponent: (Settings.data.bar.position === "left" || Settings.data.bar.position === "right") ? verticalBarComponent : horizontalBarComponent
         }
 
-        // For horizontal bars, use the original three-section layout
-        Loader {
-          id: horizontalBarLayout
-          anchors.fill: parent
-          visible: Settings.data.bar.position === "top" || Settings.data.bar.position === "bottom"
-          sourceComponent: horizontalBarComponent
-        }
-
-        // Main layout components
+        // For vertical bars
         Component {
           id: verticalBarComponent
           Item {
@@ -109,7 +98,7 @@ Variants {
                     "sectionWidgetIndex": index,
                     "sectionWidgetsCount": Settings.data.bar.widgets.left.length
                   }
-                  Layout.alignment: Qt.AlignHCenter 
+                  Layout.alignment: Qt.AlignHCenter
                 }
               }
             }
@@ -132,7 +121,7 @@ Variants {
                     "sectionWidgetIndex": index,
                     "sectionWidgetsCount": Settings.data.bar.widgets.center.length
                   }
-                  Layout.alignment: Qt.AlignHCenter 
+                  Layout.alignment: Qt.AlignHCenter
                 }
               }
             }
@@ -156,20 +145,21 @@ Variants {
                     "sectionWidgetIndex": index,
                     "sectionWidgetsCount": Settings.data.bar.widgets.right.length
                   }
-                  Layout.alignment: Qt.AlignHCenter 
+                  Layout.alignment: Qt.AlignHCenter
                 }
               }
             }
           }
         }
 
+        // For horizontal bars
         Component {
           id: horizontalBarComponent
           Item {
             anchors.fill: parent
 
             // Left Section
-            RowLayout{
+            RowLayout {
               id: leftSection
               objectName: "leftSection"
               anchors.left: parent.left

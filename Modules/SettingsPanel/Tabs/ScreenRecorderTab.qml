@@ -19,7 +19,6 @@ ColumnLayout {
   ColumnLayout {
     spacing: Style.marginS * scaling
     Layout.fillWidth: true
-    Layout.topMargin: Style.marginS * scaling
 
     NTextInput {
       label: "Output Directory"
@@ -65,7 +64,7 @@ ColumnLayout {
     // Source
     NComboBox {
       label: "Video Source"
-      description: "Portal is recommend, if you get artifacts try Screen."
+      description: "Portal is recommended, if you get artifacts try Screen."
       model: ListModel {
         ListElement {
           key: "portal"
