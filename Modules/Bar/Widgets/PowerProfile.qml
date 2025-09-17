@@ -11,56 +11,16 @@ NIconButton {
 
   property ShellScreen screen
   property real scaling: 1.0
-  readonly property bool hasPP: PowerProfileService.available
 
   baseSize: Style.capsuleHeight
-  visible: hasPP
+  visible: PowerProfileService.available
 
-  function profileIcon() {
-    if (!hasPP)
-      return "balanced"
-    if (PowerProfileService.profile === PowerProfile.Performance)
-      return "performance"
-    if (PowerProfileService.profile === PowerProfile.Balanced)
-      return "balanced"
-    if (PowerProfileService.profile === PowerProfile.PowerSaver)
-      return "powersaver"
-  }
-
-  function profileName() {
-    if (!hasPP)
-      return "Unknown"
-    if (PowerProfileService.profile === PowerProfile.Performance)
-      return "Performance"
-    if (PowerProfileService.profile === PowerProfile.Balanced)
-      return "Balanced"
-    if (PowerProfileService.profile === PowerProfile.PowerSaver)
-      return "Power Saver"
-  }
-
-  function changeProfile() {
-    if (!hasPP)
-      return
-    PowerProfileService.cycleProfile()
-  }
-
-  function profileColor() {
-    if (!hasPP)
-      return "#e0def4"
-    if (PowerProfileService.profile === PowerProfile.Performance)
-        return "#ebbcba"
-    else if (PowerProfileService.profile === PowerProfile.Balanced)
-        return "#c4a7e7"
-    else if (PowerProfileService.profile === PowerProfile.PowerSaver)
-        return "#9ccfd8"
-  }
-
-  icon: root.profileIcon()
-  tooltipText: root.profileName()
+  icon: PowerProfileService.getIcon()
+  tooltipText: `Current power profile is "${PowerProfileService.getName()}".`
   compact: (Settings.data.bar.density === "compact")
-  colorBg: Color.mSurfaceVariant
-  colorFg: root.profileColor()
+  colorBg: (Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent)
+  colorFg: PowerProfileService.getColor()
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
-  onClicked: root.changeProfile()
+  onClicked: PowerProfileService.cycleProfile()
 }

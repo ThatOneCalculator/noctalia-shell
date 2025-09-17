@@ -36,7 +36,7 @@ NIconButton {
   tooltipText: "Open side panel."
   baseSize: Style.capsuleHeight
   compact: (Settings.data.bar.density === "compact")
-  colorBg: Color.mSurfaceVariant
+  colorBg: (Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent)
   colorFg: "#31748f"
   colorBgHover: useDistroLogo ? Color.mSurfaceVariant : Color.mTertiary
   colorBorder: Color.transparent
