@@ -27,7 +27,8 @@ Item {
   IpcHandler {
     target: "notifications"
     function toggleHistory() {
-      notificationHistoryPanel.toggle()
+      // Will attempt to open the panel next to the bar button if any.
+      notificationHistoryPanel.toggle(BarService.lookupWidget("NotificationHistory"))
     }
     function toggleDND() {
       Settings.data.notifications.doNotDisturb = !Settings.data.notifications.doNotDisturb
@@ -118,13 +119,20 @@ Item {
   IpcHandler {
     target: "sidePanel"
     function toggle() {
-      sidePanel.toggle()
+      // Will attempt to open the panel next to the bar button if any.
+      sidePanel.toggle(BarService.lookupWidget("SidePanelToggle"))
     }
   }
 
   // Wallpaper IPC: trigger a new random wallpaper
   IpcHandler {
     target: "wallpaper"
+    function toggle() {
+      if (Settings.data.wallpaper.enabled) {
+        wallpaperSelector.toggle()
+      }
+    }
+
     function random() {
       if (Settings.data.wallpaper.enabled) {
         WallpaperService.setRandomWallpaper()

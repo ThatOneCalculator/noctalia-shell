@@ -21,36 +21,30 @@ NPanel {
 
   panelKeyboardFocus: true
 
+  draggable: true
+
   // Tabs enumeration, order is NOT relevant
   enum Tab {
     About,
     Audio,
     Bar,
-    Dock,
-    Hooks,
-    Launcher,
     ColorScheme,
     Display,
+    Dock,
     General,
+    Hooks,
+    Launcher,
+    Location,
     Network,
     Notification,
     ScreenRecorder,
-    Weather,
-    Wallpaper,
-    WallpaperSelector
+    Wallpaper
   }
 
   property int requestedTab: SettingsPanel.Tab.General
   property int currentTabIndex: 0
   property var tabsModel: []
   property var activeScrollView: null
-
-  Connections {
-    target: Settings.data.wallpaper
-    function onEnabledChanged() {
-      updateTabsModel()
-    }
-  }
 
   Component.onCompleted: {
     updateTabsModel()
@@ -81,8 +75,8 @@ NPanel {
     Tabs.NetworkTab {}
   }
   Component {
-    id: weatherTab
-    Tabs.WeatherTab {}
+    id: locationTab
+    Tabs.LocationTab {}
   }
   Component {
     id: colorSchemeTab
@@ -92,10 +86,7 @@ NPanel {
     id: wallpaperTab
     Tabs.WallpaperTab {}
   }
-  Component {
-    id: wallpaperSelectorTab
-    Tabs.WallpaperSelectorTab {}
-  }
+
   Component {
     id: screenRecorderTab
     Tabs.ScreenRecorderTab {}
@@ -160,10 +151,10 @@ NPanel {
                      "icon": "settings-network",
                      "source": networkTab
                    }, {
-                     "id": SettingsPanel.Tab.Weather,
-                     "label": "Weather",
-                     "icon": "settings-weather",
-                     "source": weatherTab
+                     "id": SettingsPanel.Tab.Location,
+                     "label": "Location",
+                     "icon": "settings-location",
+                     "source": locationTab
                    }, {
                      "id": SettingsPanel.Tab.ColorScheme,
                      "label": "Color Scheme",
@@ -174,34 +165,22 @@ NPanel {
                      "label": "Wallpaper",
                      "icon": "settings-wallpaper",
                      "source": wallpaperTab
+                   }, {
+                     "id": SettingsPanel.Tab.ScreenRecorder,
+                     "label": "Screen Recorder",
+                     "icon": "settings-screen-recorder",
+                     "source": screenRecorderTab
+                   }, {
+                     "id": SettingsPanel.Tab.Hooks,
+                     "label": "Hooks",
+                     "icon": "settings-hooks",
+                     "source": hooksTab
+                   }, {
+                     "id": SettingsPanel.Tab.About,
+                     "label": "About",
+                     "icon": "settings-about",
+                     "source": aboutTab
                    }]
-
-    // Only add the Wallpaper Selector tab if the feature is enabled
-    if (Settings.data.wallpaper.enabled) {
-      newTabs.push({
-                     "id": SettingsPanel.Tab.WallpaperSelector,
-                     "label": "Wallpaper Selector",
-                     "icon": "settings-wallpaper-selector",
-                     "source": wallpaperSelectorTab
-                   })
-    }
-
-    newTabs.push({
-                   "id": SettingsPanel.Tab.ScreenRecorder,
-                   "label": "Screen Recorder",
-                   "icon": "settings-screen-recorder",
-                   "source": screenRecorderTab
-                 }, {
-                   "id": SettingsPanel.Tab.Hooks,
-                   "label": "Hooks",
-                   "icon": "settings-hooks",
-                   "source": hooksTab
-                 }, {
-                   "id": SettingsPanel.Tab.About,
-                   "label": "About",
-                   "icon": "settings-about",
-                   "source": aboutTab
-                 })
 
     root.tabsModel = newTabs // Assign the generated list to the model
   }
