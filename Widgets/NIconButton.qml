@@ -70,9 +70,9 @@ Rectangle {
     font.pointSize: Math.max(1, root.compact ? root.width * 0.65 : root.width * 0.48)
     color: root.enabled && root.hovering ? colorFgHover : colorFg
     // Center horizontally
-    x: ((root.width - width) / 2) + 0.5
+    x: ((root.width - width) / 2) + 0.55
     // Center vertically accounting for font metrics
-    y: (root.height - height) / 2 + (height - contentHeight) / 2
+    y: (root.height - height) / 2 + (height - contentHeight) / 2 - 0.5
 
     Behavior on color {
       ColorAnimation {
