@@ -13,11 +13,11 @@ NIconButton {
 
   baseSize: Style.capsuleHeight
   compact: (Settings.data.bar.density === "compact")
-  icon: IdleInhibitorService.isInhibited ? "keep-awake-on" : "keep-awake-off"
-  tooltipText: IdleInhibitorService.isInhibited ? "Disable keep awake" : "Enable keep awake"
+  icon: "wallpaper-selector"
+  tooltipText: "Open wallpaper selector"
   colorBg: (Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent)
-  colorFg: IdleInhibitorService.isInhibited ? Color.mPrimary : Color.mOnSurface
+  colorFg: Color.mOnSurface
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
-  onClicked: IdleInhibitorService.manualToggle()
+  onClicked: PanelService.getPanel("wallpaperSelector")?.toggle(this)
 }

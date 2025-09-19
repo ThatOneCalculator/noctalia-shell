@@ -158,11 +158,9 @@ Rectangle {
               // Compact mode: date section (last 2 lines)
               switch (index) {
               case 0:
-                // Day
-                return now.getDate().toString().padStart(2, '0')
+                return monthBeforeDay ? (now.getMonth() + 1).toString().padStart(2, '0') : now.getDate().toString().padStart(2, '0')
               case 1:
-                // Month
-                return (now.getMonth() + 1).toString().padStart(2, '0')
+                return monthBeforeDay ? now.getDate().toString().padStart(2, '0') : (now.getMonth() + 1).toString().padStart(2, '0')
               default:
                 return ""
               }
