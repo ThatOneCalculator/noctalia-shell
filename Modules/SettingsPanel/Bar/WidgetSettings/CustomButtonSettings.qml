@@ -13,9 +13,11 @@ ColumnLayout {
   property var widgetData: null
   property var widgetMetadata: null
 
+  property string valueIcon: widgetData.icon !== undefined ? widgetData.icon : widgetMetadata.icon
+
   function saveSettings() {
     var settings = Object.assign({}, widgetData || {})
-    settings.icon = iconInput.text
+    settings.icon = valueIcon
     settings.leftClickExec = leftClickExecInput.text
     settings.rightClickExec = rightClickExecInput.text
     settings.middleClickExec = middleClickExecInput.text
@@ -24,193 +26,39 @@ ColumnLayout {
     return settings
   }
 
-  NTextInput {
-    id: iconInput
-    Layout.fillWidth: true
-    label: "Icon Name"
-    description: "Select an icon from the library."
-    placeholderText: "Enter icon name (e.g., cat, gear, house, ...)"
-    text: widgetData?.icon || widgetMetadata.icon
-  }
-
   RowLayout {
-    spacing: Style.marginS * scaling
-    Layout.alignment: Qt.AlignLeft
+    spacing: Style.marginM * scaling
+
+    NLabel {
+      label: "Icon"
+      description: "Select an icon from the library."
+    }
+
     NIcon {
       Layout.alignment: Qt.AlignVCenter
-      icon: iconInput.text
-      visible: iconInput.text !== ""
+      icon: valueIcon
+      font.pointSize: Style.fontSizeXL * scaling
+      visible: valueIcon !== ""
     }
+
     NButton {
       text: "Browse"
       onClicked: iconPicker.open()
     }
   }
 
-  Popup {
+  NIconPicker {
     id: iconPicker
-    modal: true
-    width: {
-      var w = Math.round(Math.max(screen.width * 0.35, 900) * scaling)
-      w = Math.min(w, screen.width - Style.marginL * 2)
-      return w
-    }
-    height: {
-      var h = Math.round(Math.max(screen.height * 0.65, 700) * scaling)
-      h = Math.min(h, screen.height - Style.barHeight * scaling - Style.marginL * 2)
-      return h
-    }
-    anchors.centerIn: Overlay.overlay
-    padding: Style.marginXL * scaling
-
-    property string query: ""
-    property string selectedIcon: ""
-    property var allIcons: Object.keys(Icons.icons)
-    property var filteredIcons: allIcons.filter(function (name) {
-      return query === "" || name.toLowerCase().indexOf(query.toLowerCase()) !== -1
-    })
-    readonly property int columns: 6
-    readonly property int cellW: Math.floor(grid.width / columns)
-    readonly property int cellH: Math.round(cellW * 0.7 + 36 * scaling)
-
-    background: Rectangle {
-      color: Color.mSurface
-      radius: Style.radiusL * scaling
-      border.color: Color.mPrimary
-      border.width: Style.borderM * scaling
-    }
-
-    ColumnLayout {
-      anchors.fill: parent
-      spacing: Style.marginM * scaling
-
-      // Title row
-      RowLayout {
-        Layout.fillWidth: true
-        NText {
-          text: "Icon Picker"
-          font.pointSize: Style.fontSizeL * scaling
-          font.weight: Style.fontWeightBold
-          color: Color.mPrimary
-          Layout.fillWidth: true
-        }
-        NIconButton {
-          icon: "close"
-          onClicked: iconPicker.close()
-        }
-      }
-
-      NDivider {
-        Layout.fillWidth: true
-      }
-
-      RowLayout {
-        Layout.fillWidth: true
-        spacing: Style.marginS * scaling
-        NTextInput {
-          Layout.fillWidth: true
-          label: "Search"
-          placeholderText: "Search (e.g., arrow, battery, cloud)"
-          text: iconPicker.query
-          onTextChanged: iconPicker.query = text.trim().toLowerCase()
-        }
-      }
-
-      // Icon grid
-      NScrollView {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        clip: true
-        horizontalPolicy: ScrollBar.AlwaysOff
-        verticalPolicy: ScrollBar.AlwaysOn
-
-        GridView {
-          id: grid
-          anchors.fill: parent
-          anchors.margins: Style.marginM * scaling
-          cellWidth: iconPicker.cellW
-          cellHeight: iconPicker.cellH
-          model: iconPicker.filteredIcons
-          delegate: Rectangle {
-            width: grid.cellWidth
-            height: grid.cellHeight
-            radius: Style.radiusS * scaling
-            clip: true
-            color: (iconPicker.selectedIcon === modelData) ? Qt.alpha(Color.mPrimary, 0.15) : "transparent"
-            border.color: (iconPicker.selectedIcon === modelData) ? Color.mPrimary : Qt.rgba(0, 0, 0, 0)
-            border.width: (iconPicker.selectedIcon === modelData) ? Style.borderS * scaling : 0
-
-            MouseArea {
-              anchors.fill: parent
-              onClicked: iconPicker.selectedIcon = modelData
-              onDoubleClicked: {
-                iconPicker.selectedIcon = modelData
-                iconInput.text = iconPicker.selectedIcon
-                iconPicker.close()
-              }
-            }
-
-            ColumnLayout {
-              anchors.fill: parent
-              anchors.margins: Style.marginS * scaling
-              spacing: Style.marginS * scaling
-              Item {
-                Layout.fillHeight: true
-                Layout.preferredHeight: 4 * scaling
-              }
-              NIcon {
-                Layout.alignment: Qt.AlignHCenter
-                icon: modelData
-                font.pointSize: 42 * scaling
-              }
-              NText {
-                Layout.alignment: Qt.AlignHCenter
-                Layout.fillWidth: true
-                Layout.topMargin: Style.marginXS * scaling
-                elide: Text.ElideRight
-                wrapMode: Text.NoWrap
-                maximumLineCount: 1
-                horizontalAlignment: Text.AlignHCenter
-                color: Color.mOnSurfaceVariant
-                font.pointSize: Style.fontSizeXS * scaling
-                text: modelData
-              }
-              Item {
-                Layout.fillHeight: true
-              }
-            }
-          }
-        }
-      }
-
-      RowLayout {
-        Layout.fillWidth: true
-        spacing: Style.marginM * scaling
-        Item {
-          Layout.fillWidth: true
-        }
-        NButton {
-          text: "Cancel"
-          outlined: true
-          onClicked: iconPicker.close()
-        }
-        NButton {
-          text: "Apply"
-          icon: "check"
-          enabled: iconPicker.selectedIcon !== ""
-          onClicked: {
-            iconInput.text = iconPicker.selectedIcon
-            iconPicker.close()
-          }
-        }
-      }
+    initialIcon: valueIcon
+    onIconSelected: function (iconName) {
+      valueIcon = iconName
     }
   }
 
   NTextInput {
     id: leftClickExecInput
     Layout.fillWidth: true
-    label: "Left Click Command"
+    label: "Left click"
     placeholderText: "Enter command to execute (app or custom script)"
     text: widgetData?.leftClickExec || widgetMetadata.leftClickExec
   }
@@ -218,7 +66,7 @@ ColumnLayout {
   NTextInput {
     id: rightClickExecInput
     Layout.fillWidth: true
-    label: "Right Click Command"
+    label: "Right click"
     placeholderText: "Enter command to execute (app or custom script)"
     text: widgetData?.rightClickExec || widgetMetadata.rightClickExec
   }
@@ -226,7 +74,7 @@ ColumnLayout {
   NTextInput {
     id: middleClickExecInput
     Layout.fillWidth: true
-    label: "Middle Click Command"
+    label: "Middle click"
     placeholderText: "Enter command to execute (app or custom script)"
     text: widgetData.middleClickExec || widgetMetadata.middleClickExec
   }
@@ -235,18 +83,15 @@ ColumnLayout {
     Layout.fillWidth: true
   }
 
-  NText {
-    text: "Dynamic Text"
-    font.pointSize: Style.fontSizeM * scaling
-    font.weight: Style.fontWeightBold
-    color: Color.mPrimary
+  NHeader {
+    label: "Dynamic text"
   }
 
   NTextInput {
     id: textCommandInput
     Layout.fillWidth: true
-    label: "Text Command"
-    description: "Shell command to run periodically (first line becomes the text)."
+    label: "Display Command Output"
+    description: "Enter a command to run at a regular interval. The first line of its output will be displayed as text."
     placeholderText: "echo \"Hello World\""
     text: widgetData?.textCommand || widgetMetadata.textCommand
   }
@@ -254,7 +99,7 @@ ColumnLayout {
   NTextInput {
     id: textIntervalInput
     Layout.fillWidth: true
-    label: "Refresh Interval"
+    label: "Refresh interval"
     description: "Interval in milliseconds."
     placeholderText: String(widgetMetadata.textIntervalMs || 3000)
     text: widgetData && widgetData.textIntervalMs !== undefined ? String(widgetData.textIntervalMs) : ""

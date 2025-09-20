@@ -53,7 +53,10 @@ Singleton {
                                   },
                                   "Clock": {
                                     "allowUserSettings": true,
-                                    "displayFormat": "time-date-short"
+                                    "usePrimaryColor": true,
+                                    "useMonospacedFont": true,
+                                    "formatHorizontal": "HH:mm ddd, MMM dd",
+                                    "formatVertical": "HH mm - dd MM"
                                   },
                                   "CustomButton": {
                                     "allowUserSettings": true,
@@ -99,7 +102,8 @@ Singleton {
                                   },
                                   "SidePanelToggle": {
                                     "allowUserSettings": true,
-                                    "useDistroLogo": false
+                                    "useDistroLogo": false,
+                                    "icon": "noctalia"
                                   },
                                   "Volume": {
                                     "allowUserSettings": true,

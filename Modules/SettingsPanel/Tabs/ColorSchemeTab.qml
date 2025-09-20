@@ -106,7 +106,7 @@ ColumnLayout {
 
   // Main Toggles - Dark Mode / Matugen
   NHeader {
-    label: "Color Source"
+    label: "Color source"
     description: "Main settings for Noctalia's colors."
   }
 
@@ -490,7 +490,7 @@ ColumnLayout {
       defaultExpanded: false
 
       NCheckbox {
-        label: "User Templates"
+        label: "User templates"
         description: "Enable user-defined Matugen config from ~/.config/matugen/config.toml"
         checked: Settings.data.matugen.enableUserTemplates
         onToggled: checked => {

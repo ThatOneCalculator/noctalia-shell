@@ -29,9 +29,10 @@ NIconButton {
     return {}
   }
 
+  readonly property string customIcon: widgetSettings.icon || widgetMetadata.icon
   readonly property bool useDistroLogo: (widgetSettings.useDistroLogo !== undefined) ? widgetSettings.useDistroLogo : widgetMetadata.useDistroLogo
 
-  icon: useDistroLogo ? "" : "" // "noctalia"
+  icon: useDistroLogo ? "" : "" // customIcon
   nerd: !useDistroLogo
   tooltipText: "Open side panel"
   baseSize: Style.capsuleHeight
