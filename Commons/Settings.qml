@@ -16,6 +16,8 @@ Singleton {
   property string configDir: Quickshell.env("NOCTALIA_CONFIG_DIR") || (Quickshell.env("XDG_CONFIG_HOME") || Quickshell.env("HOME") + "/.config") + "/" + shellName + "/"
   property string cacheDir: Quickshell.env("NOCTALIA_CACHE_DIR") || (Quickshell.env("XDG_CACHE_HOME") || Quickshell.env("HOME") + "/.cache") + "/" + shellName + "/"
   property string cacheDirImages: cacheDir + "images/"
+  property string cacheDirImagesWallpapers: cacheDir + "images/wallpapers/"
+  property string cacheDirImagesNotifications: cacheDir + "images/notifications/"
 
   property string settingsFile: Quickshell.env("NOCTALIA_SETTINGS_FILE") || (configDir + "settings.json")
 
@@ -202,7 +204,9 @@ Singleton {
     // ensure settings dir exists
     Quickshell.execDetached(["mkdir", "-p", configDir])
     Quickshell.execDetached(["mkdir", "-p", cacheDir])
-    Quickshell.execDetached(["mkdir", "-p", cacheDirImages])
+
+    Quickshell.execDetached(["mkdir", "-p", cacheDirImagesWallpapers])
+    Quickshell.execDetached(["mkdir", "-p", cacheDirImagesNotifications])
 
     // Mark directories as created and trigger file loading
     directoriesCreated = true
