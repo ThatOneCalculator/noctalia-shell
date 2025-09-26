@@ -116,7 +116,7 @@ Singleton {
     if (focusedWindowIndex >= 0 && focusedWindowIndex < windows.length) {
       return windows[focusedWindowIndex].title || "(Unnamed window)"
     }
-    return "(No active window)"
+    return ""
   }
 
   // Generic workspace switching
