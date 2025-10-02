@@ -30,34 +30,52 @@ Item {
     return {}
   }
 
-  readonly property bool hasActiveWindow: CompositorService.getFocusedWindowTitle() !== ""
-  readonly property string windowTitle: CompositorService.getFocusedWindowTitle() || "No active window"
-  readonly property string fallbackIcon: "user-desktop"
+  readonly property string windowTitle: CompositorService.getFocusedWindowTitle()
+
+  readonly property bool showIcon: (widgetSettings.showIcon !== undefined) ? widgetSettings.showIcon : widgetMetadata.showIcon
+
+  // 6% of total width
+  readonly property real minWidth: Math.max(1, screen.width * 0.06)
+  readonly property real maxWidth: minWidth * 2
 
   readonly property string barPosition: Settings.data.bar.position
+  readonly property bool isVertical: barPosition === "left" || barPosition === "right"
   readonly property bool compact: (Settings.data.bar.density === "compact")
 
-  // Widget settings - matching MediaMini pattern
-  readonly property bool showIcon: (widgetSettings.showIcon !== undefined) ? widgetSettings.showIcon : widgetMetadata.showIcon
-  readonly property bool autoHide: (widgetSettings.autoHide !== undefined) ? widgetSettings.autoHide : widgetMetadata.autoHide
-  readonly property string scrollingMode: (widgetSettings.scrollingMode !== undefined) ? widgetSettings.scrollingMode : (widgetMetadata.scrollingMode !== undefined ? widgetMetadata.scrollingMode : "hover")
-
-  // Fixed width
-  readonly property real widgetWidth: Math.max(145, screen.width * 0.06)
-
-  implicitHeight: visible ? ((barPosition === "left" || barPosition === "right") ? calculatedVerticalHeight() : Math.round(Style.barHeight * scaling)) : 0
-  implicitWidth: visible ? ((barPosition === "left" || barPosition === "right") ? Math.round(Style.baseWidgetSize * 0.8 * scaling) : (widgetWidth * scaling)) : 0
-
-  opacity: !autoHide || hasActiveWindow ? 1.0 : 0
-  Behavior on opacity {
-    NumberAnimation {
-      duration: Style.animationNormal
-      easing.type: Easing.OutCubic
-    }
+  readonly property real textSize: {
+    var base = isVertical ? width : height
+    return Math.max(1, compact ? base * 0.43 : base * 0.33)
   }
 
+  readonly property real iconSize: textSize * 1.25
+
+  implicitHeight: (barPosition === "left" || barPosition === "right") ? calculatedVerticalHeight() : Math.round(Style.barHeight * scaling)
+  implicitWidth: (barPosition === "left" || barPosition === "right") ? Math.round(Style.capsuleHeight * 0.8 * scaling) : (horizontalLayout.implicitWidth + Style.marginM * 2 * scaling)
+
+  visible: windowTitle !== ""
+
   function calculatedVerticalHeight() {
-    return Math.round(Style.baseWidgetSize * 0.8 * scaling)
+    // Use standard widget height like other widgets
+    return Math.round(Style.capsuleHeight * scaling)
+  }
+
+  function calculatedHorizontalWidth() {
+    let total = Style.marginM * 2 * scaling // internal padding
+
+    if (showIcon) {
+      total += Style.capsuleHeight * 0.5 * scaling + 2 * scaling // icon + spacing
+    }
+
+    // Calculate actual text width more accurately
+    if (windowTitle !== "") {
+      // Estimate text width: average character width * number of characters
+      const avgCharWidth = Style.fontSizeS * scaling * 0.6 // rough estimate
+      const titleWidth = Math.min(windowTitle.length * avgCharWidth, 80 * scaling)
+      total += titleWidth
+    }
+
+    // Row layout handles spacing between widgets
+    return Math.max(total, Style.capsuleHeight * scaling) // Minimum width
   }
 
   function getAppIcon() {
@@ -96,52 +114,54 @@ Item {
         }
       }
 
-      return ThemeIcons.iconFromName(fallbackIcon)
+      return ""
     } catch (e) {
       Logger.warn("ActiveWindow", "Error in getAppIcon:", e)
-      return ThemeIcons.iconFromName(fallbackIcon)
+      return ""
     }
   }
 
-  // Hidden text element to measure full title width
+  // A hidden text element to safely measure the full title width
   NText {
     id: fullTitleMetrics
     visible: false
     text: windowTitle
-    pointSize: Style.fontSizeS * scaling
+    font.pointSize: Style.fontSizeS * scaling
     font.weight: Style.fontWeightMedium
   }
 
   Rectangle {
-    id: windowActiveRect
+    id: windowTitleRect
     visible: root.visible
-    anchors.left: parent.left
+    anchors.left: (barPosition === "top" || barPosition === "bottom") ? parent.left : undefined
+    anchors.top: (barPosition === "left" || barPosition === "right") ? parent.top : undefined
     anchors.verticalCenter: parent.verticalCenter
-    width: (barPosition === "left" || barPosition === "right") ? Math.round(Style.baseWidgetSize * 0.8 * scaling) : (widgetWidth * scaling)
-    height: (barPosition === "left" || barPosition === "right") ? Math.round(Style.baseWidgetSize * 0.8 * scaling) : Math.round(Style.capsuleHeight * scaling)
-    radius: (barPosition === "left" || barPosition === "right") ? width / 2 : Math.round(Style.radiusM * scaling)
+    anchors.horizontalCenter: parent.horizontalCenter
+    width: (barPosition === "left" || barPosition === "right") ? Math.round(Style.capsuleHeight * scaling) : (horizontalLayout.implicitWidth + Style.marginM * 2 * scaling)
+    height: (barPosition === "left" || barPosition === "right") ? Math.round(Style.capsuleHeight * scaling) : Math.round(Style.capsuleHeight * scaling)
+    radius: width / 2
     color: Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent
 
     Item {
       id: mainContainer
       anchors.fill: parent
-      anchors.leftMargin: (barPosition === "left" || barPosition === "right") ? 0 : Style.marginS * scaling
+      anchors.leftMargin: (barPosition === "left" || barPosition === "right") ? 0 : Style.marginXS * scaling
       anchors.rightMargin: (barPosition === "left" || barPosition === "right") ? 0 : Style.marginS * scaling
+      clip: true
 
       // Horizontal layout for top/bottom bars
       RowLayout {
-        id: rowLayout
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: Style.marginS * scaling
+        id: horizontalLayout
+        anchors.centerIn: parent
+        spacing: 2 * scaling
         visible: barPosition === "top" || barPosition === "bottom"
-        z: 1
 
         // Window icon
         Item {
-          Layout.preferredWidth: Math.round(18 * scaling)
-          Layout.preferredHeight: Math.round(18 * scaling)
+          Layout.preferredWidth: Style.capsuleHeight * 0.75 * scaling
+          Layout.preferredHeight: Style.capsuleHeight * 0.75 * scaling
           Layout.alignment: Qt.AlignVCenter
-          visible: showIcon
+          visible: windowTitle !== "" && showIcon
 
           IconImage {
             id: windowIcon
@@ -150,139 +170,39 @@ Item {
             asynchronous: true
             smooth: true
             visible: source !== ""
+
+            // Handle loading errors gracefully
+            onStatusChanged: {
+              if (status === Image.Error) {
+                Logger.warn("ActiveWindow", "Failed to load icon:", source)
+              }
+            }
           }
         }
 
-        // Title container with scrolling
-        Item {
-          id: titleContainer
+        NText {
+          id: titleText
           Layout.preferredWidth: {
-            // Calculate available width based on other elements
-            var iconWidth = (showIcon && windowIcon.visible ? (18 * scaling + Style.marginS * scaling) : 0)
-            var totalMargins = Style.marginXXS * scaling * 2
-            var availableWidth = mainContainer.width - iconWidth - totalMargins
-            return Math.max(20 * scaling, availableWidth)
+            try {
+              if (mouseArea.containsMouse) {
+                return Math.round(Math.min(fullTitleMetrics.contentWidth, root.maxWidth * scaling))
+              } else {
+                return Math.round(Math.min(fullTitleMetrics.contentWidth, 200 * scaling)) // Limited width for horizontal bars
+              }
+            } catch (e) {
+              Logger.warn("ActiveWindow", "Error calculating width:", e)
+              return 80 * scaling
+            }
           }
-          Layout.maximumWidth: Layout.preferredWidth
           Layout.alignment: Qt.AlignVCenter
-          Layout.preferredHeight: titleText.height
-
+          horizontalAlignment: Text.AlignLeft
+          text: windowTitle
+          font.pointSize: Style.fontSizeS * scaling
+          font.weight: Style.fontWeightMedium
+          elide: mouseArea.containsMouse ? Text.ElideNone : Text.ElideRight
+          verticalAlignment: Text.AlignVCenter
+          color: "#c4a7e7"
           clip: true
-
-          property bool isScrolling: false
-          property bool isResetting: false
-          property real textWidth: fullTitleMetrics.contentWidth
-          property real containerWidth: width
-          property bool needsScrolling: textWidth > containerWidth
-
-          // Timer for "always" mode with delay
-          Timer {
-            id: scrollStartTimer
-            interval: 1000
-            repeat: false
-            onTriggered: {
-              if (scrollingMode === "always" && titleContainer.needsScrolling) {
-                titleContainer.isScrolling = true
-                titleContainer.isResetting = false
-              }
-            }
-          }
-
-          // Update scrolling state based on mode
-          property var updateScrollingState: function () {
-            if (scrollingMode === "never") {
-              isScrolling = false
-              isResetting = false
-            } else if (scrollingMode === "always") {
-              if (needsScrolling) {
-                if (mouseArea.containsMouse) {
-                  isScrolling = false
-                  isResetting = true
-                } else {
-                  scrollStartTimer.restart()
-                }
-              } else {
-                scrollStartTimer.stop()
-                isScrolling = false
-                isResetting = false
-              }
-            } else if (scrollingMode === "hover") {
-              if (mouseArea.containsMouse && needsScrolling) {
-                isScrolling = true
-                isResetting = false
-              } else {
-                isScrolling = false
-                if (needsScrolling) {
-                  isResetting = true
-                }
-              }
-            }
-          }
-
-          onWidthChanged: updateScrollingState()
-          Component.onCompleted: updateScrollingState()
-
-          // React to hover changes
-          Connections {
-            target: mouseArea
-            function onContainsMouseChanged() {
-              titleContainer.updateScrollingState()
-            }
-          }
-
-          // Scrolling content with seamless loop
-          Item {
-            id: scrollContainer
-            height: parent.height
-            width: childrenRect.width
-
-            property real scrollX: 0
-            x: scrollX
-
-            RowLayout {
-              spacing: 50 * scaling // Gap between text copies
-
-              NText {
-                id: titleText
-                text: windowTitle
-                pointSize: Style.fontSizeS * scaling
-                font.weight: Style.fontWeightMedium
-                verticalAlignment: Text.AlignVCenter
-                color: Color.mOnSurface
-              }
-
-              // Second copy for seamless scrolling
-              NText {
-                text: windowTitle
-                font: titleText.font
-                verticalAlignment: Text.AlignVCenter
-                color: Color.mOnSurface
-                visible: titleContainer.needsScrolling && titleContainer.isScrolling
-              }
-            }
-
-            // Reset animation
-            NumberAnimation on scrollX {
-              running: titleContainer.isResetting
-              to: 0
-              duration: 300
-              easing.type: Easing.OutQuad
-              onFinished: {
-                titleContainer.isResetting = false
-              }
-            }
-
-            // Seamless infinite scroll
-            NumberAnimation on scrollX {
-              id: infiniteScroll
-              running: titleContainer.isScrolling && !titleContainer.isResetting
-              from: 0
-              to: -(titleContainer.textWidth + 50 * scaling)
-              duration: Math.max(4000, windowTitle.length * 100)
-              loops: Animation.Infinite
-              easing.type: Easing.Linear
-            }
-          }
 
           Behavior on Layout.preferredWidth {
             NumberAnimation {
@@ -297,17 +217,15 @@ Item {
       Item {
         id: verticalLayout
         anchors.centerIn: parent
-        width: parent.width - Style.marginM * scaling * 2
-        height: parent.height - Style.marginM * scaling * 2
+        width: parent.width - Style.marginXS * scaling * 2
+        height: parent.height - Style.marginXS * scaling * 2
         visible: barPosition === "left" || barPosition === "right"
-        z: 1
 
         // Window icon
         Item {
-          width: Style.baseWidgetSize * 0.5 * scaling
-          height: Style.baseWidgetSize * 0.5 * scaling
+          width: Style.capsuleHeight * 0.75 * scaling
+          height: Style.capsuleHeight * 0.75 * scaling
           anchors.centerIn: parent
-          visible: windowTitle !== ""
 
           IconImage {
             id: windowIconVertical
@@ -316,6 +234,13 @@ Item {
             asynchronous: true
             smooth: true
             visible: source !== ""
+
+            // Handle loading errors gracefully
+            onStatusChanged: {
+              if (status === Image.Error) {
+                Logger.warn("ActiveWindow", "Failed to load icon:", source)
+              }
+            }
           }
         }
       }
@@ -326,14 +251,15 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        acceptedButtons: Qt.LeftButton
         onEntered: {
-          if ((windowTitle !== "") && (barPosition === "left" || barPosition === "right") || (scrollingMode === "never")) {
-            TooltipService.show(root, windowTitle, BarService.getTooltipDirection())
+          if (barPosition === "left" || barPosition === "right") {
+            tooltip.show()
           }
         }
         onExited: {
-          TooltipService.hide()
+          if (barPosition === "left" || barPosition === "right") {
+            tooltip.hide()
+          }
         }
       }
     }

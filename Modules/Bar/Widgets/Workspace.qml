@@ -168,7 +168,7 @@ Item {
       const ws = localWorkspaces.get(i)
       if (ws.isFocused === true) {
         root.triggerUnifiedWave()
-        root.workspaceChanged(ws.id, Color.mPrimary)
+        root.workspaceChanged(ws.id, "#c4a7e7")
         break
       }
     }
@@ -307,13 +307,13 @@ Item {
           radius: width * 0.5
           color: {
             if (model.isFocused)
-              return Color.mPrimary
+              return "#c4a7e7"
             if (model.isUrgent)
               return Color.mError
             if (model.isActive || model.isOccupied)
               return Color.mSecondary
 
-            return Qt.alpha(Color.mSecondary, 0.3)
+            return "#6e6a86"
           }
           scale: model.isFocused ? 1.0 : 0.9
           z: 0

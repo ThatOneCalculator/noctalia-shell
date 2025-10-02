@@ -40,7 +40,7 @@ Item {
   readonly property string scrollingMode: (widgetSettings.scrollingMode !== undefined) ? widgetSettings.scrollingMode : widgetMetadata.scrollingMode
 
   // Fixed width - no expansion
-  readonly property real widgetWidth: Math.max(145, screen.width * 0.06)
+  readonly property real widgetWidth: Math.max(145, screen.width * 0.1)
 
   readonly property bool hasActivePlayer: MediaService.currentPlayer !== null && getTitle() !== ""
   readonly property string placeholderText: I18n.tr("bar.widget-settings.media-mini.no-active-player")
@@ -173,8 +173,9 @@ Item {
           spacing: 0
 
           Item {
-            Layout.preferredWidth: Math.round(18 * scaling)
-            Layout.preferredHeight: Math.round(18 * scaling)
+            Layout.preferredWidth: Math.round(22 * scaling)
+            Layout.preferredHeight: Math.round(22 * scaling)
+            Layout.leftMargin: -4
 
             NImageCircled {
               id: trackArt
@@ -184,6 +185,24 @@ Item {
               fallbackIconSize: 10 * scaling
               borderWidth: 0
               border.color: Color.transparent
+              
+              // SequentialAnimation on scale {
+              //   running: MediaService.isPlaying
+              //   loops: Animation.Infinite
+              //   alwaysRunToEnd: false
+              //   NumberAnimation {
+              //     from: 1.0
+              //     to: 1.1
+              //     duration: BeatDetectorService.bpm * 0.1
+              //     easing.type: Easing.InOutSine
+              //   }
+              //   NumberAnimation {
+              //     from: 1.1
+              //     to: 1.0
+              //     duration: BeatDetectorService.bpm * 1.9
+              //     easing.type: Easing.InOutSine
+              //   }
+              // }
             }
           }
         }
@@ -290,7 +309,7 @@ Item {
                 font.weight: Style.fontWeightMedium
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: hasActivePlayer ? Text.AlignLeft : Text.AlignHCenter
-                color: hasActivePlayer ? Color.mOnSurface : Color.mOnSurfaceVariant
+                color: hasActivePlayer ? Color.mSecondary : Color.mOnSurfaceVariant
               }
 
               NText {
@@ -298,7 +317,7 @@ Item {
                 font: titleText.font
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: hasActivePlayer ? Text.AlignLeft : Text.AlignHCenter
-                color: hasActivePlayer ? Color.mOnSurface : Color.mOnSurfaceVariant
+                color: hasActivePlayer ? Color.mSecondary : Color.mOnSurfaceVariant
                 visible: hasActivePlayer && titleContainer.needsScrolling && titleContainer.isScrolling
               }
             }
@@ -320,7 +339,7 @@ Item {
               running: titleContainer.isScrolling && !titleContainer.isResetting
               from: 0
               to: -(titleContainer.textWidth + 50 * scaling) // Scroll one complete text width + gap
-              duration: Math.max(4000, getTitle().length * 120)
+              duration: Math.max(10000, getTitle().length * 120)
               loops: Animation.Infinite
               easing.type: Easing.Linear
             }

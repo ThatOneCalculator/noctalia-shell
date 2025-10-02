@@ -10,7 +10,7 @@ Singleton {
 
   property bool shouldRun: BarService.hasAudioVisualizer || (PanelService.getPanel("controlCenterPanel") === PanelService.openedPanel) || PanelService.lockScreen.active
   property var values: Array(barsCount).fill(0)
-  property int barsCount: 24
+  property int barsCount: 26
   property var config: ({
                           "general": {
                             "bars": barsCount,
@@ -21,8 +21,8 @@ Singleton {
                             "higher_cutoff_freq": 12000
                           },
                           "smoothing": {
-                            "monstercat": 0,
-                            "noise_reduction": 77
+                            "monstercat": 1,
+                            "noise_reduction": 22
                           },
                           "output": {
                             "method": "raw",

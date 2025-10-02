@@ -74,7 +74,7 @@ Rectangle {
                 return (index == 0) ? Style.fontSizeXS * scaling : Style.fontSizeXXS * scaling
               }
             }
-            font.weight: Style.fontWeightBold
+            // font.weight: Style.fontWeightBold
             color: usePrimaryColor ? Color.mPrimary : Color.mOnSurface
             wrapMode: Text.WordWrap
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

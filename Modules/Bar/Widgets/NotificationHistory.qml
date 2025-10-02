@@ -55,7 +55,7 @@ NIconButton {
   tooltipText: Settings.data.notifications.doNotDisturb ? I18n.tr("tooltips.open-notification-history-disable-dnd") : I18n.tr("tooltips.open-notification-history-enable-dnd")
   tooltipDirection: BarService.getTooltipDirection()
   colorBg: (Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent)
-  colorFg: Color.mOnSurface
+  colorFg: Settings.data.notifications.doNotDisturb ? "#6e6a86" : "#f6c177"
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
 
