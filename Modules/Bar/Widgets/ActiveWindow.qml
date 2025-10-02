@@ -47,8 +47,6 @@ Item {
     return Math.max(1, compact ? base * 0.43 : base * 0.33)
   }
 
-  readonly property real iconSize: textSize * 1.25
-
   implicitHeight: (barPosition === "left" || barPosition === "right") ? calculatedVerticalHeight() : Math.round(Style.barHeight * scaling)
   implicitWidth: (barPosition === "left" || barPosition === "right") ? Math.round(Style.capsuleHeight * 0.8 * scaling) : (horizontalLayout.implicitWidth + Style.marginM * 2 * scaling)
 
@@ -158,8 +156,9 @@ Item {
 
         // Window icon
         Item {
-          Layout.preferredWidth: Style.capsuleHeight * 0.75 * scaling
-          Layout.preferredHeight: Style.capsuleHeight * 0.75 * scaling
+          Layout.preferredWidth: Style.capsuleHeight * 0.7 * scaling
+          Layout.preferredHeight: Style.capsuleHeight * 0.7 * scaling
+          Layout.rightMargin: (barPosition === "left" || barPosition === "right") ? 0 : Style.marginXS * scaling
           Layout.alignment: Qt.AlignVCenter
           visible: windowTitle !== "" && showIcon
 

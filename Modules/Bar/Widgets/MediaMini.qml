@@ -173,8 +173,8 @@ Item {
           spacing: 0
 
           Item {
-            Layout.preferredWidth: Math.round(22 * scaling)
-            Layout.preferredHeight: Math.round(22 * scaling)
+            Layout.preferredWidth: Math.round(20 * scaling)
+            Layout.preferredHeight: Math.round(20 * scaling)
             Layout.leftMargin: -4
 
             NImageCircled {
