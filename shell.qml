@@ -38,7 +38,6 @@ import qs.Modules.Notification
 import qs.Modules.OSD
 import qs.Modules.Settings
 import qs.Modules.Toast
-import qs.Modules.Tooltip
 import qs.Modules.Wallpaper
 
 ShellRoot {
@@ -73,10 +72,10 @@ ShellRoot {
     }
   }
 
-  LazyLoader {
+  Loader {
     active: i18nLoaded && settingsLoaded
 
-    Item {
+    sourceComponent: Item {
       Component.onCompleted: {
         // Save a ref. to our lockScreen so we can access it  easily
         PanelService.lockScreen = lockScreen
