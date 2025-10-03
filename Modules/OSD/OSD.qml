@@ -28,13 +28,22 @@ Variants {
     active: false
 
     // Current OSD display state
-    property string currentOSDType: "" // "volume" or ""
+    property string currentOSDType: "" // "volume", "brightness", or ""
 
     // Volume properties
     readonly property real currentVolume: AudioService.volume
     readonly property bool isMuted: AudioService.muted
     property bool volumeInitialized: false
     property bool muteInitialized: false
+
+    // Brightness properties
+    property bool brightnessInitialized: false
+    readonly property real currentBrightness: {
+      if (BrightnessService.monitors.length > 0) {
+        return BrightnessService.monitors[0].brightness || 0
+      }
+      return 0
+    }
 
     // Get appropriate icon based on current OSD type
     function getIcon() {
@@ -43,6 +52,8 @@ Variants {
           return "volume-mute"
         }
         return (AudioService.volume <= Number.EPSILON) ? "volume-zero" : (AudioService.volume <= 0.5) ? "volume-low" : "volume-high"
+      } else if (currentOSDType === "brightness") {
+        return currentBrightness <= 0.5 ? "brightness-low" : "brightness-high"
       }
       return ""
     }
@@ -51,6 +62,8 @@ Variants {
     function getCurrentValue() {
       if (currentOSDType === "volume") {
         return isMuted ? 0 : currentVolume
+      } else if (currentOSDType === "brightness") {
+        return currentBrightness
       }
       return 0
     }
@@ -61,6 +74,9 @@ Variants {
         if (isMuted)
           return "0%"
         const pct = Math.round(Math.min(1.0, currentVolume) * 100)
+        return pct + "%"
+      } else if (currentOSDType === "brightness") {
+        const pct = Math.round(Math.min(1.0, currentBrightness) * 100)
         return pct + "%"
       }
       return ""
@@ -456,6 +472,36 @@ Variants {
       onTriggered: {
         volumeInitialized = true
         muteInitialized = true
+      }
+    }
+
+    // Brightness change monitoring
+    Connections {
+      target: BrightnessService
+
+      function onMonitorsChanged() {
+        connectBrightnessMonitors()
+      }
+    }
+
+    Component.onCompleted: {
+      connectBrightnessMonitors()
+    }
+
+    function connectBrightnessMonitors() {
+      for (var i = 0; i < BrightnessService.monitors.length; i++) {
+        let monitor = BrightnessService.monitors[i]
+        // Disconnect first to avoid duplicate connections
+        monitor.brightnessUpdated.disconnect(onBrightnessChanged)
+        monitor.brightnessUpdated.connect(onBrightnessChanged)
+      }
+    }
+
+    function onBrightnessChanged(newBrightness) {
+      if (!brightnessInitialized) {
+        brightnessInitialized = true
+      } else {
+        showOSD("brightness")
       }
     }
 
