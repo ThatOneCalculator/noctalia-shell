@@ -79,6 +79,16 @@
           }
         },
         "reset-scaling": "Redefinir escala"
+      },
+      "control-center": {
+        "section": {
+          "label": "Centro de controle",
+          "description": "Configurar o posicionamento e comportamento do painel do centro de controle."
+        },
+        "position": {
+          "label": "Posição",
+          "description": "Escolha onde o painel do centro de controle aparece quando aberto."
+        }
       }
     },
     "audio": {
@@ -834,6 +844,10 @@
         "scrolling-mode": {
           "label": "Modo de rolagem",
           "description": "Controlar quando a rolagem de texto está habilitada para títulos de janela longos."
+        },
+        "width": {
+          "description": "Controla o tamanho horizontal do widget.",
+          "label": "Largura do Widget"
         }
       },
       "system-monitor": {
@@ -1210,6 +1224,17 @@
         "center_right": "Centro à direita"
       }
     },
+    "control-center": {
+      "position": {
+        "close_to_bar_button": "Perto do botão da barra",
+        "top_left": "Superior esquerdo",
+        "top_right": "Superior direito",
+        "bottom_left": "Inferior esquerdo",
+        "bottom_right": "Inferior direito",
+        "bottom_center": "Centro inferior",
+        "top_center": "Centro superior"
+      }
+    },
     "bar": {
       "position": {
         "top": "Topo",
@@ -1324,7 +1349,10 @@
   "lock-screen": {
     "secure-terminal": "TERMINAL SEGURO",
     "unlock-command": "sudo unlock-session",
-    "password": "Senha:",
+    "password": "Digite sua senha...",
+    "welcome-back": "Bem-vindo de volta,",
+    "authenticating": "Autenticando...",
+    "authentication-failed": "Falha na autenticação",
     "shut-down": "Desligar",
     "restart": "Reiniciar",
     "suspend": "Suspender"
@@ -1394,7 +1422,7 @@
     },
     "missing-control-center": {
       "label": "Último widget da Central de Controle removido",
-      "description": "O widget da Central de Controle foi removido da barra. Para acessá-lo novamente pela barra, adicione o widget novamente."
+      "description": "O widget da Central de Controle foi removido da barra. Para acessá-lo novamente pela barra, adicione o widget novamente. Você também pode abri-lo clicando com o botão direito na barra."
     }
   },
   "weather": {

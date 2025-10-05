@@ -79,6 +79,16 @@
           }
         },
         "reset-scaling": "Skalierung zurücksetzen"
+      },
+      "control-center": {
+        "section": {
+          "label": "Kontrollzentrum",
+          "description": "Konfigurieren Sie die Positionierung und das Verhalten des Kontrollzentrum-Panels."
+        },
+        "position": {
+          "label": "Position",
+          "description": "Wählen Sie, wo das Kontrollzentrum-Panel beim Öffnen erscheint."
+        }
       }
     },
     "audio": {
@@ -855,6 +865,10 @@
         "scrolling-mode": {
           "label": "Scrollmodus",
           "description": "Steuern, wann Textscrolling für lange Fenstertitel aktiviert ist."
+        },
+        "width": {
+          "description": "Steuert die horizontale Größe des Widgets.",
+          "label": "Widget-Breite"
         }
       },
       "system-monitor": {
@@ -1232,6 +1246,17 @@
         "center_right": "Rechts mittig"
       }
     },
+    "control-center": {
+      "position": {
+        "close_to_bar_button": "Nah zur Leisten-Schaltfläche",
+        "top_left": "Oben links",
+        "top_right": "Oben rechts",
+        "bottom_left": "Unten links",
+        "bottom_right": "Unten rechts",
+        "bottom_center": "Unten mittig",
+        "top_center": "Oben mittig"
+      }
+    },
     "osd": {
       "position": {
         "top_left": "Oben links",
@@ -1327,7 +1352,7 @@
   },
   "system": {
     "uptime": "System-Laufzeit: {uptime}",
-    "welcome-back": "Willkommen zurück, {user}!",
+    "welcome-back": "Willkommen zurück,",
     "monitor-description": "{model} ({width}x{height})",
     "scaling-percentage": "{percentage}%",
     "location-display": "{name} ({coordinates})",
@@ -1356,7 +1381,10 @@
   "lock-screen": {
     "secure-terminal": "SICHERES TERMINAL",
     "unlock-command": "sudo unlock-session",
-    "password": "Passwort:",
+    "password": "Passwort eingeben...",
+    "welcome-back": "Willkommen zurück,",
+    "authenticating": "Authentifizierung...",
+    "authentication-failed": "Authentifizierung fehlgeschlagen",
     "shut-down": "Herunterfahren",
     "restart": "Neu starten",
     "suspend": "Ruhezustand"
@@ -1426,7 +1454,7 @@
     },
     "missing-control-center": {
       "label": "Letztes Control-Center-Widget entfernt",
-      "description": "Das Control-Center-Widget wurde aus der Leiste entfernt. Um es erneut über die Leiste zu öffnen, fügen Sie das Widget wieder hinzu."
+      "description": "Das Control-Center-Widget wurde aus der Leiste entfernt. Um es erneut über die Leiste zu öffnen, fügen Sie das Widget wieder hinzu. Sie können es auch durch Rechtsklick auf die Leiste öffnen."
     }
   }
 }

@@ -17,6 +17,8 @@ Loader {
   property real preferredHeightRatio
   property color panelBackgroundColor: Color.mSurface
   property bool draggable: false
+  property var buttonItem: null
+  property string buttonName: ""
 
   property bool panelAnchorHorizontalCenter: false
   property bool panelAnchorVerticalCenter: false
@@ -42,8 +44,6 @@ Loader {
   property real scaleValue: originalScale
   property real opacityValue: originalOpacity
   property real dimmingOpacity: 0
-
-  property alias isClosing: hideTimer.running
 
   signal opened
   signal closed
@@ -74,43 +74,18 @@ Loader {
   }
 
   // -----------------------------------------
-  function toggle(buttonItem) {
-    if (!active || isClosing) {
-      open(buttonItem)
+  function toggle(buttonItem, buttonName) {
+    if (!active) {
+      open(buttonItem, buttonName)
     } else {
       close()
     }
   }
 
   // -----------------------------------------
-  function open(buttonItem) {
-    // Get the button position if provided
-    if (buttonItem !== undefined && buttonItem !== null) {
-      useButtonPosition = true
-      // Try to get the button's window
-      var buttonWindow = buttonItem.Window.window
-      if (buttonWindow) {
-        // Map to button's window coordinates
-        var itemPosInWindow = buttonItem.mapToItem(buttonWindow.contentItem, 0, 0)
-        // Then account for window position on screen
-        buttonPosition = Qt.point(buttonWindow.x + itemPosInWindow.x, buttonWindow.y + itemPosInWindow.y)
-      } else {
-        // Fallback to old method
-        var itemPos = buttonItem.mapToItem(null, 0, 0)
-        buttonPosition = Qt.point(itemPos.x, itemPos.y)
-      }
-      buttonWidth = buttonItem.width
-      buttonHeight = buttonItem.height
-    } else {
-      useButtonPosition = false
-    }
-
-    // Special case if currently closing/animating
-    if (isClosing) {
-      hideTimer.stop() // in case we were closing
-      scaleValue = 1.0
-      opacityValue = 1.0
-    }
+  function open(buttonItem, buttonName) {
+    root.buttonItem = buttonItem
+    root.buttonName = buttonName || ""
 
     PanelService.willOpenPanel(root)
 
@@ -124,28 +99,11 @@ Loader {
     dimmingOpacity = 0
     scaleValue = originalScale
     opacityValue = originalOpacity
-    hideTimer.start()
-    PanelService.willClosePanel(root)
-  }
-
-  // -----------------------------------------
-  function closeCompleted() {
     root.closed()
     active = false
     useButtonPosition = false
     backgroundClickEnabled = true
     PanelService.closedPanel(root)
-  }
-
-  // -----------------------------------------
-  // Timer to disable the loader after the close animation is completed
-  Timer {
-    id: hideTimer
-    interval: Style.animationSlow
-    repeat: false
-    onTriggered: {
-      closeCompleted()
-    }
   }
 
   // -----------------------------------------
@@ -184,6 +142,25 @@ Loader {
           // It's mandatory to force refresh the subloader to ensure the scaling is properly dispatched
           panelContentLoader.active = false
           panelContentLoader.active = true
+
+          // If we have a button name, we are landing here from an IPC call.
+          // IPC calls have no idead on which screen they panel will spawn.
+          // Resolve the button name to a proper button item now that we have a screen.
+          if (buttonName !== "") {
+            buttonItem = BarService.lookupWidget(buttonName, root.screen.name)
+          }
+
+          // Get the button position if provided
+          if (buttonItem !== undefined && buttonItem !== null) {
+            useButtonPosition = true
+            var itemPos = buttonItem.mapToItem(null, 0, 0)
+            buttonPosition = Qt.point(itemPos.x, itemPos.y)
+            buttonWidth = buttonItem.width
+            buttonHeight = buttonItem.height
+          } else {
+            useButtonPosition = false
+          }
+          //Logger.log("NPanel", "OnScreenChanged", root.screen.name)
         }
       }
 
@@ -202,7 +179,7 @@ Loader {
 
       Behavior on color {
         ColorAnimation {
-          duration: Style.animationSlow
+          duration: Style.animationNormal
         }
       }
 
@@ -214,7 +191,7 @@ Loader {
       // Close any panel with Esc without requiring focus
       Shortcut {
         sequences: ["Escape"]
-        enabled: root.active && !root.isClosing
+        enabled: root.active
         onActivated: root.close()
         context: Qt.WindowShortcut
       }
@@ -412,7 +389,7 @@ Loader {
         // Animation behaviors
         Behavior on scale {
           NumberAnimation {
-            duration: Style.animationSlow
+            duration: Style.animationNormal
             easing.type: Easing.OutExpo
           }
         }

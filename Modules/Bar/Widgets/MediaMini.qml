@@ -409,7 +409,7 @@ Item {
         onEntered: {
           var textToShow = hasActivePlayer ? tooltipText : placeholderText
           if ((textToShow !== "") && (barPosition === "left" || barPosition === "right") || (scrollingMode === "never")) {
-            TooltipService.show(root, textToShow, BarService.getTooltipDirection())
+            TooltipService.show(Screen, root, textToShow, BarService.getTooltipDirection())
           }
         }
         onExited: {

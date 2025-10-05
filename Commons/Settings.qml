@@ -27,8 +27,6 @@ Singleton {
   property string settingsFile: Quickshell.env("NOCTALIA_SETTINGS_FILE") || (configDir + "settings.json")
 
   property string defaultLocation: "Tokyo"
-  property string defaultWallpaper: Quickshell.shellDir + "/Assets/Wallpaper/noctalia.png"
-
   property string defaultAvatar: Quickshell.env("HOME") + "/.face"
   property string defaultVideosDirectory: Quickshell.env("HOME") + "/Videos"
   property string defaultWallpapersDirectory: Quickshell.env("HOME") + "/Pictures/Wallpapers"
@@ -60,6 +58,7 @@ Singleton {
     adapter.general.avatarImage = defaultAvatar
     adapter.screenRecorder.directory = defaultVideosDirectory
     adapter.wallpaper.directory = defaultWallpapersDirectory
+    adapter.wallpaper.defaultWallpaper = Quickshell.shellDir + "/Assets/Wallpaper/noctalia.png"
 
     // Set the adapter to the settingsFileView to trigger the real settings load
     settingsFileView.adapter = adapter
@@ -129,7 +128,7 @@ Singleton {
   JsonAdapter {
     id: adapter
 
-    property int settingsVersion: 12
+    property int settingsVersion: 14
 
     // bar
     property JsonObject bar: JsonObject {
@@ -220,6 +219,7 @@ Singleton {
       property string directory: ""
       property bool enableMultiMonitorDirectories: false
       property bool setWallpaperOnAllMonitors: true
+      property string defaultWallpaper: ""
       property string fillMode: "crop"
       property color fillColor: "#000000"
       property bool randomEnabled: false
@@ -240,6 +240,12 @@ Singleton {
       property bool useApp2Unit: false
       property bool sortByMostUsed: true
       property string terminalCommand: "xterm -e"
+    }
+
+    // control center
+    property JsonObject controlCenter: JsonObject {
+      // Position: close_to_bar_button, center, top_left, top_right, bottom_left, bottom_right, bottom_center, top_center
+      property string position: "close_to_bar_button"
     }
 
     // dock

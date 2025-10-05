@@ -1,5 +1,5 @@
 {
-  "settingsVersion": 12,
+  "settingsVersion": 14,
   "bar": {
     "position": "top",
     "backgroundOpacity": 1,
@@ -92,6 +92,7 @@
     "directory": "",
     "enableMultiMonitorDirectories": false,
     "setWallpaperOnAllMonitors": true,
+    "defaultWallpaper": "",
     "fillMode": "crop",
     "fillColor": "#000000",
     "randomEnabled": false,
@@ -109,6 +110,9 @@
     "useApp2Unit": false,
     "sortByMostUsed": true,
     "terminalCommand": "xterm -e"
+  },
+  "controlCenter": {
+    "position": "close_to_bar_button"
   },
   "dock": {
     "autoHide": false,
@@ -162,9 +166,10 @@
     "useWallpaperColors": false,
     "predefinedScheme": "Noctalia (default)",
     "darkMode": true,
-    "matugenSchemeType": "scheme-fruit-salad"
+    "matugenSchemeType": "scheme-fruit-salad",
+    "generateTemplatesForPredefined": true
   },
-  "matugen": {
+  "templates": {
     "gtk": false,
     "qt": false,
     "kitty": false,

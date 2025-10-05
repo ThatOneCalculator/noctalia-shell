@@ -14,6 +14,15 @@ NPanel {
   preferredHeight: 734
   panelKeyboardFocus: true
 
+  // Positioning
+  readonly property string controlCenterPosition: Settings.data.controlCenter.position
+  panelAnchorHorizontalCenter: controlCenterPosition !== "close_to_bar_button" && controlCenterPosition.endsWith("_center")
+  panelAnchorVerticalCenter: false
+  panelAnchorLeft: controlCenterPosition !== "close_to_bar_button" && controlCenterPosition.endsWith("_left")
+  panelAnchorRight: controlCenterPosition !== "close_to_bar_button" && controlCenterPosition.endsWith("_right")
+  panelAnchorBottom: controlCenterPosition !== "close_to_bar_button" && controlCenterPosition.startsWith("bottom_")
+  panelAnchorTop: controlCenterPosition !== "close_to_bar_button" && controlCenterPosition.startsWith("top_")
+
   panelContent: Item {
     id: content
 
@@ -29,13 +38,11 @@ NPanel {
 
       // Cards (consistent inter-card spacing via ColumnLayout spacing)
       ProfileCard {
-        screen: root.screen
         Layout.fillWidth: true
         Layout.preferredHeight: Math.max(64 * scaling)
       }
 
       WeatherCard {
-        screen: root.screen
         Layout.fillWidth: true
         Layout.preferredHeight: Math.max(220 * scaling)
       }
@@ -48,14 +55,12 @@ NPanel {
 
         // Media card
         MediaCard {
-          screen: root.screen
           Layout.fillWidth: true
           Layout.fillHeight: true
         }
 
         // System monitors combined in one card
         SystemMonitorCard {
-          screen: root.screen
           Layout.preferredWidth: Style.baseWidgetSize * 2.625 * scaling
           Layout.fillHeight: true
         }
@@ -69,7 +74,6 @@ NPanel {
 
         // Power Profiles switcher
         PowerProfilesCard {
-          screen: root.screen
           Layout.fillWidth: true
           Layout.fillHeight: true
           spacing: content.cardSpacing
@@ -77,7 +81,6 @@ NPanel {
 
         // Utilities buttons
         UtilitiesCard {
-          screen: root.screen
           Layout.fillWidth: true
           Layout.fillHeight: true
           spacing: content.cardSpacing

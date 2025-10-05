@@ -34,6 +34,7 @@ NPanel {
   property var results: []
   property var plugins: []
   property var activePlugin: null
+  property bool resultsReady: false
 
   readonly property int badgeSize: Math.round(Style.baseWidgetSize * 1.6 * scaling)
   readonly property int entryHeight: Math.round(badgeSize + Style.marginM * 2 * scaling)
@@ -92,12 +93,18 @@ NPanel {
 
   // Lifecycle
   onOpened: {
+    resultsReady = false
+
     // Notify plugins
     for (let plugin of plugins) {
       if (plugin.onOpened)
         plugin.onOpened()
     }
     updateResults()
+
+    Qt.callLater(() => {
+                   resultsReady = true
+                 })
   }
 
   onClosed: {
@@ -145,6 +152,14 @@ NPanel {
   panelContent: Rectangle {
     id: ui
     color: Color.transparent
+    opacity: resultsReady ? 1.0 : 0.0
+
+    Behavior on opacity {
+      NumberAnimation {
+        duration: Style.animationFast
+        easing.type: Easing.OutCirc
+      }
+    }
 
     // ---------------------
     // Navigation
@@ -290,11 +305,8 @@ NPanel {
         Layout.fillWidth: true
         Layout.fillHeight: true
         spacing: Style.marginXXS * scaling
-
         model: results
         currentIndex: selectedIndex
-
-        clip: true
         cacheBuffer: resultsList.height * 2
         onCurrentIndexChanged: {
           cancelFlick()
@@ -372,7 +384,6 @@ NPanel {
                 Layout.preferredHeight: badgeSize
                 radius: Style.radiusM * scaling
                 color: Color.mSurfaceVariant
-                clip: true
 
                 // Image preview for clipboard images
                 NImageRounded {

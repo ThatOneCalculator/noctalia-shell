@@ -44,6 +44,19 @@ Variants {
       property real fillMode: WallpaperService.getFillModeUniform()
       property vector4d fillColor: Qt.vector4d(Settings.data.wallpaper.fillColor.r, Settings.data.wallpaper.fillColor.g, Settings.data.wallpaper.fillColor.b, 1.0)
 
+      property int monitoredWidth: modelData.width
+      property int monitoredHeight: modelData.height
+
+      onMonitoredWidthChanged: {
+        Logger.log("Background", "Screen width changed to:", monitoredWidth, "for", modelData.name)
+        recalculateImageSizes()
+      }
+
+      onMonitoredHeightChanged: {
+        Logger.log("Background", "Screen height changed to:", monitoredHeight, "for", modelData.name)
+        recalculateImageSizes()
+      }
+
       Component.onCompleted: setWallpaperInitial()
 
       Component.onDestruction: {
@@ -99,30 +112,70 @@ Variants {
 
       Image {
         id: currentWallpaper
+
+        property bool dimensionsCalculated: false
+
         source: ""
         smooth: true
         mipmap: false
         visible: false
         cache: false
         asynchronous: true
+
         onStatusChanged: {
           if (status === Image.Error) {
             Logger.warn("Current wallpaper failed to load:", source)
+          } else if (status === Image.Ready && !dimensionsCalculated) {
+            dimensionsCalculated = true
+            calculateSourceSize()
+          }
+        }
+
+        onSourceChanged: {
+          dimensionsCalculated = false
+          sourceSize = undefined
+        }
+
+        function calculateSourceSize() {
+          if (implicitWidth > 0 && implicitHeight > 0) {
+            const aspectRatio = implicitWidth / implicitHeight
+            const w = Math.min(modelData.width, implicitWidth)
+            sourceSize = Qt.size(w, w / aspectRatio)
           }
         }
       }
 
       Image {
         id: nextWallpaper
+
+        property bool dimensionsCalculated: false
+
         source: ""
         smooth: true
         mipmap: false
         visible: false
         cache: false
         asynchronous: true
+
         onStatusChanged: {
           if (status === Image.Error) {
             Logger.warn("Next wallpaper failed to load:", source)
+          } else if (status === Image.Ready && !dimensionsCalculated) {
+            dimensionsCalculated = true
+            calculateSourceSize()
+          }
+        }
+
+        onSourceChanged: {
+          dimensionsCalculated = false
+          sourceSize = undefined
+        }
+
+        function calculateSourceSize() {
+          if (implicitWidth > 0 && implicitHeight > 0) {
+            const aspectRatio = implicitWidth / implicitHeight
+            const w = Math.min(modelData.width, implicitWidth)
+            sourceSize = Qt.size(w, w / aspectRatio)
           }
         }
       }
@@ -278,6 +331,15 @@ Variants {
                                         currentWallpaper.asynchronous = true
                                       })
                        })
+        }
+      }
+
+      function recalculateImageSizes() {
+        if (currentWallpaper.status === Image.Ready) {
+          currentWallpaper.calculateSourceSize()
+        }
+        if (nextWallpaper.status === Image.Ready) {
+          nextWallpaper.calculateSourceSize()
         }
       }
 

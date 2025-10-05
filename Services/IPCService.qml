@@ -35,7 +35,7 @@ Item {
     target: "notifications"
     function toggleHistory() {
       // Will attempt to open the panel next to the bar button if any.
-      notificationHistoryPanel.toggle(BarService.lookupWidget("NotificationHistory"))
+      notificationHistoryPanel.toggle(null, "NotificationHistory")
     }
     function toggleDND() {
       Settings.data.notifications.doNotDisturb = !Settings.data.notifications.doNotDisturb
@@ -119,14 +119,6 @@ Item {
     }
   }
 
-  // TODO: delete in next major release
-  IpcHandler {
-    target: "powerPanel"
-    function toggle() {
-      sessionMenuPanel.toggle()
-      ToastService.showWarning("IPC", I18n.tr("toast.ipc.powerpanel-deprecated"), 8000)
-    }
-  }
   IpcHandler {
     target: "sessionMenu"
     function toggle() {
@@ -134,20 +126,11 @@ Item {
     }
   }
 
-  // TODO: delete in next major release
-  IpcHandler {
-    target: "sidePanel"
-    function toggle() {
-      // Will attempt to open the panel next to the bar button if any.
-      controlCenterPanel.toggle(BarService.lookupWidget("ControlCenter"))
-      ToastService.showWarning("IPC", I18n.tr("toast.ipc.sidepanel-deprecated"), 8000)
-    }
-  }
   IpcHandler {
     target: "controlCenter"
     function toggle() {
       // Will attempt to open the panel next to the bar button if any.
-      controlCenterPanel.toggle(BarService.lookupWidget("ControlCenter"))
+      controlCenterPanel.toggle(null, "ControlCenter")
     }
   }
 

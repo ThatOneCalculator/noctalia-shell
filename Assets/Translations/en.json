@@ -81,6 +81,16 @@
             "description": "Increase or decrease the size of the monospaced text."
           }
         }
+      },
+      "control-center": {
+        "section": {
+          "label": "Control Center",
+          "description": "Configure the Control Center panel positioning and behavior."
+        },
+        "position": {
+          "label": "Position",
+          "description": "Choose where the Control Center panel appears when opened."
+        }
       }
     },
     "audio": {
@@ -836,6 +846,10 @@
         "scrolling-mode": {
           "label": "Scrolling mode",
           "description": "Control when text scrolling is enabled for long window titles."
+        },
+        "width": {
+          "label": "Widget Width",
+          "description": "Controls the horizontal size of the widget."
         }
       },
       "system-monitor": {
@@ -1214,6 +1228,17 @@
         "center_right": "Right center"
       }
     },
+    "control-center": {
+      "position": {
+        "close_to_bar_button": "Close to bar button",
+        "top_left": "Top left",
+        "top_right": "Top right",
+        "bottom_left": "Bottom left",
+        "bottom_right": "Bottom right",
+        "bottom_center": "Bottom center",
+        "top_center": "Top center"
+      }
+    },
     "osd": {
       "position": {
         "top_left": "Top left",
@@ -1309,7 +1334,7 @@
   },
   "system": {
     "uptime": "System uptime: {uptime}",
-    "welcome-back": "Welcome back, {user}!",
+    "welcome-back": "Welcome back,",
     "monitor-description": "{model} ({width}x{height})",
     "scaling-percentage": "{percentage}%",
     "location-display": "{name} ({coordinates})",
@@ -1327,7 +1352,10 @@
   "lock-screen": {
     "secure-terminal": "SECURE TERMINAL",
     "unlock-command": "sudo unlock-session",
-    "password": "Password:",
+    "password": "Enter your password...",
+    "welcome-back": "Welcome back,",
+    "authenticating": "Authenticating...",
+    "authentication-failed": "Authentication failed",
     "shut-down": "Shut down",
     "restart": "Restart",
     "suspend": "Suspend"
@@ -1397,7 +1425,7 @@
     },
     "missing-control-center": {
       "label": "Last Control Center widget removed",
-      "description": "The Control Center widget has been removed from the bar. To access it from the bar again, you will need to re-add the widget."
+      "description": "The Control Center widget has been removed from the bar. To access it from the bar again, you will need to re-add the widget. You can open it with right clicking on the bar too."
     }
   },
   "weather": {

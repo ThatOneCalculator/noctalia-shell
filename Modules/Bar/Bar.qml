@@ -79,9 +79,12 @@ Variants {
         MouseArea {
           anchors.fill: parent
           acceptedButtons: Qt.RightButton
+          hoverEnabled: false
+          preventStealing: true
           onClicked: function (mouse) {
             if (mouse.button === Qt.RightButton) {
-              controlCenterPanel.toggle(BarService.lookupWidget("ControlCenter"))
+              // Important to pass the screen here so we get the right widget for the actual bar that was clicked.
+              controlCenterPanel.toggle(BarService.lookupWidget("ControlCenter", screen.name))
               mouse.accepted = true
             }
           }

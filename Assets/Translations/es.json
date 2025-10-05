@@ -79,6 +79,16 @@
           }
         },
         "reset-scaling": "Restablecer la escala"
+      },
+      "control-center": {
+        "section": {
+          "label": "Centro de control",
+          "description": "Configurar el posicionamiento y comportamiento del panel del centro de control."
+        },
+        "position": {
+          "label": "Posición",
+          "description": "Elige dónde aparece el panel del centro de control cuando se abre."
+        }
       }
     },
     "audio": {
@@ -834,6 +844,10 @@
         "scrolling-mode": {
           "label": "Modo de desplazamiento",
           "description": "Controlar cuándo está habilitado el desplazamiento de texto para títulos de ventana largos."
+        },
+        "width": {
+          "description": "Controla el tamaño horizontal del widget.",
+          "label": "Ancho del widget"
         }
       },
       "system-monitor": {
@@ -1211,6 +1225,17 @@
         "center_right": "Derecha centrado"
       }
     },
+    "control-center": {
+      "position": {
+        "close_to_bar_button": "Cerca del botón de la barra",
+        "top_left": "Superior izquierda",
+        "top_right": "Superior derecha",
+        "bottom_left": "Inferior izquierda",
+        "bottom_right": "Inferior derecha",
+        "bottom_center": "Inferior central",
+        "top_center": "Superior central"
+      }
+    },
     "osd": {
       "position": {
         "top_left": "Superior izquierda",
@@ -1306,7 +1331,7 @@
   },
   "system": {
     "uptime": "Tiempo de actividad: {uptime}",
-    "welcome-back": "¡Bienvenido de nuevo, {user}!",
+    "welcome-back": "¡Bienvenido de nuevo,",
     "monitor-description": "{model} ({width}x{height})",
     "scaling-percentage": "{percentage}%",
     "location-display": "{name} ({coordinates})",
@@ -1324,7 +1349,10 @@
   "lock-screen": {
     "secure-terminal": "TERMINAL SEGURA",
     "unlock-command": "sudo unlock-session",
-    "password": "Contraseña:",
+    "password": "Ingresa tu contraseña...",
+    "welcome-back": "¡Bienvenido de nuevo,",
+    "authenticating": "Autenticando...",
+    "authentication-failed": "Autenticación fallida",
     "shut-down": "Apagar",
     "restart": "Reiniciar",
     "suspend": "Suspender"
@@ -1394,7 +1422,7 @@
     },
     "missing-control-center": {
       "label": "Se eliminó el último widget del Centro de control",
-      "description": "El widget del Centro de control se eliminó de la barra. Para acceder a él nuevamente desde la barra, debes volver a añadir el widget."
+      "description": "El widget del Centro de control se eliminó de la barra. Para acceder a él nuevamente desde la barra, debes volver a añadir el widget. También puedes abrirlo haciendo clic derecho en la barra."
     }
   },
   "weather": {
