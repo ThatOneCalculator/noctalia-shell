@@ -18,6 +18,10 @@
           "label": "Interfaz de usuario",
           "description": "Personaliza la apariencia, sensación y comportamiento de la interfaz."
         },
+        "tooltips": {
+          "label": "Mostrar tooltips",
+          "description": "Activar o desactivar tooltips en toda la interfaz."
+        },
         "dim-desktop": {
           "label": "Atenuar escritorio",
           "description": "Atenúa el escritorio cuando los paneles o menús están abiertos."
@@ -272,13 +276,12 @@
           "label": "Apariencia",
           "description": "Personaliza el comportamiento y la apariencia del dock."
         },
-        "auto-hide": {
-          "label": "Ocultar automáticamente",
-          "description": "Ocultar automáticamente cuando no está en uso."
-        },
-        "exclusive-zone": {
-          "label": "Zona exclusiva",
-          "description": "Evita la superposición de ventanas."
+        "display": {
+          "label": "Pantalla",
+          "description": "Elige cómo se comporta el dock.",
+          "always-visible": "Siempre visible",
+          "auto-hide": "Ocultar automáticamente",
+          "exclusive": "Exclusivo"
         },
         "background-opacity": {
           "label": "Opacidad del fondo",
@@ -603,8 +606,8 @@
           "description": "Personaliza cómo aparecen la fecha y la hora."
         },
         "12hour-format": {
-          "label": "Usar formato de 12 horas en la pantalla de bloqueo",
-          "description": "Activado para formato AM/PM (ej., 8:00 PM), desactivado para formato de 24 horas (ej., 20:00)."
+          "description": "Activado para formato AM/PM (ej., 8:00 PM), desactivado para formato de 24 horas (ej., 20:00).",
+          "label": "Utilice el formato de hora de 12 horas"
         },
         "week-numbers": {
           "label": "Mostrar números de semana",
@@ -1347,8 +1350,6 @@
     "unknown-layout": "Desconocida"
   },
   "lock-screen": {
-    "secure-terminal": "TERMINAL SEGURA",
-    "unlock-command": "sudo unlock-session",
     "password": "Ingresa tu contraseña...",
     "welcome-back": "¡Bienvenido de nuevo,",
     "authenticating": "Autenticando...",
@@ -1382,7 +1383,9 @@
       "failed-gpu": "gpu-screen-recorder se cerró inesperadamente.",
       "failed-general": "La grabadora se cerró con un error.",
       "no-portals": "Los portales de escritorio no están en ejecución",
-      "no-portals-desc": "Inicia xdg-desktop-portal y un portal de compositor (wlr/hyprland/gnome/kde)."
+      "no-portals-desc": "Inicia xdg-desktop-portal y un portal de compositor (wlr/hyprland/gnome/kde).",
+      "not-installed": "gpu-screen-recorder no instalado",
+      "not-installed-desc": "Por favor instala gpu-screen-recorder para usar las funciones de grabación de pantalla."
     },
     "clipboard": {
       "unavailable": "Historial del portapapeles no disponible",

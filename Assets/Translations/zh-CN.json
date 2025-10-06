@@ -18,6 +18,10 @@
           "label": "用户界面",
           "description": "自定义界面的外观、风格和行为。"
         },
+        "tooltips": {
+          "label": "显示工具提示",
+          "description": "在整个界面中启用或禁用工具提示。"
+        },
         "dim-desktop": {
           "label": "调暗桌面",
           "description": "当面板或菜单打开时调暗桌面。"
@@ -272,13 +276,12 @@
           "label": "外观",
           "description": "自定义 Dock 的行为和外观。"
         },
-        "auto-hide": {
-          "label": "自动隐藏",
-          "description": "不使用时自动隐藏。"
-        },
-        "exclusive-zone": {
-          "label": "独占区域",
-          "description": "可以防止窗口重叠。"
+        "display": {
+          "label": "显示",
+          "description": "选择 Dock 的行为方式。",
+          "always-visible": "始终可见",
+          "auto-hide": "自动隐藏",
+          "exclusive": "独占"
         },
         "background-opacity": {
           "label": "背景不透明度",
@@ -603,8 +606,8 @@
           "description": "自定义日期和时间的显示方式。"
         },
         "12hour-format": {
-          "label": "在锁屏上使用 12 小时制",
-          "description": "开启为 AM/PM 格式（例如：8:00 PM），关闭为 24 小时制（例如：20:00）。"
+          "description": "开启为 AM/PM 格式（例如：8:00 PM），关闭为 24 小时制（例如：20:00）。",
+          "label": "使用12小时制时间格式"
         },
         "week-numbers": {
           "label": "显示周数",
@@ -1347,8 +1350,6 @@
     "unknown-layout": "未知"
   },
   "lock-screen": {
-    "secure-terminal": "安全终端",
-    "unlock-command": "sudo unlock-session",
     "password": "请输入密码...",
     "welcome-back": "欢迎回来，",
     "authenticating": "正在验证...",
@@ -1382,7 +1383,9 @@
       "failed-gpu": "gpu-screen-recorder 意外退出。",
       "failed-general": "录制器因错误退出。",
       "no-portals": "桌面门户未运行",
-      "no-portals-desc": "请启动 xdg-desktop-portal 和一个合成器门户 (wlr/hyprland/gnome/kde)。"
+      "no-portals-desc": "请启动 xdg-desktop-portal 和一个合成器门户 (wlr/hyprland/gnome/kde)。",
+      "not-installed": "gpu-screen-recorder 未安装",
+      "not-installed-desc": "请安装 gpu-screen-recorder 以使用屏幕录制功能。"
     },
     "clipboard": {
       "unavailable": "剪贴板历史记录不可用",

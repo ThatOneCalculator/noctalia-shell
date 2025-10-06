@@ -1,5 +1,5 @@
 {
-  "settingsVersion": 14,
+  "settingsVersion": 15,
   "bar": {
     "position": "top",
     "backgroundOpacity": 1,
@@ -115,8 +115,7 @@
     "position": "close_to_bar_button"
   },
   "dock": {
-    "autoHide": false,
-    "exclusive": false,
+    "displayMode": "always_visible",
     "backgroundOpacity": 1,
     "floatingRatio": 1,
     "onlySameOutput": true,
@@ -157,7 +156,8 @@
     "fontDefaultScale": 1,
     "fontFixedScale": 1,
     "monitorsScaling": [],
-    "idleInhibitorEnabled": false
+    "idleInhibitorEnabled": false,
+    "tooltipsEnabled": true
   },
   "brightness": {
     "brightnessStep": 5

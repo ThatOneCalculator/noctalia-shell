@@ -218,6 +218,13 @@ NPanel {
             searchDebounceTimer.restart()
           }
 
+          Keys.onDownPressed: {
+            let currentView = screenRepeater.itemAt(currentScreenIndex)
+            if (currentView && currentView.gridView) {
+              currentView.gridView.forceActiveFocus()
+            }
+          }
+
           Component.onCompleted: {
             if (searchInput.inputItem && searchInput.inputItem.visible) {
               searchInput.inputItem.forceActiveFocus()
@@ -231,6 +238,7 @@ NPanel {
   // Component for each screen's wallpaper view
   component WallpaperScreenView: Item {
     property var targetScreen
+    property alias gridView: wallpaperGridView
 
     // Local reactive state for this screen
     property list<string> wallpapersList: []
@@ -300,7 +308,6 @@ NPanel {
       anchors.fill: parent
       spacing: Style.marginM * scaling
 
-      // Optimized GridView with native scrolling and recycling
       GridView {
         id: wallpaperGridView
 
@@ -308,13 +315,16 @@ NPanel {
         Layout.fillHeight: true
 
         visible: !WallpaperService.scanning
-        interactive: true // Enable delegate recycling and native scrolling
+        interactive: true
         clip: true
+        focus: true
+        keyNavigationEnabled: true
+        keyNavigationWraps: false
 
         model: filteredWallpapers
 
         property int columns: 4
-        property int itemSize: Math.floor((width - leftMargin - rightMargin - (columns * Style.marginS * scaling)) / columns)
+        property int itemSize: cellWidth
 
         cellWidth: Math.floor((width - leftMargin - rightMargin) / columns)
         cellHeight: Math.floor(itemSize * 0.7) + Style.marginXS * scaling + Style.fontSizeXS * scaling + Style.marginM * scaling
@@ -323,6 +333,37 @@ NPanel {
         rightMargin: Style.marginS * scaling
         topMargin: Style.marginS * scaling
         bottomMargin: Style.marginS * scaling
+
+        onCurrentIndexChanged: {
+          // Synchronize scroll with current item position
+          if (currentIndex >= 0) {
+            let row = Math.floor(currentIndex / columns)
+            let itemY = row * cellHeight
+            let viewportTop = contentY
+            let viewportBottom = viewportTop + height
+
+            // If item is out of view, scroll
+            if (itemY < viewportTop) {
+              contentY = Math.max(0, itemY - cellHeight)
+            } else if (itemY + cellHeight > viewportBottom) {
+              contentY = itemY + cellHeight - height + cellHeight
+            }
+          }
+        }
+
+        Keys.onPressed: event => {
+                          if (event.key === Qt.Key_Return || event.key === Qt.Key_Space) {
+                            if (currentIndex >= 0 && currentIndex < filteredWallpapers.length) {
+                              let path = filteredWallpapers[currentIndex]
+                              if (Settings.data.wallpaper.setWallpaperOnAllMonitors) {
+                                WallpaperService.changeWallpaper(path, undefined)
+                              } else {
+                                WallpaperService.changeWallpaper(path, targetScreen.name)
+                              }
+                            }
+                            event.accepted = true
+                          }
+                        }
 
         ScrollBar.vertical: ScrollBar {
           policy: ScrollBar.AsNeeded
@@ -355,7 +396,15 @@ NPanel {
             Rectangle {
               anchors.fill: parent
               color: Color.transparent
-              border.color: isSelected ? Color.mSecondary : Color.mSurface
+              border.color: {
+                if (isSelected) {
+                  return Color.mSecondary
+                }
+                if (wallpaperGridView.currentIndex === index) {
+                  return Color.mTertiary
+                }
+                return Color.mSurface
+              }
               border.width: Math.max(1, Style.borderL * 1.5 * scaling)
             }
 
@@ -383,7 +432,7 @@ NPanel {
             Rectangle {
               anchors.fill: parent
               color: Color.mSurface
-              opacity: (hoverHandler.hovered || isSelected) ? 0 : 0.3
+              opacity: (hoverHandler.hovered || isSelected || wallpaperGridView.currentIndex === index) ? 0 : 0.3
               radius: parent.radius
               Behavior on opacity {
                 NumberAnimation {
@@ -399,6 +448,7 @@ NPanel {
 
             TapHandler {
               onTapped: {
+                wallpaperGridView.currentIndex = index
                 if (Settings.data.wallpaper.setWallpaperOnAllMonitors) {
                   WallpaperService.changeWallpaper(wallpaperPath, undefined)
                 } else {
@@ -410,8 +460,7 @@ NPanel {
 
           NText {
             text: filename
-            color: Color.mOnSurfaceVariant
-            opacity: 0.5
+            color: (hoverHandler.hovered || isSelected || wallpaperGridView.currentIndex === index) ? Color.mOnSurface : Color.mOnSurfaceVariant
             pointSize: Style.fontSizeXS * scaling
             Layout.fillWidth: true
             Layout.leftMargin: Style.marginS * scaling

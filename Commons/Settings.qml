@@ -128,7 +128,7 @@ Singleton {
   JsonAdapter {
     id: adapter
 
-    property int settingsVersion: 14
+    property int settingsVersion: 15
 
     // bar
     property JsonObject bar: JsonObject {
@@ -250,8 +250,7 @@ Singleton {
 
     // dock
     property JsonObject dock: JsonObject {
-      property bool autoHide: false
-      property bool exclusive: false
+      property string displayMode: "always_visible" // "always_visible", "auto_hide", "exclusive"
       property real backgroundOpacity: 1.0
       property real floatingRatio: 1.0
       property bool onlySameOutput: true
@@ -304,6 +303,7 @@ Singleton {
       property real fontFixedScale: 1.0
       property list<var> monitorsScaling: []
       property bool idleInhibitorEnabled: false
+      property bool tooltipsEnabled: true
     }
 
     // brightness

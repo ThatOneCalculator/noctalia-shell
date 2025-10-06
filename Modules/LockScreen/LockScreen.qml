@@ -47,6 +47,9 @@ Loader {
           lockScreen.scheduleUnloadAfterUnlock()
           lockContext.currentText = ""
         }
+        onFailed: {
+          lockContext.currentText = ""
+        }
       }
 
       WlSessionLock {
@@ -109,14 +112,14 @@ Loader {
             ColumnLayout {
               anchors.horizontalCenter: parent.horizontalCenter
               anchors.top: parent.top
-              anchors.topMargin: 80 * scaling
-              spacing: 8 * scaling
+              anchors.topMargin: 100 * scaling
+              spacing: 12 * scaling
 
               NText {
                 id: timeText
                 text: lockScreen.formatTime()
                 Layout.alignment: Qt.AlignHCenter
-                pointSize: 64 * scaling
+                pointSize: 72 * scaling
                 font.weight: Font.Medium
                 color: Color.mOnSurface
                 horizontalAlignment: Text.AlignHCenter
@@ -141,7 +144,7 @@ Loader {
                 id: dateText
                 text: lockScreen.formatDate()
                 Layout.alignment: Qt.AlignHCenter
-                pointSize: Style.fontSizeL * scaling
+                pointSize: Style.fontSizeXL * scaling
                 font.weight: Font.Medium
                 color: Color.mOnSurface
                 horizontalAlignment: Text.AlignHCenter
@@ -152,12 +155,12 @@ Loader {
             // User Profile
             ColumnLayout {
               anchors.centerIn: parent
-              spacing: 6 * scaling
+              spacing: 10 * scaling
               Layout.alignment: Qt.AlignHCenter
 
               Rectangle {
-                Layout.preferredWidth: 130 * scaling
-                Layout.preferredHeight: 130 * scaling
+                Layout.preferredWidth: 140 * scaling
+                Layout.preferredHeight: 140 * scaling
                 Layout.alignment: Qt.AlignHCenter
                 radius: width * 0.5
                 color: Color.transparent
@@ -186,8 +189,8 @@ Loader {
 
                 NImageCircled {
                   anchors.centerIn: parent
-                  width: 120 * scaling
-                  height: 120 * scaling
+                  width: 130 * scaling
+                  height: 130 * scaling
                   imagePath: Settings.data.general.avatarImage
                   fallbackIcon: "person"
 
@@ -210,7 +213,7 @@ Loader {
               NText {
                 text: I18n.tr("lock-screen.welcome-back")
                 Layout.alignment: Qt.AlignHCenter
-                pointSize: Style.fontSizeL * scaling
+                pointSize: Style.fontSizeXL * scaling
                 font.weight: Font.Medium
                 color: Color.mOnSurface
                 horizontalAlignment: Text.AlignHCenter
@@ -228,28 +231,69 @@ Loader {
               }
             }
 
-            // Bottom container with weather, password input and controls
+            // Error notification
             Rectangle {
-              width: 700 * scaling
-              height: 200 * scaling
+              width: 450 * scaling
+              height: 60 * scaling
               anchors.horizontalCenter: parent.horizontalCenter
               anchors.bottom: parent.bottom
-              anchors.bottomMargin: 80 * scaling
+              anchors.bottomMargin: 300 * scaling
               radius: 30 * scaling
+              color: Color.mError
+              border.color: Color.mError
+              border.width: 1
+              visible: lockContext.showFailure && lockContext.errorMessage
+              opacity: visible ? 1.0 : 0.0
+
+              RowLayout {
+                anchors.centerIn: parent
+                spacing: 10 * scaling
+
+                NIcon {
+                  icon: "alert-circle"
+                  pointSize: Style.fontSizeL * scaling
+                  color: Color.mOnError
+                }
+
+                NText {
+                  text: lockContext.errorMessage || "Authentication failed"
+                  color: Color.mOnError
+                  pointSize: Style.fontSizeL * scaling
+                  font.weight: Font.Medium
+                  horizontalAlignment: Text.AlignHCenter
+                }
+              }
+
+              Behavior on opacity {
+                NumberAnimation {
+                  duration: 300
+                  easing.type: Easing.OutCubic
+                }
+              }
+            }
+
+            // Bottom container with weather, password input and controls
+            Rectangle {
+              width: 750 * scaling
+              height: 220 * scaling
+              anchors.horizontalCenter: parent.horizontalCenter
+              anchors.bottom: parent.bottom
+              anchors.bottomMargin: 100 * scaling
+              radius: 32 * scaling
               color: Qt.alpha(Color.mSurfaceContainerHighest, 0.9)
               border.color: Qt.alpha(Color.mOutline, 0.2)
               border.width: 1
 
               ColumnLayout {
                 anchors.fill: parent
-                anchors.margins: 12 * scaling
-                spacing: 12 * scaling
+                anchors.margins: 14 * scaling
+                spacing: 14 * scaling
 
                 // Weather section
                 RowLayout {
                   Layout.fillWidth: true
-                  Layout.preferredHeight: 60 * scaling
-                  spacing: 16 * scaling
+                  Layout.preferredHeight: 65 * scaling
+                  spacing: 18 * scaling
                   visible: LocationService.coordinatesReady && LocationService.data.weather !== null
 
                   // Media widget with visualizer
@@ -330,7 +374,7 @@ Loader {
 
                         NText {
                           text: MediaService.trackTitle || "No media"
-                          pointSize: Style.fontSizeS * scaling
+                          pointSize: Style.fontSizeM * scaling
                           font.weight: Style.fontWeightMedium
                           color: Color.mOnSurface
                           Layout.fillWidth: true
@@ -339,7 +383,7 @@ Loader {
 
                         NText {
                           text: MediaService.trackArtist || ""
-                          pointSize: Style.fontSizeXS * scaling
+                          pointSize: Style.fontSizeM * scaling
                           color: Color.mOnSurfaceVariant
                           Layout.fillWidth: true
                           elide: Text.ElideRight
@@ -390,7 +434,7 @@ Loader {
 
                         NText {
                           text: LocationService.data.weather.current_weather.windspeed + " km/h"
-                          pointSize: Style.fontSizeXS * scaling
+                          pointSize: Style.fontSizeM * scaling
                           color: Color.mOnSurfaceVariant
                           font.weight: Font.Normal
                         }
@@ -402,13 +446,13 @@ Loader {
 
                         NText {
                           text: Settings.data.location.name.split(",")[0]
-                          pointSize: Style.fontSizeXS * scaling
+                          pointSize: Style.fontSizeM * scaling
                           color: Color.mOnSurfaceVariant
                         }
 
                         NText {
                           text: (LocationService.data.weather.current && LocationService.data.weather.current.relativehumidity_2m) ? LocationService.data.weather.current.relativehumidity_2m + "% humidity" : ""
-                          pointSize: Style.fontSizeXS * scaling
+                          pointSize: Style.fontSizeM * scaling
                           color: Color.mOnSurfaceVariant
                         }
                       }
@@ -429,7 +473,7 @@ Loader {
 
                         NText {
                           text: Qt.locale().toString(new Date(LocationService.data.weather.daily.time[index].replace(/-/g, "/")), "ddd")
-                          pointSize: Style.fontSizeXS * scaling
+                          pointSize: Style.fontSizeM * scaling
                           color: Color.mOnSurfaceVariant
                           horizontalAlignment: Text.AlignHCenter
                           Layout.fillWidth: true
@@ -444,9 +488,9 @@ Loader {
 
                         NText {
                           text: Math.round(LocationService.data.weather.daily.temperature_2m_max[index]) + "°/" + Math.round(LocationService.data.weather.daily.temperature_2m_min[index]) + "°"
-                          pointSize: Style.fontSizeXS * scaling
+                          pointSize: Style.fontSizeM * scaling
                           font.weight: Style.fontWeightMedium
-                          color: Color.mOnSurface
+                          color: Color.mOnSurfaceVariant
                           horizontalAlignment: Text.AlignHCenter
                           Layout.fillWidth: true
                         }
@@ -467,14 +511,14 @@ Loader {
 
                       NIcon {
                         icon: BatteryService.getIcon(Math.round(UPower.displayDevice.percentage * 100), UPower.displayDevice.state === UPowerDeviceState.Charging, true)
-                        pointSize: Style.fontSizeS * scaling
+                        pointSize: Style.fontSizeM * scaling
                         color: UPower.displayDevice.state === UPowerDeviceState.Charging ? Color.mPrimary : Color.mOnSurfaceVariant
                       }
 
                       NText {
                         text: Math.round(UPower.displayDevice.percentage * 100) + "%"
                         color: Color.mOnSurfaceVariant
-                        pointSize: Style.fontSizeXS * scaling
+                        pointSize: Style.fontSizeM * scaling
                         font.weight: Font.Medium
                       }
                     }
@@ -486,14 +530,14 @@ Loader {
 
                       NIcon {
                         icon: "keyboard"
-                        pointSize: Style.fontSizeS * scaling
+                        pointSize: Style.fontSizeM * scaling
                         color: Color.mOnSurfaceVariant
                       }
 
                       NText {
                         text: keyboardLayout.currentLayout
                         color: Color.mOnSurfaceVariant
-                        pointSize: Style.fontSizeXS * scaling
+                        pointSize: Style.fontSizeM * scaling
                         font.weight: Font.Medium
                       }
                     }
@@ -511,21 +555,21 @@ Loader {
 
                   Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 44 * scaling
-                    radius: 22 * scaling
+                    Layout.preferredHeight: 48 * scaling
+                    radius: 24 * scaling
                     color: Qt.alpha(Color.mSurfaceContainerHighest, 0.6)
                     border.color: passwordInput.activeFocus ? Color.mPrimary : Qt.alpha(Color.mOutline, 0.3)
                     border.width: passwordInput.activeFocus ? 2 : 1
 
                     Row {
                       anchors.left: parent.left
-                      anchors.leftMargin: 16 * scaling
+                      anchors.leftMargin: 18 * scaling
                       anchors.verticalCenter: parent.verticalCenter
-                      spacing: 12 * scaling
+                      spacing: 14 * scaling
 
                       NIcon {
                         icon: "lock"
-                        pointSize: Style.fontSizeM * scaling
+                        pointSize: Style.fontSizeL * scaling
                         color: passwordInput.activeFocus ? Color.mPrimary : Color.mOnSurfaceVariant
                         anchors.verticalCenter: parent.verticalCenter
                       }
@@ -554,12 +598,57 @@ Loader {
                         Component.onCompleted: forceActiveFocus()
                       }
 
-                      NText {
-                        text: passwordInput.text.length > 0 ? "•".repeat(passwordInput.text.length) : I18n.tr("lock-screen.password")
-                        color: passwordInput.text.length > 0 ? Color.mOnSurface : Color.mOnSurfaceVariant
-                        pointSize: Style.fontSizeL * scaling
-                        width: 560 * scaling
-                        opacity: passwordInput.text.length > 0 ? 1.0 : 0.6
+                      Row {
+                        spacing: 0
+
+                        Rectangle {
+                          width: 2 * scaling
+                          height: 20 * scaling
+                          color: Color.mPrimary
+                          visible: passwordInput.activeFocus && passwordInput.text.length === 0
+                          anchors.verticalCenter: parent.verticalCenter
+
+                          SequentialAnimation on opacity {
+                            loops: Animation.Infinite
+                            running: passwordInput.activeFocus && passwordInput.text.length === 0
+                            NumberAnimation {
+                              to: 0
+                              duration: 530
+                            }
+                            NumberAnimation {
+                              to: 1
+                              duration: 530
+                            }
+                          }
+                        }
+
+                        NText {
+                          text: passwordInput.text.length > 0 ? "•".repeat(passwordInput.text.length) : ""
+                          color: passwordInput.text.length > 0 ? Color.mOnSurface : Color.mOnSurfaceVariant
+                          pointSize: Style.fontSizeXL * scaling
+                          opacity: passwordInput.text.length > 0 ? 1.0 : 0.6
+                        }
+
+                        Rectangle {
+                          width: 2 * scaling
+                          height: 20 * scaling
+                          color: Color.mPrimary
+                          visible: passwordInput.activeFocus && passwordInput.text.length > 0
+                          anchors.verticalCenter: parent.verticalCenter
+
+                          SequentialAnimation on opacity {
+                            loops: Animation.Infinite
+                            running: passwordInput.activeFocus && passwordInput.text.length > 0
+                            NumberAnimation {
+                              to: 0
+                              duration: 530
+                            }
+                            NumberAnimation {
+                              to: 1
+                              duration: 530
+                            }
+                          }
+                        }
                       }
                     }
 
@@ -567,8 +656,8 @@ Loader {
                       anchors.right: parent.right
                       anchors.rightMargin: 8 * scaling
                       anchors.verticalCenter: parent.verticalCenter
-                      width: 32 * scaling
-                      height: 32 * scaling
+                      width: 36 * scaling
+                      height: 36 * scaling
                       radius: width * 0.5
                       color: submitButtonArea.containsMouse ? Color.mPrimary : Qt.alpha(Color.mPrimary, 0.8)
                       border.color: Color.mPrimary
@@ -578,7 +667,7 @@ Loader {
                       NIcon {
                         anchors.centerIn: parent
                         icon: "arrow-forward"
-                        pointSize: Style.fontSizeS * scaling
+                        pointSize: Style.fontSizeM * scaling
                         color: Color.mOnPrimary
                       }
 
@@ -606,8 +695,8 @@ Loader {
                 // System control buttons
                 RowLayout {
                   Layout.fillWidth: true
-                  Layout.preferredHeight: 44 * scaling
-                  spacing: 8 * scaling
+                  Layout.preferredHeight: 48 * scaling
+                  spacing: 10 * scaling
 
                   Item {
                     Layout.preferredWidth: Style.marginM * scaling
@@ -615,8 +704,8 @@ Loader {
 
                   Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 44 * scaling
-                    radius: 22 * scaling
+                    Layout.preferredHeight: 48 * scaling
+                    radius: 24 * scaling
                     color: logoutButtonArea.containsMouse ? Color.mTertiary : "transparent"
 
                     RowLayout {
@@ -654,8 +743,8 @@ Loader {
 
                   Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 44 * scaling
-                    radius: 22 * scaling
+                    Layout.preferredHeight: 48 * scaling
+                    radius: 24 * scaling
                     color: rebootButtonArea.containsMouse ? Color.mTertiary : "transparent"
 
                     RowLayout {
@@ -693,8 +782,8 @@ Loader {
 
                   Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 44 * scaling
-                    radius: 22 * scaling
+                    Layout.preferredHeight: 48 * scaling
+                    radius: 24 * scaling
                     color: shutdownButtonArea.containsMouse ? Color.mError : "transparent"
                     border.color: shutdownButtonArea.containsMouse ? Color.mError : Color.transparent
                     border.width: 1
@@ -742,48 +831,6 @@ Loader {
                   Item {
                     Layout.preferredWidth: Style.marginM * scaling
                   }
-                }
-              }
-            }
-
-            // Status message
-            NText {
-              anchors.horizontalCenter: parent.horizontalCenter
-              anchors.bottom: parent.bottom
-              anchors.bottomMargin: 150 * scaling
-              text: {
-                if (lockContext.unlockInProgress)
-                  return lockContext.infoMessage || "Authenticating..."
-                if (lockContext.showFailure && lockContext.errorMessage)
-                  return lockContext.errorMessage
-                if (lockContext.showFailure)
-                  return "Authentication failed. Please try again."
-                return ""
-              }
-              color: lockContext.unlockInProgress ? Color.mPrimary : (lockContext.showFailure ? Color.mError : Color.transparent)
-              pointSize: Style.fontSizeS * scaling
-              horizontalAlignment: Text.AlignHCenter
-              opacity: text.length > 0 ? 1.0 : 0.0
-
-              SequentialAnimation on opacity {
-                running: lockContext.unlockInProgress
-                loops: Animation.Infinite
-                NumberAnimation {
-                  to: 0.6
-                  duration: 1000
-                  easing.type: Easing.InOutQuad
-                }
-                NumberAnimation {
-                  to: 1.0
-                  duration: 1000
-                  easing.type: Easing.InOutQuad
-                }
-              }
-
-              Behavior on opacity {
-                NumberAnimation {
-                  duration: 300
-                  easing.type: Easing.OutCubic
                 }
               }
             }
