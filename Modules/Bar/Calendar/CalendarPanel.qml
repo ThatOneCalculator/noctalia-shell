@@ -459,7 +459,7 @@ NPanel {
       // Helper function to get color for a specific event
       function getEventColor(event, isToday) {
         if (isMultiDayEvent(event)) {
-          return isToday ? Color.mOnSecondary : Color.mTertiary
+          return isToday ? Color.mOnSecondary : "#c4a7e7"
         } else if (isAllDayEvent(event)) {
           return isToday ? Color.mOnSecondary : Color.mSecondary
         } else {
