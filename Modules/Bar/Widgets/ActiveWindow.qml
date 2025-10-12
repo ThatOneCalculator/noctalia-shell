@@ -10,6 +10,7 @@ import qs.Widgets
 
 Item {
   id: root
+
   property ShellScreen screen
   property real scaling: 1.0
 
@@ -170,6 +171,15 @@ Item {
             smooth: true
             visible: source !== ""
 
+            // Apply dock shader to active window icon (always themed)
+            layer.enabled: widgetSettings.colorizeIcons !== false
+            layer.effect: ShaderEffect {
+              property color targetColor: Color.mOnSurface
+              property real colorizeMode: 0.0 // Dock mode (grayscale)
+
+              fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")
+            }
+
             // Handle loading errors gracefully
             onStatusChanged: {
               if (status === Image.Error) {
@@ -233,6 +243,15 @@ Item {
             asynchronous: true
             smooth: true
             visible: source !== ""
+
+            // Apply dock shader to active window icon (always themed)
+            layer.enabled: widgetSettings.colorizeIcons !== false
+            layer.effect: ShaderEffect {
+              property color targetColor: Color.mOnSurface
+              property real colorizeMode: 0.0 // Dock mode (grayscale)
+
+              fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")
+            }
 
             // Handle loading errors gracefully
             onStatusChanged: {
