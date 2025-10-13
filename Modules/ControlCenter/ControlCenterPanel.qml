@@ -10,9 +10,17 @@ import qs.Widgets
 NPanel {
   id: root
 
-  preferredWidth: 460
-  preferredHeight: 790
   panelKeyboardFocus: true
+  preferredWidth: Math.round(460 * Style.uiScaleRatio)
+  preferredHeight: {
+    let height = profileHeight + weatherHeight + mediaSysMonHeight + utilsHeight
+    let count = 4
+    if (Settings.data.controlCenter.audioControlsEnabled) {
+      count++
+      height += audioHeight
+    }
+    return height + (count + 1) * Style.marginL
+  }
 
   // Positioning
   readonly property string controlCenterPosition: Settings.data.controlCenter.position
@@ -23,80 +31,79 @@ NPanel {
   panelAnchorBottom: controlCenterPosition !== "close_to_bar_button" && controlCenterPosition.startsWith("bottom_")
   panelAnchorTop: controlCenterPosition !== "close_to_bar_button" && controlCenterPosition.startsWith("top_")
 
+  readonly property int profileHeight: Math.round(64 * Style.uiScaleRatio)
+  readonly property int weatherHeight: Math.round(190 * Style.uiScaleRatio)
+  readonly property int mediaSysMonHeight: Math.round(260 * Style.uiScaleRatio)
+  readonly property int audioHeight: Math.round(120 * Style.uiScaleRatio)
+  readonly property int utilsHeight: Math.round(52 * Style.uiScaleRatio)
+
   panelContent: Item {
     id: content
-
-    property real cardSpacing: Style.marginL * scaling
 
     // Layout content
     ColumnLayout {
       id: layout
-      x: content.cardSpacing
-      y: content.cardSpacing
-      width: parent.width - (2 * content.cardSpacing)
-      spacing: content.cardSpacing
+      x: Style.marginL
+      y: Style.marginL
+      width: parent.width - (Style.marginL * 2)
+      spacing: Style.marginL
 
-      // Cards (consistent inter-card spacing via ColumnLayout spacing)
+      // Profile
       ProfileCard {
         Layout.fillWidth: true
-        Layout.preferredHeight: Math.max(64 * scaling)
-        scaling: root.scaling
+        Layout.preferredHeight: profileHeight
       }
 
-      WeatherCard {
-        Layout.fillWidth: true
-        Layout.preferredHeight: Math.max(190 * scaling)
-        scaling: root.scaling
-      }
-
-      // Middle section: media + stats column
+      // Utils
       RowLayout {
         Layout.fillWidth: true
-        Layout.preferredHeight: Math.max(260 * scaling)
-        spacing: content.cardSpacing
-
-        // Media card
-        MediaCard {
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          scaling: root.scaling
-        }
-
-        // System monitors combined in one card
-        SystemMonitorCard {
-          Layout.preferredWidth: Style.baseWidgetSize * 2.625 * scaling
-          Layout.fillHeight: true
-          scaling: root.scaling
-        }
-      }
-
-      // Audio card below media and system monitor
-      AudioCard {
-        Layout.fillWidth: true
-        Layout.preferredHeight: Math.max(120 * scaling)
-        scaling: root.scaling
-      }
-
-      // Bottom actions (two grouped rows of round buttons)
-      RowLayout {
-        Layout.fillWidth: true
-        Layout.preferredHeight: Math.max(60 * scaling)
-        spacing: content.cardSpacing
+        Layout.preferredHeight: utilsHeight
+        spacing: Style.marginL
 
         // Power Profiles switcher
         PowerProfilesCard {
           Layout.fillWidth: true
           Layout.fillHeight: true
-          spacing: content.cardSpacing
-          scaling: root.scaling
+          spacing: Style.marginL
         }
 
         // Utilities buttons
         UtilitiesCard {
           Layout.fillWidth: true
           Layout.fillHeight: true
-          spacing: content.cardSpacing
-          scaling: root.scaling
+          spacing: Style.marginL
+        }
+      }
+
+      // Audio controls
+      AudioCard {
+        visible: Settings.data.controlCenter.audioControlsEnabled
+        Layout.fillWidth: true
+        Layout.preferredHeight: audioHeight
+      }
+
+      // Weather
+      WeatherCard {
+        Layout.fillWidth: true
+        Layout.preferredHeight: weatherHeight
+      }
+
+      // Media + SysMon
+      RowLayout {
+        Layout.fillWidth: true
+        Layout.preferredHeight: mediaSysMonHeight
+        spacing: Style.marginL
+
+        // Media card
+        MediaCard {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+        }
+
+        // System monitors combined in one card
+        SystemMonitorCard {
+          Layout.preferredWidth: Math.round(Style.baseWidgetSize * 2.625)
+          Layout.fillHeight: true
         }
       }
     }

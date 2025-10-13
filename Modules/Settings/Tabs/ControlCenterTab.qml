@@ -9,7 +9,7 @@ import qs.Modules.Settings.Extras
 
 ColumnLayout {
   id: root
-  spacing: Style.marginL * scaling
+  spacing: Style.marginL
 
   // Handler for drag start - disables panel background clicks
   function handleDragStart() {
@@ -27,85 +27,126 @@ ColumnLayout {
     }
   }
 
-  // Quick Settings Style Section
   ColumnLayout {
-    spacing: Style.marginL * scaling
+    spacing: Style.marginL
     Layout.fillWidth: true
 
     NHeader {
-      label: I18n.tr("settings.control-center.quickSettingsStyle.section.label")
-      description: I18n.tr("settings.control-center.quickSettingsStyle.section.description")
+      label: I18n.tr("settings.control-center.section.label")
+      description: I18n.tr("settings.control-center.section.description")
     }
 
     NComboBox {
-      id: quickSettingsStyle
-      label: I18n.tr("settings.control-center.quickSettingsStyle.style.label")
-      description: I18n.tr("settings.control-center.quickSettingsStyle.style.description")
+      id: controlCenterPosition
+      label: I18n.tr("settings.control-center.position.label")
+      description: I18n.tr("settings.control-center.position.description")
       Layout.fillWidth: true
       model: [{
-          "key": "compact",
-          "name": I18n.tr("options.control-center.quickSettingsStyle.compact")
+          "key": "close_to_bar_button",
+          "name": I18n.tr("options.control-center.position.close_to_bar_button")
         }, {
-          "key": "classic",
-          "name": I18n.tr("options.control-center.quickSettingsStyle.classic")
+          "key": "top_left",
+          "name": I18n.tr("options.control-center.position.top_left")
         }, {
-          "key": "modern",
-          "name": I18n.tr("options.control-center.quickSettingsStyle.modern")
+          "key": "top_right",
+          "name": I18n.tr("options.control-center.position.top_right")
+        }, {
+          "key": "bottom_left",
+          "name": I18n.tr("options.control-center.position.bottom_left")
+        }, {
+          "key": "bottom_right",
+          "name": I18n.tr("options.control-center.position.bottom_right")
+        }, {
+          "key": "bottom_center",
+          "name": I18n.tr("options.control-center.position.bottom_center")
+        }, {
+          "key": "top_center",
+          "name": I18n.tr("options.control-center.position.top_center")
         }]
-      currentKey: Settings.data.controlCenter.quickSettingsStyle || "compact"
+      currentKey: Settings.data.controlCenter.position
       onSelected: function (key) {
-        Settings.data.controlCenter.quickSettingsStyle = key
+        Settings.data.controlCenter.position = key
       }
     }
   }
 
-  NDivider {
-    Layout.fillWidth: true
-    Layout.topMargin: Style.marginXL * scaling
-    Layout.bottomMargin: Style.marginXL * scaling
-  }
-
-  // Widgets Management Section
-  ColumnLayout {
-    spacing: Style.marginXXS * scaling
-    Layout.fillWidth: true
-
-    NHeader {
-      label: I18n.tr("settings.control-center.widgets.section.label")
-      description: I18n.tr("settings.control-center.widgets.section.description")
-    }
-
-    // Bar Sections
-    ColumnLayout {
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      Layout.topMargin: Style.marginM * scaling
-      spacing: Style.marginM * scaling
-
-      // Quick Settings
-      SectionEditor {
-        sectionName: I18n.tr("settings.control-center.quickSettings.sectionName")
-        sectionId: "quickSettings"
-        settingsDialogComponent: ""
-        widgetRegistry: ControlCenterWidgetRegistry
-        widgetModel: Settings.data.controlCenter.widgets["quickSettings"]
-        availableWidgets: availableWidgets
-        enableMoveBetweenSections: false
-        onAddWidget: (widgetId, section) => _addWidgetToSection(widgetId, section)
-        onRemoveWidget: (section, index) => _removeWidgetFromSection(section, index)
-        onReorderWidget: (section, fromIndex, toIndex) => _reorderWidgetInSection(section, fromIndex, toIndex)
-        onUpdateWidgetSettings: (section, index, settings) => _updateWidgetSettingsInSection(section, index, settings)
-        onDragPotentialStarted: root.handleDragStart()
-        onDragPotentialEnded: root.handleDragEnd()
-      }
-    }
+  NToggle {
+    label: I18n.tr("settings.control-center.audio-controls.label")
+    description: I18n.tr("settings.control-center.audio-controls.description")
+    checked: Settings.data.controlCenter.audioControlsEnabled
+    onToggled: checked => Settings.data.controlCenter.audioControlsEnabled = checked
   }
 
   NDivider {
     Layout.fillWidth: true
-    Layout.topMargin: Style.marginXL * scaling
-    Layout.bottomMargin: Style.marginXL * scaling
+    Layout.topMargin: Style.marginXL
+    Layout.bottomMargin: Style.marginXL
   }
+
+  // NDivider {
+  //   Layout.fillWidth: true
+  //   Layout.topMargin: Style.marginXL
+  //   Layout.bottomMargin: Style.marginXL
+  // }
+
+  // // Widgets Management Section
+  // ColumnLayout {
+  //   spacing: Style.marginXXS
+  //   Layout.fillWidth: true
+
+  //   NHeader {
+  //     label: I18n.tr("settings.control-center.quickSettings.section.label")
+  //     description: I18n.tr("settings.control-center.quickSettings.section.description")
+  //   }
+
+  //   // Sections
+  //   ColumnLayout {
+  //     Layout.fillWidth: true
+  //     Layout.fillHeight: true
+  //     Layout.topMargin: Style.marginM
+  //     spacing: Style.marginM
+
+  //     // Left
+  //     SectionEditor {
+  //       sectionName: I18n.tr("settings.control-center.quickSettings.sectionLeft")
+  //       sectionId: "left"
+  //       settingsDialogComponent: ""
+  //       widgetRegistry: ControlCenterWidgetRegistry
+  //       widgetModel: Settings.data.controlCenter.widgets["left"]
+  //       availableWidgets: availableWidgets
+  //       enableMoveBetweenSections: false
+  //       onAddWidget: (widgetId, section) => _addWidgetToSection(widgetId, section)
+  //       onRemoveWidget: (section, index) => _removeWidgetFromSection(section, index)
+  //       onReorderWidget: (section, fromIndex, toIndex) => _reorderWidgetInSection(section, fromIndex, toIndex)
+  //       onUpdateWidgetSettings: (section, index, settings) => _updateWidgetSettingsInSection(section, index, settings)
+  //       onDragPotentialStarted: root.handleDragStart()
+  //       onDragPotentialEnded: root.handleDragEnd()
+  //     }
+
+  //     // Right
+  //     SectionEditor {
+  //       sectionName: I18n.tr("settings.control-center.quickSettings.sectionRight")
+  //       sectionId: "right"
+  //       settingsDialogComponent: ""
+  //       widgetRegistry: ControlCenterWidgetRegistry
+  //       widgetModel: Settings.data.controlCenter.widgets["right"]
+  //       availableWidgets: availableWidgets
+  //       enableMoveBetweenSections: false
+  //       onAddWidget: (widgetId, section) => _addWidgetToSection(widgetId, section)
+  //       onRemoveWidget: (section, index) => _removeWidgetFromSection(section, index)
+  //       onReorderWidget: (section, fromIndex, toIndex) => _reorderWidgetInSection(section, fromIndex, toIndex)
+  //       onUpdateWidgetSettings: (section, index, settings) => _updateWidgetSettingsInSection(section, index, settings)
+  //       onDragPotentialStarted: root.handleDragStart()
+  //       onDragPotentialEnded: root.handleDragEnd()
+  //     }
+  //   }
+  // }
+
+  // NDivider {
+  //   Layout.fillWidth: true
+  //   Layout.topMargin: Style.marginXL
+  //   Layout.bottomMargin: Style.marginXL
+  // }
 
   // ---------------------------------
   // Signal functions

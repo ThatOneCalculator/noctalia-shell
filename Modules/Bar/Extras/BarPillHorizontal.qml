@@ -38,9 +38,9 @@ Item {
   property bool showPill: false
   property bool shouldAnimateHide: false
 
-  readonly property int pillHeight: Math.round(Style.capsuleHeight * scaling)
-  readonly property int pillPaddingHorizontal: Math.round(Style.capsuleHeight * 0.2 * scaling)
-  readonly property int pillOverlap: Math.round(Style.capsuleHeight * 0.5 * scaling)
+  readonly property int pillHeight: Style.capsuleHeight
+  readonly property int pillPaddingHorizontal: Math.round(Style.capsuleHeight * 0.2)
+  readonly property int pillOverlap: Math.round(Style.capsuleHeight * 0.5)
   readonly property int pillMaxWidth: Math.max(1, textItem.implicitWidth + pillPaddingHorizontal * 2 + pillOverlap)
 
   readonly property real iconSize: Math.max(1, compact ? pillHeight * 0.65 : pillHeight * 0.48)
@@ -80,16 +80,17 @@ Item {
       x: {
         // Better text horizontal centering
         var centerX = (parent.width - width) / 2
-        var offset = rightOpen ? Style.marginXS * scaling : -Style.marginXS * scaling
+        var offset = rightOpen ? Style.marginXS : -Style.marginXS
         if (forceOpen) {
           // If its force open, the icon disc background is the same color as the bg pill move text slightly
-          offset += rightOpen ? -Style.marginXXS * scaling : Style.marginXXS * scaling
+          offset += rightOpen ? -Style.marginXXS : Style.marginXXS
         }
         return centerX + offset
       }
       text: root.text + root.suffix
       family: Settings.data.ui.fontFixed
       pointSize: textSize
+      applyUiScale: false
       font.weight: Style.fontWeightBold
       color: forceOpen ? Color.mOnSurface : Color.mPrimary
       visible: revealed
@@ -131,6 +132,7 @@ Item {
     NIcon {
       icon: root.icon
       pointSize: iconSize
+      applyUiScale: false
       color: hovered ? Color.mOnTertiary : Color.mOnSurface
       // Center horizontally
       x: (iconCircle.width - width) / 2

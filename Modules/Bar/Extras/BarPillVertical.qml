@@ -45,9 +45,9 @@ Item {
   property bool shouldAnimateHide: false
 
   // Sizing logic for vertical bars
-  readonly property int buttonSize: Math.round(Style.capsuleHeight * scaling)
+  readonly property int buttonSize: Style.capsuleHeight
   readonly property int pillHeight: buttonSize
-  readonly property int pillPaddingVertical: 3 * 2 * scaling // Very precise adjustment don't replace by Style.margin
+  readonly property int pillPaddingVertical: 3 * 2 // Very precise adjustment don't replace by Style.margin
   readonly property int pillOverlap: buttonSize * 0.5
   readonly property int maxPillWidth: buttonSize
   readonly property int maxPillHeight: Math.max(1, textItem.implicitHeight + pillPaddingVertical * 4)
@@ -95,13 +95,14 @@ Item {
         var offset = openDownward ? pillPaddingVertical * 0.75 : -pillPaddingVertical * 0.75
         if (forceOpen) {
           // If its force open, the icon disc background is the same color as the bg pill move text slightly
-          offset += rightOpen ? -Style.marginXXS * scaling : Style.marginXXS * scaling
+          offset += rightOpen ? -Style.marginXXS : Style.marginXXS
         }
         return offset
       }
       text: root.text + root.suffix
       family: Settings.data.ui.fontFixed
       pointSize: textSize
+      applyUiScale: false
       font.weight: Style.fontWeightMedium
       horizontalAlignment: Text.AlignHCenter
       verticalAlignment: Text.AlignVCenter
@@ -154,6 +155,7 @@ Item {
     NIcon {
       icon: root.icon
       pointSize: iconSize
+      applyUiScale: false
       color: hovered ? Color.mOnTertiary : Color.mOnSurface
       // Center horizontally
       x: (iconCircle.width - width) / 2

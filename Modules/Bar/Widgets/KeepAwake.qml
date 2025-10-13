@@ -9,10 +9,10 @@ NIconButton {
   id: root
 
   property ShellScreen screen
-  property real scaling: 1.0
 
   baseSize: Style.capsuleHeight
-  compact: (Settings.data.bar.density === "compact")
+  applyUiScale: false
+  compact: (Settings.data.bar.density === "compact") || (Settings.data.bar.density === "mini")
   icon: IdleInhibitorService.isInhibited ? "keep-awake-on" : "keep-awake-off"
   tooltipText: IdleInhibitorService.isInhibited ? I18n.tr("tooltips.disable-keep-awake") : I18n.tr("tooltips.enable-keep-awake")
   tooltipDirection: BarService.getTooltipDirection()

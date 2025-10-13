@@ -9,10 +9,10 @@ NIconButton {
   id: root
 
   property ShellScreen screen
-  property real scaling: 1.0
 
   baseSize: Style.capsuleHeight
-  compact: (Settings.data.bar.density === "compact")
+  applyUiScale: false
+  compact: (Settings.data.bar.density === "compact") || (Settings.data.bar.density === "mini")
   icon: "wallpaper-selector"
   tooltipText: I18n.tr("tooltips.open-wallpaper-selector")
   tooltipDirection: BarService.getTooltipDirection()

@@ -183,6 +183,7 @@ Singleton {
       property bool dimDesktop: true
       property bool showScreenCorners: false
       property bool forceBlackScreenCorners: false
+      property real scaleRatio: 1.0
       property real radiusRatio: 1.0
       property real screenRadiusRatio: 1.0
       property real animationSpeed: 1.0
@@ -244,16 +245,17 @@ Singleton {
     property JsonObject controlCenter: JsonObject {
       // Position: close_to_bar_button, center, top_left, top_right, bottom_left, bottom_right, bottom_center, top_center
       property string position: "close_to_bar_button"
-      property string quickSettingsStyle: "compact" // "compact", "classic", or "modern"
+      property bool audioControlsEnabled: true
       property JsonObject widgets
       widgets: JsonObject {
-        property list<var> quickSettings: [{
+        property list<var> left: [{
             "id": "WiFi"
           }, {
             "id": "Bluetooth"
           }, {
             "id": "Notifications"
-          }, {
+          }]
+        property list<var> right: [{
             "id": "ScreenRecorder"
           }, {
             "id": "PowerProfile"
@@ -318,7 +320,6 @@ Singleton {
       property string fontFixed: "DejaVu Sans Mono"
       property real fontDefaultScale: 1.0
       property real fontFixedScale: 1.0
-      property list<var> monitorsScaling: []
       property bool idleInhibitorEnabled: false
       property bool tooltipsEnabled: true
     }
@@ -373,6 +374,23 @@ Singleton {
       property string wallpaperChange: ""
       property string darkModeChange: ""
     }
+  }
+
+  // -----------------------------------------------------
+  // Function to preprocess paths by expanding "~" to user's home directory
+  function preprocessPath(path) {
+    if (typeof path !== "string" || path === "") {
+      return path
+    }
+
+    // Expand "~" to user's home directory
+    if (path.startsWith("~/")) {
+      return Quickshell.env("HOME") + path.substring(1)
+    } else if (path === "~") {
+      return Quickshell.env("HOME")
+    }
+
+    return path
   }
 
   // -----------------------------------------------------

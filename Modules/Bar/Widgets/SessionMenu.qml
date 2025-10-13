@@ -9,10 +9,10 @@ NIconButton {
   id: root
 
   property ShellScreen screen
-  property real scaling: 1.0
 
-  compact: (Settings.data.bar.density === "compact")
+  compact: (Settings.data.bar.density === "compact") || (Settings.data.bar.density === "mini")
   baseSize: Style.capsuleHeight
+  applyUiScale: false
   icon: "power"
   tooltipText: I18n.tr("tooltips.session-menu")
   tooltipDirection: BarService.getTooltipDirection()
