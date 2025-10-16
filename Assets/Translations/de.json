@@ -222,7 +222,7 @@
       "widgets": {
         "section": {
           "label": "Widget-Positionierung",
-          "description": "Widgets per Drag & Drop innerhalb jeder Sektion neu anordnen oder Add/Remove-Buttons zum Verwalten verwenden."
+          "description": "Widgets per Drag & Drop neu anordnen. Abzeichen zeigen die Verwendung an: [L]inks, [M]itte, [R]echts."
         }
       },
       "monitors": {
@@ -576,6 +576,10 @@
           "label": "Wetter",
           "description": "Bevorzugte Temperatureinheit wählen."
         },
+        "enabled": {
+          "label": "Wetter aktivieren",
+          "description": "Wetterinformationen in der gesamten Benutzeroberfläche anzeigen und Wetterdaten abrufen. Wenn deaktiviert, werden alle Wetterelemente ausgeblendet und es werden keine Netzwerkanfragen gestellt."
+        },
         "fahrenheit": {
           "label": "Temperatur in Fahrenheit (°F) anzeigen",
           "description": "Temperatur in Fahrenheit statt Celsius anzeigen."
@@ -730,14 +734,16 @@
         "label": "Aussehen"
       },
       "title": "Kontrollzentrum",
-      "audio-controls": {
-        "description": "Verschiedene Audio-Lautstärken sofort über das Kontrollzentrum anpassen.",
-        "label": "Lautstärkeregler"
-      },
-      "quick-settings": {
+      "cards": {
         "section": {
-          "description": "Konfigurieren und verwalten Sie die Schnellzugriff-Widgets.",
-          "label": "Schnelleinstellungen-Widgets"
+          "description": "Passen Sie an, welche Steuerelemente im Kontrollzentrum angezeigt werden und in welcher Reihenfolge.",
+          "label": "Karten"
+        }
+      },
+      "shortcuts": {
+        "section": {
+          "description": "Konfigurieren und verwalten Sie die Verknüpfungs-Widgets.",
+          "label": "Widgets für Kurzbefehle"
         },
         "sectionLeft": "Links",
         "sectionRight": "Richtig"
@@ -1086,7 +1092,7 @@
         },
         "horizontal-bar": {
           "label": "Horizontale Statusleiste",
-          "description": "Tipp: Verwenden Sie \\n, um einen Zeilenumbruch zu erstellen."
+          "description": "Tipp: Verwenden Sie \n, um einen Zeilenumbruch zu erstellen."
         },
         "vertical-bar": {
           "label": "Vertikale Statusleiste",
@@ -1105,6 +1111,10 @@
         }
       },
       "taskbar": {
+        "hide-mode": {
+          "label": "Ausblendmodus",
+          "description": "Steuert das Verhalten des Widgets, wenn keine übereinstimmenden Fenster vorhanden sind."
+        },
         "only-active-workspaces": {
           "label": "Nur von aktiven Arbeitsbereichen",
           "description": "Zeige nur Apps von aktiven Arbeitsbereichen an."
@@ -1197,6 +1207,9 @@
   "calendar": {
     "panel": {
       "week": "Woche"
+    },
+    "weather": {
+      "loading": "Wetter wird geladen…"
     }
   },
   "tooltips": {
@@ -1224,26 +1237,26 @@
     "keep-awake": "Wach bleiben",
     "enable-keep-awake": "Wach bleiben aktivieren",
     "disable-keep-awake": "Wach bleiben deaktivieren",
-    "wallpaper-selector": "Linksklick: Hintergrundbild-Auswahl öffnen.\\nRechtsklick: Zufälliges Hintergrundbild setzen.",
+    "wallpaper-selector": "Linksklick: Hintergrundbild-Auswahl öffnen.\nRechtsklick: Zufälliges Hintergrundbild setzen.",
     "do-not-disturb-enabled": "'Nicht stören' aktiviert",
     "do-not-disturb-disabled": "'Nicht stören' deaktiviert",
     "connect-disconnect-devices": "Linksklick zum Verbinden. Rechtsklick zum Vergessen.",
     "set-power-profile": "'{profile}' Energieprofil setzen",
     "switch-to-light-mode": "Zum hellen Modus wechseln",
     "switch-to-dark-mode": "Zum dunklen Modus wechseln",
-    "night-light-disabled": "Nachtlicht ist deaktiviert.\\nLinksklick zum Wechseln des Modus.\\nRechtsklick für Einstellungen.",
-    "night-light-enabled": "Nachtlicht ist aktiviert.\\nLinksklick zum Wechseln des Modus.\\nRechtsklick für Einstellungen.",
-    "night-light-forced": "Nachtlicht ist erzwungen.\\nLinksklick zum Wechseln des Modus.\\nRechtsklick für Einstellungen.",
-    "night-light-not-installed": "Nachtlicht ist nicht verfügbar.\\nwlsunset ist nicht installiert.",
+    "night-light-disabled": "Nachtlicht ist deaktiviert.\nLinksklick zum Wechseln des Modus.\nRechtsklick für Einstellungen.",
+    "night-light-enabled": "Nachtlicht ist aktiviert.\nLinksklick zum Wechseln des Modus.\nRechtsklick für Einstellungen.",
+    "night-light-forced": "Nachtlicht ist erzwungen.\nLinksklick zum Wechseln des Modus.\nRechtsklick für Einstellungen.",
+    "night-light-not-installed": "Nachtlicht ist nicht verfügbar.\nwlsunset ist nicht installiert.",
     "click-to-start-recording": "Klicken zum Starten der Aufnahme",
     "click-to-stop-recording": "Klicken zum Stoppen der Aufnahme",
     "open-control-center": "Kontrollzentrum öffnen",
-    "volume-at": "Lautstärke bei {volume}%\\nLinksklick zum Stumm-/Lautschalten. Rechtsklick für Einstellungen.\\nScrollen zum Ändern der Lautstärke.",
-    "microphone-volume-at": "Mikrofon-Lautstärke bei {volume}%\\nLinksklick zum Stumm-/Lautschalten. Rechtsklick für Einstellungen.\\nScrollen zum Ändern der Lautstärke.",
+    "volume-at": "Lautstärke bei {volume}%\nLinksklick zum Stumm-/Lautschalten. Rechtsklick für Einstellungen.\nScrollen zum Ändern der Lautstärke.",
+    "microphone-volume-at": "Mikrofon-Lautstärke bei {volume}%\nLinksklick zum Stumm-/Lautschalten. Rechtsklick für Einstellungen.\nScrollen zum Ändern der Lautstärke.",
     "manage-wifi": "WLAN verwalten",
     "bluetooth-devices": "Bluetooth-Geräte",
-    "open-notification-history-enable-dnd": "Benachrichtigungsverlauf öffnen\\nRechtsklick um 'Nicht stören' zu aktivieren.",
-    "open-notification-history-disable-dnd": "Benachrichtigungsverlauf öffnen\\nRechtsklick um 'Nicht stören' zu deaktivieren.",
+    "open-notification-history-enable-dnd": "Benachrichtigungsverlauf öffnen\nRechtsklick um 'Nicht stören' zu aktivieren.",
+    "open-notification-history-disable-dnd": "Benachrichtigungsverlauf öffnen\nRechtsklick um 'Nicht stören' zu deaktivieren.",
     "open-wallpaper-selector": "Hintergrundbild-Auswahl öffnen",
     "previous-media": "Vorheriges Medium",
     "pause": "Pausieren",
@@ -1316,7 +1329,8 @@
         "bottom_left": "Unten links",
         "bottom_right": "Unten rechts",
         "bottom_center": "Unten mittig",
-        "top_center": "Oben mittig"
+        "top_center": "Oben mittig",
+        "center": "Mitte"
       },
       "quickSettingsStyle": {
         "modern": "Modern",
@@ -1390,20 +1404,13 @@
   },
   "session-menu": {
     "title": "Sitzungsmenü",
-    "click-again": "Erneut klicken für sofortige Ausführung",
     "action-in-seconds": "{action} in {seconds} Sekunden...",
     "lock": "Sperren",
-    "lock-subtitle": "Sitzung sperren",
     "lock-and-suspend": "Sperren und Ruhezustand",
-    "lock-and-suspend-subtitle": "Sitzung sperren und System in den Ruhezustand versetzen",
     "suspend": "Ruhezustand",
     "reboot": "Neu starten",
     "logout": "Abmelden",
-    "logout-subtitle": "Sitzung beenden",
-    "shutdown": "Herunterfahren",
-    "reboot-subtitle": "Starten Sie Ihren Computer neu.",
-    "shutdown-subtitle": "Schalte deinen Computer aus.",
-    "suspend-subtitle": "System in den Ruhezustand versetzen"
+    "shutdown": "Herunterfahren"
   },
   "plugins": {
     "applications": "Anwendungen",
@@ -1444,7 +1451,19 @@
     "charging-rate": "Laderate: {rate} W.",
     "discharging-rate": "Entladerate: {rate} W.",
     "charging": "Wird geladen.",
-    "discharging": "Wird entladen."
+    "discharging": "Wird entladen.",
+    "plugged-in": "Angeschlossen.",
+    "idle": "Leerlauf.",
+    "time-left": "Verbleibende Zeit: {time}.",
+    "time-until-full": "Zeit bis vollständig geladen: {time}.",
+    "health": "Zustand: {percent}%",
+    "panel": {
+      "title": "Ladeschwelle",
+      "full": "Volle Kapazität ({percent}%)",
+      "balanced": "Ausgeglichen ({percent}%)",
+      "lifespan": "Verlängerte Lebensdauer ({percent}%)",
+      "disabled": "Batteriemanager deaktiviert"
+    }
   },
   "authentication": {
     "failed": "Authentifizierung fehlgeschlagen",
@@ -1599,9 +1618,51 @@
       "low": "Niedriger Batteriestand",
       "low-desc": "Batterie ist bei {percent}%. Bitte schließen Sie das Ladegerät an."
     },
+    "battery-manager": {
+      "title": "Batterieschwelle",
+      "set-success-desc": "Batterieschwelle auf {percent}% gesetzt",
+      "initial-setup": "Ersteinrichtung erforderlich",
+      "set-failed": "Fehler beim Setzen der Batterieschwelle",
+      "install-success": "Erfolgreich installiert",
+      "install-missing": "Erforderliche Dateien fehlen",
+      "install-unsupported": "System wird nicht unterstützt",
+      "install-failed": "Installation fehlgeschlagen",
+      "uninstall-setup": "Deinstallation, Authentifizierung erforderlich",
+      "uninstall-success": "Erfolgreich deinstalliert",
+      "uninstall-failed": "Deinstallation fehlgeschlagen"
+    },
     "missing-control-center": {
       "label": "Letztes Control-Center-Widget entfernt",
       "description": "Das Control-Center-Widget wurde aus der Leiste entfernt. Um es erneut über die Leiste zu öffnen, fügen Sie das Widget wieder hinzu. Sie können es auch durch Rechtsklick auf die Leiste öffnen."
+    }
+  },
+  "setup": {
+    "customize": {
+      "header": "Erlebnis anpassen",
+      "subheader": "Leistenposition, Dichte, Skalierung und mehr einstellen."
+    },
+    "appearance": {
+      "header": "Erscheinungsbild",
+      "subheader": "Dunkelmodus und Farbquellen wählen (Matugen oder vordefiniert)."
+    },
+    "wallpaper": {
+      "header": "Wähle dein Hintergrundbild",
+      "subheader": "Bestimme die Stimmung mit einem schönen Hintergrund.",
+      "select-prompt": "Wähle unten ein Hintergrundbild",
+      "preview-error": "Bild konnte nicht geladen werden",
+      "none-in-dir": "Keine Hintergrundbilder im Verzeichnis gefunden",
+      "no-dir": "Kein Hintergrundbild-Verzeichnis ausgewählt",
+      "no-valid": "Keine gültigen Bilddateien gefunden in: {dir}",
+      "choose-dir": "Wähle ein Verzeichnis mit deinen Hintergrundbildern",
+      "dir": {
+        "label": "Hintergrundbild-Verzeichnis",
+        "description": "Wähle den Ordner mit deinen Hintergrundbildern",
+        "browse": "Ordner auswählen",
+        "select-title": "Hintergrundbild-Ordner wählen"
+      }
+    },
+    "welcome": {
+      "note": "Nur ein paar Grundeinstellungen – alle Optionen findest du in den Einstellungen"
     }
   }
 }

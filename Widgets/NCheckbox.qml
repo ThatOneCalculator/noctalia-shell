@@ -6,7 +6,7 @@ import qs.Commons
 RowLayout {
   id: root
 
-  // Public API (mirrors NToggle but compact)
+  // Public API
   property string label: ""
   property string description: ""
   property bool checked: false
@@ -61,7 +61,6 @@ RowLayout {
       icon: "check"
       color: root.activeOnColor
       pointSize: Math.max(Style.fontSizeXS, root.baseSize * 0.5)
-      font.weight: Style.fontWeightBold
     }
 
     MouseArea {

@@ -222,7 +222,7 @@
       "widgets": {
         "section": {
           "label": "Posicionamento dos widgets",
-          "description": "Arraste e solte os widgets para reordená-los em cada seção, ou use os botões de adicionar/remover para gerenciar os widgets."
+          "description": "Arraste e solte widgets para reordená-los. Os emblemas indicam o uso: [E]squerda, [C]entro, [D]ireita."
         }
       },
       "monitors": {
@@ -538,6 +538,10 @@
           "label": "Clima",
           "description": "Escolha sua unidade de temperatura preferida."
         },
+        "enabled": {
+          "label": "Ativar clima",
+          "description": "Mostrar informações meteorológicas em toda a interface e buscar dados do clima. Quando desativado, todos os elementos do clima serão ocultados e nenhuma solicitação de rede será feita."
+        },
         "fahrenheit": {
           "label": "Exibir temperatura em Fahrenheit (°F)",
           "description": "Exibe a temperatura em Fahrenheit em vez de Celsius."
@@ -730,17 +734,19 @@
         "label": "Aparência"
       },
       "title": "Central de Controle",
-      "audio-controls": {
-        "description": "Ajuste instantaneamente diferentes volumes de áudio a partir da Central de Controle.",
-        "label": "Controles deslizantes de volume"
-      },
-      "quick-settings": {
+      "cards": {
         "section": {
-          "description": "Configure e gerencie os widgets de configurações rápidas.",
-          "label": "Widgets de configurações rápidas"
+          "description": "Personalize quais controles aparecem na Central de Controle e em que ordem.",
+          "label": "Cartas"
+        }
+      },
+      "shortcuts": {
+        "section": {
+          "description": "Configure e gerencie os widgets de atalhos.",
+          "label": "Widgets de atalhos"
         },
         "sectionLeft": "Esquerda",
-        "sectionRight": "Direito/Certo/Correto"
+        "sectionRight": "Direito/Certo/À direita"
       }
     },
     "user-interface": {
@@ -1099,6 +1105,10 @@
         "colorize-icons": {
           "label": "Colorir ícones",
           "description": "Aplicar cores do tema aos ícones da barra de tarefas."
+        },
+        "hide-mode": {
+          "label": "Modo de ocultação",
+          "description": "Controla como o widget se comporta quando não há janelas correspondentes."
         }
       },
       "tray": {
@@ -1180,6 +1190,9 @@
   "calendar": {
     "panel": {
       "week": "Semana"
+    },
+    "weather": {
+      "loading": "Carregando o clima…"
     }
   },
   "tooltips": {
@@ -1297,7 +1310,8 @@
         "bottom_left": "Inferior esquerdo",
         "bottom_right": "Inferior direito",
         "bottom_center": "Centro inferior",
-        "top_center": "Centro superior"
+        "top_center": "Centro superior",
+        "center": "Centro"
       },
       "quickSettingsStyle": {
         "modern": "Moderno",
@@ -1373,20 +1387,13 @@
   },
   "session-menu": {
     "title": "Menu da Sessão",
-    "click-again": "Clique novamente para executar imediatamente",
     "action-in-seconds": "{action} em {seconds} segundos...",
     "lock": "Bloquear",
-    "lock-subtitle": "Bloqueie sua sessão",
     "lock-and-suspend": "Bloquear e Suspender",
-    "lock-and-suspend-subtitle": "Bloquear sessão e colocar o sistema em suspensão",
     "suspend": "Suspender",
     "reboot": "Reiniciar",
     "logout": "Sair",
-    "logout-subtitle": "Encerre sua sessão",
-    "shutdown": "Desligar",
-    "reboot-subtitle": "Reinicie o seu computador.",
-    "shutdown-subtitle": "Desligue o seu computador.",
-    "suspend-subtitle": "Colocar o sistema em suspensão."
+    "shutdown": "Desligar"
   },
   "plugins": {
     "applications": "Aplicativos",
@@ -1571,6 +1578,19 @@
       "low": "Bateria Fraca",
       "low-desc": "A bateria está em {percent}%. Por favor, conecte o carregador."
     },
+    "battery-manager": {
+      "title": "Limite da bateria",
+      "set-success-desc": "Limite da bateria definido para {percent}%",
+      "initial-setup": "Configuração inicial necessária",
+      "set-failed": "Falha ao definir o limite da bateria",
+      "install-success": "Instalado com sucesso",
+      "install-missing": "Arquivos necessários ausentes",
+      "install-unsupported": "Sistema não suportado",
+      "install-failed": "Falha na instalação",
+      "uninstall-setup": "Desinstalando, autenticação necessária",
+      "uninstall-success": "Desinstalado com sucesso",
+      "uninstall-failed": "Falha na desinstalação"
+    },
     "missing-control-center": {
       "label": "Último widget da Central de Controle removido",
       "description": "O widget da Central de Controle foi removido da barra. Para acessá-lo novamente pela barra, adicione o widget novamente. Você também pode abri-lo clicando com o botão direito na barra."
@@ -1602,6 +1622,47 @@
     "charging-rate": "Taxa de carregamento: {rate} W.",
     "discharging-rate": "Taxa de descarregamento: {rate} W.",
     "charging": "Carregando.",
-    "discharging": "Descarregando."
+    "discharging": "Descarregando.",
+    "plugged-in": "Conectado.",
+    "idle": "Ocioso.",
+    "time-left": "Tempo restante: {time}.",
+    "time-until-full": "Tempo até carga completa: {time}.",
+    "health": "Saúde: {percent}%",
+    "panel": {
+      "balanced": "Balanceado ({percent}%)",
+      "disabled": "Gerenciador de bateria desativado",
+      "full": "Capacidade máxima ({percent}%)",
+      "lifespan": "Vida útil prolongada ({percent}%)",
+      "title": "Limite de carga"
+    }
+  },
+  "setup": {
+    "customize": {
+      "header": "Personalizar a sua experiência",
+      "subheader": "Ajuste a posição da barra, densidade, escala e mais."
+    },
+    "appearance": {
+      "header": "Aparência",
+      "subheader": "Escolha o modo escuro e as fontes de cores (Matugen ou predefinidas)."
+    },
+    "wallpaper": {
+      "header": "Escolha o seu papel de parede",
+      "subheader": "Defina o ambiente com um belo fundo.",
+      "select-prompt": "Selecione um papel de parede abaixo",
+      "preview-error": "Falha ao carregar a imagem",
+      "none-in-dir": "Nenhum papel de parede encontrado no diretório",
+      "no-dir": "Nenhum diretório de papéis de parede selecionado",
+      "no-valid": "Nenhuma imagem válida encontrada em: {dir}",
+      "choose-dir": "Escolha um diretório contendo seus papéis de parede",
+      "dir": {
+        "label": "Diretório de papéis de parede",
+        "description": "Escolha a pasta que contém seus papéis de parede",
+        "browse": "Procurar pasta",
+        "select-title": "Selecionar pasta de papéis de parede"
+      }
+    },
+    "welcome": {
+      "note": "Apenas alguns ajustes básicos para começar - o restante está em Configurações"
+    }
   }
 }

@@ -324,7 +324,7 @@ Loader {
 
                   // Welcome back + Username on one line
                   NText {
-                    text: I18n.tr("lock-screen.welcome-back") + " " + Quickshell.env("USER") + "!"
+                    text: I18n.tr("lock-screen.welcome-back") + " " + (Quickshell.env("USER").charAt(0).toUpperCase() + Quickshell.env("USER").slice(1)) + "!"
                     pointSize: Style.fontSizeXXL
                     font.weight: Font.Medium
                     color: Color.mOnSurface
@@ -402,8 +402,9 @@ Loader {
                         var t = Settings.data.location.use12hourFormat ? Qt.locale().toString(Time.date, "hh AP") : Qt.locale().toString(Time.date, "HH")
                         return t
                       }
-                      pointSize: Style.fontSizeL
+                      pointSize: Style.fontSizeM
                       font.weight: Style.fontWeightBold
+                      family: Settings.data.ui.fontFixed
                       color: Color.mOnSurface
                       horizontalAlignment: Text.AlignHCenter
                       Layout.alignment: Qt.AlignHCenter
@@ -411,8 +412,9 @@ Loader {
 
                     NText {
                       text: Qt.formatTime(Time.date, "mm")
-                      pointSize: Style.fontSizeL
+                      pointSize: Style.fontSizeM
                       font.weight: Style.fontWeightBold
+                      family: Settings.data.ui.fontFixed
                       color: Color.mOnSurfaceVariant
                       horizontalAlignment: Text.AlignHCenter
                       Layout.alignment: Qt.AlignHCenter
@@ -428,7 +430,7 @@ Loader {
               height: 60
               anchors.horizontalCenter: parent.horizontalCenter
               anchors.bottom: parent.bottom
-              anchors.bottomMargin: 300
+              anchors.bottomMargin: (Settings.data.general.compactLockScreen ? 240 : 320) * Style.uiScaleRatio
               radius: 30
               color: Color.mError
               border.color: Color.mError
@@ -546,16 +548,18 @@ Loader {
                 anchors.margins: 14
                 spacing: 14
 
-                // Weather section
+                // Top info row
                 RowLayout {
                   Layout.fillWidth: true
                   Layout.preferredHeight: 65
                   spacing: 18
-                  visible: !Settings.data.general.compactLockScreen && LocationService.coordinatesReady && LocationService.data.weather !== null
+                  visible: !Settings.data.general.compactLockScreen
 
                   // Media widget with visualizer
                   Rectangle {
                     Layout.preferredWidth: 220
+                    // Expand to take remaining space when weather is hidden
+                    Layout.fillWidth: !(Settings.data.location.weatherEnabled && LocationService.data.weather !== null)
                     Layout.preferredHeight: 50
                     radius: 25
                     color: Color.transparent
@@ -664,6 +668,7 @@ Loader {
 
                   // Current weather
                   RowLayout {
+                    visible: Settings.data.location.weatherEnabled && LocationService.data.weather !== null
                     Layout.preferredWidth: 180
                     spacing: 8
 
@@ -736,6 +741,7 @@ Loader {
 
                   // 3-day forecast
                   RowLayout {
+                    visible: Settings.data.location.weatherEnabled && LocationService.data.weather !== null
                     Layout.preferredWidth: 260
                     Layout.rightMargin: 8
                     spacing: 4
@@ -783,9 +789,16 @@ Loader {
                     }
                   }
 
+                  Item {
+                    Layout.fillWidth: true
+                    visible: !(Settings.data.location.weatherEnabled && LocationService.data.weather !== null)
+                    Layout.preferredWidth: visible ? 1 : 0
+                  }
+
                   // Battery and Keyboard Layout (full mode only)
                   ColumnLayout {
                     Layout.preferredWidth: 60
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     spacing: 8
 
                     // Battery

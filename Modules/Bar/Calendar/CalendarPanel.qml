@@ -25,7 +25,7 @@ NPanel {
 
     readonly property int firstDayOfWeek: Qt.locale().firstDayOfWeek
     property bool isCurrentMonth: checkIsCurrentMonth()
-    readonly property bool weatherReady: (LocationService.data.weather !== null)
+    readonly property bool weatherReady: Settings.data.location.weatherEnabled && (LocationService.data.weather !== null)
 
     function checkIsCurrentMonth() {
       return (Time.date.getMonth() === grid.month) && (Time.date.getFullYear() === grid.year)
@@ -79,12 +79,13 @@ NPanel {
 
           // Weather icon and temperature
           ColumnLayout {
+            visible: Settings.data.location.weatherEnabled && weatherReady
             Layout.alignment: Qt.AlignVCenter
             spacing: Style.marginXXS
 
             NIcon {
               Layout.alignment: Qt.AlignHCenter
-              icon: weatherReady ? LocationService.weatherSymbolFromCode(LocationService.data.weather.current_weather.weathercode) : "cloud"
+              icon: Settings.data.location.weatherEnabled && weatherReady ? LocationService.weatherSymbolFromCode(LocationService.data.weather.current_weather.weathercode) : ""
               pointSize: Style.fontSizeXXL
               color: Color.mOnPrimary
             }
@@ -92,6 +93,8 @@ NPanel {
             NText {
               Layout.alignment: Qt.AlignHCenter
               text: {
+                if (!Settings.data.location.weatherEnabled)
+                  return ""
                 if (!weatherReady)
                   return ""
                 var temp = LocationService.data.weather.current_weather.temperature
@@ -169,6 +172,8 @@ NPanel {
 
               NText {
                 text: {
+                  if (!Settings.data.location.weatherEnabled)
+                    return ""
                   if (!weatherReady)
                     return I18n.tr("calendar.weather.loading")
                   const chunks = Settings.data.location.name.split(",")
@@ -324,7 +329,7 @@ NPanel {
       }
     }
     RowLayout {
-      visible: !weatherReady
+      visible: Settings.data.location.weatherEnabled && !weatherReady
       Layout.fillWidth: true
       Layout.alignment: Qt.AlignHCenter
       NBusyIndicator {}

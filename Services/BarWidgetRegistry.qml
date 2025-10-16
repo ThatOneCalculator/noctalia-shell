@@ -118,6 +118,7 @@ Singleton {
                                     "allowUserSettings": true,
                                     "onlySameOutput": true,
                                     "onlyActiveWorkspaces": true,
+                                    "hideMode": "hidden",
                                     "colorizeIcons": false
                                   },
                                   "Tray": {
@@ -214,7 +215,7 @@ Singleton {
   }
 
   function init() {
-    Logger.log("BarWidgetRegistry", "Service started")
+    Logger.i("BarWidgetRegistry", "Service started")
   }
 
   // ------------------------------

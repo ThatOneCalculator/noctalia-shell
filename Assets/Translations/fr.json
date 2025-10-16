@@ -222,7 +222,7 @@
       "widgets": {
         "section": {
           "label": "Positionnement des widgets",
-          "description": "Glissez-déposez les widgets pour les réorganiser dans chaque section, ou utilisez les boutons ajouter/supprimer pour gérer les widgets."
+          "description": "Faites glisser et déposez les widgets pour les réorganiser. Les badges indiquent l'utilisation : [G]auche, [C]entre, [D]roite."
         }
       },
       "monitors": {
@@ -576,6 +576,10 @@
           "label": "Météo",
           "description": "Choisissez votre unité de température préférée."
         },
+        "enabled": {
+          "label": "Activer la météo",
+          "description": "Afficher les informations météorologiques dans toute l'interface et récupérer les données météo. Lorsque désactivé, tous les éléments météo seront masqués et aucune requête réseau ne sera effectuée."
+        },
         "fahrenheit": {
           "label": "Afficher la température en Fahrenheit (°F)",
           "description": "Afficher la température en Fahrenheit au lieu de Celsius."
@@ -730,14 +734,16 @@
         "label": "Apparence"
       },
       "title": "Centre de contrôle",
-      "audio-controls": {
-        "description": "Ajustez instantanément différents volumes audio depuis le Centre de contrôle.",
-        "label": "Curseurs de volume"
-      },
-      "quick-settings": {
+      "cards": {
         "section": {
-          "description": "Configurer et gérer les widgets des paramètres rapides.",
-          "label": "Widgets de paramètres rapides"
+          "description": "Personnalisez les commandes qui apparaissent dans le Centre de contrôle et leur ordre d'affichage.",
+          "label": "Cartes"
+        }
+      },
+      "shortcuts": {
+        "section": {
+          "description": "Configurer et gérer les widgets de raccourcis.",
+          "label": "Widgets de raccourcis"
         },
         "sectionLeft": "Gauche",
         "sectionRight": "Droite"
@@ -1088,6 +1094,10 @@
         }
       },
       "taskbar": {
+        "hide-mode": {
+          "label": "Mode de masquage",
+          "description": "Contrôle le comportement du widget lorsqu'il n'y a pas de fenêtres correspondantes."
+        },
         "only-active-workspaces": {
           "description": "Afficher uniquement les applications des espaces de travail actifs.",
           "label": "Seulement depuis les espaces de travail actifs."
@@ -1180,6 +1190,9 @@
   "calendar": {
     "panel": {
       "week": "Semaine"
+    },
+    "weather": {
+      "loading": "Chargement de la météo…"
     }
   },
   "tooltips": {
@@ -1299,7 +1312,8 @@
         "bottom_left": "En bas à gauche",
         "bottom_right": "En bas à droite",
         "bottom_center": "En bas au centre",
-        "top_center": "En haut au centre"
+        "top_center": "En haut au centre",
+        "center": "Centre"
       },
       "quickSettingsStyle": {
         "modern": "Moderne",
@@ -1373,20 +1387,13 @@
   },
   "session-menu": {
     "title": "Menu de session",
-    "click-again": "Cliquez à nouveau pour exécuter immédiatement",
     "action-in-seconds": "{action} dans {seconds} secondes...",
     "lock": "Verrouiller",
-    "lock-subtitle": "Verrouiller votre session",
     "lock-and-suspend": "Verrouiller et Mettre en veille",
-    "lock-and-suspend-subtitle": "Verrouiller la session et mettre le système en veille",
     "suspend": "Mettre en veille",
     "reboot": "Redémarrer",
     "logout": "Déconnexion",
-    "logout-subtitle": "Terminer votre session",
-    "shutdown": "Éteindre",
-    "reboot-subtitle": "Redémarrez votre ordinateur.",
-    "shutdown-subtitle": "Éteignez votre ordinateur.",
-    "suspend-subtitle": "Mettre le système en veille"
+    "shutdown": "Éteindre"
   },
   "plugins": {
     "applications": "Applications",
@@ -1571,6 +1578,19 @@
       "low": "Batterie faible",
       "low-desc": "La batterie est à {percent}%. Veuillez brancher le chargeur."
     },
+    "battery-manager": {
+      "title": "Seuil de batterie",
+      "set-success-desc": "Seuil de batterie défini à {percent}%",
+      "initial-setup": "Configuration initiale requise",
+      "set-failed": "Échec de la définition du seuil de batterie",
+      "install-success": "Installation réussie",
+      "install-missing": "Fichiers requis manquants",
+      "install-unsupported": "Système non pris en charge",
+      "install-failed": "Échec de l'installation",
+      "uninstall-setup": "Désinstallation, authentification requise",
+      "uninstall-success": "Désinstallation réussie",
+      "uninstall-failed": "Échec de la désinstallation"
+    },
     "missing-control-center": {
       "label": "Dernier widget du Centre de contrôle supprimé",
       "description": "Le widget du Centre de contrôle a été retiré de la barre. Pour y accéder à nouveau depuis la barre, veuillez ré‑ajouter le widget. Vous pouvez aussi l'ouvrir en cliquant avec le bouton droit sur la barre."
@@ -1602,6 +1622,47 @@
     "charging-rate": "Taux de charge : {rate} W.",
     "discharging-rate": "Taux de décharge : {rate} W.",
     "charging": "En charge.",
-    "discharging": "En décharge."
+    "discharging": "En décharge.",
+    "plugged-in": "Branché.",
+    "idle": "Inactif.",
+    "time-left": "Temps restant : {time}.",
+    "time-until-full": "Temps jusqu'à charge complète : {time}.",
+    "health": "État : {percent}%",
+    "panel": {
+      "title": "Seuil de charge",
+      "full": "Capacité totale ({percent}%)",
+      "balanced": "Équilibré ({percent}%)",
+      "lifespan": "Durée de vie prolongée ({percent}%)",
+      "disabled": "Gestionnaire de batterie désactivé"
+    }
+  },
+  "setup": {
+    "customize": {
+      "header": "Personnaliser votre expérience",
+      "subheader": "Ajustez la position de la barre, la densité, l'échelle et plus encore."
+    },
+    "appearance": {
+      "header": "Apparence",
+      "subheader": "Choisissez le mode sombre et la source des couleurs (Matugen ou prédéfinie)."
+    },
+    "wallpaper": {
+      "header": "Choisissez votre fond d'écran",
+      "subheader": "Définissez l'ambiance avec un joli fond.",
+      "select-prompt": "Sélectionnez un fond ci-dessous",
+      "preview-error": "Échec du chargement de l'image",
+      "none-in-dir": "Aucun fond d'écran trouvé dans le répertoire",
+      "no-dir": "Aucun répertoire de fonds d'écran sélectionné",
+      "no-valid": "Aucun fichier image valide trouvé dans : {dir}",
+      "choose-dir": "Choisissez un répertoire contenant vos fonds d'écran",
+      "dir": {
+        "label": "Répertoire des fonds d'écran",
+        "description": "Choisissez le dossier contenant vos fonds d'écran",
+        "browse": "Parcourir le dossier",
+        "select-title": "Sélectionner le dossier des fonds d'écran"
+      }
+    },
+    "welcome": {
+      "note": "Quelques réglages de base pour démarrer — toutes les options sont dans Paramètres"
+    }
   }
 }

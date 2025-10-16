@@ -222,7 +222,7 @@
       "widgets": {
         "section": {
           "label": "Posicionamiento de widgets",
-          "description": "Arrastra y suelta widgets para reordenarlos dentro de cada sección, o usa los botones de añadir/eliminar para gestionar los widgets."
+          "description": "Arrastra y suelta widgets para reordenarlos. Las insignias indican el uso: [I]zquierda, [C]entro, [D]erecha."
         }
       },
       "monitors": {
@@ -576,6 +576,10 @@
           "label": "Clima",
           "description": "Elige tu unidad de temperatura preferida."
         },
+        "enabled": {
+          "label": "Activar clima",
+          "description": "Mostrar información del clima en toda la interfaz y obtener datos meteorológicos. Cuando está desactivado, todos los elementos del clima estarán ocultos y no se realizarán solicitudes de red."
+        },
         "fahrenheit": {
           "label": "Mostrar temperatura en Fahrenheit (°F)",
           "description": "Muestra la temperatura en Fahrenheit en lugar de Celsius."
@@ -730,14 +734,16 @@
         "label": "Apariencia"
       },
       "title": "Centro de control",
-      "audio-controls": {
-        "description": "Ajusta instantáneamente diferentes volúmenes de audio desde el Centro de control.",
-        "label": "Deslizadores de volumen"
-      },
-      "quick-settings": {
+      "cards": {
         "section": {
-          "description": "Configurar y administrar los widgets de configuración rápida.",
-          "label": "Widgets de configuración rápida"
+          "description": "Personaliza qué controles aparecen en el Centro de control y en qué orden.",
+          "label": "Tarjetas"
+        }
+      },
+      "shortcuts": {
+        "section": {
+          "description": "Configurar y administrar los widgets de accesos directos.",
+          "label": "Widgets de accesos directos"
         },
         "sectionLeft": "Izquierda",
         "sectionRight": "Derecha"
@@ -1088,6 +1094,10 @@
         }
       },
       "taskbar": {
+        "hide-mode": {
+          "label": "Modo de ocultación",
+          "description": "Controla cómo se comporta el widget cuando no hay ventanas coincidentes."
+        },
         "only-active-workspaces": {
           "description": "Mostrar solo las aplicaciones de los espacios de trabajo activos.",
           "label": "Solo desde espacios de trabajo activos"
@@ -1180,6 +1190,9 @@
   "calendar": {
     "panel": {
       "week": "Semana"
+    },
+    "weather": {
+      "loading": "Cargando el clima…"
     }
   },
   "tooltips": {
@@ -1299,7 +1312,8 @@
         "bottom_left": "Inferior izquierda",
         "bottom_right": "Inferior derecha",
         "bottom_center": "Inferior central",
-        "top_center": "Superior central"
+        "top_center": "Superior central",
+        "center": "Centro"
       },
       "quickSettingsStyle": {
         "modern": "Moderno",
@@ -1373,20 +1387,13 @@
   },
   "session-menu": {
     "title": "Menú de sesión",
-    "click-again": "Haz clic de nuevo para ejecutar inmediatamente",
     "action-in-seconds": "{action} en {seconds} segundos...",
     "lock": "Bloquear",
-    "lock-subtitle": "Bloquea tu sesión",
     "lock-and-suspend": "Bloquear y Suspender",
-    "lock-and-suspend-subtitle": "Bloquear sesión y poner el sistema en suspensión",
     "suspend": "Suspender",
     "reboot": "Reiniciar",
     "logout": "Cerrar sesión",
-    "logout-subtitle": "Finaliza tu sesión",
-    "shutdown": "Apagar",
-    "reboot-subtitle": "Reinicia tu computadora.",
-    "shutdown-subtitle": "Apaga tu computadora.",
-    "suspend-subtitle": "Poner el sistema en reposo"
+    "shutdown": "Apagar"
   },
   "plugins": {
     "applications": "Aplicaciones",
@@ -1571,6 +1578,19 @@
       "low": "Batería baja",
       "low-desc": "La batería está al {percent}%. Por favor, conecta el cargador."
     },
+    "battery-manager": {
+      "title": "Umbral de batería",
+      "set-success-desc": "Umbral de batería establecido en {percent}%",
+      "initial-setup": "Configuración inicial requerida",
+      "set-failed": "No se pudo establecer el umbral de batería",
+      "install-success": "Instalado correctamente",
+      "install-missing": "Faltan archivos requeridos",
+      "install-unsupported": "El sistema no es compatible",
+      "install-failed": "Error en la instalación",
+      "uninstall-setup": "Desinstalando, se requiere autenticación",
+      "uninstall-success": "Desinstalado correctamente",
+      "uninstall-failed": "Error en la desinstalación"
+    },
     "missing-control-center": {
       "label": "Se eliminó el último widget del Centro de control",
       "description": "El widget del Centro de control se eliminó de la barra. Para acceder a él nuevamente desde la barra, debes volver a añadir el widget. También puedes abrirlo haciendo clic derecho en la barra."
@@ -1602,6 +1622,47 @@
     "charging-rate": "Tasa de carga: {rate} W.",
     "discharging-rate": "Tasa de descarga: {rate} W.",
     "charging": "Cargando.",
-    "discharging": "Descargando."
+    "discharging": "Descargando.",
+    "plugged-in": "Conectado.",
+    "idle": "Inactivo.",
+    "time-left": "Tiempo restante: {time}.",
+    "time-until-full": "Tiempo hasta carga completa: {time}.",
+    "health": "Salud: {percent}%",
+    "panel": {
+      "title": "Umbral de carga",
+      "full": "Capacidad total ({percent}%)",
+      "balanced": "Equilibrado ({percent}%)",
+      "lifespan": "Vida útil prolongada ({percent}%)",
+      "disabled": "Administrador de batería deshabilitado"
+    }
+  },
+  "setup": {
+    "customize": {
+      "header": "Personaliza tu experiencia",
+      "subheader": "Ajusta la posición de la barra, densidad, escala y más."
+    },
+    "appearance": {
+      "header": "Apariencia",
+      "subheader": "Elige modo oscuro y fuentes de color (Matugen o predefinido)."
+    },
+    "wallpaper": {
+      "header": "Elige tu fondo",
+      "subheader": "Define el ambiente con un bonito fondo.",
+      "select-prompt": "Selecciona un fondo abajo",
+      "preview-error": "No se pudo cargar la imagen",
+      "none-in-dir": "No se encontraron fondos en el directorio",
+      "no-dir": "No se seleccionó un directorio de fondos",
+      "no-valid": "No se encontraron imágenes válidas en: {dir}",
+      "choose-dir": "Elige un directorio que contenga tus fondos",
+      "dir": {
+        "label": "Directorio de fondos",
+        "description": "Elige la carpeta que contiene tus fondos",
+        "browse": "Seleccionar carpeta",
+        "select-title": "Seleccionar carpeta de fondos"
+      }
+    },
+    "welcome": {
+      "note": "Solo algunos conceptos básicos para empezar: todas las opciones están en Configuración."
+    }
   }
 }

@@ -13,6 +13,7 @@ Rectangle {
   property string icon
   property string tooltipText
   property string tooltipDirection: "auto"
+  property string density: ""
   property bool enabled: true
   property bool allowClickWhenDisabled: false
   property bool hovering: false
@@ -51,7 +52,14 @@ Rectangle {
   NIcon {
     icon: root.icon
     visible: !root.nerd
-    pointSize: Math.max(1, root.compact ? root.width * 0.65 : root.width * 0.48)
+    pointSize: {
+      switch (root.density) {
+      case "compact":
+        return Math.max(1, root.width * 0.65)
+      default:
+        return Math.max(1, root.width * 0.48)
+      }
+    }
     applyUiScale: root.applyUiScale
     color: root.enabled && root.hovering ? colorFgHover : colorFg
     // Center horizontally
@@ -70,8 +78,14 @@ Rectangle {
   NNerdIcon {
     text: root.icon
     visible: root.nerd
-    font.pointSize: Math.max(1, root.compact ? root.width * 0.65 : root.width * 0.48)
-    color: root.enabled && root.hovering ? colorFgHover : colorFg
+    pointSize: {
+      switch (root.density) {
+      case "compact":
+        return Math.max(1, root.width * 0.65)
+      default:
+        return Math.max(1, root.width * 0.48)
+      }
+    }    color: root.enabled && root.hovering ? colorFgHover : colorFg
     x: ((root.width - width) / 2) + 0.55
     y: (root.height - height) / 2 + (height - contentHeight) / 2 - 0.5
 

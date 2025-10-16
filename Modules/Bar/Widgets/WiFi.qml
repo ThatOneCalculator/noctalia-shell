@@ -12,7 +12,7 @@ NIconButton {
 
   property ShellScreen screen
 
-  compact: (Settings.data.bar.density === "compact") || (Settings.data.bar.density === "mini")
+  density: Settings.data.bar.density
   baseSize: Style.capsuleHeight
   applyUiScale: false
   colorBg: (Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent)
@@ -37,7 +37,7 @@ NIconButton {
       }
       return connected ? NetworkService.signalIcon(signalStrength) : "wifi-off"
     } catch (error) {
-      Logger.error("Wi-Fi", "Error getting icon:", error)
+      Logger.e("Wi-Fi", "Error getting icon:", error)
       return "signal_wifi_bad"
     }
   }

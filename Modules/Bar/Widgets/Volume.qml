@@ -51,7 +51,7 @@ Item {
   Connections {
     target: AudioService.sink?.audio ? AudioService.sink?.audio : null
     function onVolumeChanged() {
-      // Logger.log("Bar:Volume", "onVolumeChanged")
+      // Logger.i("Bar:Volume", "onVolumeChanged")
       if (!firstVolumeReceived) {
         // Ignore the first volume change
         firstVolumeReceived = true
@@ -74,7 +74,7 @@ Item {
   BarPill {
     id: pill
 
-    compact: (Settings.data.bar.density === "compact") || (Settings.data.bar.density === "mini")
+    density: Settings.data.bar.density
     rightOpen: BarService.getPillDirection(root)
     icon: getIcon()
     autoHide: false // Important to be false so we can hover as long as we want
