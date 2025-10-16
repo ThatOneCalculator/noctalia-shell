@@ -78,14 +78,8 @@ Rectangle {
   NNerdIcon {
     text: root.icon
     visible: root.nerd
-    pointSize: {
-      switch (root.density) {
-      case "compact":
-        return Math.max(1, root.width * 0.65)
-      default:
-        return Math.max(1, root.width * 0.48)
-      }
-    }    color: root.enabled && root.hovering ? colorFgHover : colorFg
+    font.pointSize: Math.max(1, root.compact ? root.width * 0.65 : root.width * 0.48)
+    color: root.enabled && root.hovering ? colorFgHover : colorFg
     x: ((root.width - width) / 2) + 0.55
     y: (root.height - height) / 2 + (height - contentHeight) / 2 - 0.5
 
