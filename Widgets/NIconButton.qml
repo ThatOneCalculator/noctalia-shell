@@ -74,7 +74,7 @@ Rectangle {
       }
     }
   }
-  
+
   NNerdIcon {
     text: root.icon
     visible: root.nerd

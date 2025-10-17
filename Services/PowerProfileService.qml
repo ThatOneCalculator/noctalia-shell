@@ -70,7 +70,7 @@ Singleton {
     else if (current === PowerProfile.PowerSaver)
       setProfile(PowerProfile.Balanced)
   }
-  
+
   function getColor(p) {
     if (!available)
       return "#e0def4"
