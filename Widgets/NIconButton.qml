@@ -80,7 +80,7 @@ Rectangle {
     visible: root.nerd
     font.pointSize: Math.max(1, root.compact ? root.width * 0.65 : root.width * 0.48)
     color: root.enabled && root.hovering ? colorFgHover : colorFg
-    x: ((root.width - width) / 2) + 0.55
+    x: ((root.width - width) / 2) + 0.5
     y: (root.height - height) / 2 + (height - contentHeight) / 2 - 0.5
 
     Behavior on color {
