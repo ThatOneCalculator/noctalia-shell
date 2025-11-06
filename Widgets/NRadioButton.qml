@@ -7,15 +7,17 @@ import qs.Widgets
 RadioButton {
   id: root
 
+  property real pointSize: Style.fontSizeM
+
   indicator: Rectangle {
     id: outerCircle
 
-    implicitWidth: Style.baseWidgetSize * 0.625
-    implicitHeight: Style.baseWidgetSize * 0.625
+    implicitWidth: Style.baseWidgetSize * 0.625 * pointSize / Style.fontSizeM
+    implicitHeight: Style.baseWidgetSize * 0.625 * pointSize / Style.fontSizeM
     radius: width * 0.5
     color: Color.transparent
     border.color: root.checked ? Color.mPrimary : Color.mOnSurface
-    border.width: Math.max(1, Style.borderM)
+    border.width: Style.borderM
     anchors.verticalCenter: parent.verticalCenter
 
     Rectangle {
@@ -41,7 +43,7 @@ RadioButton {
 
   contentItem: NText {
     text: root.text
-    pointSize: Style.fontSizeM
+    pointSize: root.pointSize
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: outerCircle.right
     anchors.right: parent.right

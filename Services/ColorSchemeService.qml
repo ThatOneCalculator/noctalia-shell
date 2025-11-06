@@ -27,7 +27,7 @@ Singleton {
       const enabled = !!Settings.data.colorSchemes.darkMode
       const label = enabled ? "Dark mode" : "Light mode"
       const description = enabled ? "Enabled" : "Enabled"
-      ToastService.showNotice(label, description)
+      ToastService.showNotice(label, description, "dark-mode")
     }
   }
 
@@ -89,6 +89,31 @@ Singleton {
     var filePath = resolveSchemePath(nameOrPath)
     schemeReader.path = ""
     schemeReader.path = filePath
+  }
+
+  function setPredefinedScheme(schemeName) {
+    Logger.i("ColorScheme", "Attempting to set predefined scheme to:", schemeName)
+
+    var resolvedPath = resolveSchemePath(schemeName)
+    var basename = getBasename(schemeName)
+
+    // Check if the scheme actually exists in the loaded schemes list
+    var schemeExists = false
+    for (var i = 0; i < schemes.length; i++) {
+      if (getBasename(schemes[i]) === basename) {
+        schemeExists = true
+        break
+      }
+    }
+
+    if (schemeExists) {
+      Settings.data.colorSchemes.predefinedScheme = basename
+      applyScheme(schemeName)
+      ToastService.showNotice("Color Scheme", `Set to ${basename}`, "settings-color-scheme")
+    } else {
+      Logger.e("ColorScheme", "Scheme not found:", schemeName)
+      ToastService.showError("Color Scheme", `Scheme '${basename}' not found!`)
+    }
   }
 
   Process {
@@ -161,8 +186,13 @@ Singleton {
 
   // Check if any templates are enabled
   function hasEnabledTemplates() {
-    return Settings.data.templates.gtk || Settings.data.templates.qt || Settings.data.templates.kitty || Settings.data.templates.ghostty || Settings.data.templates.foot || Settings.data.templates.fuzzel || Settings.data.templates.discord || Settings.data.templates.discord_vesktop || Settings.data.templates.discord_webcord
-        || Settings.data.templates.discord_armcord || Settings.data.templates.discord_equibop || Settings.data.templates.discord_lightcord || Settings.data.templates.discord_dorion || Settings.data.templates.pywalfox
+    const templates = Settings.data.templates
+    for (const key in templates) {
+      if (templates[key]) {
+        return true
+      }
+    }
+    return false
   }
 
   // Writer to colors.json using a JsonAdapter for safety

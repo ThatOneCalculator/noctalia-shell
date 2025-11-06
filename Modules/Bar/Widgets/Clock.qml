@@ -32,7 +32,7 @@ Rectangle {
   readonly property bool isBarVertical: barPosition === "left" || barPosition === "right"
   readonly property bool density: Settings.data.bar.density
 
-  readonly property var now: Time.date
+  readonly property var now: Time.now
 
   // Resolve settings: try user settings or defaults from BarWidgetRegistry
   readonly property bool usePrimaryColor: widgetSettings.usePrimaryColor !== undefined ? widgetSettings.usePrimaryColor : widgetMetadata.usePrimaryColor
@@ -62,7 +62,7 @@ Rectangle {
         spacing: Settings.data.bar.showCapsule ? -4 : -2
         Repeater {
           id: repeater
-          model: Qt.locale().toString(now, formatHorizontal.trim()).split("\\n")
+          model: I18n.locale.toString(now, formatHorizontal.trim()).split("\\n")
           NText {
             visible: text !== ""
             text: modelData
@@ -95,7 +95,7 @@ Rectangle {
         anchors.centerIn: parent
         spacing: -2
         Repeater {
-          model: Qt.locale().toString(now, formatVertical.trim()).split(" ")
+          model: I18n.locale.toString(now, formatVertical.trim()).split(" ")
           delegate: NText {
             visible: text !== ""
             text: modelData
@@ -121,7 +121,7 @@ Rectangle {
     cursorShape: Qt.PointingHandCursor
     hoverEnabled: true
     onEntered: {
-      if (!PanelService.getPanel("calendarPanel")?.active) {
+      if (!PanelService.getPanel("calendarPanel", screen)?.active) {
         TooltipService.show(Screen, root, I18n.tr("clock.tooltip"), BarService.getTooltipDirection())
       }
     }
@@ -130,7 +130,7 @@ Rectangle {
     }
     onClicked: {
       TooltipService.hide()
-      PanelService.getPanel("calendarPanel")?.toggle(this)
+      PanelService.getPanel("calendarPanel", screen)?.toggle(this)
     }
   }
 }

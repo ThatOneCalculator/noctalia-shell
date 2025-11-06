@@ -150,9 +150,16 @@ Variants {
       id: hideTimer
       interval: hideDelay
       onTriggered: {
+        // Force menuHovered to false if no menu is current or visible
+        if (!root.currentContextMenu || !root.currentContextMenu.visible) {
+          menuHovered = false
+        }
         if (autoHide && !dockHovered && !anyAppHovered && !peekHovered && !menuHovered) {
           hidden = true
           unloadTimer.restart() // Start unload timer when hiding
+        } else if (autoHide && !dockHovered && !peekHovered) {
+          // Restart timer if menu is closing (handles race condition)
+          restart()
         }
       }
     }
@@ -186,7 +193,7 @@ Variants {
 
     // PEEK WINDOW - Always visible when auto-hide is enabled
     Loader {
-      active: (barIsReady || !hasBar) && modelData && Settings.data.dock.monitors.includes(modelData.name) && autoHide
+      active: Settings.data.dock.enabled && (barIsReady || !hasBar) && modelData && (Settings.data.dock.monitors.length === 0 || Settings.data.dock.monitors.includes(modelData.name)) && autoHide
 
       sourceComponent: PanelWindow {
         id: peekWindow
@@ -198,7 +205,7 @@ Variants {
         focusable: false
         color: Color.transparent
 
-        WlrLayershell.namespace: "noctalia-dock-peek"
+        WlrLayershell.namespace: "noctalia-dock-peek-" + (screen?.name || "unknown")
         WlrLayershell.exclusionMode: ExclusionMode.Ignore
         implicitHeight: peekHeight
 
@@ -226,7 +233,8 @@ Variants {
 
     // DOCK WINDOW
     Loader {
-      active: (barIsReady || !hasBar) && modelData && Settings.data.dock.monitors.includes(modelData.name) && dockLoaded && ToplevelManager && (dockApps.length > 0)
+      id: dockWindowLoader
+      active: Settings.data.dock.enabled && (barIsReady || !hasBar) && modelData && (Settings.data.dock.monitors.length === 0 || Settings.data.dock.monitors.includes(modelData.name)) && dockLoaded && ToplevelManager && (dockApps.length > 0)
 
       sourceComponent: PanelWindow {
         id: dockWindow
@@ -236,7 +244,7 @@ Variants {
         focusable: false
         color: Color.transparent
 
-        WlrLayershell.namespace: "noctalia-dock-main"
+        WlrLayershell.namespace: "noctalia-dock-" + (screen?.name || "unknown")
         WlrLayershell.exclusionMode: exclusive ? ExclusionMode.Auto : ExclusionMode.Ignore
 
         // Size to fit the dock container exactly
@@ -289,7 +297,7 @@ Variants {
             color: Qt.alpha(Color.mSurface, Settings.data.dock.backgroundOpacity)
             anchors.centerIn: parent
             radius: Style.radiusL
-            border.width: Math.max(1, Style.borderS)
+            border.width: Style.borderS
             border.color: Qt.alpha(Color.mOutline, Settings.data.dock.backgroundOpacity)
 
             MouseArea {
@@ -383,7 +391,7 @@ Variants {
                       // Apply dock-specific colorization shader only to non-focused apps
                       layer.enabled: !appButton.isActive && Settings.data.dock.colorizeIcons
                       layer.effect: ShaderEffect {
-                        property color targetColor: Color.mOnSurface
+                        property color targetColor: Settings.data.colorSchemes.darkMode ? Color.mOnSurface : Color.mSurfaceVariant
                         property real colorizeMode: 0.0 // Dock mode (grayscale)
 
                         fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")
@@ -434,24 +442,38 @@ Variants {
                     // Context menu popup
                     DockMenu {
                       id: contextMenu
-                      onHoveredChanged: menuHovered = hovered
-                      onRequestClose: {
-                        contextMenu.hide()
-                        // Restart hide timer after menu action if auto-hide is enabled
-                        if (autoHide && !dockHovered && !anyAppHovered && !peekHovered) {
-                          hideTimer.restart()
+                      onHoveredChanged: {
+                        // Only update menuHovered if this menu is current and visible
+                        if (root.currentContextMenu === contextMenu && contextMenu.visible) {
+                          menuHovered = hovered
+                        } else {
+                          menuHovered = false
+                        }
+                      }
+
+                      Connections {
+                        target: contextMenu
+                        function onRequestClose() {
+                          // Clear current menu immediately to prevent hover updates
+                          root.currentContextMenu = null
+                          hideTimer.stop()
+                          contextMenu.hide()
+                          menuHovered = false
+                          anyAppHovered = false
                         }
                       }
                       onAppClosed: root.updateDockApps // Force immediate dock update when app is closed
                       onVisibleChanged: {
                         if (visible) {
                           root.currentContextMenu = contextMenu
+                          anyAppHovered = false
                         } else if (root.currentContextMenu === contextMenu) {
                           root.currentContextMenu = null
-                          // Reset menu hover state when menu becomes invisible
+                          hideTimer.stop()
                           menuHovered = false
-                          // Restart hide timer if conditions are met
-                          if (autoHide && !dockHovered && !anyAppHovered && !peekHovered) {
+                          anyAppHovered = false
+                          // Restart hide timer after menu closes
+                          if (autoHide && !dockHovered && !anyAppHovered && !peekHovered && !menuHovered) {
                             hideTimer.restart()
                           }
                         }
@@ -460,6 +482,7 @@ Variants {
 
                     MouseArea {
                       id: appMouseArea
+                      objectName: "appMouseArea"
                       anchors.fill: parent
                       hoverEnabled: true
                       cursorShape: Qt.PointingHandCursor
@@ -482,6 +505,10 @@ Variants {
                       onExited: {
                         anyAppHovered = false
                         TooltipService.hide()
+                        // Clear menuHovered if no current menu or menu not visible
+                        if (!root.currentContextMenu || !root.currentContextMenu.visible) {
+                          menuHovered = false
+                        }
                         if (autoHide && !dockHovered && !peekHovered && !menuHovered) {
                           hideTimer.restart()
                         }

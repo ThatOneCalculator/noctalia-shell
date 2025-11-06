@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
-import qs.Modules.Audio
+import qs.Modules.AudioSpectrum
 import qs.Commons
 import qs.Services
 import qs.Widgets
@@ -32,7 +32,9 @@ Item {
 
   readonly property bool isVerticalBar: (Settings.data.bar.position === "left" || Settings.data.bar.position === "right")
 
-  readonly property string hideMode: (widgetSettings.hideMode !== undefined) ? widgetSettings.hideMode : "hidden" // "visible", "hidden", "transparent"
+  readonly property string hideMode: (widgetSettings.hideMode !== undefined) ? widgetSettings.hideMode : "hidden" // "visible", "hidden", "transparent", "idle"
+  // Backward compatibility: honor legacy hideWhenIdle setting if present
+  readonly property bool hideWhenIdle: (widgetSettings.hideWhenIdle !== undefined) ? widgetSettings.hideWhenIdle : (widgetMetadata.hideWhenIdle !== undefined ? widgetMetadata.hideWhenIdle : false)
   readonly property bool showAlbumArt: (widgetSettings.showAlbumArt !== undefined) ? widgetSettings.showAlbumArt : widgetMetadata.showAlbumArt
   readonly property bool showVisualizer: (widgetSettings.showVisualizer !== undefined) ? widgetSettings.showVisualizer : widgetMetadata.showVisualizer
   readonly property string visualizerType: (widgetSettings.visualizerType !== undefined && widgetSettings.visualizerType !== "") ? widgetSettings.visualizerType : widgetMetadata.visualizerType
@@ -60,16 +62,33 @@ Item {
     return title
   }
 
-  implicitHeight: visible ? (isVerticalBar ? calculatedVerticalDimension() : Style.barHeight) : 0
-  implicitWidth: visible ? (isVerticalBar ? calculatedVerticalDimension() : dynamicWidth) : 0
+  // Hide conditions
+  readonly property bool shouldHideIdle: ((hideMode === "idle") || hideWhenIdle) && !MediaService.isPlaying
+  readonly property bool isEmptyForHideMode: (!hasActivePlayer) && (hideMode === "hidden" || hideMode === "transparent")
 
-  // "visible": Always Visible, "hidden": Hide When Empty, "transparent": Transparent When Empty
-  visible: hideMode !== "hidden" || hasActivePlayer
-  opacity: hideMode !== "transparent" || hasActivePlayer ? 1.0 : 0
+  implicitHeight: visible ? (isVerticalBar ? ((shouldHideIdle || isEmptyForHideMode) ? 0 : calculatedVerticalDimension()) : Style.capsuleHeight) : 0
+  implicitWidth: visible ? (isVerticalBar ? ((shouldHideIdle || isEmptyForHideMode) ? 0 : calculatedVerticalDimension()) : ((shouldHideIdle || isEmptyForHideMode) ? 0 : dynamicWidth)) : 0
+
+  // "visible": Always Visible, "hidden": Hide When Empty, "transparent": Transparent When Empty, "idle": Hide When Idle (not playing)
+  visible: shouldHideIdle ? false : (hideMode !== "hidden" || opacity > 0)
+  opacity: shouldHideIdle ? 0.0 : (((hideMode !== "hidden" || hasActivePlayer) && (hideMode !== "transparent" || hasActivePlayer)) ? 1.0 : 0.0)
   Behavior on opacity {
     NumberAnimation {
       duration: Style.animationNormal
-      easing.type: Easing.OutCubic
+      easing.type: Easing.InOutCubic
+    }
+  }
+
+  Behavior on implicitWidth {
+    NumberAnimation {
+      duration: Style.animationNormal
+      easing.type: Easing.InOutCubic
+    }
+  }
+  Behavior on implicitHeight {
+    NumberAnimation {
+      duration: Style.animationNormal
+      easing.type: Easing.InOutCubic
     }
   }
 
@@ -89,20 +108,22 @@ Item {
     // Icon or album art width
     if (!hasActivePlayer || !showAlbumArt) {
       // Icon width
-      contentWidth += Style.fontSizeL * scaling
+      contentWidth += Math.round(18 * scaling)
     } else if (showAlbumArt && hasActivePlayer) {
       // Album art width
       contentWidth += 21 * scaling
     }
 
-    // Spacing between icon/art and text
-    contentWidth += Style.marginS * scaling
+    // Spacing between icon/art and text; only if there is text
+    if (fullTitleMetrics.contentWidth > 0) {
+      contentWidth += Style.marginS * scaling
 
-    // Text width (use the measured width)
-    contentWidth += fullTitleMetrics.contentWidth
+      // Text width (use the measured width)
+      contentWidth += fullTitleMetrics.contentWidth
 
-    // Additional small margin for text
-    contentWidth += Style.marginXXS * 2
+      // Additional small margin for text
+      contentWidth += Style.marginXXS * 2
+    }
 
     // Add container margins
     contentWidth += margins
@@ -118,7 +139,8 @@ Item {
     }
     // Otherwise, adapt to content
     if (!hasActivePlayer) {
-      return maxWidth
+      // Keep compact when no active player
+      return calculateContentWidth()
     }
     // Use content width but don't exceed user-set maximum width
     return Math.min(calculateContentWidth(), maxWidth)
@@ -139,8 +161,8 @@ Item {
     visible: root.visible
     anchors.left: parent.left
     anchors.verticalCenter: parent.verticalCenter
-    width: isVerticalBar ? root.width : dynamicWidth
-    height: isVerticalBar ? width : Style.capsuleHeight
+    width: isVerticalBar ? ((shouldHideIdle || isEmptyForHideMode) ? 0 : calculatedVerticalDimension()) : ((shouldHideIdle || isEmptyForHideMode) ? 0 : dynamicWidth)
+    height: isVerticalBar ? ((shouldHideIdle || isEmptyForHideMode) ? 0 : calculatedVerticalDimension()) : Style.capsuleHeight
     radius: isVerticalBar ? width / 2 : Style.radiusM
     color: Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent
 
@@ -152,11 +174,20 @@ Item {
       }
     }
 
+    // Smooth height transition for vertical bar
+    Behavior on height {
+      NumberAnimation {
+        duration: Style.animationNormal
+        easing.type: Easing.InOutCubic
+      }
+    }
+
     Item {
       id: mainContainer
       anchors.fill: parent
       anchors.leftMargin: isVerticalBar ? 0 : Style.marginS * scaling
       anchors.rightMargin: isVerticalBar ? 0 : Style.marginS * scaling
+      clip: true
 
       Loader {
         anchors.verticalCenter: parent.verticalCenter
@@ -266,8 +297,8 @@ Item {
           id: titleContainer
           Layout.preferredWidth: {
             // Calculate available width based on other elements in the row
-            var iconWidth = (windowIcon.visible ? (Style.fontSizeL + Style.marginS) : 0)
-            var albumArtWidth = (hasActivePlayer && showAlbumArt ? (18 + Style.marginS) : 0)
+            var iconWidth = (windowIcon.visible ? (18 * scaling + Style.marginS * scaling) : 0)
+            var albumArtWidth = (hasActivePlayer && showAlbumArt ? (21 * scaling + Style.marginS * scaling) : 0)
             var totalMargins = Style.marginXXS * 2
             var availableWidth = mainContainer.width - iconWidth - albumArtWidth - totalMargins
             return Math.max(20, availableWidth)
@@ -282,7 +313,7 @@ Item {
           property bool isResetting: false
           property real textWidth: fullTitleMetrics.contentWidth
           property real containerWidth: 0
-          property bool needsScrolling: textWidth > containerWidth && MediaService.isPlaying
+          property bool needsScrolling: textWidth > containerWidth
 
           // Timer for "always" mode with delay
           Timer {
@@ -366,6 +397,14 @@ Item {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: hasActivePlayer ? Text.AlignLeft : Text.AlignHCenter
                 color: hasActivePlayer ? Color.mSecondary : Color.mOnSurfaceVariant
+                onTextChanged: {
+                  titleContainer.isScrolling = false
+                  titleContainer.isResetting = false
+                  scrollContainer.scrollX = 0
+                  if (titleContainer.needsScrolling) {
+                    scrollStartTimer.restart()
+                  }
+                }
               }
 
               NText {
@@ -400,13 +439,6 @@ Item {
               duration: Math.max(10000, getTitle().length * 120)
               loops: Animation.Infinite
               easing.type: Easing.Linear
-            }
-          }
-
-          Behavior on Layout.preferredWidth {
-            NumberAnimation {
-              duration: Style.animationSlow
-              easing.type: Easing.InOutCubic
             }
           }
         }

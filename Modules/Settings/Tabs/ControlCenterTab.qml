@@ -40,7 +40,7 @@ ColumnLayout {
 
   // Handler for drag start - disables panel background clicks
   function handleDragStart() {
-    var panel = PanelService.getPanel("settingsPanel")
+    var panel = PanelService.getPanel("settingsPanel", screen)
     if (panel && panel.disableBackgroundClick) {
       panel.disableBackgroundClick()
     }
@@ -48,7 +48,7 @@ ColumnLayout {
 
   // Handler for drag end - re-enables panel background clicks
   function handleDragEnd() {
-    var panel = PanelService.getPanel("settingsPanel")
+    var panel = PanelService.getPanel("settingsPanel", screen)
     if (panel && panel.enableBackgroundClick) {
       panel.enableBackgroundClick()
     }
@@ -68,12 +68,13 @@ ColumnLayout {
   Component.onCompleted: {
     // Fill out availableWidgets ListModel
     availableWidgets.clear()
-    ControlCenterWidgetRegistry.getAvailableWidgets().forEach(entry => {
-                                                                availableWidgets.append({
-                                                                                          "key": entry,
-                                                                                          "name": entry
-                                                                                        })
-                                                              })
+    var sortedEntries = ControlCenterWidgetRegistry.getAvailableWidgets().slice().sort()
+    sortedEntries.forEach(entry => {
+                            availableWidgets.append({
+                                                      "key": entry,
+                                                      "name": entry
+                                                    })
+                          })
     // Starts empty
     cardsModel = []
 
@@ -85,6 +86,10 @@ ColumnLayout {
         if (settingCard.id === cardsDefault[j].id) {
           var card = cardsDefault[j]
           card.enabled = settingCard.enabled
+          // Auto-disable weather card if weather is disabled
+          if (card.id === "weather-card" && !Settings.data.location.weatherEnabled) {
+            card.enabled = false
+          }
           cardsModel.push(card)
         }
       }
@@ -101,7 +106,12 @@ ColumnLayout {
       }
 
       if (!found) {
-        cardsModel.push(cardsDefault[i])
+        var card = cardsDefault[i]
+        // Auto-disable weather card if weather is disabled
+        if (card.id === "weather-card" && !Settings.data.location.weatherEnabled) {
+          card.enabled = false
+        }
+        cardsModel.push(card)
       }
     }
 
@@ -126,26 +136,26 @@ ColumnLayout {
           "key": "close_to_bar_button",
           "name": I18n.tr("options.control-center.position.close_to_bar_button")
         }, {
+          "key": "center",
+          "name": I18n.tr("options.control-center.position.center")
+        }, {
+          "key": "top_center",
+          "name": I18n.tr("options.control-center.position.top_center")
+        }, {
           "key": "top_left",
           "name": I18n.tr("options.control-center.position.top_left")
         }, {
           "key": "top_right",
           "name": I18n.tr("options.control-center.position.top_right")
         }, {
+          "key": "bottom_center",
+          "name": I18n.tr("options.control-center.position.bottom_center")
+        }, {
           "key": "bottom_left",
           "name": I18n.tr("options.control-center.position.bottom_left")
         }, {
           "key": "bottom_right",
           "name": I18n.tr("options.control-center.position.bottom_right")
-        }, {
-          "key": "bottom_center",
-          "name": I18n.tr("options.control-center.position.bottom_center")
-        }, {
-          "key": "top_center",
-          "name": I18n.tr("options.control-center.position.top_center")
-        }, {
-          "key": "center",
-          "name": I18n.tr("options.control-center.position.center")
         }]
       currentKey: Settings.data.controlCenter.position
       onSelected: function (key) {
@@ -170,9 +180,28 @@ ColumnLayout {
       description: I18n.tr("settings.control-center.cards.section.description")
     }
 
+    Connections {
+      target: Settings.data.location
+      function onWeatherEnabledChanged() {
+        // Auto-disable weather card when weather is disabled
+        var newModel = cardsModel.slice()
+        for (var i = 0; i < newModel.length; i++) {
+          if (newModel[i].id === "weather-card") {
+            newModel[i] = Object.assign({}, newModel[i], {
+                                          "enabled": Settings.data.location.weatherEnabled
+                                        })
+            cardsModel = newModel
+            saveCards()
+            break
+          }
+        }
+      }
+    }
+
     NReorderCheckboxes {
       Layout.fillWidth: true
       model: cardsModel
+      disabledIds: Settings.data.location.weatherEnabled ? [] : ["weather-card"]
       onDragPotentialStarted: {
         root.handleDragStart()
       }
@@ -226,7 +255,7 @@ ColumnLayout {
       NSectionEditor {
         sectionName: I18n.tr("settings.control-center.shortcuts.sectionLeft")
         sectionId: "left"
-        settingsDialogComponent: ""
+        settingsDialogComponent: Qt.resolvedUrl(Quickshell.shellDir + "/Modules/Settings/ControlCenter/ControlCenterWidgetSettingsDialog.qml")
         maxWidgets: 5
         widgetRegistry: ControlCenterWidgetRegistry
         widgetModel: Settings.data.controlCenter.shortcuts["left"]
@@ -245,7 +274,7 @@ ColumnLayout {
       NSectionEditor {
         sectionName: I18n.tr("settings.control-center.shortcuts.sectionRight")
         sectionId: "right"
-        settingsDialogComponent: ""
+        settingsDialogComponent: Qt.resolvedUrl(Quickshell.shellDir + "/Modules/Settings/ControlCenter/ControlCenterWidgetSettingsDialog.qml")
         maxWidgets: 5
         widgetRegistry: ControlCenterWidgetRegistry
         widgetModel: Settings.data.controlCenter.shortcuts["right"]
@@ -329,8 +358,12 @@ ColumnLayout {
   }
 
   function _updateWidgetSettingsInSection(section, index, settings) {
-    // Update the widget settings in the Settings data
-    Settings.data.controlCenter.shortcuts[section][index] = settings
+    // Create a new array to trigger QML's change detection for persistence.
+    // This is crucial for Settings.data to detect the change and persist it.
+    var newSectionArray = Settings.data.controlCenter.shortcuts[section].slice()
+    newSectionArray[index] = settings
+    Settings.data.controlCenter.shortcuts[section] = newSectionArray
+    Settings.saveImmediate()
   }
 
   // Base list model for all combo boxes

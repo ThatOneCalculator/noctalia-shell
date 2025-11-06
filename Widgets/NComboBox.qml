@@ -8,7 +8,7 @@ import qs.Widgets
 RowLayout {
   id: root
 
-  property real minimumWidth: 280 * Style.uiScaleRatio
+  property real minimumWidth: 200 * Style.uiScaleRatio
   property real popupHeight: 180 * Style.uiScaleRatio
 
   property string label: ""
@@ -76,7 +76,7 @@ RowLayout {
       implicitHeight: preferredHeight
       color: Color.mSurface
       border.color: combo.activeFocus ? Color.mSecondary : Color.mOutline
-      border.width: Math.max(1, Style.borderS)
+      border.width: Style.borderS
       radius: Style.radiusM
 
       Behavior on border.color {
@@ -124,28 +124,30 @@ RowLayout {
         verticalPolicy: ScrollBar.AsNeeded
 
         delegate: ItemDelegate {
-          width: combo.width
+          property var parentComboBox: combo // Reference to the ComboBox
+          property int itemIndex: index // Explicitly capture index
+          width: parentComboBox ? parentComboBox.width : 0
           hoverEnabled: true
-          highlighted: ListView.view.currentIndex === index
+          highlighted: ListView.view.currentIndex === itemIndex
 
           onHoveredChanged: {
             if (hovered) {
-              ListView.view.currentIndex = index
+              ListView.view.currentIndex = itemIndex
             }
           }
 
           onClicked: {
-            var item = root.getItem(index)
-            if (item && item.key !== undefined) {
+            var item = root.getItem(itemIndex)
+            if (item && item.key !== undefined && parentComboBox) {
               root.selected(item.key)
-              combo.currentIndex = index
-              combo.popup.close()
+              parentComboBox.currentIndex = itemIndex
+              parentComboBox.popup.close()
             }
           }
 
           background: Rectangle {
-            width: combo.width - Style.marginM * 3
-            color: highlighted ? Color.mTertiary : Color.transparent
+            width: parentComboBox ? parentComboBox.width - Style.marginM * 3 : 0
+            color: highlighted ? Color.mHover : Color.transparent
             radius: Style.radiusS
             Behavior on color {
               ColorAnimation {
@@ -160,7 +162,7 @@ RowLayout {
               return item && item.name ? item.name : ""
             }
             pointSize: Style.fontSizeM
-            color: highlighted ? Color.mOnTertiary : Color.mOnSurface
+            color: highlighted ? Color.mOnHover : Color.mOnSurface
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
             Behavior on color {
@@ -175,7 +177,7 @@ RowLayout {
       background: Rectangle {
         color: Color.mSurfaceVariant
         border.color: Color.mOutline
-        border.width: Math.max(1, Style.borderS)
+        border.width: Style.borderS
         radius: Style.radiusM
       }
     }

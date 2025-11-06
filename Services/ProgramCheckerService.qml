@@ -12,14 +12,19 @@ Singleton {
   // Program availability properties
   property bool matugenAvailable: false
   property bool pywalfoxAvailable: false
+  property bool alacrittyAvailable: false
   property bool kittyAvailable: false
   property bool ghosttyAvailable: false
   property bool footAvailable: false
+  property bool weztermAvailable: false
   property bool fuzzelAvailable: false
   property bool vicinaeAvailable: false
+  property bool walkerAvailable: false
   property bool gpuScreenRecorderAvailable: false
   property bool wlsunsetAvailable: false
   property bool app2unitAvailable: false
+  property bool codeAvailable: false
+  property bool gnomeCalendarAvailable: false
 
   // Discord client auto-detection
   property var availableDiscordClients: []
@@ -94,14 +99,19 @@ Singleton {
   readonly property var programsToCheck: ({
                                             "matugenAvailable": ["which", "matugen"],
                                             "pywalfoxAvailable": ["which", "pywalfox"],
+                                            "alacrittyAvailable": ["which", "alacritty"],
                                             "kittyAvailable": ["which", "kitty"],
                                             "ghosttyAvailable": ["which", "ghostty"],
                                             "footAvailable": ["which", "foot"],
+                                            "weztermAvailable": ["which", "wezterm"],
                                             "fuzzelAvailable": ["which", "fuzzel"],
-                                            "vicinaeAvailable": ["which", "vicinae"],
+                                            "vicinaeAvailable": ["sh", "-c", "command -v vicinae >/dev/null 2>&1 || (IFS=:; find $PATH -maxdepth 1 -iname 'vicinae*.appimage' -type f -executable 2>/dev/null | grep -q .)"],
+                                            "walkerAvailable": ["which", "walker"],
                                             "app2unitAvailable": ["which", "app2unit"],
                                             "gpuScreenRecorderAvailable": ["sh", "-c", "command -v gpu-screen-recorder >/dev/null 2>&1 || (command -v flatpak >/dev/null 2>&1 && flatpak list --app | grep -q 'com.dec05eba.gpu_screen_recorder')"],
-                                            "wlsunsetAvailable": ["which", "wlsunset"]
+                                            "wlsunsetAvailable": ["which", "wlsunset"],
+                                            "codeAvailable": ["which", "code"],
+                                            "gnomeCalendarAvailable": ["which", "gnome-calendar"]
                                           })
 
   // Internal tracking

@@ -12,15 +12,93 @@ import "../../Helpers/FuzzySort.js" as FuzzySort
 NPanel {
   id: root
 
-  preferredWidth: 640
-  preferredHeight: 480
-  preferredWidthRatio: 0.4
-  preferredHeightRatio: 0.52
-  panelAnchorHorizontalCenter: true
-  panelAnchorVerticalCenter: true
-  panelKeyboardFocus: true
+  preferredWidth: 800 * Style.uiScaleRatio
+  preferredHeight: 600 * Style.uiScaleRatio
+  preferredWidthRatio: 0.5
+  preferredHeightRatio: 0.45
 
-  draggable: !PanelService.hasOpenedPopup
+  // Positioning
+  readonly property string panelPosition: {
+    if (Settings.data.wallpaper.panelPosition === "follow_bar") {
+      if (Settings.data.bar.position === "left" || Settings.data.bar.position === "right") {
+        return `center_${Settings.data.bar.position}`
+      } else {
+        return `${Settings.data.bar.position}_center`
+      }
+    } else {
+      return Settings.data.wallpaper.panelPosition
+    }
+  }
+  panelAnchorHorizontalCenter: panelPosition === "center" || panelPosition.endsWith("_center")
+  panelAnchorVerticalCenter: panelPosition === "center"
+  panelAnchorLeft: panelPosition !== "center" && panelPosition.endsWith("_left")
+  panelAnchorRight: panelPosition !== "center" && panelPosition.endsWith("_right")
+  panelAnchorBottom: panelPosition.startsWith("bottom_")
+  panelAnchorTop: panelPosition.startsWith("top_")
+
+  // Store direct reference to content for instant access
+  property var contentItem: null
+
+  // Override keyboard handlers to enable grid navigation
+  function onDownPressed() {
+    if (!contentItem)
+      return
+    let view = contentItem.screenRepeater.itemAt(contentItem.currentScreenIndex)
+    if (view?.gridView) {
+      if (!view.gridView.activeFocus) {
+        view.gridView.forceActiveFocus()
+        if (view.gridView.currentIndex < 0) {
+          view.gridView.currentIndex = 0
+        }
+      } else {
+        view.gridView.moveCurrentIndexDown()
+      }
+    }
+  }
+
+  function onUpPressed() {
+    if (!contentItem)
+      return
+    let view = contentItem.screenRepeater.itemAt(contentItem.currentScreenIndex)
+    if (view?.gridView?.activeFocus) {
+      view.gridView.moveCurrentIndexUp()
+    }
+  }
+
+  function onLeftPressed() {
+    if (!contentItem)
+      return
+    let view = contentItem.screenRepeater.itemAt(contentItem.currentScreenIndex)
+    if (view?.gridView?.activeFocus) {
+      view.gridView.moveCurrentIndexLeft()
+    }
+  }
+
+  function onRightPressed() {
+    if (!contentItem)
+      return
+    let view = contentItem.screenRepeater.itemAt(contentItem.currentScreenIndex)
+    if (view?.gridView?.activeFocus) {
+      view.gridView.moveCurrentIndexRight()
+    }
+  }
+
+  function onReturnPressed() {
+    if (!contentItem)
+      return
+    let view = contentItem.screenRepeater.itemAt(contentItem.currentScreenIndex)
+    if (view?.gridView?.activeFocus) {
+      let gridView = view.gridView
+      if (gridView.currentIndex >= 0 && gridView.currentIndex < gridView.model.length) {
+        let path = gridView.model[gridView.currentIndex]
+        if (Settings.data.wallpaper.setWallpaperOnAllMonitors) {
+          WallpaperService.changeWallpaper(path, undefined)
+        } else {
+          WallpaperService.changeWallpaper(path, view.targetScreen.name)
+        }
+      }
+    }
+  }
 
   panelContent: Rectangle {
     id: wallpaperPanel
@@ -37,8 +115,30 @@ NPanel {
     }
     property var currentScreen: Quickshell.screens[currentScreenIndex]
     property string filterText: ""
+    property alias screenRepeater: screenRepeater
+
+    Component.onCompleted: {
+      root.contentItem = wallpaperPanel
+    }
 
     color: Color.transparent
+
+    // Focus management
+    Connections {
+      target: root
+      function onOpened() {
+        // Ensure contentItem is set
+        if (!root.contentItem) {
+          root.contentItem = wallpaperPanel
+        }
+        // Give initial focus to search input
+        Qt.callLater(() => {
+                       if (searchInput.inputItem) {
+                         searchInput.inputItem.forceActiveFocus()
+                       }
+                     })
+      }
+    }
 
     // Debounce timer for search
     Timer {
@@ -85,7 +185,7 @@ NPanel {
           tooltipText: I18n.tr("settings.wallpaper.settings.section.label")
           baseSize: Style.baseWidgetSize * 0.8
           onClicked: {
-            var settingsPanel = PanelService.getPanel("settingsPanel")
+            var settingsPanel = PanelService.getPanel("settingsPanel", screen)
             settingsPanel.requestedTab = SettingsPanel.Tab.Wallpaper
             settingsPanel.open()
           }
@@ -140,7 +240,7 @@ NPanel {
             background: Rectangle {
               color: screenTabBar.currentIndex === index ? Color.mSecondary : Color.transparent
               radius: Style.radiusS
-              border.width: screenTabBar.currentIndex === index ? 0 : Math.max(1, Style.borderS)
+              border.width: screenTabBar.currentIndex === index ? 0 : Style.borderS
               border.color: Color.mOutline
 
               Behavior on color {
@@ -291,6 +391,7 @@ NPanel {
         return
       }
       wallpapersList = WallpaperService.getWallpapersList(targetScreen.name)
+      Logger.i("WallpaperPanel", "Got", wallpapersList.length, "wallpapers for screen", targetScreen.name)
 
       // Pre-compute basenames once for better performance
       wallpapersWithNames = wallpapersList.map(function (p) {
@@ -323,7 +424,7 @@ NPanel {
 
         model: filteredWallpapers
 
-        property int columns: 4
+        property int columns: (screen.width > 1920) ? 5 : 4
         property int itemSize: cellWidth
 
         cellWidth: Math.floor((width - leftMargin - rightMargin) / columns)
@@ -401,7 +502,7 @@ NPanel {
                   return Color.mSecondary
                 }
                 if (wallpaperGridView.currentIndex === index) {
-                  return Color.mTertiary
+                  return Color.mHover
                 }
                 return Color.mSurface
               }
@@ -417,7 +518,7 @@ NPanel {
               radius: width / 2
               color: Color.mSecondary
               border.color: Color.mOutline
-              border.width: Math.max(1, Style.borderS)
+              border.width: Style.borderS
               visible: isSelected
 
               NIcon {
@@ -476,7 +577,7 @@ NPanel {
         color: Color.mSurface
         radius: Style.radiusM
         border.color: Color.mOutline
-        border.width: Math.max(1, Style.borderS)
+        border.width: Style.borderS
         visible: (filteredWallpapers.length === 0 && !WallpaperService.scanning) || WallpaperService.scanning
         Layout.fillWidth: true
         Layout.preferredHeight: 130

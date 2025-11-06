@@ -11,22 +11,31 @@ NPanel {
   id: root
 
   // Panel configuration
-  preferredWidth: 500
+  preferredWidth: 500 * Style.uiScaleRatio
+  preferredHeight: 600 * Style.uiScaleRatio
   preferredWidthRatio: 0.3
-  preferredHeight: 600
   preferredHeightRatio: 0.5
 
-  panelKeyboardFocus: true
   panelBackgroundColor: Qt.alpha(Color.mSurface, Settings.data.appLauncher.backgroundOpacity)
 
   // Positioning
-  readonly property string launcherPosition: Settings.data.appLauncher.position
-  panelAnchorHorizontalCenter: launcherPosition === "center" || launcherPosition.endsWith("_center")
-  panelAnchorVerticalCenter: launcherPosition === "center"
-  panelAnchorLeft: launcherPosition !== "center" && launcherPosition.endsWith("_left")
-  panelAnchorRight: launcherPosition !== "center" && launcherPosition.endsWith("_right")
-  panelAnchorBottom: launcherPosition.startsWith("bottom_")
-  panelAnchorTop: launcherPosition.startsWith("top_")
+  readonly property string panelPosition: {
+    if (Settings.data.appLauncher.position === "follow_bar") {
+      if (Settings.data.bar.position === "left" || Settings.data.bar.position === "right") {
+        return `center_${Settings.data.bar.position}`
+      } else {
+        return `${Settings.data.bar.position}_center`
+      }
+    } else {
+      return Settings.data.appLauncher.position
+    }
+  }
+  panelAnchorHorizontalCenter: panelPosition === "center" || panelPosition.endsWith("_center")
+  panelAnchorVerticalCenter: panelPosition === "center"
+  panelAnchorLeft: panelPosition !== "center" && panelPosition.endsWith("_left")
+  panelAnchorRight: panelPosition !== "center" && panelPosition.endsWith("_right")
+  panelAnchorBottom: panelPosition.startsWith("bottom_")
+  panelAnchorTop: panelPosition.startsWith("top_")
 
   // Core state
   property string searchText: ""
@@ -39,6 +48,51 @@ NPanel {
 
   readonly property int badgeSize: Math.round(Style.baseWidgetSize * 1.6)
   readonly property int entryHeight: Math.round(badgeSize + Style.marginM * 2)
+
+  // Override keyboard handlers from NPanel for navigation
+  function onTabPressed() {
+    selectNextWrapped()
+  }
+
+  function onShiftTabPressed() {
+    selectPreviousWrapped()
+  }
+
+  function onUpPressed() {
+    selectPreviousWrapped()
+  }
+
+  function onDownPressed() {
+    selectNextWrapped()
+  }
+
+  function onReturnPressed() {
+    activate()
+  }
+
+  function onHomePressed() {
+    selectFirst()
+  }
+
+  function onEndPressed() {
+    selectLast()
+  }
+
+  function onPageUpPressed() {
+    selectPreviousPage()
+  }
+
+  function onPageDownPressed() {
+    selectNextPage()
+  }
+
+  function onCtrlJPressed() {
+    selectNextWrapped()
+  }
+
+  function onCtrlKPressed() {
+    selectPreviousWrapped()
+  }
 
   // Public API for plugins
   function setSearchText(text) {
@@ -151,6 +205,54 @@ NPanel {
     }
   }
 
+  // Navigation functions
+  function selectNextWrapped() {
+    if (results.length > 0) {
+      selectedIndex = (selectedIndex + 1) % results.length
+    }
+  }
+
+  function selectPreviousWrapped() {
+    if (results.length > 0) {
+      selectedIndex = (((selectedIndex - 1) % results.length) + results.length) % results.length
+    }
+  }
+
+  function selectFirst() {
+    selectedIndex = 0
+  }
+
+  function selectLast() {
+    if (results.length > 0) {
+      selectedIndex = results.length - 1
+    } else {
+      selectedIndex = 0
+    }
+  }
+
+  function selectNextPage() {
+    if (results.length > 0) {
+      const page = Math.max(1, Math.floor(600 / entryHeight)) // Use approximate height
+      selectedIndex = Math.min(selectedIndex + page, results.length - 1)
+    }
+  }
+
+  function selectPreviousPage() {
+    if (results.length > 0) {
+      const page = Math.max(1, Math.floor(600 / entryHeight)) // Use approximate height
+      selectedIndex = Math.max(selectedIndex - page, 0)
+    }
+  }
+
+  function activate() {
+    if (results.length > 0 && results[selectedIndex]) {
+      const item = results[selectedIndex]
+      if (item.onActivate) {
+        item.onActivate()
+      }
+    }
+  }
+
   // UI
   panelContent: Rectangle {
     id: ui
@@ -198,107 +300,24 @@ NPanel {
       }
     }
 
+    // Focus management
+    Connections {
+      target: root
+      function onOpened() {
+        // Delay focus to ensure window has keyboard focus
+        Qt.callLater(() => {
+                       if (searchInput.inputItem) {
+                         searchInput.inputItem.forceActiveFocus()
+                       }
+                     })
+      }
+    }
+
     Behavior on opacity {
       NumberAnimation {
         duration: Style.animationFast
         easing.type: Easing.OutCirc
       }
-    }
-
-    // ---------------------
-    // Navigation
-    function selectNextWrapped() {
-      if (results.length > 0) {
-        selectedIndex = (selectedIndex + 1) % results.length
-      }
-    }
-
-    function selectPreviousWrapped() {
-      if (results.length > 0) {
-        selectedIndex = (((selectedIndex - 1) % results.length) + results.length) % results.length
-      }
-    }
-
-    function selectFirst() {
-      selectedIndex = 0
-    }
-
-    function selectLast() {
-      if (results.length > 0) {
-        selectedIndex = results.length - 1
-      } else {
-        selectedIndex = 0
-      }
-    }
-
-    function selectNextPage() {
-      if (results.length > 0) {
-        const page = Math.max(1, Math.floor(resultsList.height / entryHeight))
-        selectedIndex = Math.min(selectedIndex + page, results.length - 1)
-      }
-    }
-    function selectPreviousPage() {
-      if (results.length > 0) {
-        const page = Math.max(1, Math.floor(resultsList.height / entryHeight))
-        selectedIndex = Math.max(selectedIndex - page, 0)
-      }
-    }
-
-    function activate() {
-      if (results.length > 0 && results[selectedIndex]) {
-        const item = results[selectedIndex]
-        if (item.onActivate) {
-          item.onActivate()
-        }
-      }
-    }
-
-    Shortcut {
-      sequence: "Ctrl+K"
-      onActivated: ui.selectPreviousWrapped()
-      enabled: root.opened && searchInput.inputItem && searchInput.inputItem.activeFocus
-    }
-
-    Shortcut {
-      sequence: "Ctrl+J"
-      onActivated: ui.selectNextWrapped()
-      enabled: root.opened && searchInput.inputItem && searchInput.inputItem.activeFocus
-    }
-
-    Shortcut {
-      sequence: "Tab"
-      onActivated: ui.selectNextWrapped()
-      enabled: root.opened && searchInput.inputItem && searchInput.inputItem.activeFocus
-    }
-
-    Shortcut {
-      sequence: "Shift+Tab"
-      onActivated: ui.selectPreviousWrapped()
-      enabled: root.opened && searchInput.inputItem && searchInput.inputItem.activeFocus
-    }
-
-    Shortcut {
-      sequence: "PgDown" // or "PageDown"
-      onActivated: ui.selectNextPage()
-      enabled: root.opened && searchInput.inputItem && searchInput.inputItem.activeFocus
-    }
-
-    Shortcut {
-      sequence: "PgUp" // or "PageUp"
-      onActivated: ui.selectPreviousPage()
-      enabled: root.opened && searchInput.inputItem && searchInput.inputItem.activeFocus
-    }
-
-    Shortcut {
-      sequence: "Home"
-      onActivated: ui.selectFirst()
-      enabled: root.opened && searchInput.inputItem && searchInput.inputItem.activeFocus
-    }
-
-    Shortcut {
-      sequence: "End"
-      onActivated: ui.selectLast()
-      enabled: root.opened && searchInput.inputItem && searchInput.inputItem.activeFocus
     }
 
     ColumnLayout {
@@ -319,32 +338,8 @@ NPanel {
         onTextChanged: searchText = text
 
         Component.onCompleted: {
-          if (searchInput.inputItem && searchInput.inputItem.visible) {
+          if (searchInput.inputItem) {
             searchInput.inputItem.forceActiveFocus()
-
-            // Override the TextField's default Home/End behavior
-            searchInput.inputItem.Keys.priority = Keys.BeforeItem
-            searchInput.inputItem.Keys.onPressed.connect(function (event) {
-              // Intercept Home and End BEFORE the TextField handles them
-              if (event.key === Qt.Key_Home) {
-                ui.selectFirst()
-                event.accepted = true
-                return
-              } else if (event.key === Qt.Key_End) {
-                ui.selectLast()
-                event.accepted = true
-                return
-              }
-            })
-            searchInput.inputItem.Keys.onDownPressed.connect(function (event) {
-              ui.selectNextWrapped()
-            })
-            searchInput.inputItem.Keys.onUpPressed.connect(function (event) {
-              ui.selectPreviousWrapped()
-            })
-            searchInput.inputItem.Keys.onReturnPressed.connect(function (event) {
-              ui.activate()
-            })
           }
         }
       }
@@ -412,7 +407,7 @@ NPanel {
           width: resultsList.width - Style.marginS
           implicitHeight: entryHeight
           radius: Style.radiusM
-          color: entry.isSelected ? Color.mTertiary : Color.mSurface
+          color: entry.isSelected ? Color.mHover : Color.mSurface
 
           Behavior on color {
             ColorAnimation {
@@ -544,7 +539,7 @@ NPanel {
                   text: modelData.name || "Unknown"
                   pointSize: Style.fontSizeL
                   font.weight: Style.fontWeightBold
-                  color: entry.isSelected ? Color.mOnTertiary : Color.mOnSurface
+                  color: entry.isSelected ? Color.mOnHover : Color.mOnSurface
                   elide: Text.ElideRight
                   Layout.fillWidth: true
                 }
@@ -552,7 +547,7 @@ NPanel {
                 NText {
                   text: modelData.description || ""
                   pointSize: Style.fontSizeS
-                  color: entry.isSelected ? Color.mOnTertiary : Color.mOnSurfaceVariant
+                  color: entry.isSelected ? Color.mOnHover : Color.mOnSurfaceVariant
                   elide: Text.ElideRight
                   Layout.fillWidth: true
                   visible: text !== ""
@@ -584,7 +579,7 @@ NPanel {
             onClicked: mouse => {
                          if (mouse.button === Qt.LeftButton) {
                            selectedIndex = index
-                           ui.activate()
+                           root.activate()
                            mouse.accepted = true
                          }
                        }

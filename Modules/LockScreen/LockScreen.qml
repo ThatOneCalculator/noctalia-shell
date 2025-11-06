@@ -11,17 +11,25 @@ import Quickshell.Widgets
 import qs.Commons
 import qs.Services
 import qs.Widgets
-import qs.Modules.Audio
+import qs.Modules.AudioSpectrum
+import qs.Modules.Bar.Calendar
 
 Loader {
   id: lockScreen
   active: false
 
+  // Track if triggered via deprecated IPC call
+  property bool triggeredViaDeprecatedCall: false
+
   Timer {
     id: unloadAfterUnlockTimer
     interval: 250
     repeat: false
-    onTriggered: lockScreen.active = false
+    onTriggered: {
+      lockScreen.active = false
+      // Reset the deprecation flag when unlocking
+      lockScreen.triggeredViaDeprecatedCall = false
+    }
   }
 
   function scheduleUnloadAfterUnlock() {
@@ -49,7 +57,7 @@ Loader {
         locked: lockScreen.active
 
         WlSessionLockSurface {
-          readonly property var now: Time.date
+          readonly property var now: Time.now
 
           Item {
             id: batteryIndicator
@@ -333,7 +341,17 @@ Loader {
 
                   // Date below
                   NText {
-                    text: Qt.locale().toString(Time.date, "dddd, MMMM d")
+                    text: {
+                      var lang = I18n.locale.name.split("_")[0]
+                      var formats = {
+                        "de": "dddd, d. MMMM",
+                        "es": "dddd, d 'de' MMMM",
+                        "fr": "dddd d MMMM",
+                        "pt": "dddd, d 'de' MMMM",
+                        "zh": "yyyy年M月d日 dddd"
+                      }
+                      return I18n.locale.toString(Time.now, formats[lang] || "dddd, MMMM d")
+                    }
                     pointSize: Style.fontSizeXL
                     font.weight: Font.Medium
                     color: Color.mOnSurfaceVariant
@@ -346,80 +364,74 @@ Loader {
                   Layout.fillWidth: true
                 }
 
-                Item {
+                // Clock
+                NClock {
+                  now: Time.now
+                  clockStyle: Settings.data.location.analogClockInCalendar ? "analog" : "digital"
                   Layout.preferredWidth: 70
                   Layout.preferredHeight: 70
                   Layout.alignment: Qt.AlignVCenter
+                  backgroundColor: Color.mSurface
+                  clockColor: Color.mOnSurface
+                  secondHandColor: Color.mPrimary
+                }
+              }
+            }
 
-                  // Seconds circular progress
-                  Canvas {
-                    id: secondsProgress
-                    anchors.fill: parent
+            // Deprecation warning (shown above error notification)
+            Rectangle {
+              width: Math.min(650, parent.width - 40)
+              implicitHeight: deprecationContent.implicitHeight + 24
+              height: implicitHeight
+              anchors.horizontalCenter: parent.horizontalCenter
+              anchors.bottom: parent.bottom
+              anchors.bottomMargin: (Settings.data.general.compactLockScreen ? 320 : 400) * Style.uiScaleRatio
+              radius: Style.radiusL
+              color: Qt.alpha(Color.mTertiary, 0.95)
+              border.color: Color.mTertiary
+              border.width: 2
+              visible: lockScreen.triggeredViaDeprecatedCall
+              opacity: visible ? 1.0 : 0.0
 
-                    property real progress: Time.date.getSeconds() / 60
-                    onProgressChanged: requestPaint()
+              ColumnLayout {
+                id: deprecationContent
+                anchors.fill: parent
+                anchors.margins: 12
+                spacing: 6
 
-                    Connections {
-                      target: Time
-                      function onDateChanged() {
-                        const total = Time.date.getSeconds() * 1000 + Time.date.getMilliseconds()
-                        secondsProgress.progress = total / 60000
-                      }
-                    }
+                RowLayout {
+                  Layout.alignment: Qt.AlignHCenter
+                  spacing: 8
 
-                    onPaint: {
-                      var ctx = getContext("2d")
-                      var centerX = width / 2
-                      var centerY = height / 2
-                      var radius = Math.min(width, height) / 2 - 3
-
-                      ctx.reset()
-
-                      // Background circle
-                      ctx.beginPath()
-                      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
-                      ctx.lineWidth = 2.5
-                      ctx.strokeStyle = Qt.alpha(Color.mOnSurface, 0.15)
-                      ctx.stroke()
-
-                      // Progress arc
-                      ctx.beginPath()
-                      ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + progress * 2 * Math.PI)
-                      ctx.lineWidth = 2.5
-                      ctx.strokeStyle = Color.mPrimary
-                      ctx.lineCap = "round"
-                      ctx.stroke()
-                    }
+                  NIcon {
+                    icon: "alert-triangle"
+                    pointSize: Style.fontSizeL
+                    color: Color.mOnTertiary
                   }
 
-                  // Digital clock
-                  ColumnLayout {
-                    anchors.centerIn: parent
-                    spacing: 0
-
-                    NText {
-                      text: {
-                        var t = Settings.data.location.use12hourFormat ? Qt.locale().toString(Time.date, "hh AP") : Qt.locale().toString(Time.date, "HH")
-                        return t
-                      }
-                      pointSize: Style.fontSizeM
-                      font.weight: Style.fontWeightBold
-                      family: Settings.data.ui.fontFixed
-                      color: Color.mOnSurface
-                      horizontalAlignment: Text.AlignHCenter
-                      Layout.alignment: Qt.AlignHCenter
-                    }
-
-                    NText {
-                      text: Qt.formatTime(Time.date, "mm")
-                      pointSize: Style.fontSizeM
-                      font.weight: Style.fontWeightBold
-                      family: Settings.data.ui.fontFixed
-                      color: Color.mOnSurfaceVariant
-                      horizontalAlignment: Text.AlignHCenter
-                      Layout.alignment: Qt.AlignHCenter
-                    }
+                  NText {
+                    text: "Deprecated IPC Call"
+                    color: Color.mOnTertiary
+                    pointSize: Style.fontSizeL
+                    font.weight: Font.Bold
                   }
+                }
+
+                NText {
+                  text: "The 'lockScreen toggle' IPC call is deprecated. Use 'lockScreen lock' instead."
+                  color: Color.mOnTertiary
+                  pointSize: Style.fontSizeM
+                  horizontalAlignment: Text.AlignHCenter
+                  Layout.alignment: Qt.AlignHCenter
+                  Layout.fillWidth: true
+                  wrapMode: Text.WordWrap
+                }
+              }
+
+              Behavior on opacity {
+                NumberAnimation {
+                  duration: 300
+                  easing.type: Easing.OutCubic
                 }
               }
             }
@@ -625,7 +637,7 @@ Loader {
                           fallbackIcon: "disc"
                           fallbackIconSize: Style.fontSizeM
                           borderColor: Color.mOutline
-                          borderWidth: Math.max(1, Style.borderS)
+                          borderWidth: Style.borderS
                         }
                       }
 
@@ -753,7 +765,10 @@ Loader {
                         spacing: 3
 
                         NText {
-                          text: Qt.locale().toString(now, "ddd")
+                          text: {
+                            var weatherDate = new Date(LocationService.data.weather.daily.time[index].replace(/-/g, "/"))
+                            return I18n.locale.toString(weatherDate, "ddd")
+                          }
                           pointSize: Style.fontSizeM
                           color: Color.mOnSurfaceVariant
                           horizontalAlignment: Text.AlignHCenter
@@ -927,10 +942,11 @@ Loader {
 
                         // Password display - show dots or actual text based on passwordVisible
                         Item {
-                          width: passwordDisplayContent.width
+                          width: Math.min(passwordDisplayContent.width, 550)
                           height: 20
                           visible: passwordInput.text.length > 0 && !parent.parent.parent.passwordVisible
                           anchors.verticalCenter: parent.verticalCenter
+                          clip: true
 
                           Row {
                             id: passwordDisplayContent
@@ -957,6 +973,8 @@ Loader {
                           font.weight: Font.Medium
                           visible: passwordInput.text.length > 0 && parent.parent.parent.passwordVisible
                           anchors.verticalCenter: parent.verticalCenter
+                          elide: Text.ElideRight
+                          width: Math.min(implicitWidth, 550)
                         }
 
                         Rectangle {
@@ -1072,7 +1090,7 @@ Loader {
                     Layout.fillWidth: true
                     Layout.preferredHeight: Settings.data.general.compactLockScreen ? 36 : 48
                     radius: Settings.data.general.compactLockScreen ? 18 : 24
-                    color: logoutButtonArea.containsMouse ? Color.mTertiary : "transparent"
+                    color: logoutButtonArea.containsMouse ? Color.mHover : "transparent"
                     border.color: Color.mOutline
                     border.width: 1
 
@@ -1083,13 +1101,13 @@ Loader {
                       NIcon {
                         icon: "logout"
                         pointSize: Settings.data.general.compactLockScreen ? Style.fontSizeM : Style.fontSizeL
-                        color: logoutButtonArea.containsMouse ? Color.mOnTertiary : Color.mOnSurfaceVariant
+                        color: logoutButtonArea.containsMouse ? Color.mOnHover : Color.mOnSurfaceVariant
                       }
 
                       NText {
                         text: I18n.tr("session-menu.logout")
-                        color: logoutButtonArea.containsMouse ? Color.mOnTertiary : Color.mOnSurfaceVariant
                         pointSize: Settings.data.general.compactLockScreen ? Style.fontSizeS : Style.fontSizeM
+                        color: logoutButtonArea.containsMouse ? Color.mOnHover : Color.mOnSurfaceVariant
                         font.weight: Font.Medium
                       }
                     }
@@ -1120,7 +1138,7 @@ Loader {
                     Layout.fillWidth: true
                     Layout.preferredHeight: Settings.data.general.compactLockScreen ? 36 : 48
                     radius: Settings.data.general.compactLockScreen ? 18 : 24
-                    color: suspendButtonArea.containsMouse ? Color.mTertiary : "transparent"
+                    color: suspendButtonArea.containsMouse ? Color.mHover : "transparent"
                     border.color: Color.mOutline
                     border.width: 1
 
@@ -1131,13 +1149,13 @@ Loader {
                       NIcon {
                         icon: "suspend"
                         pointSize: Settings.data.general.compactLockScreen ? Style.fontSizeM : Style.fontSizeL
-                        color: suspendButtonArea.containsMouse ? Color.mOnTertiary : Color.mOnSurfaceVariant
+                        color: suspendButtonArea.containsMouse ? Color.mOnHover : Color.mOnSurfaceVariant
                       }
 
                       NText {
                         text: I18n.tr("session-menu.suspend")
-                        color: suspendButtonArea.containsMouse ? Color.mOnTertiary : Color.mOnSurfaceVariant
                         pointSize: Settings.data.general.compactLockScreen ? Style.fontSizeS : Style.fontSizeM
+                        color: suspendButtonArea.containsMouse ? Color.mOnHover : Color.mOnSurfaceVariant
                         font.weight: Font.Medium
                       }
                     }
@@ -1168,7 +1186,7 @@ Loader {
                     Layout.fillWidth: true
                     Layout.preferredHeight: Settings.data.general.compactLockScreen ? 36 : 48
                     radius: Settings.data.general.compactLockScreen ? 18 : 24
-                    color: rebootButtonArea.containsMouse ? Color.mTertiary : "transparent"
+                    color: rebootButtonArea.containsMouse ? Color.mHover : "transparent"
                     border.color: Color.mOutline
                     border.width: 1
 
@@ -1179,13 +1197,13 @@ Loader {
                       NIcon {
                         icon: "reboot"
                         pointSize: Settings.data.general.compactLockScreen ? Style.fontSizeM : Style.fontSizeL
-                        color: rebootButtonArea.containsMouse ? Color.mOnTertiary : Color.mOnSurfaceVariant
+                        color: rebootButtonArea.containsMouse ? Color.mOnHover : Color.mOnSurfaceVariant
                       }
 
                       NText {
                         text: I18n.tr("session-menu.reboot")
-                        color: rebootButtonArea.containsMouse ? Color.mOnTertiary : Color.mOnSurfaceVariant
                         pointSize: Settings.data.general.compactLockScreen ? Style.fontSizeS : Style.fontSizeM
+                        color: rebootButtonArea.containsMouse ? Color.mOnHover : Color.mOnSurfaceVariant
                         font.weight: Font.Medium
                       }
                     }

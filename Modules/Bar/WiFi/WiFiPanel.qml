@@ -10,9 +10,8 @@ import qs.Widgets
 NPanel {
   id: root
 
-  preferredWidth: 400 * Style.uiScaleRatio
+  preferredWidth: 420 * Style.uiScaleRatio
   preferredHeight: 500 * Style.uiScaleRatio
-  panelKeyboardFocus: true
 
   property string passwordSsid: ""
   property string passwordInput: ""
@@ -29,59 +28,61 @@ NPanel {
       spacing: Style.marginM
 
       // Header
-      RowLayout {
+      NBox {
         Layout.fillWidth: true
-        spacing: Style.marginM
+        Layout.preferredHeight: headerRow.implicitHeight + Style.marginM * 2
 
-        NIcon {
-          icon: Settings.data.network.wifiEnabled ? "wifi" : "wifi-off"
-          pointSize: Style.fontSizeXXL
-          color: Settings.data.network.wifiEnabled ? Color.mPrimary : Color.mOnSurfaceVariant
-        }
+        RowLayout {
+          id: headerRow
+          anchors.fill: parent
+          anchors.margins: Style.marginM
+          spacing: Style.marginM
 
-        NText {
-          text: I18n.tr("wifi.panel.title")
-          pointSize: Style.fontSizeL
-          font.weight: Style.fontWeightBold
-          color: Color.mOnSurface
-          Layout.fillWidth: true
-        }
+          NIcon {
+            icon: Settings.data.network.wifiEnabled ? "wifi" : "wifi-off"
+            pointSize: Style.fontSizeXXL
+            color: Settings.data.network.wifiEnabled ? Color.mPrimary : Color.mOnSurfaceVariant
+          }
 
-        NToggle {
-          id: wifiSwitch
-          checked: Settings.data.network.wifiEnabled
-          onToggled: checked => NetworkService.setWifiEnabled(checked)
-          baseSize: Style.baseWidgetSize * 0.65
-        }
+          NText {
+            text: I18n.tr("wifi.panel.title")
+            pointSize: Style.fontSizeL
+            font.weight: Style.fontWeightBold
+            color: Color.mOnSurface
+            Layout.fillWidth: true
+          }
 
-        NIconButton {
-          icon: "refresh"
-          tooltipText: I18n.tr("tooltips.refresh")
-          baseSize: Style.baseWidgetSize * 0.8
-          enabled: Settings.data.network.wifiEnabled && !NetworkService.scanning
-          onClicked: NetworkService.scan()
-        }
+          NToggle {
+            id: wifiSwitch
+            checked: Settings.data.network.wifiEnabled
+            onToggled: checked => NetworkService.setWifiEnabled(checked)
+            baseSize: Style.baseWidgetSize * 0.65
+          }
 
-        NIconButton {
-          icon: "close"
-          tooltipText: I18n.tr("tooltips.close")
-          baseSize: Style.baseWidgetSize * 0.8
-          onClicked: root.close()
+          NIconButton {
+            icon: "refresh"
+            tooltipText: I18n.tr("tooltips.refresh")
+            baseSize: Style.baseWidgetSize * 0.8
+            enabled: Settings.data.network.wifiEnabled && !NetworkService.scanning
+            onClicked: NetworkService.scan()
+          }
+
+          NIconButton {
+            icon: "close"
+            tooltipText: I18n.tr("tooltips.close")
+            baseSize: Style.baseWidgetSize * 0.8
+            onClicked: root.close()
+          }
         }
       }
-
-      NDivider {
-        Layout.fillWidth: true
-      }
-
       // Error message
       Rectangle {
         visible: NetworkService.lastError.length > 0
         Layout.fillWidth: true
         Layout.preferredHeight: errorRow.implicitHeight + (Style.marginM * 2)
-        color: Qt.rgba(Color.mError.r, Color.mError.g, Color.mError.b, 0.1)
+        color: Qt.alpha(Color.mError, 0.1)
         radius: Style.radiusS
-        border.width: Math.max(1, Style.borderS)
+        border.width: Style.borderS
         border.color: Color.mError
 
         RowLayout {
@@ -113,16 +114,15 @@ NPanel {
       }
 
       // Main content area
-      Rectangle {
+      NBox {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        color: Color.transparent
 
         // WiFi disabled state
         ColumnLayout {
           visible: !Settings.data.network.wifiEnabled
           anchors.fill: parent
-          spacing: Style.marginM
+          anchors.margins: Style.marginM
 
           Item {
             Layout.fillHeight: true
@@ -158,6 +158,7 @@ NPanel {
         ColumnLayout {
           visible: Settings.data.network.wifiEnabled && NetworkService.scanning && Object.keys(NetworkService.networks).length === 0
           anchors.fill: parent
+          anchors.margins: Style.marginM
           spacing: Style.marginL
 
           Item {
@@ -187,6 +188,7 @@ NPanel {
         NScrollView {
           visible: Settings.data.network.wifiEnabled && (!NetworkService.scanning || Object.keys(NetworkService.networks).length > 0)
           anchors.fill: parent
+          anchors.margins: Style.marginM
           horizontalPolicy: ScrollBar.AlwaysOff
           verticalPolicy: ScrollBar.AsNeeded
           clip: true
@@ -218,7 +220,7 @@ NPanel {
                 opacity: (NetworkService.disconnectingFrom === modelData.ssid || NetworkService.forgettingNetwork === modelData.ssid) ? 0.6 : 1.0
 
                 color: modelData.connected ? Qt.rgba(Color.mPrimary.r, Color.mPrimary.g, Color.mPrimary.b, 0.05) : Color.mSurface
-                border.width: Math.max(1, Style.borderS)
+                border.width: Style.borderS
                 border.color: modelData.connected ? Color.mPrimary : Color.mOutline
 
                 // Smooth opacity animation
@@ -339,7 +341,7 @@ NPanel {
                           visible: modelData.cached && !modelData.connected && NetworkService.forgettingNetwork !== modelData.ssid && NetworkService.disconnectingFrom !== modelData.ssid
                           color: Color.transparent
                           border.color: Color.mOutline
-                          border.width: Math.max(1, Style.borderS)
+                          border.width: Style.borderS
                           radius: height * 0.5
                           width: savedText.implicitWidth + (Style.marginS * 2)
                           height: savedText.implicitHeight + (Style.marginXXS * 2)
@@ -415,7 +417,7 @@ NPanel {
                     height: passwordRow.implicitHeight + Style.marginS * 2
                     color: Color.mSurfaceVariant
                     border.color: Color.mOutline
-                    border.width: Math.max(1, Style.borderS)
+                    border.width: Style.borderS
                     radius: Style.radiusS
 
                     RowLayout {
@@ -430,7 +432,7 @@ NPanel {
                         radius: Style.radiusXS
                         color: Color.mSurface
                         border.color: pwdInput.activeFocus ? Color.mSecondary : Color.mOutline
-                        border.width: Math.max(1, Style.borderS)
+                        border.width: Style.borderS
 
                         TextInput {
                           id: pwdInput
@@ -497,7 +499,7 @@ NPanel {
                     height: forgetRow.implicitHeight + Style.marginS * 2
                     color: Color.mSurfaceVariant
                     radius: Style.radiusS
-                    border.width: Math.max(1, Style.borderS)
+                    border.width: Style.borderS
                     border.color: Color.mOutline
 
                     RowLayout {

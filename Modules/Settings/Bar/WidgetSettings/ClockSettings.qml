@@ -25,7 +25,7 @@ ColumnLayout {
   property var focusedInput: null
   property int focusedLineIndex: -1
 
-  readonly property var now: Time.date
+  readonly property var now: Time.now
 
   function saveSettings() {
     var settings = Object.assign({}, widgetData || {})
@@ -181,7 +181,7 @@ ColumnLayout {
         color: Color.mSurfaceVariant
         radius: Style.radiusM
         border.color: Color.mSecondary
-        border.width: Math.max(1, Style.borderS)
+        border.width: Style.borderS
 
         Behavior on border.color {
           ColorAnimation {
@@ -200,7 +200,7 @@ ColumnLayout {
             // Horizontal
             Repeater {
               Layout.topMargin: Style.marginM
-              model: Qt.locale().toString(now, valueFormatHorizontal.trim()).split("\\n")
+              model: I18n.locale.toString(now, valueFormatHorizontal.trim()).split("\\n")
               delegate: NText {
                 visible: text !== ""
                 text: modelData
@@ -231,7 +231,7 @@ ColumnLayout {
 
             Repeater {
               Layout.topMargin: Style.marginM
-              model: Qt.locale().toString(now, valueFormatVertical.trim()).split(" ")
+              model: I18n.locale.toString(now, valueFormatVertical.trim()).split(" ")
               delegate: NText {
                 visible: text !== ""
                 text: modelData

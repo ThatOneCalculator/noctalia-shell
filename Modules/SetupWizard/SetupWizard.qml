@@ -10,27 +10,26 @@ import qs.Widgets
 NPanel {
   id: root
 
-  preferredWidth: 520
-  preferredHeight: 600
+  preferredWidth: 520 * Style.uiScaleRatio
+  preferredHeight: 600 * Style.uiScaleRatio
   preferredWidthRatio: 0.4
   preferredHeightRatio: 0.6
+
   panelAnchorHorizontalCenter: true
   panelAnchorVerticalCenter: true
-  panelKeyboardFocus: true
-
-  // Prevent closing during setup
-  backgroundClickEnabled: false
-  draggable: false
 
   property int currentStep: 0
-  property int totalSteps: 4
+  property int totalSteps: 5
+
+  // Override Escape handler to prevent closing the setup wizard
+  function onEscapePressed() {// Do nothing - prevent ESC from closing the setup wizard
+  }
 
   // Setup wizard data
   property string selectedWallpaperDirectory: Settings.defaultWallpapersDirectory
   property string selectedWallpaper: ""
   property real selectedScaleRatio: 1.0
   property string selectedBarPosition: "top"
-  property bool selectedDimDesktop: true
 
   panelContent: Component {
     Item {
@@ -42,17 +41,6 @@ NPanel {
         anchors.fill: parent
         anchors.margins: Style.marginXL
         spacing: Style.marginL
-
-        // Override ESC key to prevent closing during setup
-        Shortcut {
-          sequences: ["Escape"]
-          enabled: root.active
-          onActivated: {
-
-            // Do nothing - prevent ESC from closing the setup wizard
-          }
-          context: Qt.WindowShortcut
-        }
 
         // Step content - takes most of the space
         Item {
@@ -199,7 +187,6 @@ NPanel {
               id: step2
               selectedScaleRatio: root.selectedScaleRatio
               selectedBarPosition: root.selectedBarPosition
-              selectedDimDesktop: root.selectedDimDesktop
               onScaleRatioChanged: function (ratio) {
                 root.selectedScaleRatio = ratio
                 root.applyUISettings()
@@ -208,13 +195,14 @@ NPanel {
                 root.selectedBarPosition = position
                 root.applyUISettings()
               }
-              onDimDesktopChanged: function (dim) {
-                root.selectedDimDesktop = dim
-                root.applyUISettings()
-              }
             }
 
-            // Step 3: Appearance - Dark mode and color source
+            // Step 3: Dock Setup
+            SetupDockStep {
+              id: stepDock
+            }
+
+            // Step 4: Appearance - Dark mode and color source
             SetupAppearanceStep {
               id: step3
             }
@@ -248,6 +236,9 @@ NPanel {
                 }, {
                   "icon": "settings",
                   "label": "Customize"
+                }, {
+                  "icon": "device-desktop",
+                  "label": "Dock"
                 }, {
                   "icon": "palette",
                   "label": "Appearance"
@@ -376,7 +367,6 @@ NPanel {
 
     Settings.data.general.scaleRatio = selectedScaleRatio
     Settings.data.bar.position = selectedBarPosition
-    Settings.data.general.dimDesktop = selectedDimDesktop
     Settings.data.setupCompleted = true
 
     Settings.saveImmediate()
@@ -398,7 +388,6 @@ NPanel {
   function applyUISettings() {
     Settings.data.general.scaleRatio = selectedScaleRatio
     Settings.data.bar.position = selectedBarPosition
-    Settings.data.general.dimDesktop = selectedDimDesktop
   }
 
   Component.onCompleted: {
@@ -407,7 +396,6 @@ NPanel {
     if (Settings && Settings.data) {
       selectedScaleRatio = Settings.data.general.scaleRatio
       selectedBarPosition = Settings.data.bar.position
-      selectedDimDesktop = Settings.data.general.dimDesktop
       selectedWallpaperDirectory = Settings.data.wallpaper.directory || Settings.defaultWallpapersDirectory
     }
   }

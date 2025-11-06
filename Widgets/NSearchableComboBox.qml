@@ -126,7 +126,7 @@ RowLayout {
       implicitHeight: preferredHeight
       color: Color.mSurface
       border.color: combo.activeFocus ? Color.mSecondary : Color.mOutline
-      border.width: Math.max(1, Style.borderS)
+      border.width: Style.borderS
       radius: Style.radiusM
 
       Behavior on border.color {
@@ -218,7 +218,7 @@ RowLayout {
                 NText {
                   text: name
                   pointSize: Style.fontSizeM
-                  color: highlighted ? Color.mOnTertiary : Color.mOnSurface
+                  color: highlighted ? Color.mOnHover : Color.mOnSurface
                   verticalAlignment: Text.AlignVCenter
                   elide: Text.ElideRight
                   Layout.fillWidth: true
@@ -236,19 +236,16 @@ RowLayout {
                   Repeater {
                     model: typeof badgeLocations !== 'undefined' ? badgeLocations : []
 
-                    delegate: NBox {
+                    delegate: Item {
                       width: Style.baseWidgetSize * 0.7
                       height: Style.baseWidgetSize * 0.7
-                      color: "transparent"
-                      radius: Style.radiusS
-                      border.width: 0
 
                       NText {
                         anchors.centerIn: parent
                         text: modelData
                         pointSize: Style.fontSizeXXS
                         font.weight: Style.fontWeightBold
-                        color: highlighted ? Color.mOnTertiary : Color.mOnSurface
+                        color: highlighted ? Color.mOnHover : Color.mOnSurface
                       }
                     }
                   }
@@ -256,7 +253,7 @@ RowLayout {
               }
               background: Rectangle {
                 width: listView.width
-                color: highlighted ? Color.mTertiary : Color.transparent
+                color: highlighted ? Color.mHover : Color.transparent
                 radius: Style.radiusS
                 Behavior on color {
                   ColorAnimation {
@@ -272,7 +269,7 @@ RowLayout {
       background: Rectangle {
         color: Color.mSurfaceVariant
         border.color: Color.mOutline
-        border.width: Math.max(1, Style.borderS)
+        border.width: Style.borderS
         radius: Style.radiusM
       }
     }

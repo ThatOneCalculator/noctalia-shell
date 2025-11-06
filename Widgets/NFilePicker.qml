@@ -147,7 +147,7 @@ Popup {
     color: Color.mSurfaceVariant
     radius: Style.radiusL
     border.color: Color.mOutline
-    border.width: Math.max(1, Style.borderS)
+    border.width: Style.borderS
   }
 
   Rectangle {
@@ -244,7 +244,7 @@ Popup {
         color: Color.mSurfaceVariant
         radius: Style.radiusS
         border.color: Color.mOutline
-        border.width: Math.max(1, Style.borderS)
+        border.width: Style.borderS
 
         RowLayout {
           anchors.left: parent.left
@@ -371,7 +371,7 @@ Popup {
         color: Color.mSurface
         radius: Style.radiusM
         border.color: Color.mOutline
-        border.width: Math.max(1, Style.borderS)
+        border.width: Style.borderS
 
         FolderListModel {
           id: folderModel
@@ -423,7 +423,7 @@ Popup {
               implicitWidth: 6
               implicitHeight: 100
               radius: Style.radiusM
-              color: parent.pressed ? Qt.alpha(Color.mTertiary, 0.8) : parent.hovered ? Qt.alpha(Color.mTertiary, 0.8) : Qt.alpha(Color.mTertiary, 0.8)
+              color: Qt.alpha(Color.mHover, 0.8)
               opacity: parent.policy === ScrollBar.AlwaysOn || parent.active ? 1.0 : 0.0
               Behavior on opacity {
                 NumberAnimation {
@@ -493,7 +493,7 @@ Popup {
               color: Color.transparent
               radius: parent.radius
               border.color: isSelected ? Color.mSecondary : Color.mSurface
-              border.width: Math.max(1, Style.borderL)
+              border.width: Style.borderL
               Behavior on color {
                 ColorAnimation {
                   duration: Style.animationFast
@@ -503,10 +503,10 @@ Popup {
 
             Rectangle {
               anchors.fill: parent
-              color: (mouseArea.containsMouse && !isSelected) ? Color.mTertiary : Color.transparent
+              color: (mouseArea.containsMouse && !isSelected) ? Color.mHover : Color.transparent
               radius: parent.radius
-              border.color: (mouseArea.containsMouse && !isSelected) ? Color.mTertiary : Color.transparent
-              border.width: Math.max(1, Style.borderS)
+              border.color: (mouseArea.containsMouse && !isSelected) ? Color.mHover : Color.transparent
+              border.width: Style.borderS
               Behavior on color {
                 ColorAnimation {
                   duration: Style.animationFast
@@ -575,7 +575,7 @@ Popup {
                     if (isSelected)
                       return Color.mSecondary
                     else if (mouseArea.containsMouse)
-                      return model.fileIsDir ? Color.mOnTertiary : Color.mOnTertiary
+                      return Color.mOnHover
                     else
                       return model.fileIsDir ? Color.mPrimary : Color.mOnSurfaceVariant
                   }
@@ -592,7 +592,7 @@ Popup {
                   radius: width / 2
                   color: Color.mSecondary
                   border.color: Color.mOutline
-                  border.width: Math.max(1, Style.borderS)
+                  border.width: Style.borderS
                   visible: isSelected
                   NIcon {
                     icon: "filepicker-check"
@@ -609,7 +609,7 @@ Popup {
                   if (isSelected)
                     return Color.mSecondary
                   else if (mouseArea.containsMouse)
-                    return Color.mOnTertiary
+                    return Color.mOnHover
                   else
                     return Color.mOnSurfaceVariant
                 }
@@ -681,7 +681,7 @@ Popup {
               if (filePickerPanel.currentSelection.includes(model.filePath))
                 return Color.mSecondary
               if (mouseArea.containsMouse)
-                return Color.mTertiary
+                return Color.mHover
               return Color.transparent
             }
             radius: Style.radiusS

@@ -16,8 +16,11 @@ Singleton {
   property var widgetInstances: ({})
 
   signal activeWidgetsChanged
-
   signal barReadyChanged(string screenName)
+
+  // onHasAudioVisualizerChanged: {
+  //   Logger.d("BarService", "hasAudioVisualizer", hasAudioVisualizer)
+  // }
 
   // Simple timer that run once when the widget structure has changed
   // and determine if any MediaMini widget has the visualizer on
@@ -27,18 +30,23 @@ Singleton {
     repeat: false
     onTriggered: {
       hasAudioVisualizer = false
+      if (getAllWidgetInstances("AudioVisualizer").length > 0) {
+        hasAudioVisualizer = true
+        return
+      }
       const widgets = getAllWidgetInstances("MediaMini")
       for (var i = 0; i < widgets.length; i++) {
         const widget = widgets[i]
         if (widget.showVisualizer) {
           hasAudioVisualizer = true
+          return
         }
       }
     }
   }
 
   Component.onCompleted: {
-    Logger.d("BarService", "Service started")
+    Logger.i("BarService", "Service started")
   }
 
   // Function for the Bar to call when it's ready

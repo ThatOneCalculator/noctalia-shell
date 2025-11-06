@@ -40,13 +40,6 @@ Item {
   implicitWidth: pill.width
   implicitHeight: pill.height
 
-  function getIcon() {
-    if (AudioService.inputMuted) {
-      return "microphone-mute"
-    }
-    return (AudioService.inputVolume <= Number.EPSILON) ? "microphone-mute" : "microphone"
-  }
-
   // Connection used to open the pill when input volume changes
   Connections {
     target: AudioService.source?.audio ? AudioService.source?.audio : null
@@ -89,8 +82,8 @@ Item {
   BarPill {
     id: pill
 
-    rightOpen: BarService.getPillDirection(root)
-    icon: getIcon()
+    oppositeDirection: BarService.getPillDirection(root)
+    icon: AudioService.getInputIcon()
     density: Settings.data.bar.density
     autoHide: false // Important to be false so we can hover as long as we want
     text: Math.round(AudioService.inputVolume * 100)
@@ -112,12 +105,10 @@ Item {
       }
     }
     onClicked: {
-      AudioService.setInputMuted(!AudioService.inputMuted)
+      PanelService.getPanel("audioPanel", screen)?.toggle(this)
     }
     onRightClicked: {
-      var settingsPanel = PanelService.getPanel("settingsPanel")
-      settingsPanel.requestedTab = SettingsPanel.Tab.Audio
-      settingsPanel.open()
+      AudioService.setInputMuted(!AudioService.inputMuted)
     }
     onMiddleClicked: {
       Quickshell.execDetached(["pwvucontrol"])

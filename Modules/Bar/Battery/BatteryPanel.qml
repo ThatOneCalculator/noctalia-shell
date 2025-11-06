@@ -10,10 +10,6 @@ import qs.Widgets
 NPanel {
   id: root
 
-  preferredWidth: 350 * Style.uiScaleRatio
-  preferredHeight: 210 * Style.uiScaleRatio
-  panelKeyboardFocus: true
-
   property var optionsModel: []
 
   function updateOptionsModel() {
@@ -34,99 +30,101 @@ NPanel {
     updateOptionsModel()
   }
 
-  panelContent: Rectangle {
-    color: Color.transparent
+  ButtonGroup {
+    id: batteryGroup
+  }
+
+  Component {
+    id: optionsComponent
+    ColumnLayout {
+      spacing: Style.marginM
+      Repeater {
+        model: root.optionsModel
+        delegate: NRadioButton {
+          ButtonGroup.group: batteryGroup
+          required property var modelData
+          text: I18n.tr(modelData.label, {
+                          "percent": BatteryService.getThresholdValue(modelData.id)
+                        })
+          checked: BatteryService.chargingMode === modelData.id
+          onClicked: {
+            BatteryService.setChargingMode(modelData.id)
+          }
+          Layout.fillWidth: true
+        }
+      }
+    }
+  }
+
+  Component {
+    id: disabledComponent
+    NText {
+      text: I18n.tr("battery.panel.disabled")
+      pointSize: Style.fontSizeL
+      color: Color.mOnSurfaceVariant
+      wrapMode: Text.WordWrap
+      horizontalAlignment: Text.AlignHCenter
+    }
+  }
+
+  panelContent: Item {
+    anchors.fill: parent
+    property real contentPreferredHeight: mainLayout.implicitHeight + Style.marginM * 2
+    property real contentPreferredWidth: 350 * Style.uiScaleRatio
 
     ColumnLayout {
-      anchors.fill: parent
-      anchors.margins: Style.marginL
+      id: mainLayout
+      anchors.centerIn: parent
+      width: parent.contentPreferredWidth - Style.marginM * 2
+      anchors.margins: Style.marginM
       spacing: Style.marginM
 
       // HEADER
-      RowLayout {
+      NBox {
         Layout.fillWidth: true
-        spacing: Style.marginM
+        Layout.preferredHeight: header.implicitHeight + Style.marginM * 2
 
-        NText {
-          text: I18n.tr("battery.panel.title")
-          pointSize: Style.fontSizeL
-          font.weight: Style.fontWeightBold
-          color: Color.mOnSurface
-          Layout.fillWidth: true
-        }
-
-        NToggle {
-          id: batteryManagerSwitch
-          checked: BatteryService.chargingMode !== BatteryService.ChargingMode.Disabled
-          onToggled: checked => BatteryService.toggleEnabled(checked)
-          baseSize: Style.baseWidgetSize * 0.65
-        }
-
-        NIconButton {
-          icon: "close"
-          tooltipText: I18n.tr("tooltips.close")
-          baseSize: Style.baseWidgetSize * 0.8
-          onClicked: {
-            root.close()
-          }
-        }
-      }
-
-      NDivider {
-        Layout.fillWidth: true
-      }
-
-      ButtonGroup {
-        id: batteryGroup
-      }
-
-      Rectangle {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        color: Color.transparent
-
-        ColumnLayout {
+        RowLayout {
+          id: header
           anchors.fill: parent
+          anchors.margins: Style.marginM
           spacing: Style.marginM
 
-          Repeater {
-            model: optionsModel
+          NText {
+            text: I18n.tr("battery.panel.title")
+            pointSize: Style.fontSizeL
+            font.weight: Style.fontWeightBold
+            color: Color.mOnSurface
+            Layout.fillWidth: true
+          }
 
-            NRadioButton {
-              visible: BatteryService.chargingMode !== BatteryService.ChargingMode.Disabled
-              ButtonGroup.group: batteryGroup
-              required property var modelData
-              text: I18n.tr(modelData.label, {
-                              "percent": BatteryService.getThresholdValue(modelData.id)
-                            })
-              checked: BatteryService.chargingMode === modelData.id
-              onClicked: {
-                BatteryService.setChargingMode(modelData.id)
-              }
-              Layout.fillWidth: true
+          NToggle {
+            id: batteryManagerSwitch
+            checked: BatteryService.chargingMode !== BatteryService.ChargingMode.Disabled
+            onToggled: checked => BatteryService.toggleEnabled(checked)
+            baseSize: Style.baseWidgetSize * 0.65
+          }
+
+          NIconButton {
+            icon: "close"
+            tooltipText: I18n.tr("tooltips.close")
+            baseSize: Style.baseWidgetSize * 0.8
+            onClicked: {
+              root.close()
             }
           }
         }
+      }
 
-        ColumnLayout {
-          visible: BatteryService.chargingMode === BatteryService.ChargingMode.Disabled
-          anchors.fill: parent
-          spacing: Style.marginM
+      NBox {
+        Layout.fillWidth: true
+        Layout.preferredHeight: loader.implicitHeight + Style.marginM * 2
 
-          Item {
-            Layout.fillHeight: true
-          }
-
-          NText {
-            text: I18n.tr("battery.panel.disabled")
-            pointSize: Style.fontSizeL
-            color: Color.mOnSurfaceVariant
-            Layout.alignment: Qt.AlignHCenter
-          }
-
-          Item {
-            Layout.fillHeight: true
-          }
+        Loader {
+          id: loader
+          anchors.centerIn: parent
+          width: parent.width - Style.marginM * 2
+          sourceComponent: BatteryService.chargingMode === BatteryService.ChargingMode.Disabled ? disabledComponent : optionsComponent
         }
       }
     }

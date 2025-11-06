@@ -40,13 +40,6 @@ Item {
   implicitWidth: pill.width
   implicitHeight: pill.height
 
-  function getIcon() {
-    if (AudioService.muted) {
-      return "volume-mute"
-    }
-    return (AudioService.volume <= Number.EPSILON) ? "volume-zero" : (AudioService.volume <= 0.5) ? "volume-low" : "volume-high"
-  }
-
   // Connection used to open the pill when volume changes
   Connections {
     target: AudioService.sink?.audio ? AudioService.sink?.audio : null
@@ -75,8 +68,8 @@ Item {
     id: pill
 
     density: Settings.data.bar.density
-    rightOpen: BarService.getPillDirection(root)
-    icon: getIcon()
+    oppositeDirection: BarService.getPillDirection(root)
+    icon: AudioService.getOutputIcon()
     autoHide: false // Important to be false so we can hover as long as we want
     text: Math.round(AudioService.volume * 100)
     suffix: "%"
@@ -97,15 +90,13 @@ Item {
       }
     }
     onClicked: {
-      AudioService.setOutputMuted(!AudioService.muted)
+      PanelService.getPanel("audioPanel", screen)?.toggle(this)
     }
     onRightClicked: {
-      var settingsPanel = PanelService.getPanel("settingsPanel")
-      settingsPanel.requestedTab = SettingsPanel.Tab.Audio
-      settingsPanel.open()
+      AudioService.setOutputMuted(!AudioService.muted)
     }
     onMiddleClicked: {
-      Quickshell.execDetached(["pwvucontrol"])
+      Quickshell.execDetached(["sh", "-c", "pwvucontrol || pavucontrol"])
     }
   }
 }

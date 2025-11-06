@@ -22,10 +22,11 @@ Item {
   Connections {
     target: ToastService
 
-    function onNotify(message, description, type, duration) {
+    function onNotify(message, description, icon, type, duration) {
       root.enqueueToast({
                           "message": message,
                           "description": description,
+                          "icon": icon,
                           "type": type,
                           "duration": duration,
                           "timestamp": Date.now()
@@ -122,7 +123,7 @@ Item {
     onStatusChanged: {
       // When loader becomes ready, show the pending toast
       if (status === Loader.Ready && pendingToast !== null) {
-        item.showToast(pendingToast.message, pendingToast.description, pendingToast.type, pendingToast.duration)
+        item.showToast(pendingToast.message, pendingToast.description, pendingToast.icon, pendingToast.type, pendingToast.duration)
         pendingToast = null
       }
     }
@@ -197,12 +198,12 @@ Item {
 
       color: Color.transparent
 
-      WlrLayershell.layer: WlrLayer.Overlay
+      WlrLayershell.layer: (Settings.data.notifications && Settings.data.notifications.overlayLayer) ? WlrLayer.Overlay : WlrLayer.Top
       WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
       exclusionMode: PanelWindow.ExclusionMode.Ignore
 
-      function showToast(message, description, type, duration) {
-        toastItem.show(message, description, type, duration)
+      function showToast(message, description, icon, type, duration) {
+        toastItem.show(message, description, icon, type, duration)
       }
 
       function hideToast() {

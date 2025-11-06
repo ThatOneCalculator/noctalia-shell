@@ -202,7 +202,19 @@ Item {
         // Record usage and persist asynchronously
         if (Settings.data.appLauncher.sortByMostUsed)
           recordUsage(app)
-        if (Settings.data.appLauncher.useApp2Unit && app.id) {
+        if (Settings.data.appLauncher.customLaunchPrefixEnabled && Settings.data.appLauncher.customLaunchPrefix) {
+          // Use custom launch prefix
+          const prefix = Settings.data.appLauncher.customLaunchPrefix.split(" ")
+
+          if (app.runInTerminal) {
+            const terminal = Settings.data.appLauncher.terminalCommand.split(" ")
+            const command = prefix.concat(terminal.concat(app.command))
+            Quickshell.execDetached(command)
+          } else {
+            const command = prefix.concat(app.command)
+            Quickshell.execDetached(command)
+          }
+        } else if (Settings.data.appLauncher.useApp2Unit && app.id) {
           Logger.d("ApplicationsPlugin", `Using app2unit for: ${app.id}`)
           if (app.runInTerminal)
             Quickshell.execDetached(["app2unit", "--", app.id + ".desktop"])

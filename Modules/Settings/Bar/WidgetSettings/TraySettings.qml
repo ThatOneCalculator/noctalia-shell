@@ -50,17 +50,12 @@ ColumnLayout {
       Layout.fillWidth: true
       spacing: Style.marginS
 
-      NTextInput {
+      NTextInputButton {
         id: newRuleInput
         Layout.fillWidth: true
         placeholderText: I18n.tr("settings.bar.tray.blacklist.placeholder")
-      }
-
-      NIconButton {
-        Layout.alignment: Qt.AlignVCenter
-        icon: "add"
-        baseSize: Style.baseWidgetSize * 0.8
-        onClicked: {
+        buttonIcon: "add"
+        onButtonClicked: {
           if (newRuleInput.text.length > 0) {
             var newRule = newRuleInput.text.trim()
             var exists = false
@@ -78,7 +73,6 @@ ColumnLayout {
             }
           }
         }
-        enabled: newRuleInput.text.length > 0
       }
     }
   }
@@ -100,7 +94,7 @@ ColumnLayout {
         anchors.margins: Style.marginXS
         color: Color.transparent // Make background transparent
         border.color: Color.mOutline
-        border.width: Math.max(1, Style.borderS)
+        border.width: Style.borderS
         radius: Style.radiusS
         visible: model.rule !== undefined && model.rule !== "" // Only visible if rule exists
       }

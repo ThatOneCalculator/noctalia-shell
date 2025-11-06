@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Effects
 import Quickshell
-import qs.Modules.Audio
+import qs.Modules.AudioSpectrum
 import qs.Commons
 import qs.Services
 import qs.Widgets
@@ -62,7 +62,6 @@ NBox {
       border.width: 1
       radius: Style.radiusM
     }
-    //}
 
     // Background visualizer on top of the artwork
     Loader {
@@ -175,12 +174,12 @@ NBox {
       id: playerContextMenu
       parent: root
       width: 200
+      verticalPolicy: ScrollBar.AlwaysOff
 
       onTriggered: function (action) {
         var index = parseInt(action)
         if (!isNaN(index)) {
-          MediaService.selectedPlayerIndex = index
-          MediaService.updateCurrentPlayer()
+          MediaService.switchToPlayer(index)
         }
       }
     }
@@ -249,7 +248,7 @@ NBox {
                     duration: index * 600
                   }
                   NumberAnimation {
-                    from: 0.5
+                    from: 0.6
                     to: 1.2
                     duration: 2000
                     easing.type: Easing.OutQuad
@@ -264,14 +263,6 @@ NBox {
               icon: "disc"
               pointSize: Style.fontSizeXXXL * 3
               color: Color.mOnSurfaceVariant
-
-              RotationAnimator on rotation {
-                from: 0
-                to: 360
-                duration: 8000
-                loops: Animation.Infinite
-                running: true
-              }
             }
           }
 

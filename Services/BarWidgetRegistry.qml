@@ -11,15 +11,17 @@ Singleton {
   // Widget registry object mapping widget names to components
   property var widgets: ({
                            "ActiveWindow": activeWindowComponent,
+                           "AudioVisualizer": audioVisualizerComponent,
                            "Battery": batteryComponent,
                            "Bluetooth": bluetoothComponent,
                            "Brightness": brightnessComponent,
                            "Clock": clockComponent,
                            "ControlCenter": controlCenterComponent,
                            "CustomButton": customButtonComponent,
-                           "DarkMode": darkMode,
+                           "DarkMode": darkModeComponent,
                            "KeepAwake": keepAwakeComponent,
                            "KeyboardLayout": keyboardLayoutComponent,
+                           "LockKeys": lockKeysComponent,
                            "MediaMini": mediaMiniComponent,
                            "Microphone": microphoneComponent,
                            "NightLight": nightLightComponent,
@@ -30,6 +32,7 @@ Singleton {
                            "Spacer": spacerComponent,
                            "SystemMonitor": systemMonitorComponent,
                            "Taskbar": taskbarComponent,
+                           "TaskbarGrouped": taskbarGroupedComponent,
                            "Tray": trayComponent,
                            "Volume": volumeComponent,
                            "WiFi": wiFiComponent,
@@ -42,16 +45,25 @@ Singleton {
                                     "allowUserSettings": true,
                                     "showIcon": true,
                                     "hideMode": "hidden",
-                                    "scrollingMode"// "visible", "hidden", "transparent"
-                                    : "hover",
+                                    "scrollingMode": "hover",
                                     "maxWidth": 145,
                                     "useFixedWidth": false,
                                     "colorizeIcons": false
+                                  },
+                                  "AudioVisualizer": {
+                                    "allowUserSettings": true,
+                                    "width": 200,
+                                    "colorName": "primary",
+                                    "hideWhenIdle": false
                                   },
                                   "Battery": {
                                     "allowUserSettings": true,
                                     "displayMode": "onhover",
                                     "warningThreshold": 30
+                                  },
+                                  "Bluetooth": {
+                                    "allowUserSettings": true,
+                                    "displayMode": "onhover"
                                   },
                                   "Brightness": {
                                     "allowUserSettings": true,
@@ -78,19 +90,31 @@ Singleton {
                                     "rightClickExec": "",
                                     "middleClickExec": "",
                                     "textCommand": "",
-                                    "textIntervalMs": 3000
+                                    "textStream": false,
+                                    "textIntervalMs": 3000,
+                                    "textCollapse": "",
+                                    "parseJson": false
                                   },
                                   "KeyboardLayout": {
                                     "allowUserSettings": true,
                                     "displayMode": "onhover"
                                   },
+                                  "LockKeys": {
+                                    "allowUserSettings": true,
+                                    "showCapsLock": true,
+                                    "showNumLock": true,
+                                    "showScrollLock": true,
+                                    "capsLockIcon": "letter-c",
+                                    "numLockIcon": "letter-n",
+                                    "scrollLockIcon": "letter-s"
+                                  },
                                   "MediaMini": {
                                     "allowUserSettings": true,
                                     "hideMode": "hidden",
-                                    "scrollingMode"// "visible", "hidden", "transparent"
-                                    : "hover",
+                                    "scrollingMode": "hover",
                                     "maxWidth": 145,
                                     "useFixedWidth": false,
+                                    "hideWhenIdle": false,
                                     "showAlbumArt": false,
                                     "showVisualizer": false,
                                     "visualizerType": "linear"
@@ -124,15 +148,24 @@ Singleton {
                                     "hideMode": "hidden",
                                     "colorizeIcons": false
                                   },
+                                  "TaskbarGrouped": {
+                                    "allowUserSettings": true
+                                  },
                                   "Tray": {
                                     "allowUserSettings": true,
                                     "blacklist": [],
-                                    "colorizeIcons": false
+                                    "colorizeIcons": false,
+                                    "favorites": []
+                                  },
+                                  "WiFi": {
+                                    "allowUserSettings": true,
+                                    "displayMode": "onhover"
                                   },
                                   "Workspace": {
                                     "allowUserSettings": true,
                                     "labelMode": "index",
-                                    "hideUnoccupied": false
+                                    "hideUnoccupied": false,
+                                    "characterCount": 2
                                   },
                                   "Volume": {
                                     "allowUserSettings": true,
@@ -143,6 +176,9 @@ Singleton {
   // Component definitions - these are loaded once at startup
   property Component activeWindowComponent: Component {
     ActiveWindow {}
+  }
+  property Component audioVisualizerComponent: Component {
+    AudioVisualizer {}
   }
   property Component batteryComponent: Component {
     Battery {}
@@ -159,7 +195,7 @@ Singleton {
   property Component customButtonComponent: Component {
     CustomButton {}
   }
-  property Component darkMode: Component {
+  property Component darkModeComponent: Component {
     DarkMode {}
   }
   property Component keyboardLayoutComponent: Component {
@@ -167,6 +203,9 @@ Singleton {
   }
   property Component keepAwakeComponent: Component {
     KeepAwake {}
+  }
+  property Component lockKeysComponent: Component {
+    LockKeys {}
   }
   property Component mediaMiniComponent: Component {
     MediaMini {}
@@ -215,6 +254,9 @@ Singleton {
   }
   property Component taskbarComponent: Component {
     Taskbar {}
+  }
+  property Component taskbarGroupedComponent: Component {
+    TaskbarGrouped {}
   }
 
   function init() {

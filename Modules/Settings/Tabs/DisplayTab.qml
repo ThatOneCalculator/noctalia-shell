@@ -38,7 +38,7 @@ ColumnLayout {
       if (exitCode === 0) {
         Settings.data.nightLight.enabled = true
         NightLightService.apply()
-        ToastService.showNotice(I18n.tr("settings.display.night-light.section.label"), I18n.tr("toast.night-light.enabled"))
+        ToastService.showNotice(I18n.tr("settings.display.night-light.section.label"), I18n.tr("toast.night-light.enabled"), "nightlight-on")
       } else {
         Settings.data.nightLight.enabled = false
         ToastService.showWarning(I18n.tr("settings.display.night-light.section.label"), I18n.tr("toast.night-light.not-installed"))
@@ -67,7 +67,7 @@ ColumnLayout {
         radius: Style.radiusM
         color: Color.mSurfaceVariant
         border.color: Color.mOutline
-        border.width: Math.max(1, Style.borderS)
+        border.width: Style.borderS
 
         property var brightnessMonitor: BrightnessService.getMonitorForScreen(modelData)
 
@@ -113,12 +113,17 @@ ColumnLayout {
                 to: 1
                 value: brightnessMonitor ? brightnessMonitor.brightness : 0.5
                 stepSize: 0.01
+                enabled: brightnessMonitor ? brightnessMonitor.brightnessControlAvailable : false
                 onMoved: value => {
-                           if (brightnessMonitor.method === "internal") {
+                           if (brightnessMonitor && brightnessMonitor.brightnessControlAvailable) {
                              brightnessMonitor.setBrightness(value)
                            }
                          }
-                onPressedChanged: (pressed, value) => brightnessMonitor.setBrightness(value)
+                onPressedChanged: (pressed, value) => {
+                                    if (brightnessMonitor && brightnessMonitor.brightnessControlAvailable) {
+                                      brightnessMonitor.setBrightness(value)
+                                    }
+                                  }
                 Layout.fillWidth: true
               }
 
@@ -127,16 +132,28 @@ ColumnLayout {
                 Layout.preferredWidth: 55
                 horizontalAlignment: Text.AlignRight
                 Layout.alignment: Qt.AlignVCenter
+                opacity: brightnessMonitor && !brightnessMonitor.brightnessControlAvailable ? 0.5 : 1.0
               }
 
               Item {
                 Layout.preferredWidth: 30
                 Layout.fillHeight: true
                 NIcon {
-                  icon: brightnessMonitor.method == "internal" ? "device-laptop" : "device-desktop"
+                  icon: brightnessMonitor && brightnessMonitor.method == "internal" ? "device-laptop" : "device-desktop"
                   anchors.centerIn: parent
+                  opacity: brightnessMonitor && !brightnessMonitor.brightnessControlAvailable ? 0.5 : 1.0
                 }
               }
+            }
+
+            // Show message when brightness control is not available
+            NText {
+              visible: brightnessMonitor && !brightnessMonitor.brightnessControlAvailable
+              text: !Settings.data.brightness.enableDdcSupport ? I18n.tr("settings.display.monitors.brightness-unavailable.ddc-disabled") : I18n.tr("settings.display.monitors.brightness-unavailable.generic")
+              pointSize: Style.fontSizeS
+              color: Color.mOnSurfaceVariant
+              Layout.fillWidth: true
+              wrapMode: Text.WordWrap
             }
           }
         }
@@ -154,6 +171,26 @@ ColumnLayout {
       stepSize: 1
       suffix: "%"
       onValueChanged: Settings.data.brightness.brightnessStep = value
+    }
+
+    NToggle {
+      Layout.fillWidth: true
+      label: I18n.tr("settings.display.monitors.enforce-minimum.label")
+      description: I18n.tr("settings.display.monitors.enforce-minimum.description")
+      checked: Settings.data.brightness.enforceMinimum
+      onToggled: checked => Settings.data.brightness.enforceMinimum = checked
+    }
+
+    NToggle {
+      Layout.fillWidth: true
+      label: I18n.tr("settings.display.monitors.external-brightness.label")
+      description: I18n.tr("settings.display.monitors.external-brightness.description")
+      checked: Settings.data.brightness.enableDdcSupport
+      onToggled: checked => {
+                   Settings.data.brightness.enableDdcSupport = checked
+                   // DDC detection will run on next monitor change when enabled
+                   // Monitors will stop using DDC immediately when disabled
+                 }
     }
   }
 
@@ -186,7 +223,7 @@ ColumnLayout {
                    Settings.data.nightLight.enabled = false
                    Settings.data.nightLight.forced = false
                    NightLightService.apply()
-                   ToastService.showNotice(I18n.tr("settings.display.night-light.section.label"), I18n.tr("toast.night-light.disabled"))
+                   ToastService.showNotice(I18n.tr("settings.display.night-light.section.label"), I18n.tr("toast.night-light.disabled"), "nightlight-off")
                  }
                }
   }

@@ -42,11 +42,19 @@ NIconButton {
   density: Settings.data.bar.density
   colorBg: (Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent)
   colorFg: "#31748f"
-  colorBgHover: useDistroLogo ? Color.mSurfaceVariant : Color.mTertiary
+  colorBgHover: useDistroLogo ? Color.mSurfaceVariant : Color.mHover
   colorBorder: Color.transparent
-  colorBorderHover: useDistroLogo ? Color.mTertiary : Color.transparent
-  onClicked: PanelService.getPanel("controlCenterPanel")?.toggle(this)
-  onRightClicked: PanelService.getPanel("settingsPanel")?.toggle()
+  colorBorderHover: useDistroLogo ? Color.mHover : Color.transparent
+  onClicked: {
+    var controlCenterPanel = PanelService.getPanel("controlCenterPanel", screen)
+    if (Settings.data.controlCenter.position === "close_to_bar_button") {
+      // Willopen the panel next to the bar button.
+      controlCenterPanel.toggle(this)
+    } else {
+      controlCenterPanel.toggle()
+    }
+  }
+  onRightClicked: PanelService.getPanel("settingsPanel", screen)?.toggle()
 
   IconImage {
     id: customOrDistroLogo

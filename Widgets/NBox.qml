@@ -8,11 +8,8 @@ import qs.Services
 Rectangle {
   id: root
 
-  implicitWidth: childrenRect.width
-  implicitHeight: childrenRect.height
-
   color: Color.mSurfaceVariant
   radius: Style.radiusM
   border.color: Color.mOutline
-  border.width: Math.max(1, Style.borderS)
+  border.width: Style.borderS
 }

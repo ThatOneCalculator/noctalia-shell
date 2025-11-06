@@ -44,8 +44,8 @@ Variants {
     sourceComponent: PanelWindow {
       screen: modelData
 
-      WlrLayershell.namespace: "noctalia-notifications"
-      WlrLayershell.layer: (Settings.data.notifications && Settings.data.notifications.alwaysOnTop) ? WlrLayer.Overlay : WlrLayer.Top
+      WlrLayershell.namespace: "noctalia-notifications-" + (screen?.name || "unknown")
+      WlrLayershell.layer: (Settings.data.notifications && Settings.data.notifications.overlayLayer) ? WlrLayer.Overlay : WlrLayer.Top
 
       color: Color.transparent
 
@@ -161,6 +161,7 @@ Variants {
 
         // Animate when notifications are added/removed
         Behavior on implicitHeight {
+          enabled: !Settings.data.general.animationDisabled
           SpringAnimation {
             spring: 2.0
             damping: 0.4
@@ -184,9 +185,9 @@ Variants {
             Layout.maximumHeight: Layout.preferredHeight
 
             radius: Style.radiusL
-            border.color: Color.mOutline
-            border.width: Math.max(1, Style.borderS)
-            color: Color.mSurface
+            border.color: Qt.alpha(Color.mOutline, Settings.data.notifications.backgroundOpacity || 1.0)
+            border.width: Style.borderS
+            color: Qt.alpha(Color.mSurface, Settings.data.notifications.backgroundOpacity || 1.0)
 
             // Optimized progress bar container
             Rectangle {
@@ -196,6 +197,7 @@ Variants {
               anchors.right: parent.right
               height: 2
               color: Color.transparent
+              visible: true
 
               // Pre-calculate available width for the progress bar
               readonly property real availableWidth: parent.width - (2 * parent.radius)
@@ -210,19 +212,21 @@ Variants {
                 width: parent.availableWidth * model.progress
 
                 color: {
+                  var baseColor
                   if (model.urgency === NotificationUrgency.Critical || model.urgency === 2)
-                    return Color.mError
+                    baseColor = Color.mError
                   else if (model.urgency === NotificationUrgency.Low || model.urgency === 0)
-                    return Color.mOnSurface
+                    baseColor = Color.mOnSurface
                   else
-                    return Color.mPrimary
+                    baseColor = Color.mPrimary
+                  return Qt.alpha(baseColor, Settings.data.notifications.backgroundOpacity || 1.0)
                 }
 
                 antialiasing: true
 
                 // Smooth progress animation
                 Behavior on width {
-                  enabled: !card.isRemoving // Disable during removal animation
+                  enabled: !card.isRemoving
                   NumberAnimation {
                     duration: 100 // Quick but smooth
                     easing.type: Easing.Linear
@@ -312,14 +316,21 @@ Variants {
 
             // Animate in when the item is created
             Component.onCompleted: {
-              // Start from slide position
-              slideOffset = slideInOffset
-              scaleValue = 0.8
-              opacityValue = 0.0
+              if (Settings.data.general.animationDisabled) {
+                // No animation - set to final state immediately
+                slideOffset = 0
+                scaleValue = 1.0
+                opacityValue = 1.0
+              } else {
+                // Start from slide position
+                slideOffset = slideInOffset
+                scaleValue = 0.8
+                opacityValue = 0.0
 
-              // Delay animation based on index for staggered effect
-              delayTimer.interval = animationDelay
-              delayTimer.start()
+                // Delay animation based on index for staggered effect
+                delayTimer.interval = animationDelay
+                delayTimer.start()
+              }
             }
 
             // Timer for staggered animation start
@@ -341,9 +352,11 @@ Variants {
                 return
               // Prevent multiple animations
               isRemoving = true
-              slideOffset = slideOutOffset
-              scaleValue = 0.8
-              opacityValue = 0.0
+              if (!Settings.data.general.animationDisabled) {
+                slideOffset = slideOutOffset
+                scaleValue = 0.8
+                opacityValue = 0.0
+              }
             }
 
             // Timer for delayed removal after animation
@@ -365,6 +378,7 @@ Variants {
 
             // Animation behaviors with spring physics
             Behavior on scale {
+              enabled: !Settings.data.general.animationDisabled
               SpringAnimation {
                 spring: 3
                 damping: 0.4
@@ -374,6 +388,7 @@ Variants {
             }
 
             Behavior on opacity {
+              enabled: !Settings.data.general.animationDisabled
               NumberAnimation {
                 duration: Style.animationNormal
                 easing.type: Easing.OutCubic
@@ -381,6 +396,7 @@ Variants {
             }
 
             Behavior on y {
+              enabled: !Settings.data.general.animationDisabled
               SpringAnimation {
                 spring: 2.5
                 damping: 0.3
@@ -522,8 +538,8 @@ Variants {
                         }
                         fontSize: Style.fontSizeS
                         backgroundColor: Color.mPrimary
-                        textColor: hovered ? Color.mOnTertiary : Color.mOnPrimary
-                        hoverColor: Color.mTertiary
+                        textColor: hovered ? Color.mOnHover : Color.mOnPrimary
+                        hoverColor: Color.mHover
                         outlined: false
                         implicitHeight: 24
                         onClicked: {
@@ -547,6 +563,7 @@ Variants {
               anchors.rightMargin: Style.marginM
 
               onClicked: {
+                NotificationService.removeFromHistory(model.id)
                 animateOut()
               }
             }

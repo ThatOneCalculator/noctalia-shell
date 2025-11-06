@@ -77,7 +77,7 @@ Item {
     id: pill
 
     density: Settings.data.bar.density
-    rightOpen: BarService.getPillDirection(root)
+    oppositeDirection: BarService.getPillDirection(root)
     icon: getIcon()
     autoHide: false // Important to be false so we can hover as long as we want
     text: {
@@ -91,7 +91,9 @@ Item {
       var monitor = getMonitor()
       if (!monitor)
         return ""
-      return "Brightness: " + Math.round(monitor.brightness * 100) + "%\nRight click for settings.\nScroll to modify brightness."
+      return I18n.tr("tooltips.brightness-at", {
+                       "brightness": Math.round(monitor.brightness * 100)
+                     })
     }
 
     onWheel: function (angle) {
@@ -106,13 +108,13 @@ Item {
     }
 
     onClicked: {
-      var settingsPanel = PanelService.getPanel("settingsPanel")
+      var settingsPanel = PanelService.getPanel("settingsPanel", screen)
       settingsPanel.requestedTab = SettingsPanel.Tab.Display
       settingsPanel.open()
     }
 
     onRightClicked: {
-      var settingsPanel = PanelService.getPanel("settingsPanel")
+      var settingsPanel = PanelService.getPanel("settingsPanel", screen)
       settingsPanel.requestedTab = SettingsPanel.Tab.Display
       settingsPanel.open()
     }

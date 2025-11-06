@@ -9,19 +9,28 @@ import qs.Widgets
 NBox {
   id: root
 
+  property int forecastDays: 7
+  property bool showLocation: true
   readonly property bool weatherReady: Settings.data.location.weatherEnabled && (LocationService.data.weather !== null)
+
+  visible: Settings.data.location.weatherEnabled
+  implicitHeight: Math.max(100 * Style.uiScaleRatio, content.implicitHeight + (Style.marginXL * 2))
 
   ColumnLayout {
     id: content
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.top: parent.top
-    anchors.margins: Style.marginM
+    anchors.margins: Style.marginXL
     spacing: Style.marginM
     clip: true
 
     RowLayout {
+      Layout.fillWidth: true
       spacing: Style.marginS
+      Item {
+        Layout.preferredWidth: 0
+      }
       NIcon {
         Layout.alignment: Qt.AlignVCenter
         icon: weatherReady ? LocationService.weatherSymbolFromCode(LocationService.data.weather.current_weather.weathercode) : ""
@@ -39,6 +48,7 @@ NBox {
           }
           pointSize: Style.fontSizeL
           font.weight: Style.fontWeightBold
+          visible: showLocation
         }
 
         RowLayout {
@@ -57,7 +67,7 @@ NBox {
               temp = Math.round(temp)
               return `${temp}°${suffix}`
             }
-            pointSize: Style.fontSizeXL
+            pointSize: showLocation ? Style.fontSizeXL : Style.fontSizeXL * 1.6
             font.weight: Style.fontWeightBold
           }
 
@@ -65,7 +75,7 @@ NBox {
             text: weatherReady ? `(${LocationService.data.weather.timezone_abbreviation})` : ""
             pointSize: Style.fontSizeXS
             color: Color.mOnSurfaceVariant
-            visible: LocationService.data.weather
+            visible: LocationService.data.weather && showLocation
           }
         }
       }
@@ -79,20 +89,24 @@ NBox {
     RowLayout {
       visible: weatherReady
       Layout.fillWidth: true
-      Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-      spacing: Style.marginL
+      Layout.alignment: Qt.AlignVCenter
+      spacing: Style.marginM
+
       Repeater {
-        model: weatherReady ? LocationService.data.weather.daily.time : []
+        model: weatherReady ? Math.min(root.forecastDays, LocationService.data.weather.daily.time.length) : 0
         delegate: ColumnLayout {
-          Layout.alignment: Qt.AlignHCenter
+          Layout.fillWidth: true
           spacing: Style.marginXS
+          Item {
+            Layout.fillWidth: true
+          }
           NText {
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
             text: {
               var weatherDate = new Date(LocationService.data.weather.daily.time[index].replace(/-/g, "/"))
-              return Qt.locale().toString(weatherDate, "ddd")
+              return I18n.locale.toString(weatherDate, "ddd")
             }
             color: Color.mOnSurface
-            Layout.alignment: Qt.AlignHCenter
           }
           NIcon {
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter

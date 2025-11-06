@@ -37,9 +37,9 @@ Singleton {
   property int screenRadius: Math.round(20 * Settings.data.general.screenRadiusRatio)
 
   // Border
-  property int borderS: Math.round(1 * uiScaleRatio)
-  property int borderM: Math.round(2 * uiScaleRatio)
-  property int borderL: Math.round(3 * uiScaleRatio)
+  property int borderS: Math.max(1, Math.round(1 * uiScaleRatio))
+  property int borderM: Math.max(1, Math.round(2 * uiScaleRatio))
+  property int borderL: Math.max(1, Math.round(3 * uiScaleRatio))
 
   // Margins (for margins and spacing)
   property int marginXXS: Math.round(2 * uiScaleRatio)
@@ -56,6 +56,13 @@ Singleton {
   property real opacityHeavy: 0.75
   property real opacityAlmost: 0.95
   property real opacityFull: 1.0
+
+  // Shadows
+  property real shadowOpacity: 0.85
+  property real shadowBlur: 1.0
+  property int shadowBlurMax: 23
+  property real shadowHorizontalOffset: Settings.data.general.shadowOffsetX
+  property real shadowVerticalOffset: Settings.data.general.shadowOffsetY
 
   // Animation duration (ms)
   property int animationFast: Settings.data.general.animationDisabled ? 0 : Math.round(150 / Settings.data.general.animationSpeed)

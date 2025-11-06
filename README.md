@@ -60,7 +60,7 @@ Check out our documentation & installation guide to get started!
 
 ## 🖥️ Wayland Compositors
 
-Noctalia provides native support for **Niri** and **Hyprland**. Other Wayland compositors will work but may require additional workspace logic configuration.
+Noctalia provides native support for **Niri**, **Hyprland** and **Sway**. Other Wayland compositors will work but may require additional workspace logic configuration.
 
 ---
 
@@ -72,6 +72,10 @@ We welcome contributions of any size - bug fixes, new features, documentation im
 - **Found a bug?** [Open an issue](https://github.com/noctalia-dev/noctalia-shell/issues/new)
 - **Want to code?** Check out our [development guidelines](https://docs.noctalia.dev/development/guideline)
 - **Need help?** Join our [Discord](https://discord.noctalia.dev)
+
+### ✨ Nix DevShell (new)
+
+Nix users can use the flake's devShell to access a development environment. Run nix develop the repo root to enter the dev shell. It includes packages, utilities and environment variables needed to develop Noctalia.
 
 ---
 
@@ -94,7 +98,9 @@ While all donations are greatly appreciated, they are completely voluntary.
 * DiscoCevapi
 * <a href="https://pika-os.com/" target="_blank">PikaOS</a>
 * LionHeartP
-
+* Nyxion ツ
+* MrDowntempo
+* Tempus Thales
 
 ---
 

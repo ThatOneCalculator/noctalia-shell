@@ -33,7 +33,7 @@ Slider {
     radius: height / 2
     color: Qt.alpha(Color.mSurface, 0.5)
     border.color: Qt.alpha(Color.mOutline, 0.5)
-    border.width: Math.max(1, Style.borderS)
+    border.width: Style.borderS
 
     // A container composite shape that puts a semicircle on the end
     Item {
@@ -117,9 +117,9 @@ Slider {
       implicitWidth: knobDiameter
       implicitHeight: knobDiameter
       radius: width / 2
-      color: root.pressed ? Color.mTertiary : Color.mSurface
+      color: root.pressed ? Color.mHover : Color.mSurface
       border.color: Color.mPrimary
-      border.width: Math.max(1, Style.borderL)
+      border.width: Style.borderL
       anchors.centerIn: parent
 
       Behavior on color {
@@ -134,9 +134,8 @@ Slider {
       anchors.fill: parent
       cursorShape: Qt.PointingHandCursor
       hoverEnabled: true
-      // Pass through mouse events to the slider
+      acceptedButtons: Qt.NoButton // Don't accept any mouse buttons - only hover
       propagateComposedEvents: true
-      preventStealing: false
 
       onEntered: {
         root.hovering = true
@@ -151,23 +150,15 @@ Slider {
           TooltipService.hide()
         }
       }
+    }
 
-      onPressed: function (mouse) {
-        if (root.tooltipText) {
+    // Hide tooltip when slider is pressed (anywhere on the slider)
+    Connections {
+      target: root
+      function onPressedChanged() {
+        if (root.pressed && root.tooltipText) {
           TooltipService.hide()
         }
-        // Pass the event through to the slider
-        mouse.accepted = false
-      }
-
-      onReleased: function (mouse) {
-        // Pass the event through to the slider
-        mouse.accepted = false
-      }
-
-      onPositionChanged: function (mouse) {
-        // Pass the event through to the slider
-        mouse.accepted = false
       }
     }
   }

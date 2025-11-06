@@ -30,7 +30,7 @@ NBox {
       imagePath: Settings.preprocessPath(Settings.data.general.avatarImage)
       fallbackIcon: "person"
       borderColor: Color.mPrimary
-      borderWidth: Math.max(1, Style.borderM)
+      borderWidth: Style.borderM
     }
 
     ColumnLayout {
@@ -60,8 +60,9 @@ NBox {
         icon: "settings"
         tooltipText: I18n.tr("tooltips.open-settings")
         onClicked: {
-          settingsPanel.requestedTab = SettingsPanel.Tab.General
-          settingsPanel.open()
+          var panel = PanelService.getPanel("settingsPanel", screen)
+          panel.requestedTab = SettingsPanel.Tab.General
+          panel.open()
         }
       }
 
@@ -69,8 +70,8 @@ NBox {
         icon: "power"
         tooltipText: I18n.tr("tooltips.session-menu")
         onClicked: {
-          sessionMenuPanel.open()
-          controlCenterPanel.close()
+          PanelService.getPanel("sessionMenuPanel", screen)?.open()
+          PanelService.getPanel("controlCenterPanel", screen)?.close()
         }
       }
 
@@ -78,7 +79,7 @@ NBox {
         icon: "close"
         tooltipText: I18n.tr("tooltips.close")
         onClicked: {
-          controlCenterPanel.close()
+          PanelService.getPanel("controlCenterPanel", screen)?.close()
         }
       }
     }

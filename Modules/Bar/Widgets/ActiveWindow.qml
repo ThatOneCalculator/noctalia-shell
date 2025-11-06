@@ -75,6 +75,12 @@ Item {
 
     // Row layout handles spacing between widgets
     return Math.max(total, Style.capsuleHeight * scaling) // Minimum width
+    // // Otherwise, adapt to content
+    // if (!hasFocusedWindow) {
+    //   return Math.min(calculateContentWidth(), maxWidth)
+    // }
+    // // Use content width but don't exceed user-set maximum width
+    // return Math.min(calculateContentWidth(), maxWidth)
   }
 
   function getAppIcon() {
@@ -174,7 +180,7 @@ Item {
             // Apply dock shader to active window icon (always themed)
             layer.enabled: widgetSettings.colorizeIcons !== false
             layer.effect: ShaderEffect {
-              property color targetColor: Color.mOnSurface
+              property color targetColor: Settings.data.colorSchemes.darkMode ? Color.mOnSurface : Color.mSurfaceVariant
               property real colorizeMode: 0.0 // Dock mode (grayscale)
 
               fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")

@@ -58,6 +58,7 @@ NBox {
     ColumnLayout {
       spacing: Style.marginXXS
       Layout.fillWidth: true
+      Layout.preferredWidth: 0
       opacity: AudioService.sink ? 1.0 : 0.5
       enabled: AudioService.sink
 
@@ -71,8 +72,8 @@ NBox {
           baseSize: Style.baseWidgetSize * 0.5
           colorFg: AudioService.muted ? Color.mError : Color.mOnSurface
           colorBg: Color.transparent
-          colorBgHover: Color.mTertiary
-          colorFgHover: Color.mOnTertiary
+          colorBgHover: Color.mHover
+          colorFgHover: Color.mOnHover
           onClicked: {
             if (AudioService.sink && AudioService.sink.audio) {
               AudioService.sink.audio.muted = !AudioService.muted
@@ -109,6 +110,7 @@ NBox {
     ColumnLayout {
       spacing: Style.marginXXS
       Layout.fillWidth: true
+      Layout.preferredWidth: 0
       opacity: AudioService.source ? 1.0 : 0.5
       enabled: AudioService.source
 
@@ -122,8 +124,8 @@ NBox {
           baseSize: Style.baseWidgetSize * 0.5
           colorFg: AudioService.inputMuted ? Color.mError : Color.mOnSurface
           colorBg: Color.transparent
-          colorBgHover: Color.mTertiary
-          colorFgHover: Color.mOnTertiary
+          colorBgHover: Color.mHover
+          colorFgHover: Color.mOnHover
           onClicked: AudioService.setInputMuted(!AudioService.inputMuted)
         }
 

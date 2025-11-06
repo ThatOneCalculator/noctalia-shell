@@ -48,7 +48,7 @@ Singleton {
   }
 
   Component.onCompleted: {
-    Logger.i("Calendar", "Service initialized")
+    Logger.i("Calendar", "Service started")
     loadFromCache()
     checkAvailability()
   }
@@ -68,16 +68,16 @@ Singleton {
   function loadFromCache() {
     if (cacheAdapter.cachedEvents && cacheAdapter.cachedEvents.length > 0) {
       root.events = cacheAdapter.cachedEvents
-      Logger.i("Calendar", `Loaded ${cacheAdapter.cachedEvents.length} cached event(s)`)
+      Logger.d("Calendar", `Loaded ${cacheAdapter.cachedEvents.length} cached event(s)`)
     }
 
     if (cacheAdapter.cachedCalendars && cacheAdapter.cachedCalendars.length > 0) {
       root.calendars = cacheAdapter.cachedCalendars
-      Logger.i("Calendar", `Loaded ${cacheAdapter.cachedCalendars.length} cached calendar(s)`)
+      Logger.d("Calendar", `Loaded ${cacheAdapter.cachedCalendars.length} cached calendar(s)`)
     }
 
     if (cacheAdapter.lastUpdate) {
-      Logger.i("Calendar", `Cache last updated: ${cacheAdapter.lastUpdate}`)
+      Logger.d("Calendar", `Cache last updated: ${cacheAdapter.lastUpdate}`)
     }
   }
 
@@ -92,7 +92,11 @@ Singleton {
 
   // Core functions
   function checkAvailability() {
-    availabilityCheckProcess.running = true
+    if (Settings.data.location.showCalendarEvents) {
+      availabilityCheckProcess.running = true
+    } else {
+      root.available = false
+    }
   }
 
   function loadCalendars() {
@@ -100,6 +104,11 @@ Singleton {
   }
 
   function loadEvents(daysAhead = 31, daysBehind = 14) {
+    if (!Settings.data.location.showCalendarEvents) {
+      root.loading = false
+      root.events = []
+      return
+    }
     if (loading)
       return
 
@@ -114,7 +123,7 @@ Singleton {
     loadEventsProcess.endTime = Math.floor(endDate.getTime() / 1000)
     loadEventsProcess.running = true
 
-    Logger.i("Calendar", `Loading events (${daysBehind} days behind, ${daysAhead} days ahead): ${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`)
+    Logger.d("Calendar", `Loading events (${daysBehind} days behind, ${daysAhead} days ahead): ${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`)
   }
 
   // Helper to format date/time
@@ -169,7 +178,7 @@ Singleton {
           cacheAdapter.cachedCalendars = result
           saveCache()
 
-          Logger.i("Calendar", `Found ${result.length} calendar(s)`)
+          Logger.d("Calendar", `Found ${result.length} calendar(s)`)
 
           // Auto-load events after discovering calendars
           // Only load if we have calendars and no cached events
@@ -216,7 +225,7 @@ Singleton {
           cacheAdapter.lastUpdate = new Date().toISOString()
           saveCache()
 
-          Logger.i("Calendar", `Loaded ${result.length} event(s)`)
+          Logger.d("Calendar", `Loaded ${result.length} event(s)`)
         } catch (e) {
           Logger.d("Calendar", "Failed to parse events: " + e)
           root.lastError = "Failed to parse events"
@@ -224,7 +233,7 @@ Singleton {
           // Fall back to cached events if available
           if (cacheAdapter.cachedEvents.length > 0) {
             root.events = cacheAdapter.cachedEvents
-            Logger.i("Calendar", "Using cached events")
+            Logger.d("Calendar", "Using cached events")
           }
         }
       }
@@ -241,7 +250,7 @@ Singleton {
           // Fall back to cached events if available
           if (cacheAdapter.cachedEvents.length > 0) {
             root.events = cacheAdapter.cachedEvents
-            Logger.i("Calendar", "Using cached events due to error")
+            Logger.d("Calendar", "Using cached events due to error")
           }
         }
       }

@@ -72,6 +72,9 @@ Singleton {
     function onRandomIntervalSecChanged() {
       root.restartRandomWallpaperTimer()
     }
+    function onRecursiveSearchChanged() {
+      root.refreshWallpapersList()
+    }
   }
 
   // -------------------------------------------------
@@ -90,6 +93,8 @@ Singleton {
     }
 
     isInitialized = true
+    Logger.d("Wallpaper", "Triggering initial wallpaper scan")
+    Qt.callLater(refreshWallpapersList)
   }
 
   // -------------------------------------------------
@@ -355,18 +360,109 @@ Singleton {
 
   // -------------------------------------------------------------------
   function refreshWallpapersList() {
-    Logger.d("Wallpaper", "refreshWallpapersList")
+    Logger.d("Wallpaper", "refreshWallpapersList", "recursive:", Settings.data.wallpaper.recursiveSearch)
     scanningCount = 0
 
-    // Force refresh by toggling the folder property on each FolderListModel
-    for (var i = 0; i < wallpaperScanners.count; i++) {
-      var scanner = wallpaperScanners.objectAt(i)
-      if (scanner) {
-        var currentFolder = scanner.folder
-        scanner.folder = ""
-        scanner.folder = currentFolder
+    if (Settings.data.wallpaper.recursiveSearch) {
+      // Use Process-based recursive search for all screens
+      for (var i = 0; i < Quickshell.screens.length; i++) {
+        var screenName = Quickshell.screens[i].name
+        var directory = getMonitorDirectory(screenName)
+        scanDirectoryRecursive(screenName, directory)
+      }
+    } else {
+      // Use FolderListModel (non-recursive)
+      // Force refresh by toggling each scanner's currentDirectory
+      for (var i = 0; i < wallpaperScanners.count; i++) {
+        var scanner = wallpaperScanners.objectAt(i)
+        if (scanner) {
+          // Capture scanner in closure
+          (function (s) {
+            var directory = root.getMonitorDirectory(s.screenName)
+            // Trigger a change by setting to /tmp (always exists) then back to the actual directory
+            // Note: This causes harmless Qt warnings (QTBUG-52262) but is necessary to force FolderListModel to re-scan
+            s.currentDirectory = "/tmp"
+            Qt.callLater(function () {
+              s.currentDirectory = directory
+            })
+          })(scanner)
+        }
       }
     }
+  }
+
+  // Process instances for recursive scanning (one per screen)
+  property var recursiveProcesses: ({})
+
+  // -------------------------------------------------------------------
+  function scanDirectoryRecursive(screenName, directory) {
+    if (!directory || directory === "") {
+      Logger.w("Wallpaper", "Empty directory for", screenName)
+      wallpaperLists[screenName] = []
+      wallpaperListChanged(screenName, 0)
+      return
+    }
+
+    // Cancel any existing scan for this screen
+    if (recursiveProcesses[screenName]) {
+      Logger.d("Wallpaper", "Cancelling existing scan for", screenName)
+      recursiveProcesses[screenName].running = false
+      recursiveProcesses[screenName].destroy()
+      delete recursiveProcesses[screenName]
+      scanningCount--
+    }
+
+    scanningCount++
+    Logger.i("Wallpaper", "Starting recursive scan for", screenName, "in", directory)
+
+    // Create Process component inline
+    var processComponent = Qt.createComponent("", root)
+    var processString = `
+    import QtQuick
+    import Quickshell.Io
+    Process {
+    id: process
+    command: ["find", "` + directory + `", "-type", "f", "(", "-iname", "*.jpg", "-o", "-iname", "*.jpeg", "-o", "-iname", "*.png", "-o", "-iname", "*.gif", "-o", "-iname", "*.pnm", "-o", "-iname", "*.bmp", ")"]
+    stdout: StdioCollector {}
+    stderr: StdioCollector {}
+    }
+    `
+
+    var processObject = Qt.createQmlObject(processString, root, "RecursiveScan_" + screenName)
+
+    // Store reference to avoid garbage collection
+    recursiveProcesses[screenName] = processObject
+
+    var handler = function (exitCode) {
+      scanningCount--
+      Logger.d("Wallpaper", "Process exited with code", exitCode, "for", screenName)
+      if (exitCode === 0) {
+        var lines = processObject.stdout.text.split('\n')
+        var files = []
+        for (var i = 0; i < lines.length; i++) {
+          var line = lines[i].trim()
+          if (line !== '') {
+            files.push(line)
+          }
+        }
+        // Sort files for consistent ordering
+        files.sort()
+        wallpaperLists[screenName] = files
+        Logger.i("Wallpaper", "Recursive scan completed for", screenName, "found", files.length, "files")
+        wallpaperListChanged(screenName, files.length)
+      } else {
+        Logger.w("Wallpaper", "Recursive scan failed for", screenName, "exit code:", exitCode, "(directory might not exist)")
+        wallpaperLists[screenName] = []
+        wallpaperListChanged(screenName, 0)
+      }
+      // Clean up
+      delete recursiveProcesses[screenName]
+      processObject.destroy()
+    }
+
+    processObject.exited.connect(handler)
+    Logger.d("Wallpaper", "Starting process for", screenName)
+    processObject.running = true
   }
 
   // -------------------------------------------------------------------

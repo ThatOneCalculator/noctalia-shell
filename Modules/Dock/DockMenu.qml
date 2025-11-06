@@ -121,7 +121,6 @@ PopupWindow {
 
   function show(item, toplevelData) {
     if (!item) {
-      Logger.w("DockMenu", "anchorItem is undefined, won't show menu.")
       return
     }
 
@@ -175,8 +174,6 @@ PopupWindow {
       if (root.onAppClosed && typeof root.onAppClosed === "function") {
         Qt.callLater(root.onAppClosed)
       }
-    } else {
-      Logger.w("DockMenu", "Cannot close app - invalid toplevel reference")
     }
     root.hide()
     root.requestClose()
@@ -210,7 +207,7 @@ PopupWindow {
     color: Color.mSurfaceVariant
     radius: Style.radiusS
     border.color: Color.mOutline
-    border.width: Math.max(1, Style.borderS)
+    border.width: Style.borderS
 
     // Single MouseArea to handle both auto-close and menu interactions
     MouseArea {
@@ -255,7 +252,7 @@ PopupWindow {
         Rectangle {
           Layout.fillWidth: true
           height: 32
-          color: root.hoveredItem === index ? Color.mTertiary : Color.transparent
+          color: root.hoveredItem === index ? Color.mHover : Color.transparent
           radius: Style.radiusXS
 
           RowLayout {
@@ -267,14 +264,14 @@ PopupWindow {
             NIcon {
               icon: modelData.icon
               pointSize: Style.fontSizeL
-              color: root.hoveredItem === index ? Color.mOnTertiary : Color.mOnSurfaceVariant
+              color: root.hoveredItem === index ? Color.mOnHover : Color.mOnSurfaceVariant
               Layout.alignment: Qt.AlignVCenter
             }
 
             NText {
               text: modelData.text
               pointSize: Style.fontSizeS
-              color: root.hoveredItem === index ? Color.mOnTertiary : Color.mOnSurfaceVariant
+              color: root.hoveredItem === index ? Color.mOnHover : Color.mOnSurfaceVariant
               Layout.alignment: Qt.AlignVCenter
               elide: Text.ElideRight
             }

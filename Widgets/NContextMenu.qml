@@ -10,6 +10,8 @@ Popup {
   property alias model: listView.model
   property real itemHeight: 36
   property real itemPadding: Style.marginM
+  property int verticalPolicy: ScrollBar.AsNeeded
+  property int horizontalPolicy: ScrollBar.AsNeeded
 
   signal triggered(string action)
 
@@ -22,7 +24,7 @@ Popup {
   background: Rectangle {
     color: Color.mSurfaceVariant
     border.color: Color.mOutline
-    border.width: Math.max(1, Style.borderS)
+    border.width: Style.borderS
     radius: Style.radiusM
   }
 
@@ -31,6 +33,8 @@ Popup {
     implicitHeight: contentHeight
     spacing: Style.marginXXS
     interactive: contentHeight > root.height
+    verticalPolicy: root.verticalPolicy
+    horizontalPolicy: root.horizontalPolicy
 
     delegate: ItemDelegate {
       id: menuItem
@@ -44,7 +48,7 @@ Popup {
       property var popup: root
 
       background: Rectangle {
-        color: menuItem.hovered && menuItem.enabled ? Color.mTertiary : Color.transparent
+        color: menuItem.hovered && menuItem.enabled ? Color.mHover : Color.transparent
         radius: Style.radiusS
 
         Behavior on color {
@@ -62,7 +66,7 @@ Popup {
           visible: modelData.icon !== undefined
           icon: modelData.icon || ""
           pointSize: Style.fontSizeM
-          color: menuItem.hovered && menuItem.enabled ? Color.mOnTertiary : Color.mOnSurface
+          color: menuItem.hovered && menuItem.enabled ? Color.mOnHover : Color.mOnSurface
           Layout.leftMargin: root.itemPadding
 
           Behavior on color {
@@ -75,7 +79,7 @@ Popup {
         NText {
           text: modelData.label || modelData.text || ""
           pointSize: Style.fontSizeM
-          color: menuItem.hovered && menuItem.enabled ? Color.mOnTertiary : Color.mOnSurface
+          color: menuItem.hovered && menuItem.enabled ? Color.mOnHover : Color.mOnSurface
           verticalAlignment: Text.AlignVCenter
           Layout.fillWidth: true
           Layout.leftMargin: modelData.icon === undefined ? root.itemPadding : 0

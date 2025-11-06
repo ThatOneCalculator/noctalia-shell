@@ -13,7 +13,7 @@ Rectangle {
   property string tooltipText
   property color backgroundColor: Color.mPrimary
   property color textColor: Color.mOnPrimary
-  property color hoverColor: Color.mTertiary
+  property color hoverColor: Color.mHover
   property bool enabled: true
   property real fontSize: Style.fontSizeM
   property int fontWeight: Style.fontWeightBold
@@ -45,7 +45,7 @@ Rectangle {
     return outlined ? Color.transparent : backgroundColor
   }
 
-  border.width: outlined ? Math.max(1, Style.borderS) : 0
+  border.width: outlined ? Style.borderS : 0
   border.color: {
     if (!enabled)
       return Color.mOutline

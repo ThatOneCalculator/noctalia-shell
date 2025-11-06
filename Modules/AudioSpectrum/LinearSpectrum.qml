@@ -7,13 +7,16 @@ Item {
   property color strokeColor: Color.mOnSurface
   property int strokeWidth: 0
   property var values: []
+  property bool vertical: false
 
-  // Pre-compute mirroring
+  // Minimum signal properties
+  property bool showMinimumSignal: false
+  property real minimumSignalValue: 0.05 // Default to 5% of height
+
+  // Pre compute horizontal mirroring
   readonly property int valuesCount: values.length
   readonly property int totalBars: valuesCount * 2
-  readonly property real barSlotWidth: totalBars > 0 ? width / totalBars : 0
-
-  readonly property real centerY: height / 2
+  readonly property real barSlotSize: totalBars > 0 ? (vertical ? height : width) / totalBars : 0
 
   Repeater {
     model: root.totalBars
@@ -24,19 +27,18 @@ Item {
       property int valueIndex: index < root.valuesCount ? root.valuesCount - 1 - index // Mirrored half
                                                         : index - root.valuesCount // Normal half
 
-      property real amp: root.values[valueIndex]
-
-      property real barHeight: root.height * amp
+      property real rawAmp: root.values[valueIndex]
+      property real amp: (root.showMinimumSignal && rawAmp === 0) ? root.minimumSignalValue : rawAmp
 
       color: root.fillColor
       border.color: root.strokeColor
       border.width: root.strokeWidth
       antialiasing: true
 
-      width: root.barSlotWidth * 0.8 // Creates a small gap between bars
-      height: barHeight
-      x: index * root.barSlotWidth + (root.barSlotWidth * 0.25)
-      y: root.centerY - (barHeight / 2)
+      width: vertical ? root.width * amp : root.barSlotSize * 0.5
+      height: vertical ? root.barSlotSize * 0.5 : root.height * amp
+      x: vertical ? root.width - width : index * root.barSlotSize + (root.barSlotSize * 0.25)
+      y: vertical ? index * root.barSlotSize + (root.barSlotSize * 0.25) : root.height - height
     }
   }
 }

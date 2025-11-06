@@ -27,6 +27,22 @@ ColumnLayout {
     Layout.bottomMargin: Style.marginL
   }
 
+  NToggle {
+    visible: Settings.data.wallpaper.enabled && CompositorService.isNiri
+    label: I18n.tr("settings.wallpaper.settings.enable-overview.label")
+    description: I18n.tr("settings.wallpaper.settings.enable-overview.description")
+    checked: Settings.data.wallpaper.overviewEnabled
+    onToggled: checked => Settings.data.wallpaper.overviewEnabled = checked
+    Layout.bottomMargin: Style.marginL
+  }
+
+  NDivider {
+    visible: Settings.data.wallpaper.enabled
+    Layout.fillWidth: true
+    Layout.topMargin: Style.marginXL
+    Layout.bottomMargin: Style.marginXL
+  }
+
   ColumnLayout {
     visible: Settings.data.wallpaper.enabled
     spacing: Style.marginL
@@ -44,6 +60,14 @@ ColumnLayout {
       onButtonClicked: mainFolderPicker.open()
     }
 
+    // Recursive search
+    NToggle {
+      label: I18n.tr("settings.wallpaper.settings.recursive-search.label")
+      description: I18n.tr("settings.wallpaper.settings.recursive-search.description")
+      checked: Settings.data.wallpaper.recursiveSearch
+      onToggled: checked => Settings.data.wallpaper.recursiveSearch = checked
+    }
+
     // Monitor-specific directories
     NToggle {
       label: I18n.tr("settings.wallpaper.settings.monitor-specific.label")
@@ -57,9 +81,9 @@ ColumnLayout {
 
       Layout.fillWidth: true
       radius: Style.radiusM
-      color: Color.mSurfaceVariant
+      color: Color.mSurface
       border.color: Color.mOutline
-      border.width: Math.max(1, Style.borderS)
+      border.width: Style.borderS
       implicitHeight: contentCol.implicitHeight + Style.marginL * 2
 
       ColumnLayout {
@@ -93,6 +117,41 @@ ColumnLayout {
             }
           }
         }
+      }
+    }
+
+    NComboBox {
+      label: I18n.tr("settings.wallpaper.settings.selector-position.label")
+      description: I18n.tr("settings.wallpaper.settings.selector-position.description")
+      Layout.fillWidth: true
+      model: [{
+          "key": "follow_bar",
+          "name": I18n.tr("options.launcher.position.follow_bar")
+        }, {
+          "key": "center",
+          "name": I18n.tr("options.launcher.position.center")
+        }, {
+          "key": "top_center",
+          "name": I18n.tr("options.launcher.position.top_center")
+        }, {
+          "key": "top_left",
+          "name": I18n.tr("options.launcher.position.top_left")
+        }, {
+          "key": "top_right",
+          "name": I18n.tr("options.launcher.position.top_right")
+        }, {
+          "key": "bottom_left",
+          "name": I18n.tr("options.launcher.position.bottom_left")
+        }, {
+          "key": "bottom_right",
+          "name": I18n.tr("options.launcher.position.bottom_right")
+        }, {
+          "key": "bottom_center",
+          "name": I18n.tr("options.launcher.position.bottom_center")
+        }]
+      currentKey: Settings.data.wallpaper.panelPosition
+      onSelected: function (key) {
+        Settings.data.wallpaper.panelPosition = key
       }
     }
   }

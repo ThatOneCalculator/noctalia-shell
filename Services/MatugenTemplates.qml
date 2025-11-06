@@ -97,11 +97,21 @@ Singleton {
                      }, {
                        "name": "ghostty",
                        "path": "Terminal/ghostty",
-                       "output": "~/.config/ghostty/themes/noctalia"
+                       "output": "~/.config/ghostty/themes/noctalia",
+                       "post_hook": "pkill -SIGUSR2 ghostty"
                      }, {
                        "name": "kitty",
                        "path": "Terminal/kitty.conf",
                        "output": "~/.config/kitty/themes/noctalia.conf"
+                     }, {
+                       "name": "alacritty",
+                       "path": "Terminal/alacritty.toml",
+                       "output": "~/.config/alacritty/themes/noctalia.toml"
+                     }, {
+                       "name": "wezterm",
+                       "path": "Terminal/wezterm.toml",
+                       "output": "~/.config/wezterm/colors/Noctalia.toml",
+                       "post_hook": "touch ~/.config/wezterm/wezterm.lua"
                      }]
 
     terminals.forEach(function (terminal) {
@@ -160,6 +170,13 @@ Singleton {
       "input": "vicinae.toml",
       "postHook": "cp -n " + Quickshell.shellDir + "/Assets/noctalia.svg ~/.local/share/vicinae/themes/noctalia.svg && " + AppThemeService.colorsApplyScript + " vicinae"
     }, {
+      "name": "walker",
+      "templates": [{
+          "version": "walker",
+          "output": "~/.config/walker/themes/noctalia/style.css"
+        }],
+      "input": "walker.css"
+    }, {
       "name": "pywalfox",
       "templates": [{
           "version": "pywalfox",
@@ -217,6 +234,13 @@ Singleton {
         }],
       "input": "vesktop.css",
       "requiresThemesFolder": true
+    }, {
+      "name": "code",
+      "templates": [{
+          "version": "code",
+          "output": "~/.vscode/extensions/hyprluna.hyprluna-theme-1.0.2/themes/hyprluna.json"
+        }],
+      "input": "code.json"
     }]
 
   // --------------------------------

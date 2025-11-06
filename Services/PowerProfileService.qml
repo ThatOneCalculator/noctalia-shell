@@ -49,6 +49,10 @@ Singleton {
     }
   }
 
+  function init() {
+    Logger.d("PowerProfileService", "Service started")
+  }
+
   function setProfile(p) {
     if (!available)
       return
@@ -104,7 +108,7 @@ Singleton {
       if (profileName !== "Unknown") {
         ToastService.showNotice(I18n.tr("toast.power-profile.changed"), I18n.tr("toast.power-profile.profile-name", {
                                                                                   "profile": profileName
-                                                                                }))
+                                                                                }), profileName.toLowerCase().replace(" ", ""))
       }
     }
   }

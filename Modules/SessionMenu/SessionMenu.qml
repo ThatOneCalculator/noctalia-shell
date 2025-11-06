@@ -15,9 +15,9 @@ NPanel {
 
   preferredWidth: 400 * Style.uiScaleRatio
   preferredHeight: 340 * Style.uiScaleRatio
+
   panelAnchorHorizontalCenter: true
   panelAnchorVerticalCenter: true
-  panelKeyboardFocus: true
 
   // Timer properties
   property int timerDuration: 9000 // 9 seconds
@@ -87,9 +87,9 @@ NPanel {
 
     switch (action) {
     case "lock":
-      // Access lockScreen directly like IPCManager does
-      if (!lockScreen.active) {
-        lockScreen.active = true
+      // Access lockScreen via PanelService
+      if (PanelService.lockScreen && !PanelService.lockScreen.active) {
+        PanelService.lockScreen.active = true
       }
       break
     case "suspend":
@@ -148,6 +148,52 @@ NPanel {
     }
   }
 
+  // Override keyboard handlers from NPanel
+  function onEscapePressed() {
+    if (timerActive) {
+      cancelTimer()
+    } else {
+      cancelTimer()
+      close()
+    }
+  }
+
+  function onTabPressed() {
+    selectNextWrapped()
+  }
+
+  function onShiftTabPressed() {
+    selectPreviousWrapped()
+  }
+
+  function onUpPressed() {
+    selectPreviousWrapped()
+  }
+
+  function onDownPressed() {
+    selectNextWrapped()
+  }
+
+  function onReturnPressed() {
+    activate()
+  }
+
+  function onHomePressed() {
+    selectFirst()
+  }
+
+  function onEndPressed() {
+    selectLast()
+  }
+
+  function onCtrlJPressed() {
+    selectNextWrapped()
+  }
+
+  function onCtrlKPressed() {
+    selectPreviousWrapped()
+  }
+
   // Countdown timer
   Timer {
     id: countdownTimer
@@ -164,81 +210,6 @@ NPanel {
   panelContent: Rectangle {
     id: ui
     color: Color.transparent
-
-    // Keyboard shortcuts
-    Shortcut {
-      sequence: "Ctrl+K"
-      onActivated: ui.selectPreviousWrapped()
-      enabled: root.opened
-    }
-
-    Shortcut {
-      sequence: "Ctrl+J"
-      onActivated: ui.selectNextWrapped()
-      enabled: root.opened
-    }
-
-    Shortcut {
-      sequence: "Up"
-      onActivated: ui.selectPreviousWrapped()
-      enabled: root.opened
-    }
-
-    Shortcut {
-      sequence: "Down"
-      onActivated: ui.selectNextWrapped()
-      enabled: root.opened
-    }
-
-    Shortcut {
-      sequence: "Shift+Tab"
-      onActivated: ui.selectPreviousWrapped()
-      enabled: root.opened
-    }
-
-    Shortcut {
-      sequence: "Tab"
-      onActivated: ui.selectNextWrapped()
-      enabled: root.opened
-    }
-
-    Shortcut {
-      sequence: "Home"
-      onActivated: ui.selectFirst()
-      enabled: root.opened
-    }
-
-    Shortcut {
-      sequence: "End"
-      onActivated: ui.selectLast()
-      enabled: root.opened
-    }
-
-    Shortcut {
-      sequence: "Return"
-      onActivated: ui.activate()
-      enabled: root.opened
-    }
-
-    Shortcut {
-      sequence: "Enter"
-      onActivated: ui.activate()
-      enabled: root.opened
-    }
-
-    Shortcut {
-      sequence: "Escape"
-      onActivated: {
-        if (timerActive) {
-          cancelTimer()
-        } else {
-          cancelTimer()
-          root.close()
-        }
-      }
-      context: Qt.WidgetShortcut
-      enabled: root.opened
-    }
 
     // Navigation functions
     function selectFirst() {
@@ -277,11 +248,11 @@ NPanel {
 
           NText {
             text: timerActive ? I18n.tr("session-menu.action-in-seconds", {
-                                          "action": pendingAction.charAt(0).toUpperCase() + pendingAction.slice(1),
+                                          "action": I18n.tr("session-menu." + pendingAction),
                                           "seconds": Math.ceil(timeRemaining / 1000)
                                         }) : I18n.tr("session-menu.title")
             font.weight: Style.fontWeightBold
-            pointSize: Style.fontSizeM
+            pointSize: Style.fontSizeL
             color: timerActive ? Color.mPrimary : Color.mOnSurface
             Layout.alignment: Qt.AlignVCenter
             verticalAlignment: Text.AlignVCenter
@@ -357,7 +328,7 @@ NPanel {
         return Qt.alpha(Color.mPrimary, 0.08)
       }
       if (isSelected || mouseArea.containsMouse) {
-        return Color.mTertiary
+        return Color.mHover
       }
       return Color.transparent
     }
@@ -368,6 +339,7 @@ NPanel {
     Behavior on color {
       ColorAnimation {
         duration: Style.animationFast
+        easing.type: Easing.OutCirc
       }
     }
 
@@ -387,7 +359,7 @@ NPanel {
           if (buttonRoot.isShutdown && !buttonRoot.isSelected && !mouseArea.containsMouse)
             return Color.mError
           if (buttonRoot.isSelected || mouseArea.containsMouse)
-            return Color.mOnTertiary
+            return Color.mOnHover
           return Color.mOnSurface
         }
         pointSize: Style.fontSizeXXL
@@ -398,6 +370,7 @@ NPanel {
         Behavior on color {
           ColorAnimation {
             duration: Style.animationFast
+            easing.type: Easing.OutCirc
           }
         }
       }
@@ -414,20 +387,21 @@ NPanel {
         NText {
           text: buttonRoot.title
           font.weight: Style.fontWeightMedium
-          pointSize: Style.fontSizeS
+          pointSize: Style.fontSizeM
           color: {
             if (buttonRoot.pending)
               return Color.mPrimary
             if (buttonRoot.isShutdown && !buttonRoot.isSelected && !mouseArea.containsMouse)
               return Color.mError
             if (buttonRoot.isSelected || mouseArea.containsMouse)
-              return Color.mOnTertiary
+              return Color.mOnHover
             return Color.mOnSurface
           }
 
           Behavior on color {
             ColorAnimation {
               duration: Style.animationFast
+              easing.type: Easing.OutCirc
             }
           }
         }
@@ -447,7 +421,7 @@ NPanel {
         NText {
           anchors.centerIn: parent
           text: Math.ceil(timeRemaining / 1000)
-          pointSize: Style.fontSizeXS
+          pointSize: Style.fontSizeS
           font.weight: Style.fontWeightBold
           color: Color.mOnPrimary
         }

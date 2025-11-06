@@ -12,13 +12,10 @@ NPanel {
   id: root
 
   preferredWidth: 820 * Style.uiScaleRatio
-  preferredHeight: 940 * Style.uiScaleRatio
+  preferredHeight: 900 * Style.uiScaleRatio
 
   panelAnchorHorizontalCenter: true
   panelAnchorVerticalCenter: true
-  panelKeyboardFocus: true
-
-  draggable: !PanelService.hasOpenedPopup
 
   // Tabs enumeration, order is NOT relevant
   enum Tab {
@@ -220,8 +217,11 @@ NPanel {
 
     root.tabsModel = newTabs // Assign the generated list to the model
   }
+
   // When the panel opens, choose the appropriate tab
   onOpened: {
+    // Run program availability checks every time settings opens
+    ProgramCheckerService.checkAllPrograms()
     updateTabsModel()
 
     var initialIndex = SettingsPanel.Tab.General
@@ -233,6 +233,7 @@ NPanel {
         }
       }
     }
+
     // Now that the UI is settled, set the current tab index.
     root.currentTabIndex = initialIndex
   }
@@ -283,6 +284,39 @@ NPanel {
     }
   }
 
+  // Override keyboard handlers from NPanel
+  function onTabPressed() {
+    selectNextTab()
+  }
+
+  function onShiftTabPressed() {
+    selectPreviousTab()
+  }
+
+  function onUpPressed() {
+    scrollUp()
+  }
+
+  function onDownPressed() {
+    scrollDown()
+  }
+
+  function onPageUpPressed() {
+    scrollPageUp()
+  }
+
+  function onPageDownPressed() {
+    scrollPageDown()
+  }
+
+  function onCtrlJPressed() {
+    scrollDown()
+  }
+
+  function onCtrlKPressed() {
+    scrollUp()
+  }
+
   panelContent: Rectangle {
     color: Color.transparent
 
@@ -291,62 +325,6 @@ NPanel {
       anchors.fill: parent
       anchors.margins: Style.marginL
       spacing: 0
-
-      // Keyboard shortcuts container
-      Item {
-        Layout.preferredWidth: 0
-        Layout.preferredHeight: 0
-
-        // Scrolling via keyboard
-        Shortcut {
-          sequence: "Down"
-          onActivated: root.scrollDown()
-          enabled: root.opened
-        }
-
-        Shortcut {
-          sequence: "Up"
-          onActivated: root.scrollUp()
-          enabled: root.opened
-        }
-
-        Shortcut {
-          sequence: "Ctrl+J"
-          onActivated: root.scrollDown()
-          enabled: root.opened
-        }
-
-        Shortcut {
-          sequence: "Ctrl+K"
-          onActivated: root.scrollUp()
-          enabled: root.opened
-        }
-
-        Shortcut {
-          sequence: "PgDown"
-          onActivated: root.scrollPageDown()
-          enabled: root.opened
-        }
-
-        Shortcut {
-          sequence: "PgUp"
-          onActivated: root.scrollPageUp()
-          enabled: root.opened
-        }
-
-        // Changing tab via keyboard
-        Shortcut {
-          sequence: "Tab"
-          onActivated: root.selectNextTab()
-          enabled: root.opened
-        }
-
-        Shortcut {
-          sequence: "Shift+Tab"
-          onActivated: root.selectPreviousTab()
-          enabled: root.opened
-        }
-      }
 
       // Main content area
       RowLayout {
@@ -357,12 +335,14 @@ NPanel {
         // Sidebar
         Rectangle {
           id: sidebar
+
+          clip: true
           Layout.preferredWidth: 220 * Style.uiScaleRatio
           Layout.fillHeight: true
           Layout.alignment: Qt.AlignTop
           color: Color.mSurfaceVariant
           border.color: Color.mOutline
-          border.width: Math.max(1, Style.borderS)
+          border.width: Style.borderS
           radius: Style.radiusM
 
           MouseArea {
@@ -395,10 +375,10 @@ NPanel {
                 Layout.fillWidth: true
                 Layout.preferredHeight: tabEntryRow.implicitHeight + Style.marginM * 2
                 radius: Style.radiusS
-                color: selected ? Color.mPrimary : (tabItem.hovering ? Color.mTertiary : Color.transparent)
+                color: selected ? Color.mPrimary : (tabItem.hovering ? Color.mHover : Color.transparent)
                 readonly property bool selected: index === currentTabIndex
                 property bool hovering: false
-                property color tabTextColor: selected ? Color.mOnPrimary : (tabItem.hovering ? Color.mOnTertiary : Color.mOnSurface)
+                property color tabTextColor: selected ? Color.mOnPrimary : (tabItem.hovering ? Color.mOnHover : Color.mOnSurface)
 
                 Behavior on color {
                   ColorAnimation {
@@ -464,7 +444,7 @@ NPanel {
           radius: Style.radiusM
           color: Color.mSurfaceVariant
           border.color: Color.mOutline
-          border.width: Math.max(1, Style.borderS)
+          border.width: Style.borderS
 
           ColumnLayout {
             id: contentLayout

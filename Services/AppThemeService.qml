@@ -15,7 +15,9 @@ Singleton {
   readonly property var terminalPaths: ({
                                           "foot": "~/.config/foot/themes/noctalia",
                                           "ghostty": "~/.config/ghostty/themes/noctalia",
-                                          "kitty": "~/.config/kitty/themes/noctalia.conf"
+                                          "kitty": "~/.config/kitty/themes/noctalia.conf",
+                                          "alacritty": "~/.config/alacritty/themes/noctalia.toml",
+                                          "wezterm": "~/.config/wezterm/colors/Noctalia.toml"
                                         })
 
   readonly property var schemeNameMap: ({
@@ -67,12 +69,62 @@ Singleton {
                                                             "path": "~/.config/vesktop/themes/noctalia.theme.css"
                                                           }]
                                                       },
+                                                      "discord_webcord": {
+                                                        "input": "vesktop.css",
+                                                        "outputs": [{
+                                                            "path": "~/.config/webcord/themes/noctalia.theme.css"
+                                                          }]
+                                                      },
+                                                      "discord_armcord": {
+                                                        "input": "vesktop.css",
+                                                        "outputs": [{
+                                                            "path": "~/.config/armcord/themes/noctalia.theme.css"
+                                                          }]
+                                                      },
+                                                      "discord_equibop": {
+                                                        "input": "vesktop.css",
+                                                        "outputs": [{
+                                                            "path": "~/.config/equibop/themes/noctalia.theme.css"
+                                                          }]
+                                                      },
+                                                      "discord_lightcord": {
+                                                        "input": "vesktop.css",
+                                                        "outputs": [{
+                                                            "path": "~/.config/lightcord/themes/noctalia.theme.css"
+                                                          }]
+                                                      },
+                                                      "discord_dorion": {
+                                                        "input": "vesktop.css",
+                                                        "outputs": [{
+                                                            "path": "~/.config/dorion/themes/noctalia.theme.css"
+                                                          }]
+                                                      },
+                                                      "discord_vencord": {
+                                                        "input": "vesktop.css",
+                                                        "outputs": [{
+                                                            "path": "~/.config/discord/themes/noctalia.theme.css"
+                                                          }]
+                                                      },
                                                       "vicinae": {
                                                         "input": "vicinae.toml",
                                                         "outputs": [{
                                                             "path": "~/.local/share/vicinae/themes/matugen.toml"
                                                           }],
                                                         "postProcess": () => `cp -n ${Quickshell.shellDir}/Assets/noctalia.svg ~/.local/share/vicinae/themes/noctalia.svg && ${colorsApplyScript} vicinae\n`
+                                                      },
+                                                      "walker": {
+                                                        "input": "walker.css",
+                                                        "outputs": [{
+                                                            "path": "~/.config/walker/themes/noctalia/style.css"
+                                                          }],
+                                                        "postProcess": () => `${colorsApplyScript} walker\n`,
+                                                        "strict": true
+                                                      },
+                                                      "code": {
+                                                        "input": "code.json",
+                                                        "outputs": [{
+                                                            "path": "~/.vscode/extensions/hyprluna.hyprluna-theme-1.0.2/themes/hyprluna.json"
+                                                          }]
                                                       }
                                                     })
 
@@ -152,12 +204,9 @@ Singleton {
 
     handleTerminalThemes()
 
-    const isDarkMode = Settings.data.colorSchemes.darkMode
-    const mode = isDarkMode ? "dark" : "light"
+    const mode = Settings.data.colorSchemes.darkMode ? "dark" : "light"
     const colors = schemeData[mode]
-
-    const matugenColors = generatePalette(colors.mPrimary, colors.mSecondary, colors.mTertiary, colors.mError, colors.mSurface, isDarkMode)
-    let script = processAllTemplates(matugenColors, mode)
+    let script = processAllTemplates(colors, mode)
 
     // Add user templates if enabled
     script += buildUserTemplateCommandForPredefined(schemeData, mode)
@@ -166,7 +215,7 @@ Singleton {
     generateProcess.running = true
   }
 
-  function generatePalette(primaryColor, secondaryColor, tertiaryColor, errorColor, backgroundColor, outlineColor, isDarkMode) {
+  function generatePalette(colors, isDarkMode, isStrict) {
     const c = hex => ({
                         "default": {
                           "hex": hex,
@@ -175,66 +224,65 @@ Singleton {
                       })
 
     // Generate container colors
-    const primaryContainer = ColorsConvert.generateContainerColor(primaryColor, isDarkMode)
-    const secondaryContainer = ColorsConvert.generateContainerColor(secondaryColor, isDarkMode)
-    const tertiaryContainer = ColorsConvert.generateContainerColor(tertiaryColor, isDarkMode)
+    const primaryContainer = ColorsConvert.generateContainerColor(colors.mPrimary, isDarkMode)
+    const secondaryContainer = ColorsConvert.generateContainerColor(colors.mSecondary, isDarkMode)
+    const tertiaryContainer = ColorsConvert.generateContainerColor(colors.mTertiary, isDarkMode)
 
-    // Generate "on" colors (for text/icons)
-    const onPrimary = ColorsConvert.generateOnColor(primaryColor, isDarkMode)
-    const onSecondary = ColorsConvert.generateOnColor(secondaryColor, isDarkMode)
-    const onTertiary = ColorsConvert.generateOnColor(tertiaryColor, isDarkMode)
-    const onBackground = ColorsConvert.generateOnColor(backgroundColor, isDarkMode)
+    // Generate "on" colors
+    const onPrimary = ColorsConvert.generateOnColor(colors.mPrimary, isDarkMode)
+    const onSecondary = ColorsConvert.generateOnColor(colors.mSecondary, isDarkMode)
+    const onTertiary = ColorsConvert.generateOnColor(colors.mTertiary, isDarkMode)
 
     const onPrimaryContainer = ColorsConvert.generateOnColor(primaryContainer, isDarkMode)
     const onSecondaryContainer = ColorsConvert.generateOnColor(secondaryContainer, isDarkMode)
     const onTertiaryContainer = ColorsConvert.generateOnColor(tertiaryContainer, isDarkMode)
 
     // Generate error colors (standard red-based)
-    const errorContainer = ColorsConvert.generateContainerColor(errorColor, isDarkMode)
-    const onError = ColorsConvert.generateOnColor(errorColor, isDarkMode)
+    const errorContainer = ColorsConvert.generateContainerColor(colors.mError, isDarkMode)
+    const onError = ColorsConvert.generateOnColor(colors.mError, isDarkMode)
     const onErrorContainer = ColorsConvert.generateOnColor(errorContainer, isDarkMode)
 
     // Surface is same as background in Material Design 3
-    const surface = backgroundColor
-    const onSurface = onBackground
+    const surface = colors.mSurface
+    const onSurface = isStrict ? colors.mOnSurface : ColorsConvert.generateOnColor(colors.mSurface, isDarkMode)
 
     // Generate surface variant (slightly different tone)
-    const surfaceVariant = ColorsConvert.adjustLightness(backgroundColor, isDarkMode ? 5 : -3)
-    const onSurfaceVariant = ColorsConvert.generateOnColor(surfaceVariant, isDarkMode)
+    const surfaceVariant = isStrict ? colors.mSurfaceVariant : ColorsConvert.adjustLightness(colors.mSurface, isDarkMode ? 5 : -3)
+    const onSurfaceVariant = isStrict ? colors.mOnSurfaceVariant : ColorsConvert.generateOnColor(surfaceVariant, isDarkMode)
 
     // Generate surface containers (progressive elevation)
-    const surfaceContainerLowest = ColorsConvert.generateSurfaceVariant(backgroundColor, 0, isDarkMode)
-    const surfaceContainerLow = ColorsConvert.generateSurfaceVariant(backgroundColor, 1, isDarkMode)
-    const surfaceContainer = ColorsConvert.generateSurfaceVariant(backgroundColor, 2, isDarkMode)
-    const surfaceContainerHigh = ColorsConvert.generateSurfaceVariant(backgroundColor, 3, isDarkMode)
-    const surfaceContainerHighest = ColorsConvert.generateSurfaceVariant(backgroundColor, 4, isDarkMode)
+    const surfaceContainerLowest = ColorsConvert.generateSurfaceVariant(surface, 0, isDarkMode)
+    const surfaceContainerLow = ColorsConvert.generateSurfaceVariant(surface, 1, isDarkMode)
+    const surfaceContainer = ColorsConvert.generateSurfaceVariant(surface, 2, isDarkMode)
+    const surfaceContainerHigh = ColorsConvert.generateSurfaceVariant(surface, 3, isDarkMode)
+    const surfaceContainerHighest = ColorsConvert.generateSurfaceVariant(surface, 4, isDarkMode)
 
     // Generate outline colors (for borders/dividers)
-    const outline = isDarkMode ? "#938f99" : "#79747e"
-    const outlineVariant = ColorsConvert.adjustLightness(outline, isDarkMode ? -10 : 10)
+    const outline = isStrict ? colors.mOutline : ColorsConvert.adjustLightnessAndSaturation(colors.mOnSurface, isDarkMode ? -30 : 30, isDarkMode ? -30 : 30)
+    const outlineVariant = ColorsConvert.adjustLightness(outline, isDarkMode ? -20 : 20)
 
-    // Shadow is always very dark
+    // Shadow is always pitch black
     const shadow = "#000000"
 
     return {
-      "primary": c(primaryColor),
+      "primary": c(colors.mPrimary),
       "on_primary": c(onPrimary),
       "primary_container": c(primaryContainer),
       "on_primary_container": c(onPrimaryContainer),
-      "secondary": c(secondaryColor),
+      "secondary": c(colors.mSecondary),
       "on_secondary": c(onSecondary),
       "secondary_container": c(secondaryContainer),
       "on_secondary_container": c(onSecondaryContainer),
-      "tertiary": c(tertiaryColor),
+      "tertiary": c(colors.mTertiary),
       "on_tertiary": c(onTertiary),
       "tertiary_container": c(tertiaryContainer),
       "on_tertiary_container": c(onTertiaryContainer),
-      "error": c(errorColor),
+      "error": c(colors.mError),
       "on_error": c(onError),
       "error_container": c(errorContainer),
       "on_error_container": c(onErrorContainer),
-      "background": c(backgroundColor),
-      "on_background": c(onBackground),
+      "background": c(surface),
+      "on_background": c(onSurface),
       "surface": c(surface),
       "on_surface": c(onSurface),
       "surface_variant": c(surfaceVariant),
@@ -249,6 +297,7 @@ Singleton {
       "shadow": c(shadow)
     }
   }
+
   function processAllTemplates(colors, mode) {
     let script = ""
     const homeDir = Quickshell.env("HOME")
@@ -267,13 +316,28 @@ Singleton {
     const templatePath = `${Quickshell.shellDir}/Assets/MatugenTemplates/${config.input}`
     let script = ""
 
+    const palette = generatePalette(colors, Settings.data.colorSchemes.darkMode, config.strict || false)
+
     config.outputs.forEach(output => {
+
                              const outputPath = output.path.replace("~", homeDir)
                              const outputDir = outputPath.substring(0, outputPath.lastIndexOf('/'))
 
-                             script += `mkdir -p ${outputDir}\n`
-                             script += `cp '${templatePath}' '${outputPath}'\n`
-                             script += replaceColorsInFile(outputPath, colors)
+                             // For Discord clients, check if the base config directory exists
+                             if (appName.startsWith("discord_")) {
+                               const baseConfigDir = outputDir.replace("/themes", "")
+                               script += `if [ -d "${baseConfigDir}" ]; then\n`
+                               script += `  mkdir -p ${outputDir}\n`
+                               script += `  cp '${templatePath}' '${outputPath}'\n`
+                               script += `  ${replaceColorsInFile(outputPath, palette)}\n`
+                               script += `else\n`
+                               script += `  echo "Discord client ${appName} not found at ${baseConfigDir}, skipping theme generation"\n`
+                               script += `fi\n`
+                             } else {
+                               script += `mkdir -p ${outputDir}\n`
+                               script += `cp '${templatePath}' '${outputPath}'\n`
+                               script += replaceColorsInFile(outputPath, palette)
+                             }
                            })
 
     if (config.postProcess) {
@@ -324,7 +388,12 @@ Singleton {
     const mode = Settings.data.colorSchemes.darkMode ? 'dark' : 'light'
 
     colorScheme = schemeNameMap[colorScheme] || colorScheme
-    const extension = terminal === 'kitty' ? ".conf" : ""
+    let extension = ""
+    if (terminal === 'kitty') {
+      extension = ".conf"
+    } else if (terminal === 'wezterm') {
+      extension = ".toml"
+    }
 
     return `${Quickshell.shellDir}/Assets/ColorScheme/${colorScheme}/terminal/${terminal}/${colorScheme}-${mode}${extension}`
   }
@@ -356,7 +425,7 @@ Singleton {
     const colors = schemeData[mode]
 
     // Generate the matugen palette JSON
-    const matugenColors = generatePalette(colors.mPrimary, colors.mSecondary, colors.mTertiary, colors.mError, colors.mSurface, isDarkMode)
+    const palette = generatePalette(colors, isDarkMode, false)
 
     // Create a temporary JSON file with the color palette
     const tempJsonPath = Settings.cacheDir + "predefined-colors.json"
@@ -369,7 +438,7 @@ Singleton {
     // Write the color palette to a temp JSON file
     script += `  cat > '${tempJsonPathEsc}' << 'EOF'\n`
     script += JSON.stringify({
-                               "colors": matugenColors
+                               "colors": palette
                              }, null, 2) + "\n"
     script += "EOF\n"
 
@@ -391,6 +460,22 @@ Singleton {
     id: generateProcess
     workingDirectory: Quickshell.shellDir
     running: false
+
+    onExited: function (exitCode) {
+      if (exitCode !== 0) {
+        // Capture error output from stderr first, then stdout, or use fallback message
+        const errorMsg = (stderr.text && stderr.text.trim() !== "") ? stderr.text.trim() : ((stdout.text && stdout.text.trim() !== "") ? stdout.text.trim() : I18n.tr("toast.matugen.failed-general"))
+        Logger.e("AppThemeService", "Matugen process failed with exit code:", exitCode)
+        if (stderr.text && stderr.text.trim() !== "") {
+          Logger.e("AppThemeService", "Matugen stderr:", stderr.text)
+        }
+        if (stdout.text && stdout.text.trim() !== "") {
+          Logger.e("AppThemeService", "Matugen stdout:", stdout.text)
+        }
+        ToastService.showError(I18n.tr("toast.matugen.failed"), errorMsg, 6000)
+      }
+    }
+
     stdout: StdioCollector {
       onStreamFinished: {
         if (this.text) {

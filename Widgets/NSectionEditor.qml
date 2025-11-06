@@ -177,7 +177,7 @@ NBox {
             radius: Style.radiusL
             color: root.getWidgetColor(modelData)[0]
             border.color: Color.mOutline
-            border.width: Math.max(1, Style.borderS)
+            border.width: Style.borderS
 
             // Store the widget index for drag operations
             property int widgetIndex: index
@@ -233,7 +233,7 @@ NBox {
               acceptedButtons: Qt.RightButton
               z: -1 // Below the buttons but above background
 
-              onClicked: mouse => {
+              onPressed: mouse => {
                            if (mouse.button === Qt.RightButton) {
                              // Check if click is not on the buttons area
                              const localX = mouse.x
@@ -276,13 +276,14 @@ NBox {
                     onClicked: {
                       var component = Qt.createComponent(Qt.resolvedUrl(root.settingsDialogComponent))
                       function instantiateAndOpen() {
-                        var dialog = component.createObject(root, {
+                        var dialog = component.createObject(Overlay.overlay, {
                                                               "widgetIndex": index,
                                                               "widgetData": modelData,
                                                               "widgetId": modelData.id,
-                                                              "parent": Overlay.overlay
+                                                              "sectionId": root.sectionId
                                                             })
                         if (dialog) {
+                          dialog.updateWidgetSettings.connect(root.updateWidgetSettings)
                           dialog.open()
                         } else {
                           Logger.e("NSectionEditor", "Failed to create settings dialog instance")
@@ -332,7 +333,7 @@ NBox {
         radius: Style.radiusL
         color: Color.transparent
         border.color: Color.mOutline
-        border.width: Math.max(1, Style.borderS)
+        border.width: Style.borderS
         opacity: 0.7
         visible: flowDragArea.dragStarted
         z: 2000

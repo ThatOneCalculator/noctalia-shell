@@ -8,25 +8,24 @@ import qs.Services
 
 // Widget Settings Dialog Component
 Popup {
-  // Don't replace by root!
-  id: widgetSettings
+  id: root
 
   property int widgetIndex: -1
   property var widgetData: null
   property string widgetId: ""
+  property string sectionId: ""
 
-  // Center popup in parent
-  x: (parent.width - width) * 0.5
-  y: (parent.height - height) * 0.5
+  signal updateWidgetSettings(string section, int index, var settings)
 
   width: Math.max(content.implicitWidth + padding * 2, 500)
   height: content.implicitHeight + padding * 2
   padding: Style.marginXL
   modal: true
+  anchors.centerIn: parent
 
   onOpened: {
     // Mark this popup has opened in the PanelService
-    PanelService.willOpenPopup(widgetSettings)
+    PanelService.willOpenPopup(root)
 
     // Load settings when popup opens with data
     if (widgetData && widgetId) {
@@ -35,7 +34,7 @@ Popup {
   }
 
   onClosed: {
-    PanelService.willClosePopup(widgetSettings)
+    PanelService.willClosePopup(root)
   }
 
   background: Rectangle {
@@ -44,7 +43,7 @@ Popup {
     color: Color.mSurface
     radius: Style.radiusL
     border.color: Color.mPrimary
-    border.width: Math.max(1, Style.borderM)
+    border.width: Style.borderM
   }
 
   contentItem: ColumnLayout {
@@ -59,7 +58,7 @@ Popup {
 
       NText {
         text: I18n.tr("system.widget-settings-title", {
-                        "widget": widgetSettings.widgetId
+                        "widget": root.widgetId
                       })
         pointSize: Style.fontSizeL
         font.weight: Style.fontWeightBold
@@ -70,7 +69,7 @@ Popup {
       NIconButton {
         icon: "close"
         tooltipText: I18n.tr("tooltips.close")
-        onClicked: widgetSettings.close()
+        onClicked: root.close()
       }
     }
 
@@ -101,7 +100,7 @@ Popup {
       NButton {
         text: I18n.tr("bar.widget-settings.dialog.cancel")
         outlined: true
-        onClicked: widgetSettings.close()
+        onClicked: root.close()
       }
 
       NButton {
@@ -110,8 +109,8 @@ Popup {
         onClicked: {
           if (settingsLoader.item && settingsLoader.item.saveSettings) {
             var newSettings = settingsLoader.item.saveSettings()
-            root.updateWidgetSettings(sectionId, widgetSettings.widgetIndex, newSettings)
-            widgetSettings.close()
+            root.updateWidgetSettings(root.sectionId, root.widgetIndex, newSettings)
+            root.close()
           }
         }
       }
@@ -121,18 +120,22 @@ Popup {
   function loadWidgetSettings() {
     const widgetSettingsMap = {
       "ActiveWindow": "WidgetSettings/ActiveWindowSettings.qml",
+      "AudioVisualizer": "WidgetSettings/AudioVisualizerSettings.qml",
       "Battery": "WidgetSettings/BatterySettings.qml",
+      "Bluetooth": "WidgetSettings/BluetoothSettings.qml",
       "Brightness": "WidgetSettings/BrightnessSettings.qml",
       "Clock": "WidgetSettings/ClockSettings.qml",
       "ControlCenter": "WidgetSettings/ControlCenterSettings.qml",
       "CustomButton": "WidgetSettings/CustomButtonSettings.qml",
       "KeyboardLayout": "WidgetSettings/KeyboardLayoutSettings.qml",
+      "LockKeys": "WidgetSettings/LockKeysSettings.qml",
       "MediaMini": "WidgetSettings/MediaMiniSettings.qml",
       "Microphone": "WidgetSettings/MicrophoneSettings.qml",
       "NotificationHistory": "WidgetSettings/NotificationHistorySettings.qml",
       "Spacer": "WidgetSettings/SpacerSettings.qml",
       "SystemMonitor": "WidgetSettings/SystemMonitorSettings.qml",
       "Volume": "WidgetSettings/VolumeSettings.qml",
+      "WiFi": "WidgetSettings/WiFiSettings.qml",
       "Workspace": "WidgetSettings/WorkspaceSettings.qml",
       "Taskbar": "WidgetSettings/TaskbarSettings.qml",
       "Tray": "WidgetSettings/TraySettings.qml"

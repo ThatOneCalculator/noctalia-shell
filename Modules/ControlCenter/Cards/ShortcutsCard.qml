@@ -28,14 +28,18 @@ RowLayout {
       Repeater {
         model: Settings.data.controlCenter.shortcuts.left
         delegate: ControlCenterWidgetLoader {
+          required property var modelData
+          required property int index
+
           Layout.fillWidth: false
           widgetId: (modelData.id !== undefined ? modelData.id : "")
+          widgetScreen: root.screen
           widgetProps: {
-            "screen": root.modelData || null,
             "widgetId": modelData.id,
             "section": "quickSettings",
             "sectionWidgetIndex": index,
-            "sectionWidgetsCount": Settings.data.controlCenter.shortcuts.left.length
+            "sectionWidgetsCount": Settings.data.controlCenter.shortcuts.left.length,
+            "widgetSettings": modelData
           }
           Layout.alignment: Qt.AlignVCenter
         }
@@ -63,14 +67,18 @@ RowLayout {
       Repeater {
         model: Settings.data.controlCenter.shortcuts.right
         delegate: ControlCenterWidgetLoader {
+          required property var modelData
+          required property int index
+
           Layout.fillWidth: false
           widgetId: (modelData.id !== undefined ? modelData.id : "")
+          widgetScreen: root.screen
           widgetProps: {
-            "screen": root.modelData || null,
             "widgetId": modelData.id,
             "section": "quickSettings",
             "sectionWidgetIndex": index,
-            "sectionWidgetsCount": Settings.data.controlCenter.shortcuts.right.length
+            "sectionWidgetsCount": Settings.data.controlCenter.shortcuts.right.length,
+            "widgetSettings": modelData
           }
           Layout.alignment: Qt.AlignVCenter
         }

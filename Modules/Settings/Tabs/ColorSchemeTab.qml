@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Io
 import qs.Commons
 import qs.Services
@@ -110,7 +111,7 @@ ColumnLayout {
       if (exitCode === 0) {
         Settings.data.colorSchemes.useWallpaperColors = true
         AppThemeService.generate()
-        ToastService.showNotice(I18n.tr("settings.color-scheme.color-source.use-wallpaper-colors.label"), I18n.tr("toast.wallpaper-colors.enabled"))
+        ToastService.showNotice(I18n.tr("settings.color-scheme.color-source.use-wallpaper-colors.label"), I18n.tr("toast.wallpaper-colors.enabled"), "settings-color-scheme")
       } else {
         ToastService.showWarning(I18n.tr("settings.color-scheme.color-source.use-wallpaper-colors.label"), I18n.tr("toast.wallpaper-colors.not-installed"))
       }
@@ -247,7 +248,7 @@ ColumnLayout {
                    matugenCheck.running = true
                  } else {
                    Settings.data.colorSchemes.useWallpaperColors = false
-                   ToastService.showNotice(I18n.tr("settings.color-scheme.color-source.use-wallpaper-colors.label"), I18n.tr("toast.wallpaper-colors.disabled"))
+                   ToastService.showNotice(I18n.tr("settings.color-scheme.color-source.use-wallpaper-colors.label"), I18n.tr("toast.wallpaper-colors.disabled"), "settings-color-scheme")
 
                    if (Settings.data.colorSchemes.predefinedScheme) {
                      ColorSchemeService.applyScheme(Settings.data.colorSchemes.predefinedScheme)
@@ -256,10 +257,10 @@ ColumnLayout {
                }
   }
 
-  // Matugen Scheme Type Selection
+  // Matugen Scheme Type Selection [Descriptions sourced from DankMaterialShell]
   NComboBox {
     label: I18n.tr("settings.color-scheme.color-source.matugen-scheme-type.label")
-    description: I18n.tr("settings.color-scheme.color-source.matugen-scheme-type.description")
+    description: I18n.tr("settings.color-scheme.color-source.matugen-scheme-type.description." + Settings.data.colorSchemes.matugenSchemeType)
     enabled: Settings.data.colorSchemes.useWallpaperColors
     opacity: Settings.data.colorSchemes.useWallpaperColors ? 1.0 : 0.6
     visible: Settings.data.colorSchemes.useWallpaperColors
@@ -318,7 +319,7 @@ ColumnLayout {
 
     // Color Schemes Grid
     GridLayout {
-      columns: 3
+      columns: 2
       rowSpacing: Style.marginM
       columnSpacing: Style.marginM
       Layout.fillWidth: true
@@ -334,29 +335,29 @@ ColumnLayout {
 
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignHCenter
-          height: 50
+          height: 50 * Style.uiScaleRatio
           radius: Style.radiusS
           color: root.getSchemeColor(schemeName, "mSurface")
-          border.width: Math.max(1, Style.borderL)
+          border.width: Style.borderL
           border.color: {
             if (Settings.data.colorSchemes.predefinedScheme === schemeName) {
               return Color.mSecondary
             }
             if (itemMouseArea.containsMouse) {
-              return Color.mTertiary
+              return Color.mHover
             }
             return Color.mOutline
           }
 
           RowLayout {
+            id: scheme
             anchors.fill: parent
             anchors.margins: Style.marginL
-            spacing: Style.marginXS
+            spacing: Style.marginS
 
             NText {
               text: schemeItem.schemeName
               pointSize: Style.fontSizeS
-              font.weight: Style.fontWeightMedium
               color: Color.mOnSurface
               Layout.fillWidth: true
               elide: Text.ElideRight
@@ -365,31 +366,33 @@ ColumnLayout {
               maximumLineCount: 1
             }
 
+            property int diameter: 16 * Style.uiScaleRatio
+
             Rectangle {
-              width: 14
-              height: 14
-              radius: width * 0.5
+              width: scheme.diameter
+              height: scheme.diameter
+              radius: scheme.diameter * 0.5
               color: root.getSchemeColor(schemeItem.schemeName, "mPrimary")
             }
 
             Rectangle {
-              width: 14
-              height: 14
-              radius: width * 0.5
+              width: scheme.diameter
+              height: scheme.diameter
+              radius: scheme.diameter * 0.5
               color: root.getSchemeColor(schemeItem.schemeName, "mSecondary")
             }
 
             Rectangle {
-              width: 14
-              height: 14
-              radius: width * 0.5
+              width: scheme.diameter
+              height: scheme.diameter
+              radius: scheme.diameter * 0.5
               color: root.getSchemeColor(schemeItem.schemeName, "mTertiary")
             }
 
             Rectangle {
-              width: 14
-              height: 14
-              radius: width * 0.5
+              width: scheme.diameter
+              height: scheme.diameter
+              radius: scheme.diameter * 0.5
               color: root.getSchemeColor(schemeItem.schemeName, "mError")
             }
           }
@@ -413,13 +416,13 @@ ColumnLayout {
             visible: (Settings.data.colorSchemes.predefinedScheme === schemeItem.schemeName)
             anchors.right: parent.right
             anchors.top: parent.top
-            anchors.rightMargin: -3
+            anchors.rightMargin: 0
             anchors.topMargin: -3
             width: 20
             height: 20
             radius: width * 0.5
             color: Color.mSecondary
-            border.width: Math.max(1, Style.borderS)
+            border.width: Style.borderS
             border.color: Color.mOnSecondary
 
             NIcon {
@@ -523,6 +526,24 @@ ColumnLayout {
       defaultExpanded: false
 
       NCheckbox {
+        label: "Alacritty"
+        description: ProgramCheckerService.footAvailable ? I18n.tr("settings.color-scheme.templates.terminal.alacritty.description", {
+                                                                     "filepath": "~/.config/alacritty/themes/noctalia"
+                                                                   }) : I18n.tr("settings.color-scheme.templates.terminal.alacritty.description-missing", {
+                                                                                  "app": "alacritty"
+                                                                                })
+        checked: Settings.data.templates.alacritty
+        enabled: ProgramCheckerService.alacrittyAvailable
+        opacity: ProgramCheckerService.alacrittyAvailable ? 1.0 : 0.6
+        onToggled: checked => {
+                     if (ProgramCheckerService.alacrittyAvailable) {
+                       Settings.data.templates.alacritty = checked
+                       AppThemeService.generate()
+                     }
+                   }
+      }
+
+      NCheckbox {
         label: "Kitty"
         description: ProgramCheckerService.kittyAvailable ? I18n.tr("settings.color-scheme.templates.terminal.kitty.description", {
                                                                       "filepath": "~/.config/kitty/themes/noctalia.conf"
@@ -571,6 +592,24 @@ ColumnLayout {
         onToggled: checked => {
                      if (ProgramCheckerService.footAvailable) {
                        Settings.data.templates.foot = checked
+                       AppThemeService.generate()
+                     }
+                   }
+      }
+
+      NCheckbox {
+        label: "Wezterm"
+        description: ProgramCheckerService.weztermAvailable ? I18n.tr("settings.color-scheme.templates.terminal.wezterm.description", {
+                                                                        "filepath": "~/.config/wezterm/colors/Noctalia.toml"
+                                                                      }) : I18n.tr("settings.color-scheme.templates.terminal.wezterm.description-missing", {
+                                                                                     "app": "wezterm"
+                                                                                   })
+        checked: Settings.data.templates.wezterm
+        enabled: ProgramCheckerService.weztermAvailable
+        opacity: ProgramCheckerService.weztermAvailable ? 1.0 : 0.6
+        onToggled: checked => {
+                     if (ProgramCheckerService.weztermAvailable) {
+                       Settings.data.templates.wezterm = checked
                        AppThemeService.generate()
                      }
                    }
@@ -677,6 +716,41 @@ ColumnLayout {
         onToggled: checked => {
                      if (ProgramCheckerService.vicinaeAvailable) {
                        Settings.data.templates.vicinae = checked
+                       AppThemeService.generate()
+                     }
+                   }
+      }
+      NCheckbox {
+        label: "Walker"
+        description: ProgramCheckerService.walkerAvailable ? I18n.tr("settings.color-scheme.templates.programs.walker.description", {
+                                                                       "filepath": "~/.config/walker/style.css"
+                                                                     }) : I18n.tr("settings.color-scheme.templates.programs.walker.description-missing", {
+                                                                                    "app": "walker"
+                                                                                  })
+        checked: Settings.data.templates.walker
+        enabled: ProgramCheckerService.walkerAvailable
+        opacity: ProgramCheckerService.walkerAvailable ? 1.0 : 0.6
+        onToggled: checked => {
+                     if (ProgramCheckerService.walkerAvailable) {
+                       Settings.data.templates.walker = checked
+                       AppThemeService.generate()
+                     }
+                   }
+      }
+
+      NCheckbox {
+        label: "Code"
+        description: ProgramCheckerService.codeAvailable ? I18n.tr("settings.color-scheme.templates.programs.code.description", {
+                                                                     "filepath": "~/.vscode/extensions/hyprluna.hyprluna-theme-1.0.2/themes/hyprluna.json"
+                                                                   }) : I18n.tr("settings.color-scheme.templates.programs.code.description-missing", {
+                                                                                  "app": "code"
+                                                                                })
+        checked: Settings.data.templates.code
+        enabled: ProgramCheckerService.codeAvailable
+        opacity: ProgramCheckerService.codeAvailable ? 1.0 : 0.6
+        onToggled: checked => {
+                     if (ProgramCheckerService.codeAvailable) {
+                       Settings.data.templates.code = checked
                        AppThemeService.generate()
                      }
                    }
