@@ -97,6 +97,10 @@
       "control-center": {
         "browse-file": "Datei durchsuchen",
         "browse-library": "Bibliothek durchsuchen",
+        "colorize-distro-logo": {
+          "description": "Wende die Designfarben auf das Logo deiner Distribution an.",
+          "label": "Distro-Logo einfärben"
+        },
         "icon": {
           "description": "Symbol aus der Bibliothek oder eine benutzerdefinierte Datei auswählen.",
           "label": "Symbol"
@@ -110,8 +114,8 @@
       "custom-button": {
         "browse": "Durchsuchen",
         "collapse-condition": {
-          "description": "If the output text matches this value, the button will collapse.",
-          "label": "Collapse condition"
+          "description": "Wenn der Ausgabetext diesem Wert entspricht, wird die Schaltfläche eingeklappt.",
+          "label": "Einklappbedingung"
         },
         "display-command-output": {
           "description": "Befehl eingeben, der in regelmäßigen Abständen ausgeführt wird. Die erste Zeile seiner Ausgabe wird als Text angezeigt.",
@@ -119,17 +123,23 @@
           "stream-description": "Geben Sie einen Befehl ein, der kontinuierlich ausgeführt werden soll."
         },
         "dynamic-text": "Dynamischer Text",
+        "hide-vertical": {
+          "description": "Wenn aktiviert, wird der Text aus der Befehlsausgabe nicht angezeigt, wenn sich die Leiste in einem vertikalen Layout befindet (links oder rechts).",
+          "label": "Text in vertikaler Leiste ausblenden"
+        },
         "icon": {
           "description": "Symbol aus der Bibliothek auswählen.",
           "label": "Symbol"
         },
         "left-click": {
           "description": "Befehl, der ausgeführt wird, wenn die Schaltfläche links angeklickt wird.",
-          "label": "Linksklick"
+          "label": "Linksklick",
+          "update-text": "Text auf Linksklick aktualisieren"
         },
         "middle-click": {
           "description": "Befehl, der ausgeführt wird, wenn die Schaltfläche mit der mittleren Maustaste angeklickt wird.",
-          "label": "Mittelklick"
+          "label": "Mittelklick",
+          "update-text": "Text auf Mittelklick aktualisieren"
         },
         "parse-json": {
           "description": "Die Befehlsausgabe als JSON-Objekt parsen, um Text und Symbol dynamisch festzulegen.",
@@ -141,11 +151,12 @@
         },
         "right-click": {
           "description": "Befehl, der ausgeführt wird, wenn die Schaltfläche rechts angeklickt wird.",
-          "label": "Rechtsklick"
+          "label": "Rechtsklick",
+          "update-text": "Text beim Rechtsklick aktualisieren"
         },
         "text-stream": {
           "description": "Gestreamte Zeilen aus dem Befehl werden als Text auf der Schaltfläche angezeigt.",
-          "label": "Strom"
+          "label": "Stream"
         }
       },
       "dialog": {
@@ -161,7 +172,7 @@
       "lock-keys": {
         "browse": "Durchsuchen",
         "show-caps-lock": {
-          "description": "Caps Lock Status anzeigen.",
+          "description": "Caps-Lock-Status anzeigen.",
           "label": "Feststelltaste"
         },
         "show-num-lock": {
@@ -274,10 +285,24 @@
           "label": "Nur vom gleichen Bildschirm"
         }
       },
+      "taskbar-grouped": {
+        "show-numbers-only-when-occupied": {
+          "description": "Arbeitsbereichsnummern nur für Arbeitsbereiche mit geöffneten Fenstern anzeigen.",
+          "label": "Nur bei belegten Arbeitsbereichen anzeigen"
+        },
+        "show-workspace-numbers": {
+          "description": "Arbeitsbereichsnummern in der oberen linken Ecke der Task-Gruppen anzeigen.",
+          "label": "Arbeitsbereichsnummern anzeigen"
+        }
+      },
       "tray": {
         "colorize-icons": {
           "description": "Theme-Farben auf Tray-Symbole anwenden.",
           "label": "Symbole einfärben"
+        },
+        "drawer-enabled": {
+          "description": "Wenn aktiviert, werden nicht angeheftete Tray-Elemente in einem Schubladen-Panel angezeigt. Wenn deaktiviert, werden alle Tray-Elemente inline angezeigt.",
+          "label": "Schublade aktivieren"
         }
       },
       "volume": {
@@ -324,10 +349,14 @@
   "bluetooth": {
     "panel": {
       "available-devices": "Verfügbare Geräte",
+      "blocked": "Blockiert",
+      "connect": "Verbinden",
       "connected-devices": "Verbundene Geräte",
       "disabled": "Bluetooth ist deaktiviert",
+      "disconnect": "Trennen",
       "enable-message": "Aktivieren Sie Bluetooth, um verfügbare Geräte zu sehen.",
       "known-devices": "Bekannte Geräte",
+      "pairing": "Koppeln...",
       "pairing-mode": "Stellen Sie sicher, dass sich Ihr Gerät im Kopplungsmodus befindet.",
       "scanning": "Scannen nach Geräten...",
       "title": "Bluetooth"
@@ -495,6 +524,10 @@
       "top_left": "Oben links",
       "top_right": "Oben rechts"
     },
+    "visualizer-quality": {
+      "high": "Hoch",
+      "low": "Niedrig"
+    },
     "visualizer-types": {
       "linear": "Linear",
       "mirrored": "Gespiegelt",
@@ -619,7 +652,8 @@
     "logout": "Abmelden",
     "reboot": "Neu starten",
     "shutdown": "Herunterfahren",
-    "suspend": "Ruhezustand",
+    "suspend": "Energiesparmodus",
+    "hibernate": "Ruhezustand",
     "title": "Sitzungsmenü"
   },
   "settings": {
@@ -684,6 +718,10 @@
         "section": {
           "description": "Bevorzugte und ignorierte Medienanwendungen festlegen.",
           "label": "Medienplayer"
+        },
+        "visualizer-quality": {
+          "description": "Hohe Qualität verbraucht mehr GPU-Ressourcen.",
+          "label": "Visualisierungsqualität"
         },
         "visualizer-type": {
           "description": "Visualisierungstyp für Medienwiedergabe wählen.",
@@ -767,6 +805,7 @@
       },
       "title": "Statusleiste",
       "tray": {
+        "back": "Zurück",
         "blacklist": {
           "description": "Ausschlussregeln für die Tray-Symbolleiste hinzufügen, unterstützt Platzhalter (*).",
           "label": "Ausschlussliste",
@@ -787,13 +826,13 @@
         "matugen-scheme-type": {
           "description": {
             "scheme-content": "Leitet Farben ab, die eng mit dem zugrunde liegenden Bild übereinstimmen.",
-            "scheme-expressive": "Lebendige Farbpalette mit verspielter Sättigung",
-            "scheme-fidelity": "Farbtreue Palette, die die Originalfarbtöne beibehält",
-            "scheme-fruit-salad": "Farbenfroher Mix aus leuchtenden, kontrastreichen Akzenten",
+            "scheme-expressive": "Lebendige Farbpalette mit verspielter Sättigung.",
+            "scheme-fidelity": "Farbtreue Palette, die die Originalfarbtöne beibehält.",
+            "scheme-fruit-salad": "Farbenfroher Mix aus leuchtenden, kontrastreichen Akzenten.",
             "scheme-monochrome": "Minimale Farbpalette, die auf einem einzigen Farbton basiert.",
             "scheme-neutral": "Gedämpfte Farbpalette mit dezenten und beruhigenden Tönen.",
-            "scheme-rainbow": "Vielfältige Palette, die das gesamte Spektrum abdeckt",
-            "scheme-tonal-spot": "Ausgewogene Farbpalette mit gezielten Akzenten"
+            "scheme-rainbow": "Vielfältige Palette, die das gesamte Spektrum abdeckt.",
+            "scheme-tonal-spot": "Ausgewogene Farbpalette mit gezielten Akzenten."
           },
           "label": "Matugen-Schema-Typ"
         },
@@ -840,7 +879,7 @@
         },
         "programs": {
           "code": {
-            "description": "Schreibe {Dateipfad}. Das Hyprluna-Theme muss manuell installiert und aktiviert werden.",
+            "description": "Schreibe {Dateipfad}. Das Hyprluna-Theme muss manuell installiert und aktiviert werden",
             "description-missing": "Benötigt die Installation von {app}"
           },
           "description": "Anwendungsspezifisches Theming.",
@@ -857,12 +896,16 @@
             "description": "Schreibt {filepath} und führt pywalfox update aus",
             "description-missing": "Erfordert die Installation von {app}"
           },
+          "spicetify": {
+            "description": "Schreibe {Dateipfad}. Das Comfy-Theme muss manuell installiert und aktiviert werden",
+            "description-missing": "Benötigt die Installation von {app}"
+          },
           "vicinae": {
             "description": "Schreibt {filepath} und lädt neu",
             "description-missing": "Erfordert die Installation von {app}"
           },
           "walker": {
-            "description": "Schreibt {filepath} und setzt das Theme auf noctalia",
+            "description": "Schreibt {filepath} und setzt das Theme auf Noctalia",
             "description-missing": "Erfordert die Installation von {app}"
           }
         },
@@ -890,7 +933,7 @@
           },
           "label": "Terminal",
           "wezterm": {
-            "description": "Schreibe {Dateipfad} und lade neu.",
+            "description": "Schreibe {Dateipfad} und lade neu",
             "description-missing": "Erfordert die Installation von {app}"
           }
         },
@@ -933,7 +976,7 @@
             "label": "Befehl"
           },
           "enable-on-state-logic": {
-            "description": "Aktiviert ein zweites Symbol und 'aktiv' Zustand basierend auf einem Prüfbefehl.",
+            "description": "Aktiviert ein zweites Symbol und 'Aktiv'-Zustand basierend auf einem Prüfbefehl.",
             "label": "Aktiv-Zustand-Logik aktivieren"
           },
           "general-tooltip-text": {
@@ -957,11 +1000,11 @@
             "label": "Rechtsklick-Befehl"
           },
           "on-state-command": {
-            "description": "Befehl, der ausgeführt wird, um zu prüfen, ob sich die Schaltfläche im 'aktiv' Zustand befinden soll. Gibt 0 für aktiv, ungleich 0 für inaktiv zurück.",
+            "description": "Befehl, der ausgeführt wird, um zu prüfen, ob sich die Schaltfläche im 'Aktiv'-Zustand befinden soll. Gibt 0 für aktiv, ungleich 0 für inaktiv zurück.",
             "label": "Befehl für Aktiv-Zustand-Prüfung"
           },
           "on-state-icon": {
-            "description": "Das Symbol für die Schaltfläche, wenn sie sich im 'aktiv' Zustand befindet.",
+            "description": "Das Symbol für die Schaltfläche, wenn sie sich im 'Aktiv'-Zustand befindet.",
             "label": "Symbol im Aktiv-Zustand"
           },
           "state-checks": {
@@ -1078,7 +1121,7 @@
         }
       },
       "enabled": {
-        "description": "Dock vollständig anzeigen oder ausblenden",
+        "description": "Dock vollständig anzeigen oder ausblenden.",
         "label": "Dock aktivieren"
       },
       "monitors": {
@@ -1335,6 +1378,7 @@
           "description": "Wie lange Benachrichtigungen normaler Priorität sichtbar bleiben.",
           "label": "Normale Dringlichkeit"
         },
+        "reset": "Timeout-Dauer zurücksetzen",
         "respect-expire": {
           "description": "Die in der Benachrichtigung gesetzte Ablaufzeit verwenden.",
           "label": "Ablaufzeit respektieren"
@@ -1367,6 +1411,10 @@
           "description": "Lautstärke- und Helligkeitsänderungen in Echtzeit anzeigen.",
           "label": "Bildschirmanzeige aktivieren"
         },
+        "enabled": {
+          "description": "Benachrichtigungs-Daemon aktivieren oder deaktivieren, erfordert einen Neustart von Noctalia Shell.",
+          "label": "Benachrichtigungen aktivieren"
+        },
         "location": {
           "description": "Wo Benachrichtigungen auf dem Bildschirm erscheinen.",
           "label": "Position"
@@ -1376,12 +1424,26 @@
           "label": "Erscheinungsbild"
         }
       },
-      "title": "Benachrichtigungen"
+      "title": "Benachrichtigungen",
+      "toast": {
+        "keyboard": {
+          "description": "Zeige eine Toast-Benachrichtigung an, wenn sich das Tastaturlayout ändert.",
+          "label": "Tastaturlayout"
+        },
+        "section": {
+          "description": "Konfigurieren Sie das Aussehen und Verhalten von Toast-Benachrichtigungen.",
+          "label": "Toast"
+        }
+      }
     },
     "osd": {
       "always-on-top": {
         "description": "On-Screen Display über Vollbildfenstern und anderen Ebenen anzeigen.",
         "label": "Immer im Vordergrund"
+      },
+      "background-opacity": {
+        "description": "Kontrolliert die Transparenz des OSD Hintergrunds.",
+        "label": "Hintergrund-Transparenz"
       },
       "description": "Bildschirm-Overlays wie Lautstärke- und Helligkeitsanzeigen konfigurieren.",
       "duration": {
@@ -1475,6 +1537,46 @@
         }
       }
     },
+    "session-menu": {
+      "countdown-duration": {
+        "description": "Legen Sie fest, wie lange der Countdown-Timer vor der Ausführung von Energieaktionen dauert.",
+        "label": "Countdown-Dauer"
+      },
+      "enable-countdown": {
+        "description": "Zeige einen Countdown-Timer vor der Ausführung von Energieaktionen.",
+        "label": "Countdown-Timer aktivieren"
+      },
+      "entries": {
+        "section": {
+          "description": "Anpassen, welche Energieaktionen im Sitzungsmenü angezeigt werden und in welcher Reihenfolge.",
+          "label": "Energieaktionen"
+        }
+      },
+      "general": {
+        "section": {
+          "description": "Konfigurieren Sie das Verhalten und Erscheinungsbild des Sitzungsmenü-Panels.",
+          "label": "Allgemein"
+        }
+      },
+      "position": {
+        "description": "Wählen Sie, wo das Sitzungsmenü-Panel beim Öffnen erscheint.",
+        "label": "Position"
+      },
+      "show-header": {
+        "description": "Zeige den Titel und die Schließen-Schaltfläche oben im Sitzungsmenü.",
+        "label": "Kopfzeile anzeigen"
+      },
+      "title": "Sitzungsmenü"
+    },
+    "system-monitor": {
+      "general": {
+        "section": {
+          "description": "Konfigurieren Sie das Verhalten und Aussehen des Systemmonitors.",
+          "label": "Allgemein"
+        }
+      },
+      "title": "Systemmonitor"
+    },
     "user-interface": {
       "animation-disable": {
         "description": "Deaktivieren Sie alle Animationen für eine schnellere und reaktionsfreudigere Erfahrung.",
@@ -1492,7 +1594,11 @@
       },
       "dim-desktop": {
         "description": "Den Desktop abdunkeln, wenn Fenster oder Menüs geöffnet sind.",
-        "label": "Dimmer Schreibtisch"
+        "label": "Desktop abdunkeln"
+      },
+      "panel-background-opacity": {
+        "description": "Hintergrunddeckkraft für alle Paneele festlegen (Launcher, Control Center, Einstellungen usw.).",
+        "label": "Paneel-Hintergrunddeckkraft"
       },
       "panels-attached-to-bar": {
         "description": "Die Paneele rasten an der Stange und den Bildschirmrändern ein und sorgen so für ein nahtloses Erscheinungsbild mit stilvollen, umgekehrten Ecken.",
@@ -1510,6 +1616,10 @@
       "section": {
         "description": "Passen Sie das Aussehen, die Haptik und das Verhalten der Benutzeroberfläche an.",
         "label": "Aussehen"
+      },
+      "settings-panel-attached-to-bar": {
+        "description": "Richten Sie das Einstellungsfenster an der Leiste aus, um ein einheitliches Erscheinungsbild zu erhalten.",
+        "label": "Einstellungsfenster an Leiste ausrichten"
       },
       "shadows": {
         "description": "Aktiviert Schlagschatten unter Balken und Panels.",
@@ -1581,6 +1691,10 @@
           "description": "Pfad zu Ihrem Haupt-Hintergrundbild-Ordner.",
           "label": "Hintergrundbild-Ordner",
           "tooltip": "Nach Hintergrundbild-Ordner suchen"
+        },
+        "hide-wallpaper-filenames": {
+          "description": "Hintergrundbilddateinamen im Auswahlmenü ausblenden.",
+          "label": "Dateinamen ausblenden"
         },
         "monitor-specific": {
           "description": "Unterschiedlichen Hintergrundbild-Ordner für jeden Monitor festlegen.",
@@ -1699,12 +1813,11 @@
       "disabled": "Deaktiviert",
       "enabled": "Aktiviert"
     },
+    "keyboard-layout": {
+      "changed": "Tastaturlayout geändert zu {layout}"
+    },
     "kofi": {
       "opened": "Ko-fi-Seite in Ihrem Browser geöffnet"
-    },
-    "matugen": {
-      "failed": "Matugen-Verarbeitung fehlgeschlagen",
-      "failed-general": "Matugen ist beim Verarbeiten der Vorlagen auf einen Fehler gestoßen"
     },
     "missing-control-center": {
       "description": "Das Kontrollzentrum-Widget wurde aus der Leiste entfernt. Um es erneut über die Leiste zu öffnen, fügen Sie das Widget wieder hinzu. Sie können es auch durch Rechtsklick auf die Leiste öffnen.",
@@ -1716,6 +1829,11 @@
       "forced": "Aktivierung erzwungen",
       "normal": "Normaler Modus",
       "not-installed": "wlsunset nicht installiert"
+    },
+    "noctalia-performance": {
+      "disabled": "Leistungsmodus deaktiviert",
+      "enabled": "Leistungsmodus aktiviert",
+      "label": "Noctalia-Aufführung"
     },
     "power-profile": {
       "changed": "Energieprofil geändert",
@@ -1733,9 +1851,15 @@
       "started": "Aufnahme gestartet",
       "stopping": "Aufnahme wird gestoppt…"
     },
+    "theming-processor-failed": {
+      "desc-generic": "Beim Verarbeiten von Vorlagen ist ein Fehler aufgetreten.",
+      "title-matugen": "Matugen-Templating-Verarbeitung fehlgeschlagen",
+      "title-predefined": "Die Verarbeitung des vordefinierten Farbschemas ist fehlgeschlagen."
+    },
     "wallpaper-colors": {
       "disabled": "Hintergrundbild-Farben deaktiviert",
       "enabled": "Hintergrundbild-Farben aktiviert",
+      "label": "Hintergrundfarbengenerierung",
       "not-installed": "Matugen nicht installiert - erforderlich für Hintergrundbild-Farbextraktion"
     },
     "wifi": {
@@ -1756,10 +1880,10 @@
     "close": "Schließen",
     "connect-disconnect-devices": "Linksklick zum Verbinden. Rechtsklick zum Vergessen.",
     "delete-notification": "Benachrichtigung löschen",
-    "disable-keep-awake": "Wach halten deaktivieren",
+    "disable-keep-awake": "Klicken, um Wach halten zu deaktivieren.\nScrollen, um Zeitlimit anzupassen.",
     "do-not-disturb-disabled": "'Nicht stören' deaktiviert",
     "do-not-disturb-enabled": "'Nicht stören' aktiviert",
-    "enable-keep-awake": "Wach halten aktivieren",
+    "enable-keep-awake": "Klicken, um Wach halten zu aktivieren.\nScrollen, um Zeitlimit anzupassen.",
     "forget-network": "Netzwerk vergessen",
     "home": "Home",
     "input-muted": "Audio-Eingabe stummschalten",
@@ -1776,6 +1900,8 @@
     "night-light-enabled": "Nachtlicht ist aktiviert.\nLinksklick zum Wechseln des Modus.\nRechtsklick für Einstellungen.",
     "night-light-forced": "Nachtlicht ist erzwungen.\nLinksklick zum Wechseln des Modus.\nRechtsklick für Einstellungen.",
     "night-light-not-installed": "Nachtlicht ist nicht verfügbar.\nwlsunset ist nicht installiert.",
+    "noctalia-performance-disabled": "Noctalia-Leistungsmodus ist deaktiviert.\nLinksklick zum Aktivieren.",
+    "noctalia-performance-enabled": "Noctalia-Leistungsmodus ist aktiviert.\nLinksklick zum Deaktivieren.",
     "open-control-center": "Kontrollzentrum öffnen",
     "open-notification-history-disable-dnd": "Benachrichtigungsverlauf öffnen\nRechtsklick um 'Nicht stören' zu deaktivieren.",
     "open-notification-history-enable-dnd": "Benachrichtigungsverlauf öffnen\nRechtsklick um 'Nicht stören' zu aktivieren.",

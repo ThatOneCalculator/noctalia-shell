@@ -1,10 +1,10 @@
 import QtQuick
-import QtQuick.Effects
 import Quickshell
+import QtQuick.Effects
 import Quickshell.Wayland
 import qs.Commons
-import qs.Services
-import qs.Widgets
+import qs.Services.Compositor
+import qs.Services.UI
 
 Loader {
   active: CompositorService.isNiri && Settings.data.wallpaper.enabled && Settings.data.wallpaper.overviewEnabled
@@ -23,6 +23,13 @@ Loader {
           Logger.d("Overview", "Loading overview for Niri on", modelData.name)
         }
         setWallpaperInitial()
+      }
+
+      Component.onDestruction: {
+        // Clean up resources to prevent memory leak when overviewEnabled is toggled off
+        timerDisableFx.stop()
+        bgImage.layer.enabled = false
+        bgImage.source = ""
       }
 
       // External state management
@@ -68,19 +75,23 @@ Loader {
         mipmap: false
         cache: false
         asynchronous: true
-        // Image is heavily blurred, so might as well save a lot of memory here.
-        sourceSize: Qt.size(1280, 720)
-      }
 
-      MultiEffect {
-        anchors.fill: parent
-        source: bgImage
-        autoPaddingEnabled: false
-        blurEnabled: true
-        blur: 1.0
-        blurMax: 64
-        colorization: Style.opacityMedium
-        colorizationColor: Settings.data.colorSchemes.darkMode ? Color.mSurface : Color.mOnSurface
+        // Image is heavily blurred, so use low resolution to save memory
+        sourceSize: Qt.size(1280, 720)
+
+        layer.enabled: true
+        layer.smooth: false
+        layer.effect: MultiEffect {
+          blurEnabled: true
+          blur: 1.0
+          blurMax: 32
+        }
+
+        Rectangle {
+          anchors.fill: parent
+          color: Settings.data.colorSchemes.darkMode ? Color.mSurface : Color.mOnSurface
+          opacity: 0.8
+        }
       }
     }
   }

@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
-import qs.Services
 import qs.Widgets
 
 // Compact circular statistic display using Layout management
@@ -17,6 +16,8 @@ Rectangle {
   // outer width/height footprint of the component
   property real contentScale: 1.0
 
+  readonly property color fillColor: Color.mPrimary
+
   width: 68
   height: 92
   color: flat ? Color.transparent : Color.mSurface
@@ -24,8 +25,28 @@ Rectangle {
   border.color: flat ? Color.transparent : Color.mSurfaceVariant
   border.width: flat ? 0 : Style.borderS
 
-  // Repaint gauge when the bound value changes
-  onValueChanged: gauge.requestPaint()
+  // Animated value for smooth transitions - reduces repaint frequency
+  property real animatedValue: value
+
+  Behavior on animatedValue {
+    enabled: !Settings.data.general.animationDisabled
+    NumberAnimation {
+      duration: Style.animationNormal
+      easing.type: Easing.OutCubic
+    }
+  }
+
+  // Repaint gauge when animated value changes (throttled by animation)
+  onAnimatedValueChanged: repaintTimer.restart()
+  onFillColorChanged: repaintTimer.restart()
+
+  // Debounce timer to limit repaint frequency during rapid value changes
+  Timer {
+    id: repaintTimer
+    interval: 33 // ~30 FPS max
+    repeat: false
+    onTriggered: gauge.requestPaint()
+  }
 
   ColumnLayout {
     id: mainLayout
@@ -45,7 +66,18 @@ Rectangle {
       Canvas {
         id: gauge
         anchors.fill: parent
-        renderStrategy: Canvas.Immediate
+
+        // Optimized Canvas settings for better GPU performance
+        renderStrategy: Canvas.Cooperative // Better performance than Immediate
+        renderTarget: Canvas.FramebufferObject // GPU texture rendering
+
+        // Enable layer caching - critical for performance!
+        layer.enabled: true
+        layer.smooth: true
+
+        Component.onCompleted: {
+          requestPaint()
+        }
 
         onPaint: {
           const ctx = getContext("2d")
@@ -68,24 +100,10 @@ Rectangle {
           ctx.stroke()
 
           // Value arc with gradient starting at 25%
-          const ratio = Math.max(0, Math.min(1, root.value / 100))
+          const ratio = Math.max(0, Math.min(1, root.animatedValue / 100))
           const end = start + (endBg - start) * ratio
 
-          // Calculate gradient start point (25% into the arc)
-          const gradientStartRatio = 0.25
-          const gradientStart = start + (endBg - start) * gradientStartRatio
-
-          // Create linear gradient
-          const startX = cx + r * Math.cos(gradientStart)
-          const startY = cy + r * Math.sin(gradientStart)
-          const endX = cx + r * Math.cos(endBg)
-          const endY = cy + r * Math.sin(endBg)
-
-          const gradient = ctx.createLinearGradient(startX, startY, endX, endY)
-          gradient.addColorStop(0, Color.mPrimary)
-          gradient.addColorStop(1, Color.mOnSurface)
-
-          ctx.strokeStyle = gradient
+          ctx.strokeStyle = root.fillColor
           ctx.beginPath()
           ctx.arc(cx, cy, r, start, end)
           ctx.stroke()
@@ -97,7 +115,7 @@ Rectangle {
         id: valueLabel
         anchors.centerIn: parent
         anchors.verticalCenterOffset: -4 * contentScale
-        text: `${root.value}${root.suffix}`
+        text: `${Math.round(root.value)}${root.suffix}`
         pointSize: Style.fontSizeM * contentScale * 0.9
         font.weight: Style.fontWeightBold
         color: Color.mOnSurface

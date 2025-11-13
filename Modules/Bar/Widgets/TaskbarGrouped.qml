@@ -5,7 +5,8 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Widgets
 import qs.Commons
-import qs.Services
+import qs.Services.Compositor
+import qs.Services.UI
 import qs.Widgets
 
 Item {
@@ -32,8 +33,20 @@ Item {
     }
     return {}
   }
-  readonly property bool hideUnoccupied: (widgetSettings.hideUnoccupied !== undefined) ? widgetSettings.hideUnoccupied : false
+  readonly property string labelMode: (widgetSettings.labelMode !== undefined) ? widgetSettings.labelMode : widgetMetadata.labelMode
+  readonly property bool hideUnoccupied: (widgetSettings.hideUnoccupied !== undefined) ? widgetSettings.hideUnoccupied : widgetMetadata.hideUnoccupied
+  readonly property int characterCount: 2
+  readonly property bool showWorkspaceNumbers: (widgetSettings.showWorkspaceNumbers !== undefined) ? widgetSettings.showWorkspaceNumbers : true
+  readonly property bool showNumbersOnlyWhenOccupied: (widgetSettings.showNumbersOnlyWhenOccupied !== undefined) ? widgetSettings.showNumbersOnlyWhenOccupied : true
+  readonly property bool colorizeIcons: (widgetSettings.colorizeIcons !== undefined) ? widgetSettings.colorizeIcons : widgetMetadata.colorizeIcons
   property ListModel localWorkspaces: ListModel {}
+  property real masterProgress: 0.0
+  property bool effectsActive: false
+  property color effectColor: Color.mPrimary
+
+  // Wheel scroll handling
+  property int wheelAccumulatedDelta: 0
+  property bool wheelCooldown: false
 
   function refreshWorkspaces() {
     localWorkspaces.clear()
@@ -56,6 +69,44 @@ Item {
 
       localWorkspaces.append(workspaceData)
     }
+    updateWorkspaceFocus()
+  }
+
+  function triggerUnifiedWave() {
+    effectColor = Color.mPrimary
+    masterAnimation.restart()
+  }
+
+  function updateWorkspaceFocus() {
+    for (var i = 0; i < localWorkspaces.count; i++) {
+      const ws = localWorkspaces.get(i)
+      if (ws.isFocused === true) {
+        root.triggerUnifiedWave()
+        break
+      }
+    }
+  }
+
+  function getFocusedLocalIndex() {
+    for (var i = 0; i < localWorkspaces.count; i++) {
+      if (localWorkspaces.get(i).isFocused === true)
+        return i
+    }
+    return -1
+  }
+
+  function switchByOffset(offset) {
+    if (localWorkspaces.count === 0)
+      return
+    var current = getFocusedLocalIndex()
+    if (current < 0)
+      current = 0
+    var next = (current + offset) % localWorkspaces.count
+    if (next < 0)
+      next = localWorkspaces.count - 1
+    const ws = localWorkspaces.get(next)
+    if (ws && ws.idx !== undefined)
+      CompositorService.switchToWorkspace(ws)
   }
 
   Component.onCompleted: {
@@ -63,6 +114,7 @@ Item {
   }
 
   onScreenChanged: refreshWorkspaces()
+  onHideUnoccupiedChanged: refreshWorkspaces()
 
   implicitWidth: isVerticalBar ? taskbarGrid.implicitWidth + Style.marginM * 2 : Math.round(taskbarGrid.implicitWidth + Style.marginM * 2)
   implicitHeight: isVerticalBar ? Math.round(taskbarGrid.implicitHeight + Style.marginM * 2) : Style.barHeight
@@ -76,6 +128,73 @@ Item {
 
     function onWindowListChanged() {
       refreshWorkspaces()
+    }
+  }
+
+  SequentialAnimation {
+    id: masterAnimation
+    PropertyAction {
+      target: root
+      property: "effectsActive"
+      value: true
+    }
+    NumberAnimation {
+      target: root
+      property: "masterProgress"
+      from: 0.0
+      to: 1.0
+      duration: Style.animationSlow * 2
+      easing.type: Easing.OutQuint
+    }
+    PropertyAction {
+      target: root
+      property: "effectsActive"
+      value: false
+    }
+    PropertyAction {
+      target: root
+      property: "masterProgress"
+      value: 0.0
+    }
+  }
+
+  // Debounce timer for wheel interactions
+  Timer {
+    id: wheelDebounce
+    interval: 150
+    repeat: false
+    onTriggered: {
+      root.wheelCooldown = false
+      root.wheelAccumulatedDelta = 0
+    }
+  }
+
+  // Scroll to switch workspaces
+  WheelHandler {
+    id: wheelHandler
+    target: root
+    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+    onWheel: function (event) {
+      if (root.wheelCooldown)
+        return
+      // Prefer vertical delta, fall back to horizontal if needed
+      var dy = event.angleDelta.y
+      var dx = event.angleDelta.x
+      var useDy = Math.abs(dy) >= Math.abs(dx)
+      var delta = useDy ? dy : dx
+      // One notch is typically 120
+      root.wheelAccumulatedDelta += delta
+      var step = 120
+      if (Math.abs(root.wheelAccumulatedDelta) >= step) {
+        var direction = root.wheelAccumulatedDelta > 0 ? -1 : 1
+        // For vertical layout, natural mapping: wheel up -> previous, down -> next (already handled by sign)
+        // For horizontal layout, same mapping using vertical wheel
+        root.switchByOffset(direction)
+        root.wheelCooldown = true
+        wheelDebounce.restart()
+        root.wheelAccumulatedDelta = 0
+        event.accepted = true
+      }
     }
   }
 
@@ -143,7 +262,7 @@ Item {
               smooth: true
               asynchronous: true
               opacity: model.isFocused ? Style.opacityFull : 0.6
-              layer.enabled: widgetSettings.colorizeIcons === true
+              layer.enabled: root.colorizeIcons && !model.isFocused
 
               Behavior on opacity {
                 NumberAnimation {
@@ -196,6 +315,129 @@ Item {
                 TooltipService.hide()
               }
             }
+          }
+        }
+      }
+
+      Item {
+        id: workspaceNumberContainer
+
+        visible: root.labelMode !== "none" && root.showWorkspaceNumbers && (!root.showNumbersOnlyWhenOccupied || container.hasWindows)
+
+        anchors {
+          left: parent.left
+          top: parent.top
+          leftMargin: -Style.fontSizeXS * 0.5
+          topMargin: -Style.fontSizeXS * 0.5
+        }
+
+        width: Math.max(workspaceNumber.implicitWidth + Style.marginXS, Style.fontSizeXXS * 2)
+        height: Math.max(workspaceNumber.implicitHeight + Style.marginXS, Style.fontSizeXXS * 2)
+
+        Rectangle {
+          id: workspaceNumberBackground
+
+          anchors.fill: parent
+          radius: width * 0.5
+
+          color: {
+            if (workspaceModel.isFocused)
+              return Color.mPrimary
+            if (workspaceModel.isUrgent)
+              return Color.mError
+            if (hasWindows)
+              return Color.mSecondary
+
+            return Qt.alpha(Color.mOutline, 0.3)
+          }
+
+          scale: workspaceModel.isActive ? 1.0 : 0.9
+
+          Behavior on scale {
+            NumberAnimation {
+              duration: Style.animationNormal
+              easing.type: Easing.OutBack
+            }
+          }
+
+          Behavior on color {
+            ColorAnimation {
+              duration: Style.animationFast
+              easing.type: Easing.InOutCubic
+            }
+          }
+        }
+
+        // Burst effect overlay for focused workspace number (smaller outline)
+        Rectangle {
+          id: workspaceNumberBurst
+          anchors.centerIn: workspaceNumberContainer
+          width: workspaceNumberContainer.width + 12 * root.masterProgress
+          height: workspaceNumberContainer.height + 12 * root.masterProgress
+          radius: width / 2
+          color: Color.transparent
+          border.color: root.effectColor
+          border.width: Math.max(1, Math.round((2 + 4 * (1.0 - root.masterProgress))))
+          opacity: root.effectsActive && workspaceModel.isFocused ? (1.0 - root.masterProgress) * 0.7 : 0
+          visible: root.effectsActive && workspaceModel.isFocused
+          z: 1
+        }
+
+        NText {
+          id: workspaceNumber
+
+          anchors.centerIn: parent
+
+          text: {
+            if (root.labelMode === "name" && workspaceModel.name && workspaceModel.name.length > 0) {
+              return workspaceModel.name.substring(0, root.characterCount)
+            } else {
+              return workspaceModel.idx.toString()
+            }
+          }
+
+          family: Settings.data.ui.fontFixed
+          font {
+            pointSize: Style.fontSizeXXS
+            weight: Style.fontWeightBold
+            capitalization: Font.AllUppercase
+          }
+          applyUiScale: false
+
+          color: {
+            if (workspaceModel.isFocused)
+              return Color.mOnPrimary
+            if (workspaceModel.isUrgent)
+              return Color.mOnError
+            if (hasWindows)
+              return Color.mOnSecondary
+
+            return Color.mOnSurface
+          }
+
+          opacity: {
+            if (workspaceModel.isFocused)
+              return 1.0
+            if (workspaceModel.isUrgent)
+              return 0.9
+            if (hasWindows)
+              return 0.8
+
+            return 0.6
+          }
+
+          Behavior on opacity {
+            NumberAnimation {
+              duration: Style.animationFast
+              easing.type: Easing.InOutCubic
+            }
+          }
+        }
+
+        Behavior on opacity {
+          NumberAnimation {
+            duration: Style.animationFast
+            easing.type: Easing.InOutCubic
           }
         }
       }

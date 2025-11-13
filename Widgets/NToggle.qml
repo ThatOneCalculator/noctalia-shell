@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
-import qs.Services
 
 RowLayout {
   id: root
@@ -26,6 +25,7 @@ RowLayout {
   NLabel {
     label: root.label
     description: root.description
+    visible: root.label !== "" || root.description !== ""
   }
 
   Rectangle {

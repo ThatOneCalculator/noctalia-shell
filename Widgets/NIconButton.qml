@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Widgets
 import qs.Commons
-import qs.Services
+import qs.Services.UI
 
 Rectangle {
   id: root
@@ -32,6 +32,7 @@ Rectangle {
   signal clicked
   signal rightClicked
   signal middleClicked
+  signal wheel(int angleDelta)
 
   implicitWidth: applyUiScale ? Math.round(baseSize * Style.uiScaleRatio) : Math.round(baseSize)
   implicitHeight: applyUiScale ? Math.round(baseSize * Style.uiScaleRatio) : Math.round(baseSize)
@@ -127,5 +128,6 @@ Rectangle {
         root.middleClicked()
       }
     }
+    onWheel: wheel => root.wheel(wheel.angleDelta.y)
   }
 }

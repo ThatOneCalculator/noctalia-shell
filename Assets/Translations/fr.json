@@ -97,6 +97,10 @@
       "control-center": {
         "browse-file": "Parcourir les fichiers",
         "browse-library": "Parcourir la bibliothèque",
+        "colorize-distro-logo": {
+          "description": "Appliquez les couleurs du thème au logo de votre distribution.",
+          "label": "Coloriser le logo de la distribution"
+        },
         "icon": {
           "description": "Sélectionnez une icône de la bibliothèque ou un fichier personnalisé.",
           "label": "Icône"
@@ -119,17 +123,23 @@
           "stream-description": "Entrez une commande à exécuter en continu."
         },
         "dynamic-text": "Texte dynamique",
+        "hide-vertical": {
+          "description": "Si activé, le texte de la sortie de la commande ne sera pas affiché lorsque la barre est en disposition verticale (gauche ou droite).",
+          "label": "Masquer le texte dans la barre verticale"
+        },
         "icon": {
           "description": "Sélectionnez une icône dans la bibliothèque.",
           "label": "Icône"
         },
         "left-click": {
           "description": "Commande à exécuter quand le bouton est cliqué à gauche.",
-          "label": "Clic gauche"
+          "label": "Clic gauche",
+          "update-text": "Mettre à jour le texte affiché au clic gauche."
         },
         "middle-click": {
           "description": "Commande à exécuter quand le bouton est cliqué au milieu.",
-          "label": "Clic milieu"
+          "label": "Clic milieu",
+          "update-text": "Mettre à jour le texte affiché lors d'un clic molette."
         },
         "parse-json": {
           "description": "Analyser la sortie de la commande en tant qu'objet JSON pour définir dynamiquement le texte et l'icône.",
@@ -141,7 +151,8 @@
         },
         "right-click": {
           "description": "Commande à exécuter quand le bouton est cliqué à droite.",
-          "label": "Clic droit"
+          "label": "Clic droit",
+          "update-text": "Mettre à jour le texte affiché lors d'un clic droit."
         },
         "text-stream": {
           "description": "Les lignes diffusées depuis la commande seront affichées sous forme de texte sur le bouton.",
@@ -274,10 +285,24 @@
           "label": "Seulement à partir de la même sortie"
         }
       },
+      "taskbar-grouped": {
+        "show-numbers-only-when-occupied": {
+          "description": "Afficher les numéros d'espace de travail uniquement pour les espaces de travail avec des fenêtres ouvertes.",
+          "label": "Afficher les numéros seulement lorsqu'occupés"
+        },
+        "show-workspace-numbers": {
+          "description": "Afficher les numéros d'espace de travail dans le coin supérieur gauche des groupes de tâches.",
+          "label": "Afficher les numéros d'espace de travail"
+        }
+      },
       "tray": {
         "colorize-icons": {
           "description": "Appliquer les couleurs du thème aux icônes de la barre système.",
           "label": "Coloriser les icônes"
+        },
+        "drawer-enabled": {
+          "description": "Lorsqu'elle est activée, les éléments de la barre système non épinglés sont affichés dans un panneau tiroir. Lorsqu'elle est désactivée, tous les éléments de la barre système sont affichés en ligne.",
+          "label": "Activer le tiroir"
         }
       },
       "volume": {
@@ -324,10 +349,14 @@
   "bluetooth": {
     "panel": {
       "available-devices": "Appareils disponibles",
+      "blocked": "Bloqué",
+      "connect": "Connecter",
       "connected-devices": "Appareils connectés",
       "disabled": "Le Bluetooth est désactivé",
+      "disconnect": "Déconnecter",
       "enable-message": "Activez le Bluetooth pour voir les appareils disponibles.",
       "known-devices": "Appareils connus",
+      "pairing": "Appairage...",
       "pairing-mode": "Assurez-vous que votre appareil est en mode d'appairage.",
       "scanning": "Recherche d'appareils en cours...",
       "title": "Bluetooth"
@@ -495,6 +524,10 @@
       "top_left": "En haut à gauche",
       "top_right": "En haut à droite"
     },
+    "visualizer-quality": {
+      "high": "Haut/Haute",
+      "low": "Bas"
+    },
     "visualizer-types": {
       "linear": "Linéaire",
       "mirrored": "Miroir",
@@ -620,6 +653,7 @@
     "reboot": "Redémarrer",
     "shutdown": "Éteindre",
     "suspend": "Mettre en veille",
+    "hibernate": "Mise en veille prolongée",
     "title": "Menu de session"
   },
   "settings": {
@@ -684,6 +718,10 @@
         "section": {
           "description": "Définissez vos applications multimédias préférées et ignorées.",
           "label": "Lecteurs multimédias"
+        },
+        "visualizer-quality": {
+          "description": "L'utilisation de haute qualité nécessite plus de ressources GPU.",
+          "label": "Qualité de la visualisation"
         },
         "visualizer-type": {
           "description": "Choisissez un type de visualisation pour la lecture multimédia.",
@@ -767,6 +805,7 @@
       },
       "title": "Barre",
       "tray": {
+        "back": "Retour",
         "blacklist": {
           "description": "Ajouter des règles d'exclusion pour la boîte à miniatures, prend en charge les caractères génériques (*).",
           "label": "Liste noire",
@@ -856,6 +895,10 @@
           "pywalfox": {
             "description": "Écrire ~/.cache/wal/colors.json et exécuter pywalfox update",
             "description-missing": "Nécessite que le paquet pywalfox soit installé"
+          },
+          "spicetify": {
+            "description": "Écrire {filepath}. Le thème Comfy doit être installé et activé manuellement.",
+            "description-missing": "Nécessite l'installation de {app}"
           },
           "vicinae": {
             "description": "Écrire {filepath} et recharger",
@@ -1335,6 +1378,7 @@
           "description": "Durée de visibilité des notifications de priorité normale.",
           "label": "Urgence normale"
         },
+        "reset": "Réinitialiser la durée du délai d'attente",
         "respect-expire": {
           "description": "Utiliser le délai d'expiration défini dans la notification.",
           "label": "Respecter le délai d'expiration"
@@ -1367,6 +1411,10 @@
           "description": "Afficher les changements de volume et de luminosité en temps réel.",
           "label": "Activer l'affichage à l'écran (OSD)"
         },
+        "enabled": {
+          "description": "Activer ou désactiver le démon de notifications, nécessite un redémarrage de noctalia-shell.",
+          "label": "Activer les notifications"
+        },
         "location": {
           "description": "Où les notifications apparaissent à l'écran.",
           "label": "Emplacement"
@@ -1376,12 +1424,26 @@
           "label": "Apparence"
         }
       },
-      "title": "Notifications"
+      "title": "Notifications",
+      "toast": {
+        "keyboard": {
+          "description": "Afficher une notification lorsque la disposition du clavier change.",
+          "label": "Disposition du clavier"
+        },
+        "section": {
+          "description": "Configurer l'apparence et le comportement des notifications toast.",
+          "label": "Pain grillé"
+        }
+      }
     },
     "osd": {
       "always-on-top": {
         "description": "Afficher l'OSD au-dessus des fenêtres plein écran et autres couches.",
         "label": "Toujours au premier plan"
+      },
+      "background-opacity": {
+        "description": "Contrôle la transparence de l'arrière-plan de l'OSD.",
+        "label": "Opacité de l'arrière-plan"
       },
       "description": "Configurer les indicateurs à l'écran tels que le volume et la luminosité.",
       "duration": {
@@ -1475,6 +1537,46 @@
         }
       }
     },
+    "session-menu": {
+      "countdown-duration": {
+        "description": "Définir la durée du compte à rebours avant d'exécuter les actions d'alimentation.",
+        "label": "Durée du compte à rebours"
+      },
+      "enable-countdown": {
+        "description": "Afficher un compte à rebours avant d'exécuter les actions d'alimentation.",
+        "label": "Activer le compte à rebours"
+      },
+      "entries": {
+        "section": {
+          "description": "Personnaliser les actions d'alimentation qui apparaissent dans le Menu de session et leur ordre.",
+          "label": "Actions d'alimentation"
+        }
+      },
+      "general": {
+        "section": {
+          "description": "Configurer le comportement et l'apparence du panneau du menu de session.",
+          "label": "Général"
+        }
+      },
+      "position": {
+        "description": "Choisissez où le panneau du Menu de session apparaît lorsqu'il est ouvert.",
+        "label": "Position"
+      },
+      "show-header": {
+        "description": "Afficher le titre et le bouton de fermeture en haut du Menu de session.",
+        "label": "Afficher l'en-tête"
+      },
+      "title": "Menu de session"
+    },
+    "system-monitor": {
+      "general": {
+        "section": {
+          "description": "Configurer le comportement et l'apparence du Moniteur Système.",
+          "label": "Général"
+        }
+      },
+      "title": "Moniteur système"
+    },
     "user-interface": {
       "animation-disable": {
         "description": "Désactiver toutes les animations pour une expérience plus rapide et plus réactive.",
@@ -1494,6 +1596,10 @@
         "description": "Atténuer le bureau lorsque des panneaux ou des menus sont ouverts.",
         "label": "Dim bureau"
       },
+      "panel-background-opacity": {
+        "description": "Définir l'opacité de fond pour tous les panneaux (Lanceur, Centre de contrôle, Paramètres, etc.).",
+        "label": "Opacité de fond des panneaux"
+      },
       "panels-attached-to-bar": {
         "description": "Les panneaux se verrouillent sur la barre et les bords de l'écran, créant un aspect homogène avec d'élégants coins inversés.",
         "label": "Aligner les panneaux aux bords"
@@ -1510,6 +1616,10 @@
       "section": {
         "description": "Personnaliser l'apparence, l'ergonomie et le comportement de l'interface.",
         "label": "Apparence"
+      },
+      "settings-panel-attached-to-bar": {
+        "description": "Alignez la fenêtre des paramètres sur la barre pour un rendu cohérent.",
+        "label": "Aligner la fenêtre des paramètres sur la barre"
       },
       "shadows": {
         "description": "Active les ombres portées sous les barres et les panneaux.",
@@ -1581,6 +1691,10 @@
           "description": "Chemin vers votre dossier principal de fonds d'écran.",
           "label": "Dossier des fonds d'écran",
           "tooltip": "Parcourir le dossier des fonds d'écran"
+        },
+        "hide-wallpaper-filenames": {
+          "description": "Masquer les noms de fichiers des fonds d'écran dans le sélecteur.",
+          "label": "Masquer les noms de fichiers"
         },
         "monitor-specific": {
           "description": "Définissez un dossier de fond d'écran différent pour chaque moniteur.",
@@ -1699,12 +1813,11 @@
       "disabled": "Désactivé",
       "enabled": "Activé"
     },
+    "keyboard-layout": {
+      "changed": "Disposition du clavier changée vers {layout}"
+    },
     "kofi": {
       "opened": "Page Ko-fi ouverte dans votre navigateur"
-    },
-    "matugen": {
-      "failed": "Échec du traitement Matugen",
-      "failed-general": "Matugen a rencontré une erreur lors du traitement des modèles"
     },
     "missing-control-center": {
       "description": "Le widget du Centre de contrôle a été retiré de la barre. Pour y accéder à nouveau depuis la barre, veuillez ré‑ajouter le widget. Vous pouvez aussi l'ouvrir en cliquant avec le bouton droit sur la barre.",
@@ -1716,6 +1829,11 @@
       "forced": "Activation forcée",
       "normal": "Mode normal",
       "not-installed": "wlsunset non installé"
+    },
+    "noctalia-performance": {
+      "disabled": "Mode performance désactivé",
+      "enabled": "Mode performance activé",
+      "label": "Performance de Noctalia"
     },
     "power-profile": {
       "changed": "Profil d'alimentation changé",
@@ -1733,9 +1851,15 @@
       "started": "Enregistrement démarré",
       "stopping": "Arrêt de l'enregistrement..."
     },
+    "theming-processor-failed": {
+      "desc-generic": "Une erreur s'est produite lors du traitement des modèles.",
+      "title-matugen": "Le traitement du modèle Matugen a échoué.",
+      "title-predefined": "Le traitement du schéma de couleurs prédéfini a échoué."
+    },
     "wallpaper-colors": {
       "disabled": "Couleurs du fond d'écran désactivées",
       "enabled": "Couleurs du fond d'écran activées",
+      "label": "Génération de couleurs pour fonds d'écran",
       "not-installed": "Matugen non installé - requis pour l'extraction des couleurs du fond d'écran"
     },
     "wifi": {
@@ -1756,10 +1880,10 @@
     "close": "Fermer",
     "connect-disconnect-devices": "Clic gauche pour connecter. Clic droit pour oublier.",
     "delete-notification": "Supprimer la notification",
-    "disable-keep-awake": "Désactiver le mode 'rester éveillé'",
+    "disable-keep-awake": "Cliquez pour désactiver le mode 'rester éveillé'.\nFaites défiler pour ajuster le délai.",
     "do-not-disturb-disabled": "'Ne pas déranger' désactivé",
     "do-not-disturb-enabled": "'Ne pas déranger' activé",
-    "enable-keep-awake": "Activer le mode 'rester éveillé'",
+    "enable-keep-awake": "Cliquez pour activer le mode 'rester éveillé'.\nFaites défiler pour ajuster le délai.",
     "forget-network": "Oublier le réseau",
     "home": "Accueil",
     "input-muted": "Couper l'entrée audio",
@@ -1776,6 +1900,8 @@
     "night-light-enabled": "L'éclairage nocturne est activé.\nClic gauche pour changer de mode.\nClic droit pour accéder aux paramètres.",
     "night-light-forced": "L'éclairage nocturne est forcé.\nClic gauche pour changer de mode.\nClic droit pour accéder aux paramètres.",
     "night-light-not-installed": "L'éclairage nocturne n'est pas disponible.\nwlsunset n'est pas installé.",
+    "noctalia-performance-disabled": "Le mode performance Noctalia est désactivé.\nClic gauche pour activer.",
+    "noctalia-performance-enabled": "Le mode performance Noctalia est activé.\nClic gauche pour désactiver.",
     "open-control-center": "Ouvrir le centre de contrôle",
     "open-notification-history-disable-dnd": "Ouvrir l'historique des notifications\nClic droit pour désactiver \"Ne pas déranger\".",
     "open-notification-history-enable-dnd": "Ouvrir l'historique des notifications\nClic droit pour activer \"Ne pas déranger\".",

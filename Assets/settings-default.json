@@ -1,5 +1,5 @@
 {
-  "settingsVersion": 18,
+  "settingsVersion": 22,
   "setupCompleted": false,
   "bar": {
     "position": "top",
@@ -14,6 +14,9 @@
     "exclusive": true,
     "widgets": {
       "left": [
+        {
+          "id": "ControlCenter"
+        },
         {
           "id": "SystemMonitor"
         },
@@ -50,9 +53,6 @@
         },
         {
           "id": "Clock"
-        },
-        {
-          "id": "ControlCenter"
         }
       ]
     }
@@ -81,8 +81,9 @@
     "fontDefaultScale": 1,
     "fontFixedScale": 1,
     "tooltipsEnabled": true,
+    "panelBackgroundOpacity": 1,
     "panelsAttachedToBar": true,
-    "panelsOverlayLayer": false
+    "settingsPanelAttachToBar": false
   },
   "location": {
     "name": "Tokyo",
@@ -108,7 +109,7 @@
   },
   "wallpaper": {
     "enabled": true,
-    "overviewEnabled": true,
+    "overviewEnabled": false,
     "directory": "",
     "enableMultiMonitorDirectories": false,
     "recursiveSearch": false,
@@ -122,12 +123,12 @@
     "transitionType": "random",
     "transitionEdgeSmoothness": 0.05,
     "monitors": [],
-    "panelPosition": "follow_bar"
+    "panelPosition": "follow_bar",
+    "hideWallpaperFilenames": false
   },
   "appLauncher": {
     "enableClipboardHistory": false,
     "position": "center",
-    "backgroundOpacity": 1,
     "pinnedExecs": [],
     "useApp2Unit": false,
     "sortByMostUsed": true,
@@ -204,8 +205,40 @@
   "network": {
     "wifiEnabled": true
   },
+  "sessionMenu": {
+    "enableCountdown": true,
+    "countdownDuration": 10000,
+    "position": "center",
+    "showHeader": true,
+    "powerOptions": [
+      {
+        "action": "lock",
+        "enabled": true
+      },
+      {
+        "action": "suspend",
+        "enabled": true
+      },
+      {
+        "action": "hibernate",
+        "enabled": true
+      },
+      {
+        "action": "reboot",
+        "enabled": true
+      },
+      {
+        "action": "logout",
+        "enabled": true
+      },
+      {
+        "action": "shutdown",
+        "enabled": true
+      }
+    ]
+  },
   "notifications": {
-    "doNotDisturb": false,
+    "enabled": true,
     "monitors": [],
     "location": "top_right",
     "overlayLayer": true,
@@ -213,20 +246,23 @@
     "respectExpireTimeout": false,
     "lowUrgencyDuration": 3,
     "normalUrgencyDuration": 8,
-    "criticalUrgencyDuration": 15
+    "criticalUrgencyDuration": 15,
+    "enableKeyboardLayoutToast": true
   },
   "osd": {
     "enabled": true,
     "location": "top_right",
     "monitors": [],
     "autoHideMs": 2000,
-    "overlayLayer": true
+    "overlayLayer": true,
+    "backgroundOpacity": 1
   },
   "audio": {
     "volumeStep": 5,
     "volumeOverdrive": false,
-    "cavaFrameRate": 60,
+    "cavaFrameRate": 30,
     "visualizerType": "linear",
+    "visualizerQuality": "high",
     "mprisBlacklist": [],
     "preferredPlayer": ""
   },
@@ -256,17 +292,18 @@
     "wezterm": false,
     "fuzzel": false,
     "discord": false,
+    "pywalfox": false,
+    "vicinae": false,
+    "walker": false,
+    "code": false,
+    "spicetify": false,
+    "enableUserTemplates": false,
     "discord_vesktop": false,
     "discord_webcord": false,
     "discord_armcord": false,
     "discord_equibop": false,
     "discord_lightcord": false,
-    "discord_dorion": false,
-    "pywalfox": false,
-    "vicinae": false,
-    "walker": false,
-    "code": false,
-    "enableUserTemplates": false
+    "discord_dorion": false
   },
   "nightLight": {
     "enabled": false,

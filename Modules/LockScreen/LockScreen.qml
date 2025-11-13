@@ -9,10 +9,14 @@ import Quickshell.Services.UPower
 import Quickshell.Io
 import Quickshell.Widgets
 import qs.Commons
-import qs.Services
+import qs.Services.Hardware
+import qs.Services.Keyboard
+import qs.Services.Location
+import qs.Services.Media
+import qs.Services.Compositor
+import qs.Services.UI
 import qs.Widgets
-import qs.Modules.AudioSpectrum
-import qs.Modules.Bar.Calendar
+import qs.Widgets.AudioSpectrum
 
 Loader {
   id: lockScreen
@@ -70,7 +74,7 @@ Loader {
 
           Item {
             id: keyboardLayout
-            property string currentLayout: (typeof KeyboardLayoutService !== 'undefined' && KeyboardLayoutService.currentLayout) ? KeyboardLayoutService.currentLayout : "Unknown"
+            property string currentLayout: KeyboardLayoutService.currentLayout
           }
 
           Image {
@@ -110,7 +114,7 @@ Loader {
             anchors.fill: parent
             visible: Settings.data.general.showScreenCorners
 
-            property color cornerColor: Settings.data.general.forceBlackScreenCorners ? Qt.rgba(0, 0, 0, 1) : Qt.alpha(Color.mSurface, Settings.data.bar.backgroundOpacity)
+            property color cornerColor: Settings.data.general.forceBlackScreenCorners ? Color.black : Qt.alpha(Color.mSurface, Settings.data.bar.backgroundOpacity)
             property real cornerRadius: Style.screenRadius
             property real cornerSize: Style.screenRadius
 
@@ -348,7 +352,9 @@ Loader {
                         "es": "dddd, d 'de' MMMM",
                         "fr": "dddd d MMMM",
                         "pt": "dddd, d 'de' MMMM",
-                        "zh": "yyyy年M月d日 dddd"
+                        "zh": "yyyy年M月d日 dddd",
+                        "uk": "dddd, d MMMM",
+                        "tr": "dddd, d MMMM"
                       }
                       return I18n.locale.toString(Time.now, formats[lang] || "dddd, MMMM d")
                     }
@@ -583,7 +589,7 @@ Loader {
                       anchors.margins: 4
                       active: Settings.data.audio.visualizerType === "linear"
                       z: 0
-                      sourceComponent: LinearSpectrum {
+                      sourceComponent: NLinearSpectrum {
                         anchors.fill: parent
                         values: CavaService.values
                         fillColor: Color.mPrimary
@@ -596,7 +602,7 @@ Loader {
                       anchors.margins: 4
                       active: Settings.data.audio.visualizerType === "mirrored"
                       z: 0
-                      sourceComponent: MirroredSpectrum {
+                      sourceComponent: NMirroredSpectrum {
                         anchors.fill: parent
                         values: CavaService.values
                         fillColor: Color.mPrimary
@@ -609,7 +615,7 @@ Loader {
                       anchors.margins: 4
                       active: Settings.data.audio.visualizerType === "wave"
                       z: 0
-                      sourceComponent: WaveSpectrum {
+                      sourceComponent: NWaveSpectrum {
                         anchors.fill: parent
                         values: CavaService.values
                         fillColor: Color.mPrimary
@@ -1165,6 +1171,54 @@ Loader {
                       anchors.fill: parent
                       hoverEnabled: true
                       onClicked: CompositorService.suspend()
+                    }
+
+                    Behavior on color {
+                      ColorAnimation {
+                        duration: 200
+                        easing.type: Easing.OutCubic
+                      }
+                    }
+
+                    Behavior on border.color {
+                      ColorAnimation {
+                        duration: 200
+                        easing.type: Easing.OutCubic
+                      }
+                    }
+                  }
+
+                  Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: Settings.data.general.compactLockScreen ? 36 : 48
+                    radius: Settings.data.general.compactLockScreen ? 18 : 24
+                    color: hibernateButtonArea.containsMouse ? Color.mHover : "transparent"
+                    border.color: Color.mOutline
+                    border.width: 1
+
+                    RowLayout {
+                      anchors.centerIn: parent
+                      spacing: 6
+
+                      NIcon {
+                        icon: "hibernate"
+                        pointSize: Settings.data.general.compactLockScreen ? Style.fontSizeM : Style.fontSizeL
+                        color: hibernateButtonArea.containsMouse ? Color.mOnHover : Color.mOnSurfaceVariant
+                      }
+
+                      NText {
+                        text: I18n.tr("session-menu.hibernate")
+                        pointSize: Settings.data.general.compactLockScreen ? Style.fontSizeS : Style.fontSizeM
+                        color: hibernateButtonArea.containsMouse ? Color.mOnHover : Color.mOnSurfaceVariant
+                        font.weight: Font.Medium
+                      }
+                    }
+
+                    MouseArea {
+                      id: hibernateButtonArea
+                      anchors.fill: parent
+                      hoverEnabled: true
+                      onClicked: CompositorService.hibernate()
                     }
 
                     Behavior on color {

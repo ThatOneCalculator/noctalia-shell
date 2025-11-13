@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Services.UPower
 import qs.Commons
-import qs.Services
+import qs.Services.UI
 import qs.Widgets
 import qs.Modules.Notification
 import qs.Modules.Bar.Extras
@@ -14,21 +14,19 @@ import qs.Modules.Bar.Extras
 Item {
   id: root
 
-  // This property will be set by NFullScreenWindow
+  // This property will be set by MainScreen
   property ShellScreen screen: null
 
   // Expose bar region for click-through mask
   readonly property var barRegion: barContentLoader.item?.children[0] || null
 
+  // Expose the actual bar Item for unified background system
+  readonly property var barItem: barRegion
+
   // Bar positioning properties
   readonly property string barPosition: Settings.data.bar.position || "top"
   readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
   readonly property bool barFloating: Settings.data.bar.floating || false
-  readonly property real barMarginH: barFloating ? Settings.data.bar.marginHorizontal * Style.marginXL : 0
-  readonly property real barMarginV: barFloating ? Settings.data.bar.marginVertical * Style.marginXL : 0
-
-  // Attachment overlap to fix hairline gap with fractional scaling
-  readonly property real attachmentOverlap: 1
 
   // Fill the parent (the Loader)
   anchors.fill: parent
@@ -38,7 +36,6 @@ Item {
     if (screen && screen.name) {
       Logger.d("Bar", "Bar screen set to:", screen.name)
       Logger.d("Bar", "  Position:", barPosition, "Floating:", barFloating)
-      Logger.d("Bar", "  Margins - H:", barMarginH, "V:", barMarginV)
       BarService.registerBar(screen.name)
     }
   }
@@ -54,64 +51,98 @@ Item {
 
       var monitors = Settings.data.bar.monitors || []
       var result = monitors.length === 0 || monitors.includes(root.screen.name)
-
       return result
     }
 
     sourceComponent: Item {
       anchors.fill: parent
 
-      // Background fill
-      NShapedRectangle {
+      // Bar container - Content
+      Item {
         id: bar
 
-        // Position and size the bar based on orientation and floating margins
-        // Extend the bar by attachmentOverlap to eliminate hairline gap
-        x: {
-          var baseX = (root.barPosition === "right") ? (parent.width - Style.barHeight - root.barMarginH) : root.barMarginH
-          if (root.barPosition === "right")
-            return baseX - root.attachmentOverlap // Extend left towards panels
-          return baseX
+        // Position and size the bar content based on orientation
+        x: (root.barPosition === "right") ? (parent.width - Style.barHeight) : 0
+        y: (root.barPosition === "bottom") ? (parent.height - Style.barHeight) : 0
+        width: root.barIsVertical ? Style.barHeight : parent.width
+        height: root.barIsVertical ? parent.height : Style.barHeight
+
+        // Corner states for new unified background system
+        // State -1: No radius (flat/square corner)
+        // State 0: Normal (inner curve)
+        // State 1: Horizontal inversion (outer curve on X-axis)
+        // State 2: Vertical inversion (outer curve on Y-axis)
+        readonly property int topLeftCornerState: {
+          // Floating bar: always simple rounded corners
+          if (barFloating)
+            return 0
+          // Top bar: top corners against screen edge = no radius
+          if (barPosition === "top")
+            return -1
+          // Left bar: top-left against screen edge = no radius
+          if (barPosition === "left")
+            return -1
+          // Bottom/Right bar with outerCorners: inverted corner
+          if (Settings.data.bar.outerCorners && (barPosition === "bottom" || barPosition === "right")) {
+            return barIsVertical ? 1 : 2 // horizontal invert for vertical bars, vertical invert for horizontal
+          }
+          // No outerCorners = square
+          return -1
         }
-        y: {
-          var baseY = (root.barPosition === "bottom") ? (parent.height - Style.barHeight - root.barMarginV) : root.barMarginV
-          if (root.barPosition === "bottom")
-            return baseY - root.attachmentOverlap // Extend up towards panels
-          return baseY
+
+        readonly property int topRightCornerState: {
+          // Floating bar: always simple rounded corners
+          if (barFloating)
+            return 0
+          // Top bar: top corners against screen edge = no radius
+          if (barPosition === "top")
+            return -1
+          // Right bar: top-right against screen edge = no radius
+          if (barPosition === "right")
+            return -1
+          // Bottom/Left bar with outerCorners: inverted corner
+          if (Settings.data.bar.outerCorners && (barPosition === "bottom" || barPosition === "left")) {
+            return barIsVertical ? 1 : 2
+          }
+          // No outerCorners = square
+          return -1
         }
-        width: {
-          var baseWidth = root.barIsVertical ? Style.barHeight : (parent.width - root.barMarginH * 2)
-          if (!root.barIsVertical)
-            return baseWidth // Horizontal bars extend via height, not width
-          return baseWidth + root.attachmentOverlap + 1
+
+        readonly property int bottomLeftCornerState: {
+          // Floating bar: always simple rounded corners
+          if (barFloating)
+            return 0
+          // Bottom bar: bottom corners against screen edge = no radius
+          if (barPosition === "bottom")
+            return -1
+          // Left bar: bottom-left against screen edge = no radius
+          if (barPosition === "left")
+            return -1
+          // Top/Right bar with outerCorners: inverted corner
+          if (Settings.data.bar.outerCorners && (barPosition === "top" || barPosition === "right")) {
+            return barIsVertical ? 1 : 2
+          }
+          // No outerCorners = square
+          return -1
         }
-        height: {
-          var baseHeight = root.barIsVertical ? (parent.height - root.barMarginV * 2) : Style.barHeight
-          if (!root.barIsVertical)
-            return baseHeight + root.attachmentOverlap
-          return baseHeight // Vertical bars extend via width, not height
+
+        readonly property int bottomRightCornerState: {
+          // Floating bar: always simple rounded corners
+          if (barFloating)
+            return 0
+          // Bottom bar: bottom corners against screen edge = no radius
+          if (barPosition === "bottom")
+            return -1
+          // Right bar: bottom-right against screen edge = no radius
+          if (barPosition === "right")
+            return -1
+          // Top/Left bar with outerCorners: inverted corner
+          if (Settings.data.bar.outerCorners && (barPosition === "top" || barPosition === "left")) {
+            return barIsVertical ? 1 : 2
+          }
+          // No outerCorners = square
+          return -1
         }
-
-        backgroundColor: Qt.alpha(Color.mSurface, Settings.data.bar.backgroundOpacity)
-
-        // Floating bar rounded corners
-        topLeftRadius: Settings.data.bar.floating || topLeftInverted ? Style.radiusL : 0
-        topRightRadius: Settings.data.bar.floating || topRightInverted ? Style.radiusL : 0
-        bottomLeftRadius: Settings.data.bar.floating || bottomLeftInverted ? Style.radiusL : 0
-        bottomRightRadius: Settings.data.bar.floating || bottomRightInverted ? Style.radiusL : 0
-
-        topLeftInverted: Settings.data.bar.outerCorners && (barPosition === "bottom" || barPosition === "right")
-        topLeftInvertedDirection: barIsVertical ? "horizontal" : "vertical"
-        topRightInverted: Settings.data.bar.outerCorners && (barPosition === "bottom" || barPosition === "left")
-        topRightInvertedDirection: barIsVertical ? "horizontal" : "vertical"
-
-        bottomLeftInverted: Settings.data.bar.outerCorners && (barPosition === "top" || barPosition === "right")
-        bottomLeftInvertedDirection: barIsVertical ? "horizontal" : "vertical"
-        bottomRightInverted: Settings.data.bar.outerCorners && (barPosition === "top" || barPosition === "left")
-        bottomRightInvertedDirection: barIsVertical ? "horizontal" : "vertical"
-
-        // No border on the bar
-        borderWidth: 0
 
         MouseArea {
           anchors.fill: parent
@@ -120,11 +151,13 @@ Item {
           preventStealing: true
           onClicked: function (mouse) {
             if (mouse.button === Qt.RightButton) {
-              // Look up for any ControlCenter button on this bar
-              var widget = BarService.lookupWidget("ControlCenter", root.screen.name)
-
-              // Open the panel near the button if any
-              PanelService.getPanel("controlCenterPanel", root.screen)?.toggle(widget)
+              var controlCenterPanel = PanelService.getPanel("controlCenterPanel", screen)
+              if (Settings.data.controlCenter.position === "close_to_bar_button") {
+                // Will attempt to open the panel next to the bar button if any.
+                controlCenterPanel?.toggle(null, "ControlCenter")
+              } else {
+                controlCenterPanel?.toggle()
+              }
               mouse.accepted = true
             }
           }

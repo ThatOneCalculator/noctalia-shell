@@ -1,7 +1,8 @@
 import QtQuick
 import Quickshell
 import qs.Commons
-import qs.Services
+import qs.Services.Networking
+import qs.Services.UI
 import qs.Modules.Bar.Extras
 
 Item {
@@ -40,7 +41,7 @@ Item {
     icon: {
       try {
         if (NetworkService.ethernetConnected) {
-          return "ethernet"
+          return NetworkService.internetConnectivity ? "ethernet" : "ethernet-off"
         }
         let connected = false
         let signalStrength = 0
@@ -51,10 +52,10 @@ Item {
             break
           }
         }
-        return connected ? NetworkService.signalIcon(signalStrength) : "wifi-off"
+        return connected ? NetworkService.signalIcon(signalStrength, true) : "wifi-off"
       } catch (error) {
         Logger.e("Wi-Fi", "Error getting icon:", error)
-        return "signal_wifi_bad"
+        return "wifi-off"
       }
     }
     text: {
@@ -77,7 +78,7 @@ Item {
     forceOpen: !isBarVertical && root.displayMode === "alwaysShow"
     forceClose: isBarVertical || root.displayMode === "alwaysHide" || !pill.text
     onClicked: PanelService.getPanel("wifiPanel", screen)?.toggle(this)
-    onRightClicked: PanelService.getPanel("wifiPanel", screen)?.toggle(this)
+    onRightClicked: NetworkService.setWifiEnabled(!Settings.data.network.wifiEnabled)
     tooltipText: {
       if (pill.text !== "") {
         return pill.text
