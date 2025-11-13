@@ -19,7 +19,7 @@ Singleton {
   property bool shouldRun: BarService.hasAudioVisualizer || PanelService.lockScreen?.active || (PanelService.openedPanel && PanelService.openedPanel.panelWrapper.objectName.startsWith("controlCenterPanel"))
 
   property var values: Array(barsCount).fill(0)
-  property int barsCount: 2
+  property int barsCount: 26
 
   // Idle detection to reduce GPU usage when there's no audio
   property bool isIdle: true
