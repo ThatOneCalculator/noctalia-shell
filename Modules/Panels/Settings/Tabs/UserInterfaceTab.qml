@@ -25,11 +25,25 @@ ColumnLayout {
       onToggled: checked => Settings.data.ui.tooltipsEnabled = checked
     }
 
-    NToggle {
-      label: I18n.tr("settings.user-interface.dim-desktop.label")
-      description: I18n.tr("settings.user-interface.dim-desktop.description")
-      checked: Settings.data.general.dimDesktop
-      onToggled: checked => Settings.data.general.dimDesktop = checked
+    // Dim desktop opacity
+    ColumnLayout {
+      spacing: Style.marginXXS
+      Layout.fillWidth: true
+
+      NLabel {
+        label: I18n.tr("settings.user-interface.dimmer-opacity.label")
+        description: I18n.tr("settings.user-interface.dimmer-opacity.description")
+      }
+
+      NValueSlider {
+        Layout.fillWidth: true
+        from: 0
+        to: 1
+        stepSize: 0.01
+        value: Settings.data.general.dimmerOpacity
+        onMoved: value => Settings.data.general.dimmerOpacity = value
+        text: Math.floor(Settings.data.general.dimmerOpacity * 100) + "%"
+      }
     }
 
     NToggle {
@@ -104,17 +118,17 @@ ColumnLayout {
         return {
           "key": k,
           "name": shadowOptionsMap[k].name
-        }
+        };
       })
 
       currentKey: Settings.data.general.shadowDirection
 
       onSelected: function (key) {
-        var opt = shadowOptionsMap[key]
+        var opt = shadowOptionsMap[key];
         if (opt) {
-          Settings.data.general.shadowDirection = key
-          Settings.data.general.shadowOffsetX = opt.p.x
-          Settings.data.general.shadowOffsetY = opt.p.y
+          Settings.data.general.shadowDirection = key;
+          Settings.data.general.shadowOffsetX = opt.p.x;
+          Settings.data.general.shadowOffsetY = opt.p.y;
         }
       }
     }
@@ -140,13 +154,21 @@ ColumnLayout {
       }
     }
 
+    NToggle {
+      visible: (Quickshell.screens.length > 1)
+      label: I18n.tr("settings.user-interface.allow-panels-without-bar.label")
+      description: I18n.tr("settings.user-interface.allow-panels-without-bar.description")
+      checked: Settings.data.general.allowPanelsOnScreenWithoutBar
+      onToggled: checked => Settings.data.general.allowPanelsOnScreenWithoutBar = checked
+    }
+
     NDivider {
       Layout.fillWidth: true
       Layout.topMargin: Style.marginL
       Layout.bottomMargin: Style.marginL
     }
 
-    // User Interface
+    // User Interface Scaling
     ColumnLayout {
       spacing: Style.marginXXS
       Layout.fillWidth: true

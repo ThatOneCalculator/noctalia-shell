@@ -21,7 +21,7 @@ NIconButton {
                          "profile": PowerProfileService.getName()
                        })
   tooltipDirection: BarService.getTooltipDirection()
-  colorBg: (Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent)
+  colorBg: Style.capsuleColor
   colorFg: PowerProfileService.getColor()
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent

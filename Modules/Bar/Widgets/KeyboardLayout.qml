@@ -1,13 +1,13 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Wayland
 import Quickshell.Io
+import Quickshell.Wayland
 import qs.Commons
-import qs.Services.UI
-import qs.Services.Keyboard
-import qs.Widgets
 import qs.Modules.Bar.Extras
+import qs.Services.Keyboard
+import qs.Services.UI
+import qs.Widgets
 
 Item {
   id: root
@@ -23,12 +23,12 @@ Item {
   property var widgetMetadata: BarWidgetRegistry.widgetMetadata[widgetId]
   property var widgetSettings: {
     if (section && sectionWidgetIndex >= 0) {
-      var widgets = Settings.data.bar.widgets[section]
+      var widgets = Settings.data.bar.widgets[section];
       if (widgets && sectionWidgetIndex < widgets.length) {
-        return widgets[sectionWidgetIndex]
+        return widgets[sectionWidgetIndex];
       }
     }
-    return {}
+    return {};
   }
 
   readonly property string displayMode: (widgetSettings.displayMode !== undefined) ? widgetSettings.displayMode : widgetMetadata.displayMode
@@ -41,8 +41,9 @@ Item {
 
   BarPill {
     id: pill
-
     anchors.verticalCenter: parent.verticalCenter
+
+    screen: root.screen
     density: Settings.data.bar.density
     oppositeDirection: BarService.getPillDirection(root)
     icon: "keyboard"
@@ -53,9 +54,9 @@ Item {
                          })
     forceOpen: root.displayMode === "forceOpen"
     forceClose: root.displayMode === "alwaysHide"
-    onClicked: {
+    onClicked:
 
       // You could open keyboard settings here if needed.
-    }
+    {}
   }
 }

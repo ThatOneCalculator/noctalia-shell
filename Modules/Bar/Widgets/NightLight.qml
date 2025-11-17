@@ -1,6 +1,6 @@
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import qs.Commons
@@ -17,7 +17,7 @@ NIconButton {
   density: Settings.data.bar.density
   baseSize: Style.capsuleHeight
   applyUiScale: false
-  colorBg: Settings.data.nightLight.forced ? Color.mPrimary : (Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent)
+  colorBg: Settings.data.nightLight.forced ? Color.mPrimary : Style.capsuleColor
   colorFg: Settings.data.nightLight.forced ? Color.mOnPrimary : Color.mOnSurface
   colorBorder: Color.transparent
   colorBorderHover: Color.transparent
@@ -28,24 +28,24 @@ NIconButton {
   onClicked: {
     // Check if wlsunset is available before enabling night light
     if (!ProgramCheckerService.wlsunsetAvailable) {
-      ToastService.showWarning(I18n.tr("settings.display.night-light.section.label"), I18n.tr("toast.night-light.not-installed"))
-      return
+      ToastService.showWarning(I18n.tr("settings.display.night-light.section.label"), I18n.tr("toast.night-light.not-installed"));
+      return;
     }
 
     if (!Settings.data.nightLight.enabled) {
-      Settings.data.nightLight.enabled = true
-      Settings.data.nightLight.forced = false
+      Settings.data.nightLight.enabled = true;
+      Settings.data.nightLight.forced = false;
     } else if (Settings.data.nightLight.enabled && !Settings.data.nightLight.forced) {
-      Settings.data.nightLight.forced = true
+      Settings.data.nightLight.forced = true;
     } else {
-      Settings.data.nightLight.enabled = false
-      Settings.data.nightLight.forced = false
+      Settings.data.nightLight.enabled = false;
+      Settings.data.nightLight.forced = false;
     }
   }
 
   onRightClicked: {
-    var settingsPanel = PanelService.getPanel("settingsPanel", screen)
-    settingsPanel.requestedTab = SettingsPanel.Tab.Display
-    settingsPanel.open()
+    var settingsPanel = PanelService.getPanel("settingsPanel", screen);
+    settingsPanel.requestedTab = SettingsPanel.Tab.Display;
+    settingsPanel.open();
   }
 }

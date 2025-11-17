@@ -8,7 +8,7 @@ import qs.Widgets
 Item {
   id: root
 
-  property ShellScreen screen
+  required property ShellScreen screen
 
   property string icon: ""
   property string text: ""
@@ -45,18 +45,18 @@ Item {
   readonly property real iconSize: {
     switch (root.density) {
     case "compact":
-      return Math.max(1, Math.round(pillHeight * 0.65))
+      return Math.max(1, Math.round(pillHeight * 0.65));
     default:
-      return Math.max(1, Math.round(pillHeight * 0.48))
+      return Math.max(1, Math.round(pillHeight * 0.48));
     }
   }
 
   readonly property real textSize: {
     switch (root.density) {
     case "compact":
-      return Math.max(1, Math.round(pillHeight * 0.45))
+      return Math.max(1, Math.round(pillHeight * 0.45));
     default:
-      return Math.max(1, Math.round(pillHeight * 0.33))
+      return Math.max(1, Math.round(pillHeight * 0.33));
     }
   }
 
@@ -67,7 +67,26 @@ Item {
     target: root
     function onTooltipTextChanged() {
       if (hovered) {
-        TooltipService.updateText(root.tooltipText)
+        TooltipService.updateText(root.tooltipText);
+      }
+    }
+  }
+
+  // Unified background for the entire pill area to avoid overlapping opacity
+  Rectangle {
+    id: pillBackground
+    width: root.width
+    height: pillHeight
+    radius: halfPillHeight
+    color: hovered ? Color.mHover : Style.capsuleColor
+    anchors.verticalCenter: parent.verticalCenter
+
+    readonly property int halfPillHeight: Math.round(pillHeight * 0.5)
+
+    Behavior on color {
+      ColorAnimation {
+        duration: Style.animationNormal
+        easing.type: Easing.InOutQuad
       }
     }
   }
@@ -82,7 +101,7 @@ Item {
                            (iconCircle.x + iconCircle.width / 2) - width // Opens left
 
     opacity: revealed ? Style.opacityFull : Style.opacityNone
-    color: Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent
+    color: Color.transparent // Make pill background transparent to avoid double opacity
 
     readonly property int halfPillHeight: Math.round(pillHeight * 0.5)
 
@@ -97,20 +116,20 @@ Item {
       anchors.verticalCenter: parent.verticalCenter
       x: {
         // Better text horizontal centering
-        var centerX = (parent.width - width) / 2
-        var offset = oppositeDirection ? Style.marginXS : -Style.marginXS
+        var centerX = (parent.width - width) / 2;
+        var offset = oppositeDirection ? Style.marginXS : -Style.marginXS;
         if (forceOpen) {
           // If its force open, the icon disc background is the same color as the bg pill move text slightly
-          offset += oppositeDirection ? -Style.marginXXS : Style.marginXXS
+          offset += oppositeDirection ? -Style.marginXXS : Style.marginXXS;
         }
-        return centerX + offset
+        return centerX + offset;
       }
       text: root.text + root.suffix
       family: Settings.data.ui.fontFixed
       pointSize: textSize
       applyUiScale: false
       font.weight: Style.fontWeightBold
-      color: forceOpen ? Color.mOnSurface : Color.mPrimary
+      color: hovered ? Color.mOnHover : (forceOpen ? Color.mOnSurface : Color.mPrimary)
       visible: revealed
     }
 
@@ -135,17 +154,10 @@ Item {
     width: pillHeight
     height: pillHeight
     radius: width * 0.5
-    color: hovered ? Color.mHover : Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent
+    color: Color.transparent // Make icon background transparent to avoid double opacity
     anchors.verticalCenter: parent.verticalCenter
 
     x: oppositeDirection ? 0 : (parent.width - width)
-
-    Behavior on color {
-      ColorAnimation {
-        duration: Style.animationNormal
-        easing.type: Easing.InOutQuad
-      }
-    }
 
     NIcon {
       icon: root.icon
@@ -179,11 +191,11 @@ Item {
       easing.type: Easing.OutCubic
     }
     onStarted: {
-      showPill = true
+      showPill = true;
     }
     onStopped: {
-      delayedHideAnim.start()
-      root.shown()
+      delayedHideAnim.start();
+      root.shown();
     }
   }
 
@@ -195,7 +207,7 @@ Item {
     }
     ScriptAction {
       script: if (shouldAnimateHide) {
-                hideAnim.start()
+                hideAnim.start();
               }
     }
   }
@@ -220,9 +232,9 @@ Item {
       easing.type: Easing.InCubic
     }
     onStopped: {
-      showPill = false
-      shouldAnimateHide = false
-      root.hidden()
+      showPill = false;
+      shouldAnimateHide = false;
+      root.hidden();
     }
   }
 
@@ -231,7 +243,7 @@ Item {
     interval: Style.pillDelay
     onTriggered: {
       if (!showPill) {
-        showAnim.start()
+        showAnim.start();
       }
     }
   }
@@ -241,31 +253,31 @@ Item {
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
     onEntered: {
-      hovered = true
-      root.entered()
-      TooltipService.show(Screen, pill, root.tooltipText, BarService.getTooltipDirection(), Style.tooltipDelayLong)
+      hovered = true;
+      root.entered();
+      TooltipService.show(screen, pill, root.tooltipText, BarService.getTooltipDirection(), Style.tooltipDelayLong);
       if (forceClose) {
-        return
+        return;
       }
       if (!forceOpen) {
-        showDelayed()
+        showDelayed();
       }
     }
     onExited: {
-      hovered = false
-      root.exited()
+      hovered = false;
+      root.exited();
       if (!forceOpen && !forceClose) {
-        hide()
+        hide();
       }
-      TooltipService.hide()
+      TooltipService.hide();
     }
     onClicked: function (mouse) {
       if (mouse.button === Qt.LeftButton) {
-        root.clicked()
+        root.clicked();
       } else if (mouse.button === Qt.RightButton) {
-        root.rightClicked()
+        root.rightClicked();
       } else if (mouse.button === Qt.MiddleButton) {
-        root.middleClicked()
+        root.middleClicked();
       }
     }
     onWheel: wheel => root.wheel(wheel.angleDelta.y)
@@ -273,43 +285,43 @@ Item {
 
   function show() {
     if (!showPill) {
-      shouldAnimateHide = autoHide
-      showAnim.start()
+      shouldAnimateHide = autoHide;
+      showAnim.start();
     } else {
-      hideAnim.stop()
-      delayedHideAnim.restart()
+      hideAnim.stop();
+      delayedHideAnim.restart();
     }
   }
 
   function hide() {
     if (forceOpen) {
-      return
+      return;
     }
     if (showPill) {
-      hideAnim.start()
+      hideAnim.start();
     }
-    showTimer.stop()
+    showTimer.stop();
   }
 
   function showDelayed() {
     if (!showPill) {
-      shouldAnimateHide = autoHide
-      showTimer.start()
+      shouldAnimateHide = autoHide;
+      showTimer.start();
     } else {
-      hideAnim.stop()
-      delayedHideAnim.restart()
+      hideAnim.stop();
+      delayedHideAnim.restart();
     }
   }
 
   onForceOpenChanged: {
     if (forceOpen) {
       // Immediately lock open without animations
-      showAnim.stop()
-      hideAnim.stop()
-      delayedHideAnim.stop()
-      showPill = true
+      showAnim.stop();
+      hideAnim.stop();
+      delayedHideAnim.stop();
+      showPill = true;
     } else {
-      hide()
+      hide();
     }
   }
 }

@@ -17,6 +17,7 @@ ColumnLayout {
   // Deprecated: hideWhenIdle now folded into hideMode = "idle"
   property bool valueHideWhenIdle: widgetData.hideWhenIdle !== undefined ? widgetData.hideWhenIdle : (widgetMetadata.hideWhenIdle !== undefined ? widgetMetadata.hideWhenIdle : false)
   property bool valueShowAlbumArt: widgetData.showAlbumArt !== undefined ? widgetData.showAlbumArt : widgetMetadata.showAlbumArt
+  property bool valueShowArtistFirst: widgetData.showArtistFirst !== undefined ? widgetData.showArtistFirst : widgetMetadata.showArtistFirst
   property bool valueShowVisualizer: widgetData.showVisualizer !== undefined ? widgetData.showVisualizer : widgetMetadata.showVisualizer
   property string valueVisualizerType: widgetData.visualizerType || widgetMetadata.visualizerType
   property string valueScrollingMode: widgetData.scrollingMode || widgetMetadata.scrollingMode
@@ -25,40 +26,46 @@ ColumnLayout {
 
   Component.onCompleted: {
     if (widgetData && widgetData.hideMode !== undefined) {
-      valueHideMode = widgetData.hideMode
+      valueHideMode = widgetData.hideMode;
     }
   }
 
   function saveSettings() {
-    var settings = Object.assign({}, widgetData || {})
-    settings.hideMode = valueHideMode
+    var settings = Object.assign({}, widgetData || {});
+    settings.hideMode = valueHideMode;
     // No longer store hideWhenIdle separately; kept for backward compatibility only
-    settings.showAlbumArt = valueShowAlbumArt
-    settings.showVisualizer = valueShowVisualizer
-    settings.visualizerType = valueVisualizerType
-    settings.scrollingMode = valueScrollingMode
-    settings.maxWidth = parseInt(widthInput.text) || widgetMetadata.maxWidth
-    settings.useFixedWidth = valueUseFixedWidth
-    return settings
+    settings.showAlbumArt = valueShowAlbumArt;
+    settings.showArtistFirst = valueShowArtistFirst;
+    settings.showVisualizer = valueShowVisualizer;
+    settings.visualizerType = valueVisualizerType;
+    settings.scrollingMode = valueScrollingMode;
+    settings.maxWidth = parseInt(widthInput.text) || widgetMetadata.maxWidth;
+    settings.useFixedWidth = valueUseFixedWidth;
+    return settings;
   }
 
   NComboBox {
     Layout.fillWidth: true
     label: I18n.tr("bar.widget-settings.media-mini.hide-mode.label")
     description: I18n.tr("bar.widget-settings.media-mini.hide-mode.description")
-    model: [{
+    model: [
+      {
         "key": "visible",
         "name": I18n.tr("options.hide-modes.visible")
-      }, {
+      },
+      {
         "key": "hidden",
         "name": I18n.tr("options.hide-modes.hidden")
-      }, {
+      },
+      {
         "key": "transparent",
         "name": I18n.tr("options.hide-modes.transparent")
-      }, {
+      },
+      {
         "key": "idle",
         "name": I18n.tr("options.hide-modes.idle")
-      }]
+      }
+    ]
     currentKey: root.valueHideMode
     onSelected: key => root.valueHideMode = key
   }
@@ -68,6 +75,13 @@ ColumnLayout {
     description: I18n.tr("bar.widget-settings.media-mini.show-album-art.description")
     checked: valueShowAlbumArt
     onToggled: checked => valueShowAlbumArt = checked
+  }
+
+  NToggle {
+    label: I18n.tr("bar.widget-settings.media-mini.show-artist-first.label")
+    description: I18n.tr("bar.widget-settings.media-mini.show-artist-first.description")
+    checked: valueShowArtistFirst
+    onToggled: checked => valueShowArtistFirst = checked
   }
 
   NToggle {
@@ -81,16 +95,20 @@ ColumnLayout {
     visible: valueShowVisualizer
     label: I18n.tr("bar.widget-settings.media-mini.visualizer-type.label")
     description: I18n.tr("bar.widget-settings.media-mini.visualizer-type.description")
-    model: [{
+    model: [
+      {
         "key": "linear",
         "name": I18n.tr("options.visualizer-types.linear")
-      }, {
+      },
+      {
         "key": "mirrored",
         "name": I18n.tr("options.visualizer-types.mirrored")
-      }, {
+      },
+      {
         "key": "wave",
         "name": I18n.tr("options.visualizer-types.wave")
-      }]
+      }
+    ]
     currentKey: valueVisualizerType
     onSelected: key => valueVisualizerType = key
     minimumWidth: 200
@@ -115,16 +133,20 @@ ColumnLayout {
   NComboBox {
     label: I18n.tr("bar.widget-settings.media-mini.scrolling-mode.label")
     description: I18n.tr("bar.widget-settings.media-mini.scrolling-mode.description")
-    model: [{
+    model: [
+      {
         "key": "always",
         "name": I18n.tr("options.scrolling-modes.always")
-      }, {
+      },
+      {
         "key": "hover",
         "name": I18n.tr("options.scrolling-modes.hover")
-      }, {
+      },
+      {
         "key": "never",
         "name": I18n.tr("options.scrolling-modes.never")
-      }]
+      }
+    ]
     currentKey: valueScrollingMode
     onSelected: key => valueScrollingMode = key
     minimumWidth: 200

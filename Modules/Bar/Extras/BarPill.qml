@@ -7,6 +7,8 @@ import qs.Widgets
 Item {
   id: root
 
+  required property ShellScreen screen
+
   property string icon: ""
   property string text: ""
   property string suffix: ""
@@ -43,6 +45,7 @@ Item {
     Component {
       id: verticalPillComponent
       BarPillVertical {
+        screen: root.screen
         icon: root.icon
         text: root.text
         suffix: root.suffix
@@ -68,6 +71,7 @@ Item {
     Component {
       id: horizontalPillComponent
       BarPillHorizontal {
+        screen: root.screen
         icon: root.icon
         text: root.text
         suffix: root.suffix
@@ -92,19 +96,19 @@ Item {
 
   function show() {
     if (pillLoader.item && pillLoader.item.show) {
-      pillLoader.item.show()
+      pillLoader.item.show();
     }
   }
 
   function hide() {
     if (pillLoader.item && pillLoader.item.hide) {
-      pillLoader.item.hide()
+      pillLoader.item.hide();
     }
   }
 
   function showDelayed() {
     if (pillLoader.item && pillLoader.item.showDelayed) {
-      pillLoader.item.showDelayed()
+      pillLoader.item.showDelayed();
     }
   }
 }

@@ -202,6 +202,10 @@
           "description": "Display the album artwork for the currently playing track.",
           "label": "Show album art"
         },
+        "show-artist-first": {
+          "description": "Display artist - title instead of title - artist.",
+          "label": "Show artist first"
+        },
         "show-visualizer": {
           "description": "Display an audio visualizer when music is playing.",
           "label": "Show visualizer"
@@ -259,6 +263,10 @@
         "disk-critical-threshold": {
           "label": "Storage Space (Critical)"
         },
+        "disk-path": {
+          "description": "Select which disk mount point to monitor.",
+          "label": "Disk path"
+        },
         "disk-warning-threshold": {
           "label": "Storage Space (Warning)"
         },
@@ -314,13 +322,9 @@
         }
       },
       "taskbar-grouped": {
-        "show-numbers-only-when-occupied": {
-          "description": "Only show workspace numbers for workspaces that have open windows.",
-          "label": "Show numbers only when occupied"
-        },
-        "show-workspace-numbers": {
-          "description": "Display workspace numbers in the top-left corner of task groups.",
-          "label": "Show workspace numbers"
+        "show-labels-only-when-occupied": {
+          "description": "Only show workspace label for workspaces that have open windows.",
+          "label": "Show label only when occupied"
         }
       },
       "tray": {
@@ -363,13 +367,6 @@
     "health": "Health: {percent}%",
     "idle": "Idle.",
     "no-battery-detected": "No battery detected.",
-    "panel": {
-      "balanced": "Balanced ({percent}%)",
-      "disabled": "Battery manager disabled",
-      "full": "Full capacity ({percent}%)",
-      "lifespan": "Extended lifespan ({percent}%)",
-      "title": "Charge threshold"
-    },
     "plugged-in": "Plugged in.",
     "time-left": "Time left: {time}.",
     "time-until-full": "Time until full: {time}."
@@ -564,6 +561,7 @@
     },
     "workspace-labels": {
       "index": "Index",
+      "index+name": "Index and Name",
       "name": "Name",
       "none": "None"
     }
@@ -579,6 +577,7 @@
     "search": "Search...",
     "search-icons": "e.g., noctalia, niri, battery, cloud",
     "search-launcher": "Search entries... or use > for commands",
+    "search-wallhaven": "Search Wallhaven...",
     "search-wallpapers": "Type to filter wallpapers...",
     "select": "Select",
     "test": "Test"
@@ -793,6 +792,10 @@
         "background-opacity": {
           "description": "Adjust the background opacity of the bar.",
           "label": "Background opacity"
+        },
+        "capsule-opacity": {
+          "description": "Set the opacity level for widget backgrounds when capsule is shown.",
+          "label": "Capsule opacity"
         },
         "density": {
           "description": "Adjust the bar's padding for a compact or spacious look.",
@@ -1662,6 +1665,10 @@
       }
     },
     "user-interface": {
+      "allow-panels-without-bar": {
+        "description": "When enabled, panels can open on any screen. When disabled, panels will only open on screens that have a bar, which can reduce memory usage.",
+        "label": "Allow panels on screens without a bar"
+      },
       "animation-disable": {
         "description": "Disable all animations for a faster, more responsive experience.",
         "label": "Disable UI Animations"
@@ -1679,6 +1686,11 @@
       "dim-desktop": {
         "description": "Dim the desktop when panels or menus are open.",
         "label": "Dim desktop"
+      },
+      "dimmer-opacity": {
+        "description": "Set the opacity level for desktop dimming.",
+        "label": "Dimmed desktop opacity",
+        "reset": "Reset dimmed desktop opacity"
       },
       "panel-background-opacity": {
         "description": "Set the background opacity for all panels (Launcher, Control Center, Settings, etc.).",
@@ -1795,6 +1807,11 @@
         },
         "select-folder": "Select wallpaper folder",
         "select-monitor-folder": "Select monitor wallpaper folder",
+        "selector": {
+          "description": "Choose your wallpaper.",
+          "label": "Wallpaper selector",
+          "tooltip": "Open wallpaper selector"
+        },
         "selector-position": {
           "description": "Choose where the wallpaper selector panel appears.",
           "label": "Position"
@@ -1858,19 +1875,6 @@
     "battery": {
       "low": "Low battery",
       "low-desc": "Battery is at {percent}%. Please connect the charger."
-    },
-    "battery-manager": {
-      "initial-setup": "Initial setup required",
-      "install-failed": "Installation failed",
-      "install-missing": "Required files are missing",
-      "install-success": "Installed successfully",
-      "install-unsupported": "System is not supported",
-      "set-failed": "Failed to set battery threshold",
-      "set-success-desc": "Battery threshold set to {percent}%",
-      "title": "Battery threshold",
-      "uninstall-failed": "Uninstallation failed",
-      "uninstall-setup": "Uninstalling, authentication required",
-      "uninstall-success": "Uninstalled successfully"
     },
     "bluetooth": {
       "disabled": "Disabled",
@@ -2000,6 +2004,7 @@
     "previous-month": "Previous month",
     "refresh": "Refresh",
     "refresh-devices": "Refresh devices",
+    "refresh-wallhaven": "Refresh Wallhaven results",
     "refresh-wallpaper-list": "Refresh wallpaper list",
     "remove-widget": "Remove widget",
     "screen-recorder-not-installed": "Screen recorder is not installed",
@@ -2026,11 +2031,54 @@
     "no-wallpaper": "No wallpaper found.",
     "panel": {
       "apply-all-monitors": {
-        "description": "Apply selected wallpaper to all monitors at once.",
+        "description": "Apply the selected wallpaper to all monitors.",
         "label": "Apply to all monitors"
       },
-      "search": "Search:",
-      "title": "Wallpaper selector"
+      "categories": {
+        "anime": "Anime",
+        "general": "General",
+        "label": "Categories",
+        "people": "People"
+      },
+      "order": {
+        "asc": "Ascending",
+        "desc": "Descending",
+        "label": "Order"
+      },
+      "purity": {
+        "all": "All",
+        "label": "Content filter",
+        "sfw": "SFW",
+        "sketchy": "Sketchy"
+      },
+      "resolution": {
+        "atleast": "At least",
+        "exact": "Exact",
+        "label": "Resolution",
+        "mode": {
+          "label": "Mode"
+        }
+      },
+      "search": "Search",
+      "sorting": {
+        "date_added": "Date added",
+        "favorites": "Favorites",
+        "label": "Sort by",
+        "random": "Random",
+        "relevance": "Relevance",
+        "toplist": "Toplist",
+        "views": "Views"
+      },
+      "source": {
+        "label": "Source",
+        "local": "Local",
+        "wallhaven": "Wallhaven"
+      },
+      "title": "Wallpaper Selector",
+      "wallhaven-settings": {
+        "apply": "Apply",
+        "title": "Wallhaven Settings"
+      }
     },
     "transitions": {
       "disc": "Disc",
@@ -2040,7 +2088,13 @@
       "stripes": "Stripes",
       "wipe": "Wipe"
     },
-    "try-different-search": "Try a different search query."
+    "try-different-search": "Try a different search query.",
+    "unknown": "Unknown",
+    "wallhaven": {
+      "loading": "Loading wallpapers...",
+      "no-results": "No wallpapers found. Try a different search query.",
+      "page": "{current} of {total}"
+    }
   },
   "weather": {
     "clear-sky": "Clear sky",

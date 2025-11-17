@@ -3,8 +3,8 @@ import QtQuick.Layouts
 import Quickshell
 import qs.Commons
 import qs.Modules.Panels.Settings
-import qs.Services.UI
 import qs.Services.System
+import qs.Services.UI
 import qs.Widgets
 
 Rectangle {
@@ -21,12 +21,12 @@ Rectangle {
   property var widgetMetadata: BarWidgetRegistry.widgetMetadata[widgetId]
   property var widgetSettings: {
     if (section && sectionWidgetIndex >= 0) {
-      var widgets = Settings.data.bar.widgets[section]
+      var widgets = Settings.data.bar.widgets[section];
       if (widgets && sectionWidgetIndex < widgets.length) {
-        return widgets[sectionWidgetIndex]
+        return widgets[sectionWidgetIndex];
       }
     }
-    return {}
+    return {};
   }
 
   readonly property string barPosition: Settings.data.bar.position
@@ -40,11 +40,12 @@ Rectangle {
   readonly property bool showMemoryAsPercent: (widgetSettings.showMemoryAsPercent !== undefined) ? widgetSettings.showMemoryAsPercent : widgetMetadata.showMemoryAsPercent
   readonly property bool showNetworkStats: (widgetSettings.showNetworkStats !== undefined) ? widgetSettings.showNetworkStats : widgetMetadata.showNetworkStats
   readonly property bool showDiskUsage: (widgetSettings.showDiskUsage !== undefined) ? widgetSettings.showDiskUsage : widgetMetadata.showDiskUsage
+  readonly property string diskPath: (widgetSettings.diskPath !== undefined) ? widgetSettings.diskPath : widgetMetadata.diskPath
 
   readonly property real iconSize: textSize * 1.4
   readonly property real textSize: {
-    var base = isVertical ? width * 0.82 : height
-    return Math.max(1, (density === "compact") ? base * 0.43 : base * 0.33)
+    var base = isVertical ? width * 0.82 : height;
+    return Math.max(1, (density === "compact") ? base * 0.43 : base * 0.33);
   }
 
   // Match Workspace widget pill sizing: base ratio depends on bar density
@@ -77,8 +78,8 @@ Rectangle {
   readonly property bool tempCritical: showCpuTemp && SystemStatService.cpuTemp > tempCriticalThreshold
   readonly property bool memWarning: showMemoryUsage && SystemStatService.memPercent > memWarningThreshold
   readonly property bool memCritical: showMemoryUsage && SystemStatService.memPercent > memCriticalThreshold
-  readonly property bool diskWarning: showDiskUsage && SystemStatService.diskPercents["/"] > diskWarningThreshold
-  readonly property bool diskCritical: showDiskUsage && SystemStatService.diskPercents["/"] > diskCriticalThreshold
+  readonly property bool diskWarning: showDiskUsage && SystemStatService.diskPercents[diskPath] > diskWarningThreshold
+  readonly property bool diskCritical: showDiskUsage && SystemStatService.diskPercents[diskPath] > diskCriticalThreshold
 
   TextMetrics {
     id: percentMetrics
@@ -108,7 +109,7 @@ Rectangle {
   implicitWidth: isVertical ? Style.capsuleHeight : Math.round(mainGrid.implicitWidth + Style.marginM * 2)
   implicitHeight: isVertical ? Math.round(mainGrid.implicitHeight + Style.marginM * 2) : Style.capsuleHeight
   radius: Style.radiusM
-  color: Settings.data.bar.showCapsule ? Color.mSurfaceVariant : Color.transparent
+  color: Style.capsuleColor
 
   // Status indicator component definition
   Component {
@@ -178,11 +179,11 @@ Rectangle {
         anchors.centerIn: parent
 
         onLoaded: {
-          item.warning = Qt.binding(() => cpuWarning)
-          item.critical = Qt.binding(() => cpuCritical)
-          item.indicatorWidth = Qt.binding(() => cpuUsageContainer.width)
-          item.warningColor = Qt.binding(() => root.warningColor)
-          item.criticalColor = Qt.binding(() => root.criticalColor)
+          item.warning = Qt.binding(() => cpuWarning);
+          item.critical = Qt.binding(() => cpuCritical);
+          item.indicatorWidth = Qt.binding(() => cpuUsageContainer.width);
+          item.warningColor = Qt.binding(() => root.warningColor);
+          item.criticalColor = Qt.binding(() => root.criticalColor);
         }
       }
 
@@ -214,11 +215,11 @@ Rectangle {
 
         NText {
           text: {
-            let usage = Math.round(SystemStatService.cpuUsage)
+            let usage = Math.round(SystemStatService.cpuUsage);
             if (usage < 100) {
-              return `${usage}%`
+              return `${usage}%`;
             } else {
-              return usage
+              return usage;
             }
           }
           family: Settings.data.ui.fontFixed
@@ -252,11 +253,11 @@ Rectangle {
         anchors.centerIn: parent
 
         onLoaded: {
-          item.warning = Qt.binding(() => tempWarning)
-          item.critical = Qt.binding(() => tempCritical)
-          item.indicatorWidth = Qt.binding(() => cpuTempContainer.width)
-          item.warningColor = Qt.binding(() => root.warningColor)
-          item.criticalColor = Qt.binding(() => root.criticalColor)
+          item.warning = Qt.binding(() => tempWarning);
+          item.critical = Qt.binding(() => tempCritical);
+          item.indicatorWidth = Qt.binding(() => cpuTempContainer.width);
+          item.warningColor = Qt.binding(() => root.warningColor);
+          item.criticalColor = Qt.binding(() => root.criticalColor);
         }
       }
 
@@ -319,11 +320,11 @@ Rectangle {
         anchors.centerIn: parent
 
         onLoaded: {
-          item.warning = Qt.binding(() => memWarning)
-          item.critical = Qt.binding(() => memCritical)
-          item.indicatorWidth = Qt.binding(() => memoryContainer.width)
-          item.warningColor = Qt.binding(() => root.warningColor)
-          item.criticalColor = Qt.binding(() => root.criticalColor)
+          item.warning = Qt.binding(() => memWarning);
+          item.critical = Qt.binding(() => memCritical);
+          item.indicatorWidth = Qt.binding(() => memoryContainer.width);
+          item.warningColor = Qt.binding(() => root.warningColor);
+          item.criticalColor = Qt.binding(() => root.criticalColor);
         }
       }
 
@@ -472,11 +473,11 @@ Rectangle {
         anchors.centerIn: parent
 
         onLoaded: {
-          item.warning = Qt.binding(() => diskWarning)
-          item.critical = Qt.binding(() => diskCritical)
-          item.indicatorWidth = Qt.binding(() => diskContainer.width)
-          item.warningColor = Qt.binding(() => root.warningColor)
-          item.criticalColor = Qt.binding(() => root.criticalColor)
+          item.warning = Qt.binding(() => diskWarning);
+          item.critical = Qt.binding(() => diskCritical);
+          item.indicatorWidth = Qt.binding(() => diskContainer.width);
+          item.warningColor = Qt.binding(() => root.warningColor);
+          item.criticalColor = Qt.binding(() => root.criticalColor);
         }
       }
 
@@ -501,7 +502,8 @@ Rectangle {
         }
 
         NText {
-          text: `${SystemStatService.diskPercents["/"]}%`
+          id: toto
+          text: SystemStatService.diskPercents[diskPath] ? `${SystemStatService.diskPercents[diskPath]}%` : "n/a"
           family: Settings.data.ui.fontFixed
           pointSize: textSize
           applyUiScale: false
@@ -515,6 +517,17 @@ Rectangle {
           Layout.row: isVertical ? 0 : 0
           Layout.column: isVertical ? 0 : 1
           scale: isVertical ? Math.min(1.0, root.width / implicitWidth) : 1.0
+        }
+
+        MouseArea {
+          anchors.fill: parent
+          hoverEnabled: true
+          onEntered: {
+            TooltipService.show(screen, diskContent, diskPath, BarService.getTooltipDirection());
+          }
+          onExited: {
+            TooltipService.hide();
+          }
         }
       }
     }
