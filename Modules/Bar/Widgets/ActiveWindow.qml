@@ -45,7 +45,7 @@ Item {
   readonly property bool isVerticalBar: (Settings.data.bar.position === "left" || Settings.data.bar.position === "right")
   readonly property bool hasFocusedWindow: CompositorService.getFocusedWindow() !== null
   readonly property string windowTitle: CompositorService.getFocusedWindowTitle() || "No active window"
-  readonly property string fallbackIcon: "user-desktop"
+  readonly property string fallbackIcon: ""
 
   implicitHeight: visible ? (isVerticalBar ? (((!hasFocusedWindow) && hideMode === "hidden") ? 0 : calculatedVerticalDimension()) : Style.capsuleHeight) : 0
   implicitWidth: visible ? (isVerticalBar ? (((!hasFocusedWindow) && hideMode === "hidden") ? 0 : calculatedVerticalDimension()) : (((!hasFocusedWindow) && hideMode === "hidden") ? 0 : dynamicWidth)) : 0
