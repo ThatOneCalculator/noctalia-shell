@@ -398,6 +398,27 @@
   "clock": {
     "tooltip": "Ouvrir le calendrier"
   },
+  "context-menu": {
+    "clear-history": "Effacer l'historique",
+    "cycle-visualizer": "Visualiseur de cycle",
+    "disable-bluetooth": "Désactiver le Bluetooth",
+    "disable-dnd": "Désactiver le mode Ne pas déranger",
+    "disable-wifi": "Désactiver le Wi-Fi",
+    "enable-bluetooth": "Activer le Bluetooth",
+    "enable-dnd": "Activer le mode Ne pas déranger",
+    "enable-wifi": "Activer le Wi-Fi",
+    "next": "Suivant",
+    "open-calendar": "Ouvrir le calendrier",
+    "open-display-settings": "Paramètres d'affichage",
+    "open-launcher": "Ouvrir le lanceur",
+    "open-mixer": "Table de mixage audio",
+    "open-settings": "Ouvrir les paramètres",
+    "pause": "Pause",
+    "play": "Jouer",
+    "previous": "Précédent",
+    "toggle-mute": "Activer/désactiver le mode muet",
+    "widget-settings": "Paramètres du widget"
+  },
   "dock": {
     "menu": {
       "close": "Fermer",
@@ -980,6 +1001,41 @@
           "qt": {
             "description": "Écrire {filepath}"
           }
+        }
+      },
+      "download": {
+        "button": "Télécharger plus",
+        "title": "Télécharger des jeux de couleurs",
+        "fetching": "Récupération des jeux de couleurs disponibles...",
+        "empty": "Aucun jeu de couleurs disponible",
+        "refresh": "Actualiser",
+        "download": "Télécharger",
+        "downloading": "Téléchargement...",
+        "delete": "Supprimer",
+        "installed": "Installé",
+        "success": {
+          "title": "Jeu de couleurs téléchargé",
+          "description": "{scheme} téléchargé avec succès"
+        },
+        "error": {
+          "title": "Échec du téléchargement",
+          "description": "Échec du téléchargement de {scheme}",
+          "invalid-response": "Format de réponse API invalide",
+          "parse-failed": "Échec de l'analyse de la réponse API: {error}",
+          "rate-limit": "Limite de débit de l'API GitHub dépassée",
+          "api-error": "Erreur API: {status}",
+          "no-files": "Aucun fichier trouvé pour le jeu de couleurs",
+          "download-failed": "Échec du téléchargement avec le code de sortie: {code}"
+        }
+      },
+      "delete": {
+        "success": {
+          "title": "Jeu de couleurs supprimé",
+          "description": "{scheme} supprimé avec succès"
+        },
+        "error": {
+          "title": "Échec de la suppression",
+          "description": "Échec de la suppression de {scheme}"
         }
       },
       "title": "Jeu de couleurs"

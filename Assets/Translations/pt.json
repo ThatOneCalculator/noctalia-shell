@@ -398,6 +398,27 @@
   "clock": {
     "tooltip": "Abrir calendário"
   },
+  "context-menu": {
+    "clear-history": "Limpar histórico",
+    "cycle-visualizer": "Visualizador de ciclo",
+    "disable-bluetooth": "Desativar Bluetooth",
+    "disable-dnd": "Desativar o Não Perturbe",
+    "disable-wifi": "Desativar Wi-Fi",
+    "enable-bluetooth": "Ativar Bluetooth",
+    "enable-dnd": "Ativar Não Perturbe",
+    "enable-wifi": "Ativar Wi-Fi",
+    "next": "Próximo(a)",
+    "open-calendar": "Abrir calendário",
+    "open-display-settings": "Configurações de exibição",
+    "open-launcher": "Abrir iniciador",
+    "open-mixer": "Mesa de som",
+    "open-settings": "Abrir configurações",
+    "pause": "Pausa",
+    "play": "Jogar",
+    "previous": "Anterior",
+    "toggle-mute": "Alternar mudo",
+    "widget-settings": "Configurações do widget"
+  },
   "dock": {
     "menu": {
       "close": "Fechar",
@@ -980,6 +1001,41 @@
           "qt": {
             "description": "Escrever {filepath}"
           }
+        }
+      },
+      "download": {
+        "button": "Baixar mais",
+        "title": "Baixar esquemas de cores",
+        "fetching": "Buscando esquemas de cores disponíveis...",
+        "empty": "Nenhum esquema de cores disponível",
+        "refresh": "Atualizar",
+        "download": "Baixar",
+        "downloading": "Baixando...",
+        "delete": "Excluir",
+        "installed": "Instalado",
+        "success": {
+          "title": "Esquema de cores baixado",
+          "description": "{scheme} baixado com sucesso"
+        },
+        "error": {
+          "title": "Falha no download",
+          "description": "Falha ao baixar {scheme}",
+          "invalid-response": "Formato de resposta da API inválido",
+          "parse-failed": "Falha ao analisar a resposta da API: {error}",
+          "rate-limit": "Limite de taxa da API do GitHub excedido",
+          "api-error": "Erro da API: {status}",
+          "no-files": "Nenhum arquivo encontrado para o esquema",
+          "download-failed": "Falha no download com código de saída: {code}"
+        }
+      },
+      "delete": {
+        "success": {
+          "title": "Esquema de cores excluído",
+          "description": "{scheme} excluído com sucesso"
+        },
+        "error": {
+          "title": "Falha ao excluir",
+          "description": "Falha ao excluir {scheme}"
         }
       },
       "title": "Esquema de cores"

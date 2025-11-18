@@ -398,6 +398,27 @@
   "clock": {
     "tooltip": "Kalender openen"
   },
+  "context-menu": {
+    "clear-history": "Geschiedenis wissen",
+    "cycle-visualizer": "Cyclusvisualisatie",
+    "disable-bluetooth": "Bluetooth uitschakelen",
+    "disable-dnd": "Niet Storen uitschakelen",
+    "disable-wifi": "Wi-Fi uitschakelen",
+    "enable-bluetooth": "Bluetooth inschakelen",
+    "enable-dnd": "Niet Storen inschakelen",
+    "enable-wifi": "Wi-Fi inschakelen",
+    "next": "Volgende",
+    "open-calendar": "Open agenda",
+    "open-display-settings": "Beeldscherminstellingen",
+    "open-launcher": "Launcher openen",
+    "open-mixer": "Audiomixer",
+    "open-settings": "Instellingen openen",
+    "pause": "Pauze",
+    "play": "Spelen",
+    "previous": "Vorige",
+    "toggle-mute": "Dempen aan/uit",
+    "widget-settings": "Widgetinstellingen"
+  },
   "dock": {
     "menu": {
       "close": "Sluiten",
@@ -980,6 +1001,41 @@
           "qt": {
             "description": "Schrijf {filepath}"
           }
+        }
+      },
+      "download": {
+        "button": "Meer downloaden",
+        "title": "Kleurenschema's downloaden",
+        "fetching": "Beschikbare kleurenschema's ophalen...",
+        "empty": "Geen kleurenschema's beschikbaar",
+        "refresh": "Vernieuwen",
+        "download": "Downloaden",
+        "downloading": "Downloaden...",
+        "delete": "Verwijderen",
+        "installed": "Geïnstalleerd",
+        "success": {
+          "title": "Kleurenschema gedownload",
+          "description": "{scheme} succesvol gedownload"
+        },
+        "error": {
+          "title": "Download mislukt",
+          "description": "Download van {scheme} mislukt",
+          "invalid-response": "Ongeldig API-antwoordformaat",
+          "parse-failed": "Fout bij parseren van API-antwoord: {error}",
+          "rate-limit": "GitHub API-snelheidslimiet overschreden",
+          "api-error": "API-fout: {status}",
+          "no-files": "Geen bestanden gevonden voor schema",
+          "download-failed": "Download mislukt met afsluitcode: {code}"
+        }
+      },
+      "delete": {
+        "success": {
+          "title": "Kleurenschema verwijderd",
+          "description": "{scheme} succesvol verwijderd"
+        },
+        "error": {
+          "title": "Verwijderen mislukt",
+          "description": "Verwijderen van {scheme} mislukt"
         }
       },
       "title": "Kleurschema"

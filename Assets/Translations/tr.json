@@ -398,6 +398,27 @@
   "clock": {
     "tooltip": "Takvimi aç"
   },
+  "context-menu": {
+    "clear-history": "Geçmişi temizle",
+    "cycle-visualizer": "Döngü görselleştirici",
+    "disable-bluetooth": "Bluetooth'u kapat",
+    "disable-dnd": "Rahatsız Etmeyin'i Kapat",
+    "disable-wifi": "Wi-Fi'ı kapat",
+    "enable-bluetooth": "Bluetooth'u etkinleştir",
+    "enable-dnd": "Rahatsız Etmeyin'i Etkinleştir",
+    "enable-wifi": "Wi-Fi'ı etkinleştir",
+    "next": "Sonraki",
+    "open-calendar": "Takvimi aç",
+    "open-display-settings": "Ekran ayarları",
+    "open-launcher": "Başlatıcıyı aç",
+    "open-mixer": "Ses mikseri",
+    "open-settings": "Ayarları aç",
+    "pause": "Duraklat",
+    "play": "Oyna",
+    "previous": "Önceki",
+    "toggle-mute": "Sesi kapat/aç",
+    "widget-settings": "Araç ayarları"
+  },
   "dock": {
     "menu": {
       "close": "Kapat",
@@ -980,6 +1001,41 @@
           "qt": {
             "description": "{filepath} dosyasına yaz"
           }
+        }
+      },
+      "download": {
+        "button": "Daha fazla indir",
+        "title": "Renk şemalarını indir",
+        "fetching": "Mevcut renk şemaları alınıyor...",
+        "empty": "Mevcut renk şeması yok",
+        "refresh": "Yenile",
+        "download": "İndir",
+        "downloading": "İndiriliyor...",
+        "delete": "Sil",
+        "installed": "Yüklü",
+        "success": {
+          "title": "Renk şeması indirildi",
+          "description": "{scheme} başarıyla indirildi"
+        },
+        "error": {
+          "title": "İndirme başarısız",
+          "description": "{scheme} indirilemedi",
+          "invalid-response": "Geçersiz API yanıt formatı",
+          "parse-failed": "API yanıtı ayrıştırılamadı: {error}",
+          "rate-limit": "GitHub API hız sınırı aşıldı",
+          "api-error": "API hatası: {status}",
+          "no-files": "Şema için dosya bulunamadı",
+          "download-failed": "İndirme başarısız, çıkış kodu: {code}"
+        }
+      },
+      "delete": {
+        "success": {
+          "title": "Renk şeması silindi",
+          "description": "{scheme} başarıyla silindi"
+        },
+        "error": {
+          "title": "Silme başarısız",
+          "description": "{scheme} silinemedi"
         }
       },
       "title": "Renk şeması"

@@ -102,7 +102,7 @@ Rectangle {
     onEntered: {
       hovering = root.enabled ? true : false;
       if (tooltipText) {
-        TooltipService.show(screen, parent, tooltipText, tooltipDirection);
+        TooltipService.show(parent, tooltipText, tooltipDirection);
       }
       root.entered();
     }
