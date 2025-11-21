@@ -123,9 +123,13 @@
           "stream-description": "Insira um comando para executar continuamente."
         },
         "dynamic-text": "Texto dinâmico",
-        "hide-vertical": {
-          "description": "Se ativado, o texto da saída do comando não será exibido quando a barra estiver em um layout vertical (esquerda ou direita).",
-          "label": "Ocultar texto na barra vertical"
+        "max-text-length-horizontal": {
+          "description": "Número máximo de caracteres a serem exibidos na barra horizontal (0 para ocultar o texto)",
+          "label": "Comprimento máximo do texto (horizontal)"
+        },
+        "max-text-length-vertical": {
+          "description": "Número máximo de caracteres a serem exibidos na barra vertical (0 para ocultar o texto)",
+          "label": "Comprimento máximo do texto (vertical)"
         },
         "icon": {
           "description": "Selecione um ícone da biblioteca.",
@@ -140,6 +144,23 @@
           "description": "Comando a executar quando o botão é clicado com o botão do meio.",
           "label": "Clique do meio",
           "update-text": "Atualizar texto exibido com clique do meio"
+        },
+        "wheel": {
+          "description": "Comando a executar quando a roda de rolagem é usada.\nUse $delta para o delta da roda de rolagem no comando",
+          "label": "Roda de rolagem",
+          "update-text": "Atualizar texto exibido ao rolar"
+        },
+        "wheel-mode-separate": {
+          "label": "Comandos de roda separados",
+          "description": "Ativar comandos separados para roda para cima e para baixo"
+        },
+        "wheel-up": {
+          "description": "Comando a executar quando a roda de rolagem é rolada para cima.",
+          "label": "Comando de roda para cima"
+        },
+        "wheel-down": {
+          "description": "Comando a executar quando a roda de rolagem é rolada para baixo.",
+          "label": "Comando de roda para baixo"
         },
         "parse-json": {
           "description": "Analisa a saída do comando como um objeto JSON para definir dinamicamente o texto e o ícone.",
@@ -395,11 +416,39 @@
       "loading": "Carregando o clima…"
     }
   },
+  "changelog": {
+    "error": {
+      "rate-limit": "Limite do GitHub atingido. Tente novamente em alguns minutos.",
+      "fetch-failed": "Não foi possível carregar os dados do changelog. Tente novamente mais tarde."
+    },
+    "panel": {
+      "buttons": {
+        "discord": "Entre no nosso Discord",
+        "dismiss": "Ok"
+      },
+      "empty": "As notas da versão ainda não estão disponíveis.",
+      "highlight-title": "Destaques",
+      "section": {
+        "released": "Lançado em {date}",
+        "version": "Versão {version}"
+      },
+      "subtitle": {
+        "fresh": "Obrigado por instalar o Noctalia! Veja o que está incluído nesta compilação.",
+        "updated": "Atualizado a partir da {previousVersion}"
+      },
+      "title": "Novidades na {version}",
+      "version": {
+        "new-user": "Nova instalação"
+      }
+    }
+  },
   "clock": {
     "tooltip": "Abrir calendário"
   },
   "context-menu": {
+    "activate-app": "Ativar {app}",
     "clear-history": "Limpar histórico",
+    "close-app": "Fechar {app}",
     "cycle-visualizer": "Visualizador de ciclo",
     "disable-bluetooth": "Desativar Bluetooth",
     "disable-dnd": "Desativar o Não Perturbe",
@@ -416,6 +465,7 @@
     "pause": "Pausa",
     "play": "Jogar",
     "previous": "Anterior",
+    "random-wallpaper": "Papel de parede aleatório",
     "toggle-mute": "Alternar mudo",
     "widget-settings": "Configurações do widget"
   },
@@ -740,6 +790,11 @@
           "label": "Dispositivos de áudio"
         }
       },
+      "external-mixer": {
+        "description": "Insira o comando ou o caminho do aplicativo para iniciar ao ativar o recurso de mixer de áudio externo.",
+        "label": "Comando de Mixer de Áudio Externo",
+        "placeholder": "pwvucontrol || pavucontrol"
+      },
       "media": {
         "excluded-player": {
           "description": "Adicione palavras-chave para os reprodutores que você deseja que o sistema ignore. Cada palavra-chave deve estar em uma nova linha.",
@@ -910,6 +965,41 @@
           "label": "Modo escuro"
         }
       },
+      "delete": {
+        "error": {
+          "description": "Falha ao excluir {scheme}",
+          "title": "Falha ao excluir"
+        },
+        "success": {
+          "description": "{scheme} excluído com sucesso",
+          "title": "Esquema de cores excluído"
+        }
+      },
+      "download": {
+        "button": "Baixar mais",
+        "delete": "Excluir",
+        "download": "Baixar",
+        "downloading": "Baixando...",
+        "empty": "Nenhum esquema de cores disponível",
+        "error": {
+          "api-error": "Erro da API: {status}",
+          "description": "Falha ao baixar {scheme}",
+          "download-failed": "Falha no download com código de saída: {code}",
+          "invalid-response": "Formato de resposta da API inválido",
+          "no-files": "Nenhum arquivo encontrado para o esquema",
+          "parse-failed": "Falha ao analisar a resposta da API: {error}",
+          "rate-limit": "Limite de taxa da API do GitHub excedido",
+          "title": "Falha no download"
+        },
+        "fetching": "Buscando esquemas de cores disponíveis...",
+        "installed": "Instalado",
+        "refresh": "Atualizar",
+        "success": {
+          "description": "{scheme} baixado com sucesso",
+          "title": "Esquema de cores baixado"
+        },
+        "title": "Baixar esquemas de cores"
+      },
       "predefined": {
         "generate-templates": {
           "description": "Gera modelos Matugen (GTK, temas de terminal, etc.) ao usar esquemas de cores predefinidos.",
@@ -1001,41 +1091,6 @@
           "qt": {
             "description": "Escrever {filepath}"
           }
-        }
-      },
-      "download": {
-        "button": "Baixar mais",
-        "title": "Baixar esquemas de cores",
-        "fetching": "Buscando esquemas de cores disponíveis...",
-        "empty": "Nenhum esquema de cores disponível",
-        "refresh": "Atualizar",
-        "download": "Baixar",
-        "downloading": "Baixando...",
-        "delete": "Excluir",
-        "installed": "Instalado",
-        "success": {
-          "title": "Esquema de cores baixado",
-          "description": "{scheme} baixado com sucesso"
-        },
-        "error": {
-          "title": "Falha no download",
-          "description": "Falha ao baixar {scheme}",
-          "invalid-response": "Formato de resposta da API inválido",
-          "parse-failed": "Falha ao analisar a resposta da API: {error}",
-          "rate-limit": "Limite de taxa da API do GitHub excedido",
-          "api-error": "Erro da API: {status}",
-          "no-files": "Nenhum arquivo encontrado para o esquema",
-          "download-failed": "Falha no download com código de saída: {code}"
-        }
-      },
-      "delete": {
-        "success": {
-          "title": "Esquema de cores excluído",
-          "description": "{scheme} excluído com sucesso"
-        },
-        "error": {
-          "title": "Falha ao excluir",
-          "description": "Falha ao excluir {scheme}"
         }
       },
       "title": "Esquema de cores"
@@ -1338,6 +1393,10 @@
           "description": "Acesse itens copiados anteriormente a partir do lançador.",
           "label": "Ativar histórico da área de transferência"
         },
+        "clip-preview": {
+          "description": "Mostra uma pré-visualização do conteúdo da área de transferência ao usar o comando >clip.",
+          "label": "Ativar pré-visualização da área de transferência"
+        },
         "custom-launch-prefix": {
           "description": "Prefixar comandos com um inicializador personalizado (ex. 'runapp' para integração systemd).",
           "label": "Prefixo de inicialização personalizado"
@@ -1421,6 +1480,10 @@
         "section": {
           "description": "Escolha sua unidade de temperatura preferida.",
           "label": "Clima"
+        },
+        "show-effects": {
+          "description": "Mostra efeitos visuais adicionais (como chuva, neve ou relâmpagos) no cartão de clima.",
+          "label": "Exibir efeitos climáticos"
         },
         "show-in-calendar": {
           "description": "Mostre a previsão do tempo diária diretamente na sua visualização de calendário.",
@@ -2259,6 +2322,7 @@
   },
   "wifi": {
     "panel": {
+      "available-networks": "Redes Disponíveis",
       "connect": "Conectar",
       "connected": "Conectado",
       "disabled": "O Wi-Fi está desativado",
@@ -2269,6 +2333,7 @@
       "forget": "Esquecer",
       "forget-network": "Esquecer esta rede?",
       "forgetting": "Esquecendo...",
+      "known-networks": "Redes Conhecidas",
       "no-networks": "Nenhuma rede encontrada",
       "password": "Senha",
       "saved": "Salva",

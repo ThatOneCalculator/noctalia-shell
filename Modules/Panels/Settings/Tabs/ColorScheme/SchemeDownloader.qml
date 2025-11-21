@@ -18,6 +18,7 @@ Popup {
   property string downloadError: ""
   property string downloadingScheme: ""
   property string pendingApplyScheme: "" // Scheme name to apply after reload
+  property string lastStderrOutput: "" // Store stderr from download process
   property real lastApiFetchTime: 0 // Track when we last fetched from API to prevent rapid calls
   property int minApiFetchInterval: 60 // Minimum seconds between API fetches (1 minute)
 
@@ -520,7 +521,7 @@ Popup {
       return;
     }
 
-    var targetDir = ColorSchemeService.schemesDirectory + "/" + schemeName;
+    var targetDir = ColorSchemeService.downloadedSchemesDirectory + "/" + schemeName;
     var downloadScript = "mkdir -p '" + targetDir + "'\n";
 
     // Build download script for all files
@@ -547,9 +548,11 @@ Popup {
     Logger.d("ColorSchemeDownload", "Downloading", files.length, "files for scheme", schemeName);
 
     // Execute download script
+    var stderrOutput = "";
     var downloadProcess = Qt.createQmlObject(`
                                              import QtQuick
                                              import Quickshell.Io
+                                             import qs.Commons
                                              Process {
                                              id: downloadProcess
                                              command: ["sh", "-c", ` + JSON.stringify(downloadScript) + `]
@@ -557,6 +560,7 @@ Popup {
                                                onStreamFinished: {
                                                  if (text && text.trim()) {
                                                    Logger.e("ColorSchemeDownload", "Download stderr:", text);
+                                                   root.lastStderrOutput = text.trim();
                                                  }
                                                }
                                              }
@@ -576,16 +580,21 @@ Popup {
         downloading = false;
         downloadingScheme = "";
       } else {
+        var errorDetails = "Exit code: " + exitCode;
+        if (root.lastStderrOutput) {
+          errorDetails += " - " + root.lastStderrOutput;
+        }
         downloadError = I18n.tr("settings.color-scheme.download.error.download-failed", {
                                   "code": exitCode
-                                });
+                                }) + "\n" + errorDetails;
         Logger.e("ColorSchemeDownload", downloadError);
         ToastService.showError(I18n.tr("settings.color-scheme.download.error.title"), I18n.tr("settings.color-scheme.download.error.description", {
                                                                                                 "scheme": schemeName
-                                                                                              }));
+                                                                                              }) + "\n" + errorDetails);
         downloading = false;
         downloadingScheme = "";
       }
+      root.lastStderrOutput = "";
       downloadProcess.destroy();
     });
 
@@ -597,6 +606,17 @@ Popup {
     for (var i = 0; i < ColorSchemeService.schemes.length; i++) {
       var path = ColorSchemeService.schemes[i];
       if (path.indexOf("/" + schemeName + "/") !== -1 || path.indexOf("/" + schemeName + ".json") !== -1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function isSchemeDownloaded(schemeName) {
+    // Check if scheme is in the downloaded directory (not preinstalled)
+    for (var i = 0; i < ColorSchemeService.schemes.length; i++) {
+      var path = ColorSchemeService.schemes[i];
+      if ((path.indexOf("/" + schemeName + "/") !== -1 || path.indexOf("/" + schemeName + ".json") !== -1) && path.indexOf(ColorSchemeService.downloadedSchemesDirectory) !== -1) {
         return true;
       }
     }
@@ -615,7 +635,8 @@ Popup {
     var deletedSchemeDisplayName = ColorSchemeService.getBasename(schemeName);
     var needsReset = (currentScheme === deletedSchemeDisplayName);
 
-    var targetDir = ColorSchemeService.schemesDirectory + "/" + schemeName;
+    // Only allow deleting downloaded schemes, not preinstalled ones
+    var targetDir = ColorSchemeService.downloadedSchemesDirectory + "/" + schemeName;
     var deleteScript = "rm -rf '" + targetDir + "'";
 
     var deleteProcess = Qt.createQmlObject(`
@@ -810,15 +831,27 @@ Popup {
           model: availableSchemes
 
           Rectangle {
+            id: schemeItem
             Layout.fillWidth: true
             Layout.preferredHeight: 50 * Style.uiScaleRatio
             radius: Style.radiusS
             property string schemeName: modelData.name
-            color: root.getSchemeColor(schemeName, "mSurfaceVariant")
-            border.width: Style.borderS
-            border.color: Color.mOutline
+            color: root.getSchemeColor(schemeName, "mSurface")
+            border.width: Style.borderL
+            border.color: hoverHandler.hovered ? root.getSchemeColor(schemeName, "mPrimary") : Color.mOutline
+
+            HoverHandler {
+              id: hoverHandler
+            }
 
             Behavior on color {
+              ColorAnimation {
+                duration: Style.animationFast
+                easing.type: Easing.InOutCubic
+              }
+            }
+
+            Behavior on border.color {
               ColorAnimation {
                 duration: Style.animationFast
                 easing.type: Easing.InOutCubic
@@ -847,17 +880,10 @@ Popup {
               NText {
                 text: schemeRow.schemeName
                 pointSize: Style.fontSizeS
-                color: root.getSchemeColor(schemeRow.schemeName, "mOnSurface")
+                color: Color.mOnSurface
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 Layout.alignment: Qt.AlignVCenter
-
-                Behavior on color {
-                  ColorAnimation {
-                    duration: Style.animationFast
-                    easing.type: Easing.InOutCubic
-                  }
-                }
               }
 
               // Color swatches
@@ -883,12 +909,14 @@ Popup {
               NIconButton {
                 property bool isDownloading: downloading && downloadingScheme === schemeRow.schemeName
                 property bool isInstalled: root.isSchemeInstalled(schemeRow.schemeName)
+                property bool isDownloaded: root.isSchemeDownloaded(schemeRow.schemeName)
 
-                icon: isDownloading ? "" : (isInstalled ? "trash" : "download")
-                tooltipText: isDownloading ? I18n.tr("settings.color-scheme.download.downloading") : (isInstalled ? I18n.tr("settings.color-scheme.download.delete") : I18n.tr("settings.color-scheme.download.download"))
+                icon: isDownloading ? "" : (isDownloaded ? "trash" : "download")
+                tooltipText: isDownloading ? I18n.tr("settings.color-scheme.download.downloading") : (isDownloaded ? I18n.tr("settings.color-scheme.download.delete") : I18n.tr("settings.color-scheme.download.download"))
                 enabled: !downloading
                 Layout.alignment: Qt.AlignVCenter
-                onClicked: isInstalled ? root.deleteScheme(schemeRow.schemeName) : root.downloadScheme(modelData)
+                visible: !isInstalled || isDownloaded // Show button only if not installed (can download) or if downloaded (can delete)
+                onClicked: isDownloaded ? root.deleteScheme(schemeRow.schemeName) : root.downloadScheme(modelData)
 
                 NBusyIndicator {
                   anchors.centerIn: parent

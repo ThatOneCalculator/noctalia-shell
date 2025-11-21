@@ -21,6 +21,8 @@ Item {
   property bool oppositeDirection: false
   property bool hovered: false
   property bool rotateText: false
+  property color customBackgroundColor: Qt.rgba(0, 0, 0, 0)
+  property color customTextIconColor: Qt.rgba(0, 0, 0, 0)
 
   // Bar position detection for pill direction
   readonly property string barPosition: Settings.data.bar.position
@@ -49,10 +51,9 @@ Item {
   // Sizing logic for vertical bars
   readonly property int buttonSize: Style.capsuleHeight
   readonly property int pillHeight: buttonSize
-  readonly property int pillPaddingVertical: 3 * 2 // Very precise adjustment don't replace by Style.margin
   readonly property int pillOverlap: Math.round(buttonSize * 0.5)
-  readonly property int maxPillWidth: rotateText ? Math.max(buttonSize, Math.round(textItem.implicitHeight + pillPaddingVertical * 2)) : buttonSize
-  readonly property int maxPillHeight: rotateText ? Math.max(1, Math.round(textItem.implicitWidth + pillPaddingVertical * 2 + Math.round(iconCircle.height / 4))) : Math.max(1, Math.round(textItem.implicitHeight + pillPaddingVertical * 4))
+  readonly property int maxPillWidth: rotateText ? Math.max(buttonSize, Math.round(textItem.implicitHeight + Style.marginM * 2)) : buttonSize
+  readonly property int maxPillHeight: rotateText ? Math.max(1, Math.round(textItem.implicitWidth + Style.marginM * 2 + Math.round(iconCircle.height / 4))) : Math.max(1, Math.round(textItem.implicitHeight + Style.marginM * 2))
 
   readonly property real iconSize: {
     switch (root.density) {
@@ -91,7 +92,7 @@ Item {
     width: buttonSize
     height: revealed ? (buttonSize + maxPillHeight - pillOverlap) : buttonSize
     radius: halfButtonSize
-    color: hovered ? Color.mHover : Style.capsuleColor
+    color: hovered ? (customBackgroundColor.a > 0 ? Qt.lighter(customBackgroundColor, 1.1) : Color.mHover) : (customBackgroundColor.a > 0 ? customBackgroundColor : Style.capsuleColor)
 
     readonly property int halfButtonSize: Math.round(buttonSize * 0.5)
 
@@ -130,7 +131,7 @@ Item {
       id: textItem
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.verticalCenter: parent.verticalCenter
-      anchors.verticalCenterOffset: rotateText ? Math.round(iconCircle.height / 4) : getVerticalCenterOffset()
+      anchors.verticalCenterOffset: openDownward ? Style.marginXXS : -Style.marginXXS
       rotation: rotateText ? -90 : 0
       text: root.text + root.suffix
       family: Settings.data.ui.fontFixed
@@ -139,15 +140,12 @@ Item {
       font.weight: Style.fontWeightMedium
       horizontalAlignment: Text.AlignHCenter
       verticalAlignment: Text.AlignVCenter
-      color: hovered ? Color.mOnHover : (forceOpen ? Color.mOnSurface : Color.mPrimary)
+      color: hovered ? (customTextIconColor.a > 0 ? customTextIconColor : Color.mOnHover) : (customTextIconColor.a > 0 ? customTextIconColor : (forceOpen ? Color.mOnSurface : Color.mPrimary))
       visible: revealed
 
       function getVerticalCenterOffset() {
-        var offset = openDownward ? Math.round(pillPaddingVertical * 0.75) : -Math.round(pillPaddingVertical * 0.75);
-        if (forceOpen) {
-          offset += oppositeDirection ? -Style.marginXXS : Style.marginXXS;
-        }
-        return offset;
+        // A small, symmetrical offset to push the text slightly away from the icon's edge.
+        return openDownward ? Style.marginXS : -Style.marginXS;
       }
     }
     Behavior on width {
@@ -189,7 +187,7 @@ Item {
       icon: root.icon
       pointSize: iconSize
       applyUiScale: false
-      color: hovered ? Color.mOnHover : Color.mOnSurface
+      color: hovered ? (customTextIconColor.a > 0 ? customTextIconColor : Color.mOnHover) : (customTextIconColor.a > 0 ? customTextIconColor : Color.mOnSurface)
       // Center horizontally
       x: (iconCircle.width - width) / 2
       // Center vertically accounting for font metrics

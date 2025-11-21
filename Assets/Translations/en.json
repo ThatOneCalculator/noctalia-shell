@@ -123,9 +123,13 @@
           "stream-description": "Enter a command to run continuously."
         },
         "dynamic-text": "Dynamic text",
-        "hide-vertical": {
-          "description": "If enabled, the text from the command output will not be shown when the bar is in a vertical layout (left or right).",
-          "label": "Hide text in vertical bar"
+        "max-text-length-horizontal": {
+          "description": "Maximum number of characters to show in horizontal bar (0 to hide text)",
+          "label": "Max text length (horizontal)"
+        },
+        "max-text-length-vertical": {
+          "description": "Maximum number of characters to show in vertical bar (0 to hide text)",
+          "label": "Max text length (vertical)"
         },
         "icon": {
           "description": "Select an icon from the library.",
@@ -140,6 +144,23 @@
           "description": "Command to execute when the button is middle-clicked.",
           "label": "Middle click",
           "update-text": "Update displayed text on middle-click"
+        },
+        "wheel": {
+          "description": "Command to execute when the scroll wheel is used.\nUse $delta for the scroll wheel delta in the command",
+          "label": "Scroll wheel",
+          "update-text": "Update displayed text on scroll"
+        },
+        "wheel-mode-separate": {
+          "label": "Separate wheel commands",
+          "description": "Enable separate commands for wheel up and down"
+        },
+        "wheel-up": {
+          "description": "Command to execute when the scroll wheel is scrolled up.",
+          "label": "Wheel up command"
+        },
+        "wheel-down": {
+          "description": "Command to execute when the scroll wheel is scrolled down.",
+          "label": "Wheel down command"
         },
         "parse-json": {
           "description": "Parse the command output as a JSON object to dynamically set text and icon.",
@@ -393,6 +414,32 @@
     },
     "weather": {
       "loading": "Loading weather…"
+    }
+  },
+  "changelog": {
+    "error": {
+      "rate-limit": "GitHub rate limit exceeded. Please try again in a few minutes.",
+      "fetch-failed": "Unable to load changelog data. Please try again later."
+    },
+    "panel": {
+      "buttons": {
+        "discord": "Join our Discord",
+        "dismiss": "Ok"
+      },
+      "empty": "Release notes are not available yet.",
+      "highlight-title": "Highlights",
+      "section": {
+        "released": "Released on {date}",
+        "version": "Version {version}"
+      },
+      "subtitle": {
+        "fresh": "Thanks for installing Noctalia! Here is what’s included in this build.",
+        "updated": "Updated from {previousVersion}"
+      },
+      "title": "What's new in {version}",
+      "version": {
+        "new-user": "Fresh install"
+      }
     }
   },
   "clock": {
@@ -743,6 +790,11 @@
           "label": "Audio devices"
         }
       },
+      "external-mixer": {
+        "description": "Enter the command or application path to launch when activating the external audio mixer feature.",
+        "label": "External Audio Mixer Command",
+        "placeholder": "pwvucontrol || pavucontrol"
+      },
       "media": {
         "excluded-player": {
           "description": "Add keywords for players you want the system to ignore. Each keyword should be on a new line.",
@@ -913,6 +965,41 @@
           "label": "Dark mode"
         }
       },
+      "delete": {
+        "error": {
+          "description": "Failed to delete {scheme}",
+          "title": "Delete Failed"
+        },
+        "success": {
+          "description": "Successfully deleted {scheme}",
+          "title": "Color Scheme Deleted"
+        }
+      },
+      "download": {
+        "button": "Download more",
+        "delete": "Delete",
+        "download": "Download",
+        "downloading": "Downloading...",
+        "empty": "No color schemes available",
+        "error": {
+          "api-error": "API error: {status}",
+          "description": "Failed to download {scheme}",
+          "download-failed": "Download failed with exit code: {code}",
+          "invalid-response": "Invalid API response format",
+          "no-files": "No files found for scheme",
+          "parse-failed": "Failed to parse API response: {error}",
+          "rate-limit": "GitHub API rate limit exceeded",
+          "title": "Download Failed"
+        },
+        "fetching": "Fetching available color schemes...",
+        "installed": "Installed",
+        "refresh": "Refresh",
+        "success": {
+          "description": "Successfully downloaded {scheme}",
+          "title": "Color Scheme Downloaded"
+        },
+        "title": "Download Color Schemes"
+      },
       "predefined": {
         "generate-templates": {
           "description": "Generate Matugen templates (GTK, terminal themes, etc.) when using predefined color schemes.",
@@ -921,41 +1008,6 @@
         "section": {
           "description": "Choose from a collection of predefined color schemes.",
           "label": "Predefined color schemes"
-        }
-      },
-      "download": {
-        "button": "Download more",
-        "title": "Download Color Schemes",
-        "fetching": "Fetching available color schemes...",
-        "empty": "No color schemes available",
-        "refresh": "Refresh",
-        "download": "Download",
-        "downloading": "Downloading...",
-        "delete": "Delete",
-        "installed": "Installed",
-        "success": {
-          "title": "Color Scheme Downloaded",
-          "description": "Successfully downloaded {scheme}"
-        },
-        "error": {
-          "title": "Download Failed",
-          "description": "Failed to download {scheme}",
-          "invalid-response": "Invalid API response format",
-          "parse-failed": "Failed to parse API response: {error}",
-          "rate-limit": "GitHub API rate limit exceeded",
-          "api-error": "API error: {status}",
-          "no-files": "No files found for scheme",
-          "download-failed": "Download failed with exit code: {code}"
-        }
-      },
-      "delete": {
-        "success": {
-          "title": "Color Scheme Deleted",
-          "description": "Successfully deleted {scheme}"
-        },
-        "error": {
-          "title": "Delete Failed",
-          "description": "Failed to delete {scheme}"
         }
       },
       "templates": {
@@ -1186,6 +1238,10 @@
           "description": "Adjust the dock's background opacity.",
           "label": "Background opacity"
         },
+        "border-radius": {
+          "description": "Adjust the dock's border radius.",
+          "label": "Border radius"
+        },
         "colorize-icons": {
           "description": "Apply theme colors to dock app icons (non-focused apps only).",
           "label": "Colorize Icons"
@@ -1341,6 +1397,10 @@
           "description": "Access previously copied items from the launcher.",
           "label": "Enable clipboard history"
         },
+        "clip-preview": {
+          "description": "Show a preview of the clipboard content when using the >clip command.",
+          "label": "Enable clip preview"
+        },
         "custom-launch-prefix": {
           "description": "Prefix commands with a custom launcher (e.g., 'runapp' for systemd integration).",
           "label": "Custom launch prefix"
@@ -1424,6 +1484,10 @@
         "section": {
           "description": "Choose your preferred temperature unit.",
           "label": "Weather"
+        },
+        "show-effects": {
+          "description": "Shows additional visual effects (like rain, snow, or lightning) on the weather card.",
+          "label": "Display weather effects"
         },
         "show-in-calendar": {
           "description": "Show the daily weather forecast directly in your calendar view.",
@@ -2262,6 +2326,7 @@
   },
   "wifi": {
     "panel": {
+      "available-networks": "Available Networks",
       "connect": "Connect",
       "connected": "Connected",
       "disabled": "Wi-Fi is disabled",
@@ -2272,6 +2337,7 @@
       "forget": "Forget",
       "forget-network": "Forget this network?",
       "forgetting": "Forgetting...",
+      "known-networks": "Known Networks",
       "no-networks": "No networks found",
       "password": "Password",
       "saved": "Saved",

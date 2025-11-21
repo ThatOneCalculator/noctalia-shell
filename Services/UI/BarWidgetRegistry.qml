@@ -58,12 +58,12 @@ Singleton {
                                      "SessionMenu": "WidgetSettings/SessionMenuSettings.qml",
                                      "Spacer": "WidgetSettings/SpacerSettings.qml",
                                      "SystemMonitor": "WidgetSettings/SystemMonitorSettings.qml",
+                                     "Taskbar": "WidgetSettings/TaskbarSettings.qml",
                                      "TaskbarGrouped": "WidgetSettings/TaskbarGroupedSettings.qml",
+                                     "Tray": "WidgetSettings/TraySettings.qml",
                                      "Volume": "WidgetSettings/VolumeSettings.qml",
                                      "WiFi": "WidgetSettings/WiFiSettings.qml",
-                                     "Workspace": "WidgetSettings/WorkspaceSettings.qml",
-                                     "Taskbar": "WidgetSettings/TaskbarSettings.qml",
-                                     "Tray": "WidgetSettings/TraySettings.qml"
+                                     "Workspace": "WidgetSettings/WorkspaceSettings.qml"
                                    })
 
   property var widgetMetadata: ({
@@ -124,7 +124,17 @@ Singleton {
                                     "textIntervalMs": 3000,
                                     "textCollapse": "",
                                     "parseJson": false,
-                                    "hideTextInVerticalBar": false
+                                    "wheelExec": "",
+                                    "wheelUpExec": "",
+                                    "wheelDownExec": "",
+                                    "wheelMode": "unified",
+                                    "wheelUpdateText": false,
+                                    "wheelUpUpdateText": false,
+                                    "wheelDownUpdateText": false,
+                                    "maxTextLength": {
+                                      "horizontal": 10,
+                                      "vertical": 10
+                                    }
                                   },
                                   "KeyboardLayout": {
                                     "allowUserSettings": true,
@@ -188,11 +198,9 @@ Singleton {
                                   },
                                   "TaskbarGrouped": {
                                     "allowUserSettings": true,
-                                    "showWorkspaceNumbers": true,
-                                    "showNumbersOnlyWhenOccupied": true,
-                                    "labelMode": "index",
                                     "hideUnoccupied": false,
-                                    "characterCount": 2,
+                                    "labelMode": "index",
+                                    "showLabelsOnlyWhenOccupied": true,
                                     "colorizeIcons": false
                                   },
                                   "Tray": {

@@ -123,9 +123,13 @@
           "stream-description": "Geben Sie einen Befehl ein, der kontinuierlich ausgeführt werden soll."
         },
         "dynamic-text": "Dynamischer Text",
-        "hide-vertical": {
-          "description": "Wenn aktiviert, wird der Text aus der Befehlsausgabe nicht angezeigt, wenn sich die Leiste in einem vertikalen Layout befindet (links oder rechts).",
-          "label": "Text in vertikaler Leiste ausblenden"
+        "max-text-length-horizontal": {
+          "description": "Maximale Anzahl an Zeichen, die in horizontaler Leiste angezeigt werden (0 zum Ausblenden des Textes)",
+          "label": "Max. Textlänge (horizontal)"
+        },
+        "max-text-length-vertical": {
+          "description": "Maximale Anzahl an Zeichen, die in vertikaler Leiste angezeigt werden (0 zum Ausblenden des Textes)",
+          "label": "Max. Textlänge (vertikal)"
         },
         "icon": {
           "description": "Symbol aus der Bibliothek auswählen.",
@@ -140,6 +144,23 @@
           "description": "Befehl, der ausgeführt wird, wenn die Schaltfläche mit der mittleren Maustaste angeklickt wird.",
           "label": "Mittelklick",
           "update-text": "Text auf Mittelklick aktualisieren"
+        },
+        "wheel": {
+          "description": "Befehl, der bei Verwendung des Scrollrads ausgeführt wird.\nVerwenden Sie $delta für die Scrollrad-Delta im Befehl",
+          "label": "Scrollrad",
+          "update-text": "Anzeigetext beim Scrollen aktualisieren"
+        },
+        "wheel-mode-separate": {
+          "label": "Separate Scrollrad-Befehle",
+          "description": "Separate Befehle für Scrollrad hoch und runter aktivieren"
+        },
+        "wheel-up": {
+          "description": "Befehl, der ausgeführt wird, wenn das Scrollrad hochgescrollt wird.",
+          "label": "Scrollrad hoch Befehl"
+        },
+        "wheel-down": {
+          "description": "Befehl, der ausgeführt wird, wenn das Scrollrad heruntergescrollt wird.",
+          "label": "Scrollrad runter Befehl"
         },
         "parse-json": {
           "description": "Die Befehlsausgabe als JSON-Objekt parsen, um Text und Symbol dynamisch festzulegen.",
@@ -395,11 +416,39 @@
       "loading": "Wetter wird geladen…"
     }
   },
+  "changelog": {
+    "error": {
+      "rate-limit": "GitHub-Limit erreicht. Bitte versuche es in ein paar Minuten erneut.",
+      "fetch-failed": "Changelog-Daten konnten nicht geladen werden. Bitte versuche es später erneut."
+    },
+    "panel": {
+      "buttons": {
+        "discord": "Unserem Discord beitreten",
+        "dismiss": "Ok"
+      },
+      "empty": "Es sind noch keine Versionshinweise verfügbar.",
+      "highlight-title": "Highlights",
+      "section": {
+        "released": "Veröffentlicht am {date}",
+        "version": "Version {version}"
+      },
+      "subtitle": {
+        "fresh": "Danke, dass du Noctalia installiert hast! Das ist in diesem Build enthalten.",
+        "updated": "Aktualisiert von {previousVersion}"
+      },
+      "title": "Was ist neu in {version}",
+      "version": {
+        "new-user": "Neuinstallation"
+      }
+    }
+  },
   "clock": {
     "tooltip": "Kalender öffnen"
   },
   "context-menu": {
+    "activate-app": "{app} aktivieren",
     "clear-history": "Verlauf löschen",
+    "close-app": "{app} schließen",
     "cycle-visualizer": "Zyklus-Visualisierer",
     "disable-bluetooth": "Bluetooth deaktivieren",
     "disable-dnd": "Bitte nicht stören deaktivieren",
@@ -416,6 +465,7 @@
     "pause": "Pause",
     "play": "Spielen",
     "previous": "Vorherige",
+    "random-wallpaper": "Zufälliges Hintergrundbild",
     "toggle-mute": "Stummschaltung umschalten",
     "widget-settings": "Widget-Einstellungen"
   },
@@ -740,6 +790,11 @@
           "label": "Audio-Geräte"
         }
       },
+      "external-mixer": {
+        "description": "Geben Sie den Befehl oder den Anwendungspfad ein, der beim Aktivieren der externen Audiomixer-Funktion gestartet werden soll.",
+        "label": "Externer Audio-Mixer-Befehl",
+        "placeholder": "pwvucontrol || pavucontrol"
+      },
       "media": {
         "excluded-player": {
           "description": "Stichwörter für Player hinzufügen, die das System ignorieren soll. Jedes Stichwort sollte in einer neuen Zeile stehen.",
@@ -910,6 +965,41 @@
           "label": "Dunkler Modus"
         }
       },
+      "delete": {
+        "error": {
+          "description": "Fehler beim Löschen von {scheme}",
+          "title": "Löschen fehlgeschlagen"
+        },
+        "success": {
+          "description": "{scheme} wurde erfolgreich gelöscht",
+          "title": "Farbschema gelöscht"
+        }
+      },
+      "download": {
+        "button": "Mehr herunterladen",
+        "delete": "Löschen",
+        "download": "Herunterladen",
+        "downloading": "Wird heruntergeladen...",
+        "empty": "Keine Farbschemata verfügbar",
+        "error": {
+          "api-error": "API-Fehler: {status}",
+          "description": "Fehler beim Herunterladen von {scheme}",
+          "download-failed": "Download fehlgeschlagen mit Exit-Code: {code}",
+          "invalid-response": "Ungültiges API-Antwortformat",
+          "no-files": "Keine Dateien für Schema gefunden",
+          "parse-failed": "Fehler beim Parsen der API-Antwort: {error}",
+          "rate-limit": "GitHub API-Ratenlimit überschritten",
+          "title": "Download fehlgeschlagen"
+        },
+        "fetching": "Verfügbare Farbschemata werden abgerufen...",
+        "installed": "Installiert",
+        "refresh": "Aktualisieren",
+        "success": {
+          "description": "{scheme} wurde erfolgreich heruntergeladen",
+          "title": "Farbschema heruntergeladen"
+        },
+        "title": "Farbschemata herunterladen"
+      },
       "predefined": {
         "generate-templates": {
           "description": "Generiert Matugen-Templates (GTK, Terminal-Themes, etc.) bei der Verwendung vordefinierter Farbschemata.",
@@ -1001,41 +1091,6 @@
           "qt": {
             "description": "Schreibt {filepath}"
           }
-        }
-      },
-      "download": {
-        "button": "Mehr herunterladen",
-        "title": "Farbschemata herunterladen",
-        "fetching": "Verfügbare Farbschemata werden abgerufen...",
-        "empty": "Keine Farbschemata verfügbar",
-        "refresh": "Aktualisieren",
-        "download": "Herunterladen",
-        "downloading": "Wird heruntergeladen...",
-        "delete": "Löschen",
-        "installed": "Installiert",
-        "success": {
-          "title": "Farbschema heruntergeladen",
-          "description": "{scheme} wurde erfolgreich heruntergeladen"
-        },
-        "error": {
-          "title": "Download fehlgeschlagen",
-          "description": "Fehler beim Herunterladen von {scheme}",
-          "invalid-response": "Ungültiges API-Antwortformat",
-          "parse-failed": "Fehler beim Parsen der API-Antwort: {error}",
-          "rate-limit": "GitHub API-Ratenlimit überschritten",
-          "api-error": "API-Fehler: {status}",
-          "no-files": "Keine Dateien für Schema gefunden",
-          "download-failed": "Download fehlgeschlagen mit Exit-Code: {code}"
-        }
-      },
-      "delete": {
-        "success": {
-          "title": "Farbschema gelöscht",
-          "description": "{scheme} wurde erfolgreich gelöscht"
-        },
-        "error": {
-          "title": "Löschen fehlgeschlagen",
-          "description": "Fehler beim Löschen von {scheme}"
         }
       },
       "title": "Farbschema"
@@ -1338,6 +1393,10 @@
           "description": "Zugriff auf zuvor kopierte Elemente über den Launcher.",
           "label": "Zwischenablageverlauf aktivieren"
         },
+        "clip-preview": {
+          "description": "Zeigt eine Vorschau des Inhalts der Zwischenablage an, wenn der Befehl >clip verwendet wird.",
+          "label": "Clip-Vorschau aktivieren"
+        },
         "custom-launch-prefix": {
           "description": "Befehle mit einem benutzerdefinierten Launcher präfixieren (z.B. 'runapp' für systemd-Integration).",
           "label": "Benutzerdefiniertes Start-Präfix"
@@ -1421,6 +1480,10 @@
         "section": {
           "description": "Bevorzugte Temperatureinheit wählen.",
           "label": "Wetter"
+        },
+        "show-effects": {
+          "description": "Zeigt zusätzliche visuelle Effekte (wie Regen, Schnee oder Blitze) auf der Wetterkarte an.",
+          "label": "Wettereffekte anzeigen"
         },
         "show-in-calendar": {
           "description": "Zeige die tägliche Wettervorhersage direkt in deiner Kalenderansicht an.",
@@ -2259,6 +2322,7 @@
   },
   "wifi": {
     "panel": {
+      "available-networks": "Verfügbare Netzwerke",
       "connect": "Verbinden",
       "connected": "Verbunden",
       "disabled": "WLAN ist deaktiviert",
@@ -2269,6 +2333,7 @@
       "forget": "Vergessen",
       "forget-network": "Dieses Netzwerk vergessen?",
       "forgetting": "Wird vergessen...",
+      "known-networks": "Bekannte Netzwerke",
       "no-networks": "Keine Netzwerke gefunden",
       "password": "Passwort",
       "saved": "Gespeichert",
