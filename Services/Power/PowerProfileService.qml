@@ -107,12 +107,12 @@ Singleton {
     function onProfileChanged() {
       root.profile = powerProfiles.profile;
       // Only show toast if we have a valid profile name (not "Unknown")
-      const profileName = root.getName();
-      if (profileName !== "Unknown") {
-        ToastService.showNotice(I18n.tr("toast.power-profile.changed"), I18n.tr("toast.power-profile.profile-name", {
-                                                                                  "profile": profileName
-                                                                                }), profileName.toLowerCase().replace(" ", ""));
-      }
+      // const profileName = root.getName();
+      // if (profileName !== "Unknown") {
+      //   ToastService.showNotice(I18n.tr("toast.power-profile.changed"), I18n.tr("toast.power-profile.profile-name", {
+      //                                                                             "profile": profileName
+      //                                                                           }), profileName.toLowerCase().replace(" ", ""));
+      // }
     }
   }
 
