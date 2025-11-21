@@ -42,7 +42,7 @@ Item {
     density: Settings.data.bar.density
     oppositeDirection: BarService.getPillDirection(root)
     icon: IdleInhibitorService.isInhibited ? "keep-awake-on" : "keep-awake-off"
-    customTextIconColor: IdleInhibitorService.isInhibited ? "#e0def4s" : "#6e6a86"
+    customTextIconColor: IdleInhibitorService.isInhibited ? "#ebbcba" : "#e0def4"
     tooltipText: IdleInhibitorService.isInhibited ? I18n.tr("tooltips.disable-keep-awake") : I18n.tr("tooltips.enable-keep-awake")
     onClicked: IdleInhibitorService.manualToggle()
     forceOpen: IdleInhibitorService.timeout !== null
