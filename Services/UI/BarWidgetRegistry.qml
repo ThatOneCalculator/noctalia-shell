@@ -36,6 +36,7 @@ Singleton {
                            "TaskbarGrouped": taskbarGroupedComponent,
                            "Tray": trayComponent,
                            "Volume": volumeComponent,
+                           "VPN": vpnComponent,
                            "WiFi": wiFiComponent,
                            "WallpaperSelector": wallpaperSelectorComponent,
                            "Workspace": workspaceComponent
@@ -62,6 +63,7 @@ Singleton {
                                      "TaskbarGrouped": "WidgetSettings/TaskbarGroupedSettings.qml",
                                      "Tray": "WidgetSettings/TraySettings.qml",
                                      "Volume": "WidgetSettings/VolumeSettings.qml",
+                                     "VPN": "WidgetSettings/VPNSettings.qml",
                                      "WiFi": "WidgetSettings/WiFiSettings.qml",
                                      "Workspace": "WidgetSettings/WorkspaceSettings.qml"
                                    })
@@ -210,6 +212,10 @@ Singleton {
                                     "pinned": [],
                                     "drawerEnabled": true
                                   },
+                                  "VPN": {
+                                    "allowUserSettings": true,
+                                    "displayMode": "onhover"
+                                  },
                                   "WiFi": {
                                     "allowUserSettings": true,
                                     "displayMode": "onhover"
@@ -217,6 +223,7 @@ Singleton {
                                   "Workspace": {
                                     "allowUserSettings": true,
                                     "labelMode": "index",
+                                    "followFocusedScreen": false,
                                     "hideUnoccupied": false,
                                     "characterCount": 2
                                   },
@@ -298,6 +305,9 @@ Singleton {
   }
   property Component volumeComponent: Component {
     Volume {}
+  }
+  property Component vpnComponent: Component {
+    VPN {}
   }
   property Component wiFiComponent: Component {
     WiFi {}

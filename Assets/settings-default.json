@@ -70,6 +70,7 @@
     "animationDisabled": false,
     "compactLockScreen": false,
     "lockOnSuspend": true,
+    "showHibernateOnLockScreen": false,
     "enableShadows": true,
     "shadowDirection": "bottom_right",
     "shadowOffsetX": 2,
@@ -86,9 +87,6 @@
     "panelBackgroundOpacity": 1,
     "panelsAttachedToBar": true,
     "settingsPanelAttachToBar": false
-  },
-  "changelog": {
-    "lastSeenVersion": ""
   },
   "location": {
     "name": "Tokyo",
@@ -224,6 +222,7 @@
     "enabled": true,
     "displayMode": "always_visible",
     "backgroundOpacity": 1,
+    "radiusRatio": 0.1,
     "floatingRatio": 1,
     "size": 1,
     "onlySameOutput": true,
@@ -293,7 +292,8 @@
     "visualizerType": "linear",
     "visualizerQuality": "high",
     "mprisBlacklist": [],
-    "preferredPlayer": ""
+    "preferredPlayer": "",
+    "externalMixer": "pwvucontrol || pavucontrol"
   },
   "brightness": {
     "brightnessStep": 5,
@@ -326,6 +326,7 @@
     "walker": false,
     "code": false,
     "spicetify": false,
+    "telegram": false,
     "enableUserTemplates": false
   },
   "nightLight": {
@@ -336,6 +337,9 @@
     "dayTemp": "6500",
     "manualSunrise": "06:30",
     "manualSunset": "18:30"
+  },
+  "changelog": {
+    "lastSeenVersion": ""
   },
   "hooks": {
     "enabled": false,

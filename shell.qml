@@ -37,6 +37,7 @@ ShellRoot {
 
   property bool i18nLoaded: false
   property bool settingsLoaded: false
+  property bool shellStateLoaded: false
 
   Component.onCompleted: {
     Logger.i("Shell", "---------------------------");
@@ -63,8 +64,18 @@ ShellRoot {
       settingsLoaded = true;
     }
   }
+
+  Connections {
+    target: typeof ShellState !== 'undefined' ? ShellState : null
+    function onIsLoadedChanged() {
+      if (ShellState.isLoaded) {
+        shellStateLoaded = true;
+      }
+    }
+  }
+
   Loader {
-    active: i18nLoaded && settingsLoaded
+    active: i18nLoaded && settingsLoaded && shellStateLoaded
 
     sourceComponent: Item {
       Component.onCompleted: {
@@ -92,25 +103,16 @@ ShellRoot {
 
       Overview {}
       Background {}
+      AllScreens {}
       Dock {}
+      Notification {}
       ToastOverlay {}
       OSD {}
-      Notification {}
 
-      LockScreen {
-        id: lockScreen
-        Component.onCompleted: {
-          // Save a ref. to our lockScreen so we can access it  easily
-          PanelService.lockScreen = lockScreen;
-        }
-      }
+      LockScreen {}
 
-      // IPCService is treated as a service but it's actually an
-      // Item that needs to exists in the shell.
+      // IPCService is treated as a service but it's actually an Item that needs to exists in the shell.
       IPCService {}
-
-      // MainScreen for each screen
-      AllScreens {}
     }
   }
 
@@ -143,6 +145,7 @@ ShellRoot {
       setupWizardTimer.start();
     } else {
       Settings.data.setupCompleted = true;
+      Settings.saveImmediate();
     }
   }
 

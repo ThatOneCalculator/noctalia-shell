@@ -123,14 +123,6 @@
           "stream-description": "Entrez une commande à exécuter en continu."
         },
         "dynamic-text": "Texte dynamique",
-        "max-text-length-horizontal": {
-          "description": "Nombre maximal de caractères à afficher dans la barre horizontale (0 pour masquer le texte)",
-          "label": "Longueur max du texte (horizontal)"
-        },
-        "max-text-length-vertical": {
-          "description": "Nombre maximal de caractères à afficher dans la barre verticale (0 pour masquer le texte)",
-          "label": "Longueur max du texte (vertical)"
-        },
         "icon": {
           "description": "Sélectionnez une icône dans la bibliothèque.",
           "label": "Icône"
@@ -140,27 +132,18 @@
           "label": "Clic gauche",
           "update-text": "Mettre à jour le texte affiché au clic gauche."
         },
+        "max-text-length-horizontal": {
+          "description": "Nombre maximal de caractères à afficher dans la barre horizontale (0 pour masquer le texte)",
+          "label": "Longueur max du texte (horizontal)"
+        },
+        "max-text-length-vertical": {
+          "description": "Nombre maximal de caractères à afficher dans la barre verticale (0 pour masquer le texte)",
+          "label": "Longueur max du texte (vertical)"
+        },
         "middle-click": {
           "description": "Commande à exécuter quand le bouton est cliqué au milieu.",
           "label": "Clic milieu",
           "update-text": "Mettre à jour le texte affiché lors d'un clic molette."
-        },
-        "wheel": {
-          "description": "Commande à exécuter lorsque la molette est utilisée.\nUtilisez $delta pour le delta de la molette dans la commande",
-          "label": "Molette",
-          "update-text": "Mettre à jour le texte affiché au défilement"
-        },
-        "wheel-mode-separate": {
-          "label": "Commandes de molette séparées",
-          "description": "Activer des commandes séparées pour la molette haut et bas"
-        },
-        "wheel-up": {
-          "description": "Commande à exécuter lorsque la molette est défilée vers le haut.",
-          "label": "Commande molette haut"
-        },
-        "wheel-down": {
-          "description": "Commande à exécuter lorsque la molette est défilée vers le bas.",
-          "label": "Commande molette bas"
         },
         "parse-json": {
           "description": "Analyser la sortie de la commande en tant qu'objet JSON pour définir dynamiquement le texte et l'icône.",
@@ -178,6 +161,23 @@
         "text-stream": {
           "description": "Les lignes diffusées depuis la commande seront affichées sous forme de texte sur le bouton.",
           "label": "Flux"
+        },
+        "wheel": {
+          "description": "Commande à exécuter lorsque la molette est utilisée.\nUtilisez $delta pour le delta de la molette dans la commande",
+          "label": "Molette",
+          "update-text": "Mettre à jour le texte affiché au défilement"
+        },
+        "wheel-down": {
+          "description": "Commande à exécuter lorsque la molette est défilée vers le bas.",
+          "label": "Commande molette bas"
+        },
+        "wheel-mode-separate": {
+          "description": "Activer des commandes séparées pour la molette haut et bas",
+          "label": "Commandes de molette séparées"
+        },
+        "wheel-up": {
+          "description": "Commande à exécuter lorsque la molette est défilée vers le haut.",
+          "label": "Commande molette haut"
         }
       },
       "dialog": {
@@ -373,6 +373,10 @@
           "description": "Ne pas afficher les espaces de travail sans fenêtres.",
           "label": "Masquer les inoccupés"
         },
+        "follow-focused-screen": {
+          "description": "Afficher les espaces de travail de l'écran actuellement ciblé, plutôt que de l'écran où se trouve la barre.",
+          "label": "Suivre l'Écran Ciblé"
+        },
         "label-mode": {
           "description": "Choisir comment les étiquettes d'espace de travail sont affichées.",
           "label": "Mode d'étiquette"
@@ -381,14 +385,20 @@
     }
   },
   "battery": {
+    "brightness": "Luminosité",
+    "charge-level": "Niveau de charge",
     "charging": "En charge.",
     "charging-rate": "Taux de charge : {rate} W.",
     "discharging": "En décharge.",
     "discharging-rate": "Taux de décharge : {rate} W.",
     "health": "État : {percent}%",
     "idle": "Inactif.",
+    "inhibit-idle-description": "Maintient le système éveillé.",
+    "inhibit-idle-label": "Garder éveillé",
     "no-battery-detected": "Aucune batterie détectée.",
+    "panel-title": "Batterie",
     "plugged-in": "Branché.",
+    "power-profile": "Profil d’alimentation",
     "time-left": "Temps restant : {time}.",
     "time-until-full": "Temps jusqu'à charge complète : {time}."
   },
@@ -418,8 +428,8 @@
   },
   "changelog": {
     "error": {
-      "rate-limit": "Limite de GitHub atteinte. Réessayez dans quelques minutes.",
-      "fetch-failed": "Impossible de charger les données du journal des modifications. Veuillez réessayer plus tard."
+      "fetch-failed": "Impossible de charger les données du journal des modifications. Veuillez réessayer plus tard.",
+      "rate-limit": "Limite de GitHub atteinte. Réessayez dans quelques minutes."
     },
     "panel": {
       "buttons": {
@@ -449,10 +459,12 @@
     "activate-app": "Activer {app}",
     "clear-history": "Effacer l'historique",
     "close-app": "Fermer {app}",
+    "connect-vpn": "Se connecter à {name}",
     "cycle-visualizer": "Visualiseur de cycle",
     "disable-bluetooth": "Désactiver le Bluetooth",
     "disable-dnd": "Désactiver le mode Ne pas déranger",
     "disable-wifi": "Désactiver le Wi-Fi",
+    "disconnect-vpn": "Se déconnecter de {name}",
     "enable-bluetooth": "Activer le Bluetooth",
     "enable-dnd": "Activer le mode Ne pas déranger",
     "enable-wifi": "Activer le Wi-Fi",
@@ -668,7 +680,11 @@
     "clipboard-history-disabled-description": "Activez l'historique du presse-papiers dans les paramètres ou installez cliphist",
     "clipboard-loading": "Chargement de l'historique du presse-papiers...",
     "clipboard-loading-description": "Veuillez patienter",
-    "clipboard-search-description": "Rechercher dans l'historique du presse-papiers"
+    "clipboard-search-description": "Rechercher dans l'historique du presse-papiers",
+    "emoji": "Sélecteur d'émojis",
+    "emoji-loading": "Chargement des émojis...",
+    "emoji-loading-description": "Veuillez patienter",
+    "emoji-search-description": "Rechercher et copier des émojis"
   },
   "quickSettings": {
     "bluetooth": {
@@ -1042,6 +1058,10 @@
             "description": "Écrire {filepath}. Le thème Comfy doit être installé et activé manuellement.",
             "description-missing": "Nécessite l'installation de {app}"
           },
+          "telegram": {
+            "description": "Écrire {filepath}.",
+            "description-missing": "Nécessite l'installation de {app}"
+          },
           "vicinae": {
             "description": "Écrire {filepath} et recharger",
             "description-missing": "Nécessite que le lanceur {app} soit installé"
@@ -1238,6 +1258,10 @@
           "description": "Ajustez l'opacité de l'arrière-plan du dock.",
           "label": "Opacité de l'arrière-plan"
         },
+        "border-radius": {
+          "description": "Ajuster le rayon de bordure du dock.",
+          "label": "Rayon de bordure"
+        },
         "colorize-icons": {
           "description": "Appliquer les couleurs du thème aux icônes d'applications du dock (applications non focalisées uniquement).",
           "label": "Coloriser les icônes"
@@ -1389,13 +1413,13 @@
           "description": "Ajustez l'opacité de l'arrière-plan du lanceur.",
           "label": "Opacité de l'arrière-plan"
         },
-        "clipboard-history": {
-          "description": "Accédez aux éléments précédemment copiés depuis le lanceur.",
-          "label": "Activer l'historique du presse-papiers"
-        },
         "clip-preview": {
           "description": "Afficher un aperçu du contenu du presse-papiers lors de l'utilisation de la commande >clip.",
           "label": "Activer l'aperçu du presse-papiers"
+        },
+        "clipboard-history": {
+          "description": "Accédez aux éléments précédemment copiés depuis le lanceur.",
+          "label": "Activer l'historique du presse-papiers"
         },
         "custom-launch-prefix": {
           "description": "Préfixer les commandes avec un lanceur personnalisé (ex. 'runapp' pour l'intégration systemd).",
@@ -1499,6 +1523,10 @@
       "lock-on-suspend": {
         "description": "Verrouiller automatiquement l'écran lors de la mise en veille du système.",
         "label": "Verrouiller à la suspension"
+      },
+      "show-hibernate": {
+        "description": "Afficher l’option 'hiberner' dans les actions d’énergie.",
+        "label": "Afficher l’hibernation"
       },
       "title": "Écran de verrouillage"
     },
@@ -2063,6 +2091,10 @@
       "title-matugen": "Le traitement du modèle Matugen a échoué.",
       "title-predefined": "Le traitement du schéma de couleurs prédéfini a échoué."
     },
+    "vpn": {
+      "connected": "Connecté à '{name}'",
+      "disconnected": "Déconnecté de '{name}'"
+    },
     "wallpaper-colors": {
       "disabled": "Couleurs du fond d'écran désactivées",
       "enabled": "Couleurs du fond d'écran activées",
@@ -2096,6 +2128,7 @@
     "input-muted": "Couper l'entrée audio",
     "keep-awake": "Rester éveillé",
     "keyboard-layout": "Disposition du clavier {layout}",
+    "manage-vpn": "Gérer les connexions VPN",
     "manage-wifi": "Gérer le Wi-Fi",
     "microphone-volume-at": "Volume du microphone à {volume}%.\nClic gauche pour les paramètres. Clic droit pour activer/désactiver le mode muet.\nFaites défiler pour modifier le volume.",
     "move-to-center-section": "Déplacer vers la section centrale",
@@ -2230,23 +2263,11 @@
   "widgets": {
     "color-picker": {
       "apply": "Appliquer",
-      "brightness": "Luminosité",
       "cancel": "Annuler",
-      "hex": {
-        "description": "Entrez un code couleur hexadécimal.",
-        "label": "Couleur hexadécimale"
-      },
       "palette": {
         "description": "Choisissez parmi une large gamme de couleurs prédéfinies.",
-        "label": "Palette"
-      },
-      "rgb": {
-        "description": "Ajustez les valeurs de rouge, vert, bleu et de luminosité.",
-        "label": "Valeurs RVB"
-      },
-      "theme-colors": {
-        "description": "Accès rapide à la palette de couleurs de votre thème.",
-        "label": "Couleurs du thème"
+        "label": "Palette",
+        "theme-colors": "Accès rapide à la palette de couleurs de votre thème."
       },
       "title": "Sélecteur de couleurs"
     },

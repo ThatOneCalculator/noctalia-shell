@@ -123,14 +123,6 @@
           "stream-description": "输入一个要持续运行的命令。"
         },
         "dynamic-text": "动态文本",
-        "max-text-length-horizontal": {
-          "description": "在水平栏中显示的最大字符数（0 为隐藏文本）",
-          "label": "最大文本长度（水平）"
-        },
-        "max-text-length-vertical": {
-          "description": "在垂直栏中显示的最大字符数（0 为隐藏文本）",
-          "label": "最大文本长度（垂直）"
-        },
         "icon": {
           "description": "从库中选择图标。",
           "label": "图标"
@@ -140,27 +132,18 @@
           "label": "左键点击",
           "update-text": "左键单击时更新显示的文本"
         },
+        "max-text-length-horizontal": {
+          "description": "在水平栏中显示的最大字符数（0 为隐藏文本）",
+          "label": "最大文本长度（水平）"
+        },
+        "max-text-length-vertical": {
+          "description": "在垂直栏中显示的最大字符数（0 为隐藏文本）",
+          "label": "最大文本长度（垂直）"
+        },
         "middle-click": {
           "description": "中键点击按钮时执行的命令。",
           "label": "中键点击",
           "update-text": "鼠标中键点击时更新显示的文本"
-        },
-        "wheel": {
-          "description": "使用滚轮时执行的命令。\n在命令中使用 $delta 表示滚轮增量",
-          "label": "滚轮",
-          "update-text": "滚轮滚动时更新显示的文本"
-        },
-        "wheel-mode-separate": {
-          "label": "分开滚轮命令",
-          "description": "为滚轮向上和向下启用单独的命令"
-        },
-        "wheel-up": {
-          "description": "滚轮向上滚动时执行的命令。",
-          "label": "滚轮向上命令"
-        },
-        "wheel-down": {
-          "description": "滚轮向下滚动时执行的命令。",
-          "label": "滚轮向下命令"
         },
         "parse-json": {
           "description": "将命令输出解析为 JSON 对象，以动态设置文本和图标。",
@@ -178,6 +161,23 @@
         "text-stream": {
           "description": "来自命令的流式输出行将作为文本显示在按钮上。",
           "label": "流"
+        },
+        "wheel": {
+          "description": "使用滚轮时执行的命令。\n在命令中使用 $delta 表示滚轮增量",
+          "label": "滚轮",
+          "update-text": "滚轮滚动时更新显示的文本"
+        },
+        "wheel-down": {
+          "description": "滚轮向下滚动时执行的命令。",
+          "label": "滚轮向下命令"
+        },
+        "wheel-mode-separate": {
+          "description": "为滚轮向上和向下启用单独的命令",
+          "label": "分开滚轮命令"
+        },
+        "wheel-up": {
+          "description": "滚轮向上滚动时执行的命令。",
+          "label": "滚轮向上命令"
         }
       },
       "dialog": {
@@ -373,6 +373,10 @@
           "description": "不显示没有窗口的工作区。",
           "label": "隐藏未占用"
         },
+        "follow-focused-screen": {
+          "description": "显示当前焦点屏幕的工作区，而不是任务栏所在屏幕的工作区。",
+          "label": "跟随焦点屏幕"
+        },
         "label-mode": {
           "description": "选择工作区标签的显示方式。",
           "label": "标签模式"
@@ -381,14 +385,20 @@
     }
   },
   "battery": {
+    "brightness": "亮度",
+    "charge-level": "电量",
     "charging": "正在充电。",
     "charging-rate": "充电速率：{rate} W。",
     "discharging": "正在放电。",
     "discharging-rate": "放电速率：{rate} W。",
     "health": "健康状况：{percent}%",
     "idle": "空闲。",
+    "inhibit-idle-description": "保持系统唤醒。",
+    "inhibit-idle-label": "保持唤醒",
     "no-battery-detected": "未检测到电池。",
+    "panel-title": "电池",
     "plugged-in": "已接通电源。",
+    "power-profile": "电源模式",
     "time-left": "剩余时间：{time}。",
     "time-until-full": "充满所需时间：{time}。"
   },
@@ -418,8 +428,8 @@
   },
   "changelog": {
     "error": {
-      "rate-limit": "已达到 GitHub 速率限制，请稍后再试。",
-      "fetch-failed": "无法加载更新日志数据，请稍后再试。"
+      "fetch-failed": "无法加载更新日志数据，请稍后再试。",
+      "rate-limit": "已达到 GitHub 速率限制，请稍后再试。"
     },
     "panel": {
       "buttons": {
@@ -449,10 +459,12 @@
     "activate-app": "激活 {app}",
     "clear-history": "清除历史记录",
     "close-app": "关闭 {app}",
+    "connect-vpn": "连接 {name}",
     "cycle-visualizer": "切换可视化器样式",
     "disable-bluetooth": "禁用蓝牙",
     "disable-dnd": "关闭勿扰模式",
     "disable-wifi": "禁用Wi-Fi",
+    "disconnect-vpn": "断开 {name}",
     "enable-bluetooth": "启用蓝牙",
     "enable-dnd": "启用勿扰模式",
     "enable-wifi": "启用 Wi-Fi",
@@ -668,7 +680,11 @@
     "clipboard-history-disabled-description": "在设置中启用剪贴板历史记录或安装 cliphist",
     "clipboard-loading": "正在加载剪贴板历史记录...",
     "clipboard-loading-description": "请稍候",
-    "clipboard-search-description": "搜索剪贴板历史记录"
+    "clipboard-search-description": "搜索剪贴板历史记录",
+    "emoji": "表情符号选择器",
+    "emoji-loading": "正在加载表情符号...",
+    "emoji-loading-description": "请稍候",
+    "emoji-search-description": "搜索和复制表情符号"
   },
   "quickSettings": {
     "bluetooth": {
@@ -1042,6 +1058,10 @@
             "description": "写入 {filepath}。Comfy 主题需要手动安装和激活。",
             "description-missing": "需要安装 {app}"
           },
+          "telegram": {
+            "description": "写入 {filepath}。",
+            "description-missing": "需要安装 {app}"
+          },
           "vicinae": {
             "description": "写入 {filepath} 并重新加载",
             "description-missing": "需要安装 {app}"
@@ -1238,6 +1258,10 @@
           "description": "调整 Dock 的背景不透明度。",
           "label": "背景不透明度"
         },
+        "border-radius": {
+          "description": "调整程序坞的边框半径。",
+          "label": "边框半径"
+        },
         "colorize-icons": {
           "description": "将主题颜色应用到 Dock 应用图标（仅限非聚焦应用）。",
           "label": "着色图标"
@@ -1389,13 +1413,13 @@
           "description": "调整启动器的背景不透明度。",
           "label": "背景不透明度"
         },
-        "clipboard-history": {
-          "description": "从启动器访问之前复制的项目。",
-          "label": "启用剪贴板历史记录"
-        },
         "clip-preview": {
           "description": "在使用 >clip 命令时显示剪贴板内容的预览。",
           "label": "启用剪贴板预览"
+        },
+        "clipboard-history": {
+          "description": "从启动器访问之前复制的项目。",
+          "label": "启用剪贴板历史记录"
         },
         "custom-launch-prefix": {
           "description": "使用自定义启动器前缀命令（例如，'runapp'用于systemd集成）。",
@@ -1499,6 +1523,10 @@
       "lock-on-suspend": {
         "description": "系统挂起时自动锁定屏幕。",
         "label": "挂起时锁定"
+      },
+      "show-hibernate": {
+        "description": "在电源操作中显示'休眠'选项。",
+        "label": "显示休眠"
       },
       "title": "锁屏"
     },
@@ -2063,6 +2091,10 @@
       "title-matugen": "Matugen模板处理失败",
       "title-predefined": "预定义的颜色方案处理失败"
     },
+    "vpn": {
+      "connected": "已连接到“{name}”",
+      "disconnected": "已断开与“{name}”的连接"
+    },
     "wallpaper-colors": {
       "disabled": "壁纸颜色已禁用",
       "enabled": "壁纸颜色已启用",
@@ -2096,6 +2128,7 @@
     "input-muted": "静音输入设备",
     "keep-awake": "保持唤醒",
     "keyboard-layout": "{layout} 键盘布局",
+    "manage-vpn": "管理 VPN 连接",
     "manage-wifi": "管理 Wi-Fi",
     "microphone-volume-at": "麦克风音量 {volume}%\n左键点击进入设置。右键点击切换静音。\n滚动滚轮调节音量。",
     "move-to-center-section": "移动到中央部分",
@@ -2230,23 +2263,11 @@
   "widgets": {
     "color-picker": {
       "apply": "应用",
-      "brightness": "亮度",
       "cancel": "取消",
-      "hex": {
-        "description": "输入十六进制颜色代码。",
-        "label": "十六进制颜色"
-      },
       "palette": {
         "description": "从各种预定义颜色中选择。",
-        "label": "调色板"
-      },
-      "rgb": {
-        "description": "调整红、绿、蓝和亮度值。",
-        "label": "RGB 值"
-      },
-      "theme-colors": {
-        "description": "快速访问您的主题调色板。",
-        "label": "主题颜色"
+        "label": "调色板",
+        "theme-colors": "快速访问您主题的调色板。"
       },
       "title": "颜色选择器"
     },

@@ -20,21 +20,19 @@ import qs.Widgets
 import qs.Widgets.AudioSpectrum
 
 Loader {
-  id: lockScreen
+  id: root
   active: false
 
-  // Track if triggered via deprecated IPC call
-  property bool triggeredViaDeprecatedCall: false
+  Component.onCompleted: {
+    // Register with panel service
+    PanelService.lockScreen = this;
+  }
 
   Timer {
     id: unloadAfterUnlockTimer
     interval: 250
     repeat: false
-    onTriggered: {
-      lockScreen.active = false;
-      // Reset the deprecation flag when unlocking
-      lockScreen.triggeredViaDeprecatedCall = false;
-    }
+    onTriggered: root.active = false
   }
 
   function scheduleUnloadAfterUnlock() {
@@ -49,7 +47,7 @@ Loader {
         id: lockContext
         onUnlocked: {
           lockSession.locked = false;
-          lockScreen.scheduleUnloadAfterUnlock();
+          root.scheduleUnloadAfterUnlock();
           lockContext.currentText = "";
         }
         onFailed: {
@@ -59,7 +57,7 @@ Loader {
 
       WlSessionLock {
         id: lockSession
-        locked: lockScreen.active
+        locked: root.active
 
         WlSessionLockSurface {
           readonly property var now: Time.now
@@ -383,72 +381,14 @@ Loader {
               }
             }
 
-            // Deprecation warning (shown above error notification)
-            Rectangle {
-              width: Math.min(650, parent.width - 40)
-              implicitHeight: deprecationContent.implicitHeight + 24
-              height: implicitHeight
-              anchors.horizontalCenter: parent.horizontalCenter
-              anchors.bottom: parent.bottom
-              anchors.bottomMargin: (Settings.data.general.compactLockScreen ? 320 : 400) * Style.uiScaleRatio
-              radius: Style.radiusL
-              color: Qt.alpha(Color.mTertiary, 0.95)
-              border.color: Color.mTertiary
-              border.width: 2
-              visible: lockScreen.triggeredViaDeprecatedCall
-              opacity: visible ? 1.0 : 0.0
-
-              ColumnLayout {
-                id: deprecationContent
-                anchors.fill: parent
-                anchors.margins: 12
-                spacing: 6
-
-                RowLayout {
-                  Layout.alignment: Qt.AlignHCenter
-                  spacing: 8
-
-                  NIcon {
-                    icon: "alert-triangle"
-                    pointSize: Style.fontSizeL
-                    color: Color.mOnTertiary
-                  }
-
-                  NText {
-                    text: "Deprecated IPC Call"
-                    color: Color.mOnTertiary
-                    pointSize: Style.fontSizeL
-                    font.weight: Font.Bold
-                  }
-                }
-
-                NText {
-                  text: "The 'lockScreen toggle' IPC call is deprecated. Use 'lockScreen lock' instead."
-                  color: Color.mOnTertiary
-                  pointSize: Style.fontSizeM
-                  horizontalAlignment: Text.AlignHCenter
-                  Layout.alignment: Qt.AlignHCenter
-                  Layout.fillWidth: true
-                  wrapMode: Text.WordWrap
-                }
-              }
-
-              Behavior on opacity {
-                NumberAnimation {
-                  duration: 300
-                  easing.type: Easing.OutCubic
-                }
-              }
-            }
-
             // Error notification
             Rectangle {
-              width: 450
-              height: 60
+              width: errorRowLayout.implicitWidth + Style.marginXL * 1.5
+              height: 50
               anchors.horizontalCenter: parent.horizontalCenter
               anchors.bottom: parent.bottom
-              anchors.bottomMargin: (Settings.data.general.compactLockScreen ? 240 : 320) * Style.uiScaleRatio
-              radius: 30
+              anchors.bottomMargin: (Settings.data.general.compactLockScreen ? 280 : 360) * Style.uiScaleRatio
+              radius: Style.radiusL
               color: Color.mError
               border.color: Color.mError
               border.width: 1
@@ -456,6 +396,7 @@ Loader {
               opacity: visible ? 1.0 : 0.0
 
               RowLayout {
+                id: errorRowLayout
                 anchors.centerIn: parent
                 spacing: 10
 

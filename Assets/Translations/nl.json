@@ -123,14 +123,6 @@
           "stream-description": "Voer een commando in dat continu wordt uitgevoerd."
         },
         "dynamic-text": "Dynamische tekst",
-        "max-text-length-horizontal": {
-          "description": "Maximaal aantal tekens dat moet worden weergegeven in horizontale balk (0 om tekst te verbergen)",
-          "label": "Max. tekstlengte (horizontaal)"
-        },
-        "max-text-length-vertical": {
-          "description": "Maximaal aantal tekens dat moet worden weergegeven in verticale balk (0 om tekst te verbergen)",
-          "label": "Max. tekstlengte (verticaal)"
-        },
         "icon": {
           "description": "Selecteer een pictogram uit de bibliotheek.",
           "label": "Pictogram"
@@ -140,27 +132,18 @@
           "label": "Linkermuisklik",
           "update-text": "Tekst bijwerken bij linksklik"
         },
+        "max-text-length-horizontal": {
+          "description": "Maximaal aantal tekens dat moet worden weergegeven in horizontale balk (0 om tekst te verbergen)",
+          "label": "Max. tekstlengte (horizontaal)"
+        },
+        "max-text-length-vertical": {
+          "description": "Maximaal aantal tekens dat moet worden weergegeven in verticale balk (0 om tekst te verbergen)",
+          "label": "Max. tekstlengte (verticaal)"
+        },
         "middle-click": {
           "description": "Commando dat wordt uitgevoerd wanneer met de middelste muisknop op de knop wordt geklikt.",
           "label": "Middelste muisklik",
           "update-text": "Tekst bijwerken bij middelste muisklik"
-        },
-        "wheel": {
-          "description": "Commando om uit te voeren wanneer het scrollwiel wordt gebruikt.\nGebruik $delta voor de scrollwiel-delta in het commando",
-          "label": "Scrollwiel",
-          "update-text": "Weergegeven tekst bij scrollen bijwerken"
-        },
-        "wheel-mode-separate": {
-          "label": "Afzonderlijke scrollwielcommando's",
-          "description": "Afzonderlijke commando's inschakelen voor scrollwiel omhoog en omlaag"
-        },
-        "wheel-up": {
-          "description": "Commando om uit te voeren wanneer het scrollwiel omhoog wordt bewogen.",
-          "label": "Scrollwiel omhoog commando"
-        },
-        "wheel-down": {
-          "description": "Commando om uit te voeren wanneer het scrollwiel omlaag wordt bewogen.",
-          "label": "Scrollwiel omlaag commando"
         },
         "parse-json": {
           "description": "Interpreteer de commando-uitvoer als JSON-object om tekst en pictogram dynamisch in te stellen.",
@@ -178,6 +161,23 @@
         "text-stream": {
           "description": "Gestreamde regels uit het commando worden als tekst op de knop weergegeven.",
           "label": "Stream"
+        },
+        "wheel": {
+          "description": "Commando om uit te voeren wanneer het scrollwiel wordt gebruikt.\nGebruik $delta voor de scrollwiel-delta in het commando",
+          "label": "Scrollwiel",
+          "update-text": "Weergegeven tekst bij scrollen bijwerken"
+        },
+        "wheel-down": {
+          "description": "Commando om uit te voeren wanneer het scrollwiel omlaag wordt bewogen.",
+          "label": "Scrollwiel omlaag commando"
+        },
+        "wheel-mode-separate": {
+          "description": "Afzonderlijke commando's inschakelen voor scrollwiel omhoog en omlaag",
+          "label": "Afzonderlijke scrollwielcommando's"
+        },
+        "wheel-up": {
+          "description": "Commando om uit te voeren wanneer het scrollwiel omhoog wordt bewogen.",
+          "label": "Scrollwiel omhoog commando"
         }
       },
       "dialog": {
@@ -373,6 +373,10 @@
           "description": "Werkruimten zonder vensters niet weergeven.",
           "label": "Ongebruikte verbergen"
         },
+        "follow-focused-screen": {
+          "description": "Werkruimten weergeven van het momenteel gefocuste scherm, in plaats van het scherm waar de balk zich bevindt.",
+          "label": "Gefocust Scherm Volgen"
+        },
         "label-mode": {
           "description": "Kies hoe labels van werkruimten worden weergegeven.",
           "label": "Labelmodus"
@@ -381,14 +385,20 @@
     }
   },
   "battery": {
+    "brightness": "Helderheid",
+    "charge-level": "Laadniveau",
     "charging": "Opladen.",
     "charging-rate": "Laadsnelheid: {rate} W.",
     "discharging": "Ontladen.",
     "discharging-rate": "Ontlaadsnelheid: {rate} W.",
     "health": "Gezondheid: {percent}%",
     "idle": "In rust.",
+    "inhibit-idle-description": "Houdt het systeem wakker.",
+    "inhibit-idle-label": "Wakker houden",
     "no-battery-detected": "Geen batterij gedetecteerd.",
+    "panel-title": "Batterij",
     "plugged-in": "Op netstroom.",
+    "power-profile": "Energieprofiel",
     "time-left": "Resterende tijd: {time}.",
     "time-until-full": "Tijd tot vol: {time}."
   },
@@ -418,8 +428,8 @@
   },
   "changelog": {
     "error": {
-      "rate-limit": "GitHub-limiet bereikt. Probeer het over enkele minuten opnieuw.",
-      "fetch-failed": "Kan changeloggegevens niet laden. Probeer het later opnieuw."
+      "fetch-failed": "Kan changeloggegevens niet laden. Probeer het later opnieuw.",
+      "rate-limit": "GitHub-limiet bereikt. Probeer het over enkele minuten opnieuw."
     },
     "panel": {
       "buttons": {
@@ -449,10 +459,12 @@
     "activate-app": "Activeer {app}",
     "clear-history": "Geschiedenis wissen",
     "close-app": "Sluit {app}",
+    "connect-vpn": "Verbinding maken met {name}",
     "cycle-visualizer": "Cyclusvisualisatie",
     "disable-bluetooth": "Bluetooth uitschakelen",
     "disable-dnd": "Niet Storen uitschakelen",
     "disable-wifi": "Wi-Fi uitschakelen",
+    "disconnect-vpn": "Verbinding met {name} verbreken",
     "enable-bluetooth": "Bluetooth inschakelen",
     "enable-dnd": "Niet Storen inschakelen",
     "enable-wifi": "Wi-Fi inschakelen",
@@ -668,7 +680,11 @@
     "clipboard-history-disabled-description": "Schakel klembordgeschiedenis in de instellingen in of installeer cliphist",
     "clipboard-loading": "Klembordgeschiedenis laden...",
     "clipboard-loading-description": "Even geduld",
-    "clipboard-search-description": "Zoek in klembordgeschiedenis"
+    "clipboard-search-description": "Zoek in klembordgeschiedenis",
+    "emoji": "Emoji-kiezer",
+    "emoji-loading": "Emoji's laden...",
+    "emoji-loading-description": "Even geduld",
+    "emoji-search-description": "Zoek en kopieer emoji's"
   },
   "quickSettings": {
     "bluetooth": {
@@ -1042,6 +1058,10 @@
             "description": "Schrijf {filepath}. Het Comfy-thema moet handmatig worden geïnstalleerd en geactiveerd.",
             "description-missing": "Vereist dat {app} is geïnstalleerd."
           },
+          "telegram": {
+            "description": "Schrijf {filepath}.",
+            "description-missing": "Vereist dat {app} is geïnstalleerd."
+          },
           "vicinae": {
             "description": "Schrijf {filepath} en herlaad.",
             "description-missing": "Vereist dat {app} is geïnstalleerd."
@@ -1238,6 +1258,10 @@
           "description": "Pas de achtergronddekking van de dock aan.",
           "label": "Achtergronddekking"
         },
+        "border-radius": {
+          "description": "Pas de randradius van het dock aan.",
+          "label": "Randradius"
+        },
         "colorize-icons": {
           "description": "Pas themakleuren toe op dock-pictogrammen (alleen niet-focuste apps).",
           "label": "Pictogrammen inkleuren"
@@ -1389,13 +1413,13 @@
           "description": "Pas de achtergronddekking van de launcher aan.",
           "label": "Achtergronddekking"
         },
-        "clipboard-history": {
-          "description": "Toegang tot eerder gekopieerde items vanuit de launcher.",
-          "label": "Klembordgeschiedenis inschakelen"
-        },
         "clip-preview": {
           "description": "Toon een voorbeeld van de inhoud van het klembord bij gebruik van het >clip-commando.",
           "label": "Klembordvoorbeeld inschakelen"
+        },
+        "clipboard-history": {
+          "description": "Toegang tot eerder gekopieerde items vanuit de launcher.",
+          "label": "Klembordgeschiedenis inschakelen"
         },
         "custom-launch-prefix": {
           "description": "Voorzie commando's van een aangepaste launcher-prefix (bijv. 'runapp' voor systemd-integratie).",
@@ -1499,6 +1523,10 @@
       "lock-on-suspend": {
         "description": "Vergrendel het scherm automatisch wanneer het systeem wordt onderbroken.",
         "label": "Vergrendelen bij onderbreken"
+      },
+      "show-hibernate": {
+        "description": "De optie 'sluimerstand' tonen in de energieacties.",
+        "label": "Sluimerstand tonen"
       },
       "title": "Vergrendelscherm"
     },
@@ -2063,6 +2091,10 @@
       "title-matugen": "Matugen-sjabloonverwerking mislukt",
       "title-predefined": "Verwerken van vooraf gedefinieerd kleurenschema mislukt"
     },
+    "vpn": {
+      "connected": "Verbonden met '{name}'",
+      "disconnected": "Verbinding met '{name}' verbroken"
+    },
     "wallpaper-colors": {
       "disabled": "Achtergrondkleuren uitgeschakeld",
       "enabled": "Achtergrondkleuren ingeschakeld",
@@ -2096,6 +2128,7 @@
     "input-muted": "Invoermicrofoon dempen in-/uitschakelen",
     "keep-awake": "Wakker houden",
     "keyboard-layout": "{layout}-toetsenbordindeling",
+    "manage-vpn": "VPN-verbindingen beheren",
     "manage-wifi": "Wi-Fi beheren",
     "microphone-volume-at": "Microfoonvolume {volume}%\nLinks klikken voor instellingen. Rechts klikken om te dempen.\nScroll om het volume aan te passen.",
     "move-to-center-section": "Verplaatsen naar middelste sectie",
@@ -2230,23 +2263,11 @@
   "widgets": {
     "color-picker": {
       "apply": "Toepassen",
-      "brightness": "Helderheid",
       "cancel": "Annuleren",
-      "hex": {
-        "description": "Voer een hexadecimale kleurcode in.",
-        "label": "Hex-kleur"
-      },
       "palette": {
         "description": "Kies uit een breed scala aan vooraf gedefinieerde kleuren.",
-        "label": "Palet"
-      },
-      "rgb": {
-        "description": "Pas de waarden voor rood, groen, blauw en helderheid aan.",
-        "label": "RGB-waarden"
-      },
-      "theme-colors": {
-        "description": "Snelle toegang tot het kleurenpalet van je thema.",
-        "label": "Themakleuren"
+        "label": "Palet",
+        "theme-colors": "Snelle toegang tot het kleurenpalet van je thema."
       },
       "title": "Kleurkiezer"
     },

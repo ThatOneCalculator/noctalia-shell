@@ -69,9 +69,23 @@ Item {
         backgroundColor: panelBackgroundColor
       }
 
+      // Battery
+      PanelBackground {
+        panel: root.windowRoot.batteryPanelPlaceholder
+        shapeContainer: backgroundsShape
+        backgroundColor: panelBackgroundColor
+      }
+
       // Bluetooth
       PanelBackground {
         panel: root.windowRoot.bluetoothPanelPlaceholder
+        shapeContainer: backgroundsShape
+        backgroundColor: panelBackgroundColor
+      }
+
+      // Brightness
+      PanelBackground {
+        panel: root.windowRoot.brightnessPanelPlaceholder
         shapeContainer: backgroundsShape
         backgroundColor: panelBackgroundColor
       }
