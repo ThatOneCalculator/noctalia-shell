@@ -227,6 +227,10 @@
           "description": "Display artist - title instead of title - artist.",
           "label": "Show artist first"
         },
+        "show-progress-ring": {
+          "description": "Display a circular progress indicator showing track progress.",
+          "label": "Show progress ring"
+        },
         "show-visualizer": {
           "description": "Display an audio visualizer when music is playing.",
           "label": "Show visualizer"
@@ -369,13 +373,13 @@
           "description": "Number of characters to display from workspace names (1-10).",
           "label": "Character count"
         },
-        "hide-unoccupied": {
-          "description": "Don't display workspaces without windows.",
-          "label": "Hide unoccupied"
-        },
         "follow-focused-screen": {
           "description": "Display workspaces from the currently focused screen, rather than the screen where the bar is located.",
           "label": "Follow Focused Screen"
+        },
+        "hide-unoccupied": {
+          "description": "Don't display workspaces without windows.",
+          "label": "Hide unoccupied"
         },
         "label-mode": {
           "description": "Choose how workspace labels are displayed.",
@@ -385,8 +389,8 @@
     }
   },
   "battery": {
+    "battery-level": "Battery level",
     "brightness": "Brightness",
-    "charge-level": "Charge level",
     "charging": "Charging",
     "charging-rate": "Charging rate: {rate} W",
     "discharging": "Discharging",
@@ -513,6 +517,15 @@
       "description": "Your notifications will show up here as they arrive.",
       "no-notifications": "No notifications",
       "title": "Notifications"
+    },
+    "time": {
+      "diffD": "1 day ago",
+      "diffDD": "{diff} days ago",
+      "diffH": "1 hour ago",
+      "diffHH": "{diff} hours ago",
+      "diffM": "1 minute ago",
+      "diffMM": "{diff} minutes ago",
+      "now": "now"
     }
   },
   "options": {
@@ -721,7 +734,7 @@
         "enabled": "Notifications"
       },
       "tooltip": {
-        "action": "Left click: Open notification history\nRight click: Toggle Do Not Disturb"
+        "action": "Left click: Open notification history\nRight click: Open context menu"
       }
     },
     "powerProfile": {
@@ -1036,6 +1049,10 @@
           }
         },
         "programs": {
+          "cava": {
+            "description": "Write {filepath}.",
+            "description-missing": "Requires {app} to be installed"
+          },
           "code": {
             "description": "Write {filepath}. Hyprluna theme needs to be installed and activated manually.",
             "description-missing": "No Code client detected. Install VSCode or VSCodium."
@@ -1429,6 +1446,10 @@
           "description": "Use a custom prefix for launching applications instead of the default method.",
           "label": "Enable custom launch prefix"
         },
+        "grid-view": {
+          "description": "Display items in a grid layout instead of a list.",
+          "label": "Grid view"
+        },
         "position": {
           "description": "Choose where the launcher panel appears.",
           "label": "Position"
@@ -1654,7 +1675,29 @@
           "label": "General"
         }
       },
-      "title": "On-Screen Display"
+      "title": "On-Screen Display",
+      "types": {
+        "brightness": {
+          "description": "Show OSD when screen brightness changes.",
+          "label": "Brightness"
+        },
+        "input-volume": {
+          "description": "Show OSD when microphone volume changes.",
+          "label": "Input volume"
+        },
+        "lockkey": {
+          "description": "Show OSD when Caps Lock, Num Lock, or Scroll Lock are toggled.",
+          "label": "Lock keys"
+        },
+        "section": {
+          "description": "Select the events that trigger the OSD. If no events are selected, all available events will trigger the OSD.",
+          "label": "OSD trigger events"
+        },
+        "volume": {
+          "description": "Show OSD when audio output volume changes.",
+          "label": "Output volume"
+        }
+      }
     },
     "screen-recorder": {
       "audio": {
@@ -2143,8 +2186,8 @@
     "noctalia-performance-disabled": "Noctalia performance mode is disabled\nLeft click to enable",
     "noctalia-performance-enabled": "Noctalia performance mode is enabled\nLeft click to disable",
     "open-control-center": "Open control center",
-    "open-notification-history-disable-dnd": "Open notification history\nRight-click to disable \"Do not disturb\"",
-    "open-notification-history-enable-dnd": "Open notification history\nRight-click to enable \"Do not disturb\"",
+    "open-notification-history-disable-dnd": "Open notification history\nRight click: Open context menu",
+    "open-notification-history-enable-dnd": "Open notification history\nRight click: Open context menu",
     "open-settings": "Open settings",
     "open-tray-dropdown": "Open tray dropdown",
     "open-wallpaper-selector": "Open wallpaper selector",

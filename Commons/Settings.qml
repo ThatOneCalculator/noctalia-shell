@@ -5,33 +5,37 @@ import Quickshell
 import Quickshell.Io
 import "../Helpers/QtObj2JS.js" as QtObj2JS
 import qs.Commons
+import qs.Services.Power
+import qs.Services.System
 import qs.Services.UI
 
 Singleton {
   id: root
 
-  // Used to access via Settings.data.xxx.yyy
-  readonly property alias data: adapter
   property bool isLoaded: false
   property bool directoriesCreated: false
-  property int settingsVersion: 23
-  property bool isDebug: Quickshell.env("NOCTALIA_DEBUG") === "1"
+  property bool shouldOpenSetupWizard: false
 
-  // Define our app directories
-  // Default config directory: ~/.config/noctalia
-  // Default cache directory: ~/.cache/noctalia
-  property string shellName: "noctalia"
-  property string configDir: Quickshell.env("NOCTALIA_CONFIG_DIR") || (Quickshell.env("XDG_CONFIG_HOME") || Quickshell.env("HOME") + "/.config") + "/" + shellName + "/"
-  property string cacheDir: Quickshell.env("NOCTALIA_CACHE_DIR") || (Quickshell.env("XDG_CACHE_HOME") || Quickshell.env("HOME") + "/.cache") + "/" + shellName + "/"
-  property string cacheDirImages: cacheDir + "images/"
-  property string cacheDirImagesWallpapers: cacheDir + "images/wallpapers/"
-  property string cacheDirImagesNotifications: cacheDir + "images/notifications/"
-  property string settingsFile: Quickshell.env("NOCTALIA_SETTINGS_FILE") || (configDir + "settings.json")
-
-  property string defaultLocation: "Tokyo"
-  property string defaultAvatar: Quickshell.env("HOME") + "/.face"
-  property string defaultVideosDirectory: Quickshell.env("HOME") + "/Videos"
-  property string defaultWallpapersDirectory: Quickshell.env("HOME") + "/Pictures/Wallpapers"
+  /*
+  Shell directories.
+  - Default config directory: ~/.config/noctalia
+  - Default cache directory: ~/.cache/noctalia
+  */
+  readonly property alias data: adapter  // Used to access via Settings.data.xxx.yyy
+  readonly property int settingsVersion: 25
+  readonly property bool isDebug: Quickshell.env("NOCTALIA_DEBUG") === "1"
+  readonly property string shellName: "noctalia"
+  readonly property string configDir: Quickshell.env("NOCTALIA_CONFIG_DIR") || (Quickshell.env("XDG_CONFIG_HOME") || Quickshell.env("HOME") + "/.config") + "/" + shellName + "/"
+  readonly property string cacheDir: Quickshell.env("NOCTALIA_CACHE_DIR") || (Quickshell.env("XDG_CACHE_HOME") || Quickshell.env("HOME") + "/.cache") + "/" + shellName + "/"
+  readonly property string cacheDirImages: cacheDir + "images/"
+  readonly property string cacheDirImagesWallpapers: cacheDir + "images/wallpapers/"
+  readonly property string cacheDirImagesNotifications: cacheDir + "images/notifications/"
+  readonly property string settingsFile: Quickshell.env("NOCTALIA_SETTINGS_FILE") || (configDir + "settings.json")
+  readonly property string defaultLocation: "Tokyo"
+  readonly property string defaultAvatar: Quickshell.env("HOME") + "/.face"
+  readonly property string defaultVideosDirectory: Quickshell.env("HOME") + "/Videos"
+  readonly property string defaultWallpapersDirectory: Quickshell.env("HOME") + "/Pictures/Wallpapers"
+  readonly property string defaultWallpaper: Quickshell.shellDir + "/Assets/Wallpaper/noctalia.png"
 
   // Signal emitted when settings are loaded after startupcale changes
   signal settingsLoaded
@@ -62,7 +66,6 @@ Singleton {
     adapter.general.avatarImage = defaultAvatar;
     adapter.screenRecorder.directory = defaultVideosDirectory;
     adapter.wallpaper.directory = defaultWallpapersDirectory;
-    adapter.wallpaper.defaultWallpaper = Quickshell.shellDir + "/Assets/Wallpaper/noctalia.png";
 
     // Set the adapter to the settingsFileView to trigger the real settings load
     settingsFileView.adapter = adapter;
@@ -98,8 +101,8 @@ Singleton {
         Logger.i("Settings", "Settings loaded");
 
         upgradeSettingsData();
-        validateMonitorConfigurations();
-        isLoaded = true;
+
+        root.isLoaded = true;
 
         // Emit the signal
         root.settingsLoaded();
@@ -112,10 +115,14 @@ Singleton {
       if (error.toString().includes("No such file") || error === 2) {
         // File doesn't exist, create it with default values
         writeAdapter();
+
         // Also write to fallback if set
         if (Quickshell.env("NOCTALIA_SETTINGS_FALLBACK")) {
           settingsFallbackFileView.writeAdapter();
         }
+
+        // We started without settings, we should open the setupWizard
+        root.shouldOpenSetupWizard = true;
       }
     }
   }
@@ -128,11 +135,11 @@ Singleton {
     printErrors: false
     watchChanges: false
   }
+
   JsonAdapter {
     id: adapter
 
     property int settingsVersion: root.settingsVersion
-    property bool setupCompleted: false
 
     // bar
     property JsonObject bar: JsonObject {
@@ -271,7 +278,6 @@ Singleton {
       property bool enableMultiMonitorDirectories: false
       property bool recursiveSearch: false
       property bool setWallpaperOnAllMonitors: true
-      property string defaultWallpaper: ""
       property string fillMode: "crop"
       property color fillColor: "#000000"
       property bool randomEnabled: false
@@ -279,7 +285,6 @@ Singleton {
       property int transitionDuration: 1500 // 1500 ms
       property string transitionType: "random"
       property real transitionEdgeSmoothness: 0.05
-      property list<var> monitors: []
       property string panelPosition: "follow_bar"
       property bool hideWallpaperFilenames: false
       // Wallhaven settings
@@ -292,6 +297,9 @@ Singleton {
       property string wallhavenResolutionMode: "atleast" // "atleast" or "exact"
       property string wallhavenResolutionWidth: ""
       property string wallhavenResolutionHeight: ""
+
+      property string defaultWallpaper: "" // TODO REMOVE
+      property list<var> monitors: []  // TODO REMOVE
     }
 
     // applauncher
@@ -306,6 +314,8 @@ Singleton {
       property string terminalCommand: "xterm -e"
       property bool customLaunchPrefixEnabled: false
       property string customLaunchPrefix: ""
+      // View mode: "list" or "grid"
+      property string viewMode: "list"
     }
 
     // control center
@@ -385,7 +395,7 @@ Singleton {
     // dock
     property JsonObject dock: JsonObject {
       property bool enabled: true
-      property string displayMode: "always_visible" // "always_visible", "auto_hide", "exclusive"
+      property string displayMode: "auto_hide" // "always_visible", "auto_hide", "exclusive"
       property real backgroundOpacity: 1.0
       property real radiusRatio: 0.1
       property real floatingRatio: 1.0
@@ -454,10 +464,11 @@ Singleton {
     property JsonObject osd: JsonObject {
       property bool enabled: true
       property string location: "top_right"
-      property list<string> monitors: []
       property int autoHideMs: 2000
       property bool overlayLayer: true
       property real backgroundOpacity: 1.0
+      property list<var> enabledTypes: []
+      property list<string> monitors: []
     }
 
     // audio
@@ -508,6 +519,7 @@ Singleton {
       property bool code: false
       property bool spicetify: false
       property bool telegram: false
+      property bool cava: false
       property bool enableUserTemplates: false
     }
 
@@ -583,36 +595,39 @@ Singleton {
   }
 
   // -----------------------------------------------------
-  // Function to validate monitor configurations
-  function validateMonitorConfigurations() {
-    var availableScreenNames = [];
-    for (var i = 0; i < Quickshell.screens.length; i++) {
-      availableScreenNames.push(Quickshell.screens[i].name);
+  // Function to clean up deprecated user/custom bar widgets settings
+  function upgradeWidget(widget) {
+    // Backup the widget definition before altering
+    const widgetBefore = JSON.stringify(widget);
+
+    // Get all existing custom settings keys
+    const keys = Object.keys(BarWidgetRegistry.widgetMetadata[widget.id]);
+
+    // Delete deprecated user settings from the wiget
+    for (const k of Object.keys(widget)) {
+      if (k === "id" || k === "allowUserSettings") {
+        continue;
+      }
+      if (!keys.includes(k)) {
+        delete widget[k];
+      }
     }
 
-    Logger.d("Settings", "Available monitors: [" + availableScreenNames.join(", ") + "]");
-    Logger.d("Settings", "Configured bar monitors: [" + adapter.bar.monitors.join(", ") + "]");
-
-    // Check bar monitors
-    if (adapter.bar.monitors.length > 0) {
-      var hasValidBarMonitor = false;
-      for (var j = 0; j < adapter.bar.monitors.length; j++) {
-        if (availableScreenNames.includes(adapter.bar.monitors[j])) {
-          hasValidBarMonitor = true;
-          break;
-        }
+    // Inject missing default setting (metaData) from BarWidgetRegistry
+    for (var i = 0; i < keys.length; i++) {
+      const k = keys[i];
+      if (k === "id" || k === "allowUserSettings") {
+        continue;
       }
-      if (!hasValidBarMonitor) {
-        Logger.w("Settings", "No configured bar monitors found on system, clearing bar monitor list to show on all screens");
-        adapter.bar.monitors = [];
-      } else
 
-        //Logger.i("Settings", "Found valid bar monitors, keeping configuration")
-      {}
-    } else
+      if (widget[k] === undefined) {
+        widget[k] = BarWidgetRegistry.widgetMetadata[widget.id][k];
+      }
+    }
 
-      //Logger.i("Settings", "Bar monitor list is empty, will show on all available screens")
-    {}
+    // Compare settings, to detect if something has been upgraded
+    const widgetAfter = JSON.stringify(widget);
+    return (widgetAfter !== widgetBefore);
   }
 
   // -----------------------------------------------------
@@ -714,104 +729,143 @@ Singleton {
     }
 
     // -----------------
-    // 5th. Migrate Discord templates (version 20 → 21)
-    // Consolidate individual discord_* properties into unified discord property
-    if (adapter.settingsVersion < 21) {
-      // Read raw JSON file to access properties not in adapter schema
-      try {
-        var rawJson = settingsFileView.text();
+    // TEMP Normalize OSD enabled types and migrate legacy show* toggles
+    try {
+      var osdRawJson = settingsFileView.text();
+      if (osdRawJson) {
+        var osdParsed = JSON.parse(osdRawJson);
+        if (osdParsed.osd) {
+          var legacyHandled = false;
 
-        if (rawJson) {
-          var parsed = JSON.parse(rawJson);
-          var anyDiscordEnabled = false;
+          if (osdParsed.osd.enabledTypes === undefined) {
+            // Some configurations (<= v23) stored booleans like showVolume/showBrightness/etc.
+            // Convert them into the new enabledTypes array as soon as we detect the legacy shape.
+            var legacyOsd = osdParsed.osd;
+            var typeMappings = [
+                  {
+                    key: "showVolume",
+                    type: 0
+                  },
+                  {
+                    key: "showInputVolume",
+                    type: 1
+                  },
+                  {
+                    key: "showBrightness",
+                    type: 2
+                  },
+                  {
+                    key: "showLockKey",
+                    type: 3
+                  }
+                ];
 
-          // Check if any Discord client was enabled
-          const discordClients = ["discord_vesktop", "discord_webcord", "discord_armcord", "discord_equibop", "discord_lightcord", "discord_dorion", "discord_vencord"];
+            var migratedTypes = [];
+            var sawLegacyKey = false;
 
-          if (parsed.templates) {
-            for (var i = 0; i < discordClients.length; i++) {
-              if (parsed.templates[discordClients[i]]) {
-                anyDiscordEnabled = true;
-                break;
+            for (var i = 0; i < typeMappings.length; i++) {
+              var mapping = typeMappings[i];
+              if (legacyOsd[mapping.key] !== undefined)
+                sawLegacyKey = true;
+
+              var enabled = legacyOsd[mapping.key];
+              if (enabled === undefined)
+                enabled = true; // default behaviour before enabledTypes existed
+
+              if (enabled && migratedTypes.indexOf(mapping.type) === -1)
+                migratedTypes.push(mapping.type);
+            }
+
+            if (legacyOsd.showLockKeyNotifications !== undefined) {
+              sawLegacyKey = true;
+              if (legacyOsd.showLockKeyNotifications) {
+                if (migratedTypes.indexOf(3) === -1)
+                  migratedTypes.push(3);
+              } else {
+                migratedTypes = migratedTypes.filter(function (type) {
+                  return type !== 3;
+                });
               }
             }
+
+            if (sawLegacyKey) {
+              if (migratedTypes.length === 0) {
+                migratedTypes = [0, 1, 2, 3];
+              }
+              adapter.osd.enabledTypes = migratedTypes;
+              Logger.i("Settings", "Migrated legacy OSD toggles to enabledTypes = " + JSON.stringify(migratedTypes));
+              legacyHandled = true;
+            }
           }
 
-          // Set unified discord property
-          adapter.templates.discord = anyDiscordEnabled;
-
-          Logger.i("Settings", "Migrated Discord templates to unified 'discord' property (enabled:", anyDiscordEnabled + ")");
-        }
-      } catch (error) {
-        Logger.w("Settings", "Failed to read raw JSON for Discord migration:", error);
-      }
-    }
-
-    // -----------------
-    // 6th. Migrate panel background opacity (version 21 → 22)
-    // Move appLauncher.backgroundOpacity to ui.panelBackgroundOpacity
-    if (adapter.settingsVersion < 22) {
-      // Read raw JSON file to access properties not in adapter schema
-      try {
-        var rawJson = settingsFileView.text();
-
-        if (rawJson) {
-          var parsed = JSON.parse(rawJson);
-          if (parsed.appLauncher && parsed.appLauncher.backgroundOpacity !== undefined) {
-            var oldOpacity = parsed.appLauncher.backgroundOpacity;
-            if (adapter.ui) {
-              adapter.ui.panelBackgroundOpacity = oldOpacity;
-              Logger.i("Settings", "Migrated appLauncher.backgroundOpacity to ui.panelBackgroundOpacity (value:", oldOpacity + ")");
+          // No matter which format the JSON used, hydrate the runtime value from disk so we don't
+          // accidentally keep the default [0,1,2,3] array after a restart.
+          if (!legacyHandled && osdParsed.osd.enabledTypes !== undefined) {
+            var parsedTypes = osdParsed.osd.enabledTypes;
+            if (Array.isArray(parsedTypes)) {
+              adapter.osd.enabledTypes = parsedTypes.slice();
+            } else if (parsedTypes && typeof parsedTypes === "object" && parsedTypes.length !== undefined) {
+              // QJsonArray can materialise as a list-like object; convert it to a plain array
+              var normalized = [];
+              for (var idx = 0; idx < parsedTypes.length; idx++) {
+                var value = parsedTypes[idx];
+                if (value !== undefined)
+                  normalized.push(value);
+              }
+              adapter.osd.enabledTypes = normalized;
             }
           }
         }
-      } catch (error) {
-        Logger.w("Settings", "Failed to read raw JSON for migration:", error);
       }
+    } catch (error) {
+      Logger.w("Settings", "Failed to normalize OSD enabledTypes:", error);
     }
 
     // -----------------
-    // 7th. Migrate dim desktop settings (version 22 → 23)
-    // If dimDesktop is enabled, set dimmerOpacity to 0.8 if it's not already set or is 0
-    // Then remove dimDesktop property as it's no longer needed
-    if (adapter.settingsVersion < 23) {
-      // Read raw JSON file to access dimDesktop property
-      try {
-        var rawJson = settingsFileView.text();
-
-        if (rawJson) {
-          var parsed = JSON.parse(rawJson);
-          if (parsed.general && parsed.general.dimDesktop === true) {
-            // Check if dimmerOpacity exists in raw JSON (not adapter default)
-            var dimmerOpacityInJson = parsed.general.dimmerOpacity;
-
-            // If dimmerOpacity wasn't explicitly set in JSON or was 0, set it to 0.8 (80% dimming)
-            if (dimmerOpacityInJson === undefined || dimmerOpacityInJson === 0) {
-              adapter.general.dimmerOpacity = 0.8;
-              Logger.i("Settings", "Migrated dimDesktop=true: set dimmerOpacity to 0.8 (80% dimming)");
-            }
-          }
-        }
-      } catch (error) {
-        Logger.w("Settings", "Failed to read raw JSON for dimDesktop migration:", error);
+    // Migrate ShellState-related files from old cache files to ShellState
+    // This consolidates migrations that were previously in individual files
+    if (adapter.settingsVersion < 25) {
+      // Only migrate the settings once!
+      if (ShellState?.isLoaded) {
+        migrateShellStateFiles();
+      } else {
+        // Wait for ShellState to be ready
+        Qt.callLater(() => {
+                       if (ShellState?.isLoaded) {
+                         migrateShellStateFiles();
+                       }
+                     });
       }
-    }
-
-    // -----------------
-    // 8th. Migrate ShellState-related files from old cache files to ShellState
-    // This consolidates migrations that were previously in individual service files
-    if (typeof ShellState !== 'undefined' && ShellState.isLoaded) {
-      migrateShellStateFiles();
-    } else {
-      // Wait for ShellState to be ready
-      Qt.callLater(() => {
-                     if (typeof ShellState !== 'undefined' && ShellState.isLoaded) {
-                       migrateShellStateFiles();
-                     }
-                   });
     }
   }
 
+  // -----------------------------------------------------
+  function buildStateSnapshot() {
+    try {
+      const settingsData = QtObj2JS.qtObjectToPlainObject(adapter);
+      const shellStateData = ShellState?.data ? QtObj2JS.qtObjectToPlainObject(ShellState.data) || {} : {};
+
+      return {
+        settings: settingsData,
+        state: {
+          doNotDisturb: NotificationService.doNotDisturb,
+          noctaliaPerformanceMode: PowerProfileService.noctaliaPerformanceMode,
+          barVisible: BarService.isVisible,
+          display: shellStateData.display || {},
+          wallpapers: shellStateData.wallpapers || {},
+          notificationsState: shellStateData.notificationsState || {},
+          changelogState: shellStateData.changelogState || {},
+          colorSchemesList: shellStateData.colorSchemesList || {}
+        }
+      };
+    } catch (error) {
+      Logger.e("Settings", "Failed to build state snapshot:", error);
+      return null;
+    }
+  }
+
+  // -----------------------------------------------------
+  // --- TO BE REMOVED
   // -----------------------------------------------------
   // Migrate old cache files to ShellState
   function migrateShellStateFiles() {
@@ -831,6 +885,7 @@ Singleton {
     migrateWallpaperPaths();
   }
 
+  // -----------------------------------------------------
   function migrateDisplayFile() {
     // Check if ShellState already has display data
     const cached = ShellState.getDisplay();
@@ -864,6 +919,7 @@ Singleton {
     `, root, "displayMigrationView");
   }
 
+  // -----------------------------------------------------
   function migrateNotificationsStateFile() {
     // Check if ShellState already has notifications state
     const cached = ShellState.getNotificationsState();
@@ -1010,40 +1066,5 @@ Singleton {
         Logger.i("Settings", "Migrated wallpaper paths from Settings to ShellState");
       }
     }
-  }
-
-  // -----------------------------------------------------
-  function upgradeWidget(widget) {
-    // Backup the widget definition before altering
-    const widgetBefore = JSON.stringify(widget);
-
-    // Get all existing custom settings keys
-    const keys = Object.keys(BarWidgetRegistry.widgetMetadata[widget.id]);
-
-    // Delete deprecated user settings from the wiget
-    for (const k of Object.keys(widget)) {
-      if (k === "id" || k === "allowUserSettings") {
-        continue;
-      }
-      if (!keys.includes(k)) {
-        delete widget[k];
-      }
-    }
-
-    // Inject missing default setting (metaData) from BarWidgetRegistry
-    for (var i = 0; i < keys.length; i++) {
-      const k = keys[i];
-      if (k === "id" || k === "allowUserSettings") {
-        continue;
-      }
-
-      if (widget[k] === undefined) {
-        widget[k] = BarWidgetRegistry.widgetMetadata[widget.id][k];
-      }
-    }
-
-    // Compare settings, to detect if something has been upgraded
-    const widgetAfter = JSON.stringify(widget);
-    return (widgetAfter !== widgetBefore);
   }
 }

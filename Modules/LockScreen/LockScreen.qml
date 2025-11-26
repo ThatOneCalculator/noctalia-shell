@@ -301,10 +301,11 @@ Loader {
                     }
                   }
 
-                  NImageCircled {
+                  NImageRounded {
                     anchors.centerIn: parent
                     width: 66
                     height: 66
+                    radius: width * 0.5
                     imagePath: Settings.preprocessPath(Settings.data.general.avatarImage)
                     fallbackIcon: "person"
 
@@ -344,14 +345,14 @@ Loader {
                       var lang = I18n.locale.name.split("_")[0];
                       var formats = {
                         "de": "dddd, d. MMMM",
+                        "en": "dddd, MMMM d",
                         "es": "dddd, d 'de' MMMM",
                         "fr": "dddd d MMMM",
+                        "nl": "dddd d MMMM",
                         "pt": "dddd, d 'de' MMMM",
-                        "zh": "yyyy年M月d日 dddd",
-                        "uk": "dddd, d MMMM",
-                        "tr": "dddd, d MMMM"
+                        "zh": "yyyy年M月d日 dddd"
                       };
-                      return I18n.locale.toString(Time.now, formats[lang] || "dddd, MMMM d");
+                      return I18n.locale.toString(Time.now, formats[lang] || "dddd, d MMMM");
                     }
                     pointSize: Style.fontSizeXL
                     font.weight: Font.Medium
@@ -525,7 +526,7 @@ Loader {
                 }
                 Text {
                   id: hibernateText
-                  text: I18n.tr("session-menu.hibernate")
+                  text: Settings.data.general.showHibernateOnLockScreen ? I18n.tr("session-menu.hibernate") : ""
                   font.pointSize: buttonRowTextMeasurer.fontSize
                   font.weight: Font.Medium
                 }
@@ -548,10 +549,12 @@ Loader {
               }
 
               // Calculate minimum width based on button requirements
-              // Button row needs: margins + 5 buttons + 4 spacings + margins
+              // Button row needs: margins + buttons (4 or 5 depending on hibernate visibility) + spacings + margins
               // Plus ColumnLayout margins (14 on each side = 28 total)
               // Add extra buffer to ensure password input has proper padding
-              property real minButtonRowWidth: buttonRowTextMeasurer.minButtonWidth > 0 ? (5 * buttonRowTextMeasurer.minButtonWidth) + 40 + (2 * Style.marginM) + 28 + (2 * Style.marginM) : 750
+              property int buttonCount: Settings.data.general.showHibernateOnLockScreen ? 5 : 4
+              property int spacingCount: buttonCount - 1
+              property real minButtonRowWidth: buttonRowTextMeasurer.minButtonWidth > 0 ? (buttonCount * buttonRowTextMeasurer.minButtonWidth) + (spacingCount * 10) + 40 + (2 * Style.marginM) + 28 + (2 * Style.marginM) : 750
               width: Math.max(750, minButtonRowWidth)
 
               ColumnLayout {
@@ -629,9 +632,10 @@ Loader {
                         color: Color.transparent
                         clip: true
 
-                        NImageCircled {
+                        NImageRounded {
                           anchors.fill: parent
                           anchors.margins: 2
+                          radius: width * 0.5
                           imagePath: MediaService.trackArtUrl
                           fallbackIcon: "disc"
                           fallbackIconSize: Style.fontSizeM
@@ -750,7 +754,7 @@ Loader {
                     }
                   }
 
-                  // 3-day forecast
+                  // Forecast
                   RowLayout {
                     visible: Settings.data.location.weatherEnabled && LocationService.data.weather !== null
                     Layout.preferredWidth: 260
@@ -758,7 +762,7 @@ Loader {
                     spacing: 4
 
                     Repeater {
-                      model: 3
+                      model: MediaService.currentPlayer && MediaService.canPlay ? 3 : 4
                       delegate: ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 3
@@ -805,8 +809,6 @@ Loader {
 
                   Item {
                     Layout.fillWidth: true
-                    visible: !(Settings.data.location.weatherEnabled && LocationService.data.weather !== null)
-                    Layout.preferredWidth: visible ? 1 : 0
                   }
 
                   // Battery and Keyboard Layout (full mode only)
@@ -1022,6 +1024,7 @@ Loader {
                         id: eyeButtonArea
                         anchors.fill: parent
                         hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
                         onClicked: parent.parent.passwordVisible = !parent.parent.passwordVisible
                       }
 
@@ -1058,6 +1061,7 @@ Loader {
                         id: submitButtonArea
                         anchors.fill: parent
                         hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
                         onClicked: lockContext.tryUnlock()
                       }
                     }
@@ -1116,6 +1120,7 @@ Loader {
                       id: logoutButtonArea
                       anchors.fill: parent
                       hoverEnabled: true
+                      cursorShape: Qt.PointingHandCursor
                       onClicked: CompositorService.logout()
                     }
 
@@ -1165,6 +1170,7 @@ Loader {
                       id: suspendButtonArea
                       anchors.fill: parent
                       hoverEnabled: true
+                      cursorShape: Qt.PointingHandCursor
                       onClicked: CompositorService.suspend()
                     }
 
@@ -1191,6 +1197,7 @@ Loader {
                     color: hibernateButtonArea.containsMouse ? Color.mHover : "transparent"
                     border.color: Color.mOutline
                     border.width: 1
+                    visible: Settings.data.general.showHibernateOnLockScreen
 
                     RowLayout {
                       anchors.centerIn: parent
@@ -1214,6 +1221,7 @@ Loader {
                       id: hibernateButtonArea
                       anchors.fill: parent
                       hoverEnabled: true
+                      cursorShape: Qt.PointingHandCursor
                       onClicked: CompositorService.hibernate()
                     }
 
@@ -1263,6 +1271,7 @@ Loader {
                       id: rebootButtonArea
                       anchors.fill: parent
                       hoverEnabled: true
+                      cursorShape: Qt.PointingHandCursor
                       onClicked: CompositorService.reboot()
                     }
 
@@ -1312,6 +1321,7 @@ Loader {
                       id: shutdownButtonArea
                       anchors.fill: parent
                       hoverEnabled: true
+                      cursorShape: Qt.PointingHandCursor
                       onClicked: CompositorService.shutdown()
                     }
 

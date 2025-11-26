@@ -227,6 +227,10 @@
           "description": "Exibir artista - título em vez de título - artista.",
           "label": "Mostrar o artista primeiro"
         },
+        "show-progress-ring": {
+          "description": "Exibir um indicador de progresso circular mostrando o progresso da faixa.",
+          "label": "Mostrar anel de progresso"
+        },
         "show-visualizer": {
           "description": "Exibir um visualizador de áudio quando música está sendo reproduzida.",
           "label": "Mostrar visualizador"
@@ -369,13 +373,13 @@
           "description": "Número de caracteres a exibir dos nomes de espaços de trabalho (1-10).",
           "label": "Número de caracteres"
         },
-        "hide-unoccupied": {
-          "description": "Não exibir áreas de trabalho sem janelas.",
-          "label": "Ocultar desocupados"
-        },
         "follow-focused-screen": {
           "description": "Exibir áreas de trabalho da tela atualmente em foco, em vez da tela onde a barra está localizada.",
           "label": "Seguir Tela em Foco"
+        },
+        "hide-unoccupied": {
+          "description": "Não exibir áreas de trabalho sem janelas.",
+          "label": "Ocultar desocupados"
         },
         "label-mode": {
           "description": "Escolher como os rótulos de espaço de trabalho são exibidos.",
@@ -385,8 +389,8 @@
     }
   },
   "battery": {
+    "battery-level": "Nível da bateria",
     "brightness": "Brilho",
-    "charge-level": "Nível de carga",
     "charging": "Carregando.",
     "charging-rate": "Taxa de carregamento: {rate} W.",
     "discharging": "Descarregando.",
@@ -513,6 +517,15 @@
       "description": "Suas notificações aparecerão aqui assim que chegarem.",
       "no-notifications": "Nenhuma notificação",
       "title": "Notificações"
+    },
+    "time": {
+      "diffD": "há 1 dia",
+      "diffDD": "há {diff} dias",
+      "diffH": "há 1 hora",
+      "diffHH": "há {diff} horas",
+      "diffM": "há 1 minuto",
+      "diffMM": "há {diff} minutos",
+      "now": "agora"
     }
   },
   "options": {
@@ -721,7 +734,7 @@
         "enabled": "Notificações"
       },
       "tooltip": {
-        "action": "Clique esquerdo: Abrir histórico de notificações\nClique direito: Alternar Não perturbar"
+        "action": "Clique esquerdo: Abrir histórico de notificações\nClique direito: Abrir menu de contexto"
       }
     },
     "powerProfile": {
@@ -1036,6 +1049,10 @@
           }
         },
         "programs": {
+          "cava": {
+            "description": "Escreva em {filepath}.",
+            "description-missing": "Requer que o {app} esteja instalado."
+          },
           "code": {
             "description": "Escreva em {filepath}. O tema Hyprluna precisa ser instalado e ativado manualmente.",
             "description-missing": "Nenhum cliente Code detectado. Instale VSCode ou VSCodium."
@@ -1429,6 +1446,10 @@
           "description": "Usar um prefixo personalizado para inicializar aplicativos em vez do método padrão.",
           "label": "Habilitar prefixo de inicialização personalizado"
         },
+        "grid-view": {
+          "description": "Exibir itens em uma grade em vez de uma lista.",
+          "label": "Visualização em grade"
+        },
         "position": {
           "description": "Escolha onde o painel do lançador aparece.",
           "label": "Posição"
@@ -1654,7 +1675,29 @@
           "label": "Geral"
         }
       },
-      "title": "Exibição na tela"
+      "title": "Exibição na tela",
+      "types": {
+        "brightness": {
+          "description": "Mostrar o OSD quando o brilho da tela mudar.",
+          "label": "Brilho"
+        },
+        "input-volume": {
+          "description": "Mostrar o OSD quando o volume do microfone mudar.",
+          "label": "Volume de entrada"
+        },
+        "lockkey": {
+          "description": "Mostrar o OSD quando Caps Lock, Num Lock ou Scroll Lock forem alternadas.",
+          "label": "Teclas de bloqueio"
+        },
+        "section": {
+          "description": "Selecione os eventos que acionam o OSD. Se nenhum evento for selecionado, todos os eventos disponíveis acionarão o OSD.",
+          "label": "Eventos de disparo OSD"
+        },
+        "volume": {
+          "description": "Mostrar o OSD quando o volume de saída de áudio mudar.",
+          "label": "Volume de saída"
+        }
+      }
     },
     "screen-recorder": {
       "audio": {
@@ -2143,8 +2186,8 @@
     "noctalia-performance-disabled": "O modo de desempenho Noctalia está desativado.\nClique esquerdo para ativar.",
     "noctalia-performance-enabled": "O modo de desempenho Noctalia está ativado.\nClique esquerdo para desativar.",
     "open-control-center": "Abrir central de controle",
-    "open-notification-history-disable-dnd": "Abrir histórico de notificações\nClique direito para desativar \"Não perturbe\".",
-    "open-notification-history-enable-dnd": "Abrir histórico de notificações\nClique direito para ativar \"Não perturbe\".",
+    "open-notification-history-disable-dnd": "Abrir histórico de notificações\nClique direito: Abrir menu de contexto",
+    "open-notification-history-enable-dnd": "Abrir histórico de notificações\nClique direito: Abrir menu de contexto",
     "open-settings": "Abrir configurações",
     "open-tray-dropdown": "Abrir menu suspenso da bandeja",
     "open-wallpaper-selector": "Abrir seletor de papel de parede",

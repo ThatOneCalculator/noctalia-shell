@@ -227,6 +227,10 @@
           "description": "Toon artiest - titel in plaats van titel - artiest.",
           "label": "Toon eerst de artiest"
         },
+        "show-progress-ring": {
+          "description": "Toon een circulaire voortgangsindicator die het bestandsspoor voortgang toont.",
+          "label": "Voortgangscirkel tonen"
+        },
         "show-visualizer": {
           "description": "Toon een audiovisualizer wanneer muziek wordt afgespeeld.",
           "label": "Visualizer tonen"
@@ -369,13 +373,13 @@
           "description": "Aantal tekens dat wordt weergegeven van werkruimtenamen (1-10).",
           "label": "Aantal tekens"
         },
-        "hide-unoccupied": {
-          "description": "Werkruimten zonder vensters niet weergeven.",
-          "label": "Ongebruikte verbergen"
-        },
         "follow-focused-screen": {
           "description": "Werkruimten weergeven van het momenteel gefocuste scherm, in plaats van het scherm waar de balk zich bevindt.",
           "label": "Gefocust Scherm Volgen"
+        },
+        "hide-unoccupied": {
+          "description": "Werkruimten zonder vensters niet weergeven.",
+          "label": "Ongebruikte verbergen"
         },
         "label-mode": {
           "description": "Kies hoe labels van werkruimten worden weergegeven.",
@@ -385,8 +389,8 @@
     }
   },
   "battery": {
+    "battery-level": "Batterijniveau",
     "brightness": "Helderheid",
-    "charge-level": "Laadniveau",
     "charging": "Opladen.",
     "charging-rate": "Laadsnelheid: {rate} W.",
     "discharging": "Ontladen.",
@@ -513,6 +517,15 @@
       "description": "Je meldingen verschijnen hier zodra ze binnenkomen.",
       "no-notifications": "Geen meldingen",
       "title": "Meldingen"
+    },
+    "time": {
+      "diffD": "1 dag geleden",
+      "diffDD": "{diff} dagen geleden",
+      "diffH": "1 uur geleden",
+      "diffHH": "{diff} uur geleden",
+      "diffM": "1 minuut geleden",
+      "diffMM": "{diff} minuten geleden",
+      "now": "nu"
     }
   },
   "options": {
@@ -721,7 +734,7 @@
         "enabled": "Meldingen"
       },
       "tooltip": {
-        "action": "Linker muisknop: meldingsgeschiedenis openen\nRechter muisknop: 'Niet storen' schakelen"
+        "action": "Linker muisknop: meldingsgeschiedenis openen\nRechter muisknop: contextmenu openen"
       }
     },
     "powerProfile": {
@@ -1036,6 +1049,10 @@
           }
         },
         "programs": {
+          "cava": {
+            "description": "Schrijf {filepath}.",
+            "description-missing": "Vereist dat {app} is geïnstalleerd."
+          },
           "code": {
             "description": "Schrijf {filepath}. Het Hyprluna-thema moet handmatig worden geïnstalleerd en geactiveerd.",
             "description-missing": "Geen Code-client gedetecteerd. Installeer VSCode of VSCodium."
@@ -1429,6 +1446,10 @@
           "description": "Gebruik een aangepaste prefix om applicaties te starten in plaats van de standaardmethode.",
           "label": "Aangepaste startprefix inschakelen"
         },
+        "grid-view": {
+          "description": "Items in een raster weergeven in plaats van een lijst.",
+          "label": "Rasterweergave"
+        },
         "position": {
           "description": "Kies waar het launcher-paneel verschijnt.",
           "label": "Positie"
@@ -1654,7 +1675,29 @@
           "label": "Algemeen"
         }
       },
-      "title": "On-screenweergave"
+      "title": "On-screenweergave",
+      "types": {
+        "brightness": {
+          "description": "Toon het OSD wanneer de schermhelderheid verandert.",
+          "label": "Helderheid"
+        },
+        "input-volume": {
+          "description": "Toon het OSD wanneer het microfoonvolume verandert.",
+          "label": "Invoervolume"
+        },
+        "lockkey": {
+          "description": "Toon het OSD wanneer Caps Lock, Num Lock of Scroll Lock wordt omgeschakeld.",
+          "label": "Vergrendeltoetsen"
+        },
+        "section": {
+          "description": "Selecteer de gebeurtenissen die de OSD activeren. Als er geen gebeurtenissen zijn geselecteerd, activeren alle beschikbare gebeurtenissen de OSD.",
+          "label": "OSD triggergebeurtenissen"
+        },
+        "volume": {
+          "description": "Toon het OSD wanneer het uitvoervolume verandert.",
+          "label": "Uitvoervolume"
+        }
+      }
     },
     "screen-recorder": {
       "audio": {
@@ -2143,8 +2186,8 @@
     "noctalia-performance-disabled": "Noctalia-prestatiemodus is uitgeschakeld.\nLinks klikken om in te schakelen.",
     "noctalia-performance-enabled": "Noctalia-prestatiemodus is ingeschakeld.\nLinks klikken om uit te schakelen.",
     "open-control-center": "Bedieningscentrum openen",
-    "open-notification-history-disable-dnd": "Meldingsgeschiedenis openen\nKlik met rechts om \"Niet storen\" uit te schakelen.",
-    "open-notification-history-enable-dnd": "Meldingsgeschiedenis openen\nKlik met rechts om \"Niet storen\" in te schakelen.",
+    "open-notification-history-disable-dnd": "Meldingsgeschiedenis openen\nRechter muisknop: contextmenu openen",
+    "open-notification-history-enable-dnd": "Meldingsgeschiedenis openen\nRechter muisknop: contextmenu openen",
     "open-settings": "Instellingen openen",
     "open-tray-dropdown": "Systeemvakmenu openen",
     "open-wallpaper-selector": "Achtergrondkiezer openen",

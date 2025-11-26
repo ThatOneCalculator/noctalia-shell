@@ -109,14 +109,14 @@ Item {
     }
     autoHide: false
     forceOpen: !isBarVertical && root.displayMode === "alwaysShow"
-    forceClose: isBarVertical || root.displayMode === "alwaysHide" || !pill.text
+    forceClose: isBarVertical || root.displayMode === "alwaysHide"
     onClicked: PanelService.getPanel("wifiPanel", screen)?.toggle(this)
     onRightClicked: {
       var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
       if (popupMenuWindow) {
+        popupMenuWindow.showContextMenu(contextMenu);
         const pos = BarService.getContextMenuPosition(pill, contextMenu.implicitWidth, contextMenu.implicitHeight);
         contextMenu.openAtItem(pill, pos.x, pos.y);
-        popupMenuWindow.showContextMenu(contextMenu);
       }
     }
     tooltipText: {

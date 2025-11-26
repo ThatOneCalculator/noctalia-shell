@@ -47,6 +47,8 @@ Item {
   function getIcon() {
     var monitor = getMonitor();
     var brightness = monitor ? monitor.brightness : 0;
+    if (brightness <= 0.001)
+      return "sun-off";
     return brightness <= 0.5 ? "brightness-low" : "brightness-high";
   }
 
@@ -148,9 +150,9 @@ Item {
     onRightClicked: {
       var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
       if (popupMenuWindow) {
+        popupMenuWindow.showContextMenu(contextMenu);
         const pos = BarService.getContextMenuPosition(pill, contextMenu.implicitWidth, contextMenu.implicitHeight);
         contextMenu.openAtItem(pill, pos.x, pos.y);
-        popupMenuWindow.showContextMenu(contextMenu);
       }
     }
   }

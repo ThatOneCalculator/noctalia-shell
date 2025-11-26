@@ -197,10 +197,11 @@ SmartPanel {
                   spacing: Style.marginM
 
                   // Icon
-                  NImageCircled {
+                  NImageRounded {
+                    anchors.verticalCenter: parent.verticalCenter
                     width: Math.round(40 * Style.uiScaleRatio)
                     height: Math.round(40 * Style.uiScaleRatio)
-                    anchors.verticalCenter: parent.verticalCenter
+                    radius: width * 0.5
                     imagePath: model.cachedImage || model.originalImage || ""
                     borderColor: Color.transparent
                     borderWidth: 0
@@ -238,13 +239,16 @@ SmartPanel {
                       NText {
                         text: model.appName || "Unknown App"
                         pointSize: Style.fontSizeXS
+                        font.weight: Style.fontWeightBold
                         color: Color.mSecondary
                       }
 
                       NText {
-                        text: Time.formatRelativeTime(model.timestamp)
-                        pointSize: Style.fontSizeXS
-                        color: Color.mSecondary
+                        textFormat: Text.PlainText
+                        text: " " + Time.formatRelativeTime(model.timestamp)
+                        pointSize: Style.fontSizeXXS
+                        color: Color.mOnSurfaceVariant
+                        anchors.bottom: parent.bottom
                       }
                     }
 

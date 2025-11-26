@@ -332,22 +332,17 @@ ColumnLayout {
     Layout.fillWidth: true
     visible: !Settings.data.colorSchemes.useWallpaperColors
 
-    RowLayout {
+    NHeader {
+      label: I18n.tr("settings.color-scheme.predefined.section.label")
+      description: I18n.tr("settings.color-scheme.predefined.section.description")
       Layout.fillWidth: true
+    }
 
-      NHeader {
-        label: I18n.tr("settings.color-scheme.predefined.section.label")
-        description: I18n.tr("settings.color-scheme.predefined.section.description")
-        Layout.fillWidth: true
-      }
-
-      NButton {
-        text: I18n.tr("settings.color-scheme.download.button")
-        icon: "download"
-        onClicked: {
-          root.openDownloadPopup();
-        }
-      }
+    NButton {
+      text: I18n.tr("settings.color-scheme.download.button")
+      icon: "download"
+      onClicked: root.openDownloadPopup()
+      Layout.alignment: Qt.AlignRight
     }
 
     // Download popup
@@ -849,6 +844,24 @@ ColumnLayout {
         onToggled: checked => {
                      if (ProgramCheckerService.telegramAvailable) {
                        Settings.data.templates.telegram = checked;
+                       AppThemeService.generate();
+                     }
+                   }
+      }
+
+      NCheckbox {
+        label: "Cava"
+        description: ProgramCheckerService.cavaAvailable ? I18n.tr("settings.color-scheme.templates.programs.cava.description", {
+                                                                     "filepath": "~/.config/cava/themes/noctalia"
+                                                                   }) : I18n.tr("settings.color-scheme.templates.programs.cava.description-missing", {
+                                                                                  "app": "cava"
+                                                                                })
+        checked: Settings.data.templates.cava
+        enabled: ProgramCheckerService.cavaAvailable
+        opacity: ProgramCheckerService.cavaAvailable ? 1.0 : 0.6
+        onToggled: checked => {
+                     if (ProgramCheckerService.cavaAvailable) {
+                       Settings.data.templates.cava = checked;
                        AppThemeService.generate();
                      }
                    }
