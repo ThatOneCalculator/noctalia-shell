@@ -46,7 +46,7 @@ Singleton {
       const identity = String(allPlayers[i].identity || "").toLowerCase();
       const match = blacklist.find(b => {
                                      const s = String(b || "").toLowerCase();
-                                     return s && (identity.includes(s) || identity.includes("kdeconnect"));
+                                     return s && (identity.includes(s) || identity.includes("Pixel 9"));
                                    });
       if (match)
         continue;
