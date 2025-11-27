@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 import "../Helpers/QtObj2JS.js" as QtObj2JS
 import qs.Commons
+import qs.Modules.OSD
 import qs.Services.Power
 import qs.Services.System
 import qs.Services.UI
@@ -257,6 +258,28 @@ Singleton {
       property int firstDayOfWeek: -1 // -1 = auto (use locale), 0 = Sunday, 1 = Monday, 6 = Saturday
     }
 
+    // calendar
+    property JsonObject calendar: JsonObject {
+      property list<var> cards: [
+        {
+          "id": "banner-card",
+          "enabled": true
+        },
+        {
+          "id": "calendar-card",
+          "enabled": true
+        },
+        {
+          "id": "timer-card",
+          "enabled": true
+        },
+        {
+          "id": "weather-card",
+          "enabled": true
+        }
+      ]
+    }
+
     // screen recorder
     property JsonObject screenRecorder: JsonObject {
       property string directory: ""
@@ -387,6 +410,11 @@ Singleton {
       property int memCriticalThreshold: 90
       property int diskWarningThreshold: 80
       property int diskCriticalThreshold: 90
+      property int cpuPollingInterval: 3000
+      property int tempPollingInterval: 3000
+      property int memPollingInterval: 3000
+      property int diskPollingInterval: 3000
+      property int networkPollingInterval: 3000
       property bool useCustomColors: false
       property string warningColor: ""
       property string criticalColor: ""
@@ -467,7 +495,7 @@ Singleton {
       property int autoHideMs: 2000
       property bool overlayLayer: true
       property real backgroundOpacity: 1.0
-      property list<var> enabledTypes: []
+      property list<var> enabledTypes: [OSD.Type.Volume, OSD.Type.InputVolume, OSD.Type.Brightness]
       property list<string> monitors: []
     }
 

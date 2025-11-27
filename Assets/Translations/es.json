@@ -271,9 +271,6 @@
         }
       },
       "system-monitor": {
-        "cpu-critical-threshold": {
-          "label": "CPU Usage (Critical)"
-        },
         "cpu-temperature": {
           "description": "Mostrar lecturas de temperatura de CPU si están disponibles.",
           "label": "Temperatura de la CPU"
@@ -282,24 +279,9 @@
           "description": "Mostrar el porcentaje actual de uso de CPU.",
           "label": "Uso de CPU"
         },
-        "cpu-warning-threshold": {
-          "label": "CPU Usage (Warning)"
-        },
-        "disk-critical-threshold": {
-          "label": "Storage Space (Critical)"
-        },
         "disk-path": {
           "description": "Seleccione qué punto de montaje de disco desea supervisar.",
           "label": "Ruta del disco"
-        },
-        "disk-warning-threshold": {
-          "label": "Storage Space (Warning)"
-        },
-        "mem-critical-threshold": {
-          "label": "Memory Usage (Critical)"
-        },
-        "mem-warning-threshold": {
-          "label": "Memory Usage (Warning)"
         },
         "memory-percentage": {
           "description": "Mostrar el uso de memoria como porcentaje en lugar de valores absolutos.",
@@ -316,16 +298,6 @@
         "storage-usage": {
           "description": "Mostrar información del uso del espacio en disco.",
           "label": "Uso de almacenamiento"
-        },
-        "temp-critical-threshold": {
-          "label": "CPU Temperature (Critical)"
-        },
-        "temp-warning-threshold": {
-          "label": "CPU Temperature (Warning)"
-        },
-        "thresholds": {
-          "description": "Establece umbrales para alertas de métricas del sistema. Resalta cuando se superan.",
-          "header": "Configuración de Umbrales"
         }
       },
       "taskbar": {
@@ -412,6 +384,7 @@
       "blocked": "Bloqueado",
       "connect": "Conectar",
       "connected-devices": "Dispositivos conectados",
+      "connecting": "Conectando...",
       "disabled": "Bluetooth está desactivado",
       "disconnect": "Desconectar",
       "enable-message": "Activa Bluetooth para ver los dispositivos disponibles.",
@@ -425,6 +398,19 @@
   "calendar": {
     "panel": {
       "week": "Semana"
+    },
+    "timer": {
+      "countdown": "Cuenta regresiva",
+      "duration": "Duración",
+      "hours": "h",
+      "minutes": "m",
+      "pause": "Pausa",
+      "reset": "Restablecer",
+      "seconds": "s",
+      "start": "Comenzar",
+      "stopwatch": "Cronómetro",
+      "timer": "Temporizador",
+      "title": "Temporizador"
     },
     "weather": {
       "loading": "Cargando el clima…"
@@ -1474,6 +1460,20 @@
       "title": "Lanzador"
     },
     "location": {
+      "calendar": {
+        "banner": {
+          "label": "Encabezado"
+        },
+        "calendar": {
+          "label": "Calendario"
+        },
+        "cards": {
+          "section": {
+            "description": "Organizar y activar/desactivar tarjetas en el panel del calendario.",
+            "label": "Tarjetas de calendario"
+          }
+        }
+      },
       "date-time": {
         "12hour-format": {
           "description": "Muestra la hora en formato de 12 horas en la pantalla de bloqueo y el calendario. El reloj de la barra tiene su propia configuración.",
@@ -1832,6 +1832,9 @@
       "memory-section": {
         "label": "Uso de memoria"
       },
+      "polling-interval": {
+        "label": "Intervalo de sondeo"
+      },
       "temp-critical-threshold": {
         "label": "Umbral crítico"
       },
@@ -1842,8 +1845,11 @@
         "label": "Temperatura de la CPU"
       },
       "thresholds-section": {
-        "description": "Establece umbrales para métricas del sistema; los valores por encima se resaltarán.",
+        "description": "Ajusta los umbrales de advertencia/crítico y los intervalos de sondeo para cada métrica del sistema.",
         "label": "Umbrales"
+      },
+      "network-section": {
+        "label": "Red"
       },
       "title": "Monitor del sistema",
       "use-custom-highlight-colors": {
@@ -2073,6 +2079,11 @@
     "clipboard": {
       "unavailable": "Historial del portapapeles no disponible",
       "unavailable-desc": "La aplicación 'cliphist' no está instalada. Por favor, instálala para usar las funciones de historial del portapapeles."
+    },
+    "dark-mode": {
+      "dark-mode": "Modo oscuro",
+      "enabled": "Activado",
+      "light-mode": "Modo claro"
     },
     "do-not-disturb": {
       "disabled": "'No molestar' desactivado",

@@ -271,9 +271,6 @@
         }
       },
       "system-monitor": {
-        "cpu-critical-threshold": {
-          "label": "CPU Usage (Critical)"
-        },
         "cpu-temperature": {
           "description": "Mostrar leituras de temperatura da CPU se disponíveis.",
           "label": "Temperatura da CPU"
@@ -282,24 +279,9 @@
           "description": "Exibir o percentual atual de uso da CPU.",
           "label": "Uso da CPU"
         },
-        "cpu-warning-threshold": {
-          "label": "CPU Usage (Warning)"
-        },
-        "disk-critical-threshold": {
-          "label": "Storage Space (Critical)"
-        },
         "disk-path": {
           "description": "Selecione qual ponto de montagem de disco monitorar.",
           "label": "Caminho do disco"
-        },
-        "disk-warning-threshold": {
-          "label": "Storage Space (Warning)"
-        },
-        "mem-critical-threshold": {
-          "label": "Memory Usage (Critical)"
-        },
-        "mem-warning-threshold": {
-          "label": "Memory Usage (Warning)"
         },
         "memory-percentage": {
           "description": "Mostrar o uso de memória como percentual em vez de valores absolutos.",
@@ -316,16 +298,6 @@
         "storage-usage": {
           "description": "Mostrar informações de uso do espaço em disco.",
           "label": "Uso de armazenamento"
-        },
-        "temp-critical-threshold": {
-          "label": "CPU Temperature (Critical)"
-        },
-        "temp-warning-threshold": {
-          "label": "CPU Temperature (Warning)"
-        },
-        "thresholds": {
-          "description": "Estabelece limites para alertas de métricas do sistema. Destaca quando superados.",
-          "header": "Configuração de Limiares"
         }
       },
       "taskbar": {
@@ -412,6 +384,7 @@
       "blocked": "Bloqueado",
       "connect": "Conectar",
       "connected-devices": "Dispositivos conectados",
+      "connecting": "Conectando...",
       "disabled": "O Bluetooth está desativado",
       "disconnect": "Desconectar",
       "enable-message": "Ative o Bluetooth para ver os dispositivos disponíveis.",
@@ -425,6 +398,19 @@
   "calendar": {
     "panel": {
       "week": "Semana"
+    },
+    "timer": {
+      "countdown": "Contagem regressiva",
+      "duration": "Duração",
+      "hours": "h",
+      "minutes": "m",
+      "pause": "Pausar",
+      "reset": "Reiniciar",
+      "seconds": "s",
+      "start": "Começar",
+      "stopwatch": "Cronômetro",
+      "timer": "Temporizador",
+      "title": "Temporizador"
     },
     "weather": {
       "loading": "Carregando o clima…"
@@ -1474,6 +1460,20 @@
       "title": "Lançador"
     },
     "location": {
+      "calendar": {
+        "banner": {
+          "label": "Cabeçalho"
+        },
+        "calendar": {
+          "label": "Calendário"
+        },
+        "cards": {
+          "section": {
+            "description": "Organize e ative/desative cartões no painel do calendário.",
+            "label": "Cartões de calendário"
+          }
+        }
+      },
       "date-time": {
         "12hour-format": {
           "description": "Exibe a hora no formato de 12 horas na tela de bloqueio e no calendário. O relógio da barra tem suas próprias configurações.",
@@ -1832,6 +1832,9 @@
       "memory-section": {
         "label": "Uso de memória"
       },
+      "polling-interval": {
+        "label": "Intervalo de pesquisa"
+      },
       "temp-critical-threshold": {
         "label": "Limite crítico"
       },
@@ -1842,8 +1845,11 @@
         "label": "Temperatura da CPU"
       },
       "thresholds-section": {
-        "description": "Defina limiares para métricas do sistema; valores acima serão destacados.",
+        "description": "Ajuste os limites de aviso/crítico e os intervalos de consulta para cada métrica do sistema.",
         "label": "Limiares"
+      },
+      "network-section": {
+        "label": "Rede"
       },
       "title": "Monitor do Sistema",
       "use-custom-highlight-colors": {
@@ -2073,6 +2079,11 @@
     "clipboard": {
       "unavailable": "Histórico da área de transferência indisponível",
       "unavailable-desc": "O aplicativo 'cliphist' não está instalado. Por favor, instale-o para usar os recursos do histórico da área de transferência."
+    },
+    "dark-mode": {
+      "dark-mode": "Modo escuro",
+      "enabled": "Ativado",
+      "light-mode": "Modo claro"
     },
     "do-not-disturb": {
       "disabled": "'Não perturbe' desativado",

@@ -271,9 +271,6 @@
         }
       },
       "system-monitor": {
-        "cpu-critical-threshold": {
-          "label": "CPU Usage (Critical)"
-        },
         "cpu-temperature": {
           "description": "Afficher les lectures de température du CPU si disponibles.",
           "label": "Température du CPU"
@@ -282,24 +279,9 @@
           "description": "Afficher le pourcentage d'utilisation actuel du CPU.",
           "label": "Utilisation du CPU"
         },
-        "cpu-warning-threshold": {
-          "label": "CPU Usage (Warning)"
-        },
-        "disk-critical-threshold": {
-          "label": "Storage Space (Critical)"
-        },
         "disk-path": {
           "description": "Sélectionnez le point de montage du disque à surveiller.",
           "label": "Chemin du disque"
-        },
-        "disk-warning-threshold": {
-          "label": "Storage Space (Warning)"
-        },
-        "mem-critical-threshold": {
-          "label": "Memory Usage (Critical)"
-        },
-        "mem-warning-threshold": {
-          "label": "Memory Usage (Warning)"
         },
         "memory-percentage": {
           "description": "Afficher l'utilisation de la mémoire en pourcentage au lieu de valeurs absolues.",
@@ -316,16 +298,6 @@
         "storage-usage": {
           "description": "Afficher les informations d'utilisation de l'espace disque.",
           "label": "Utilisation du stockage"
-        },
-        "temp-critical-threshold": {
-          "label": "CPU Temperature (Critical)"
-        },
-        "temp-warning-threshold": {
-          "label": "CPU Temperature (Warning)"
-        },
-        "thresholds": {
-          "description": "Configurez les seuils des indicateurs visuels. Les indicateurs d'avertissement/critique apparaissent en couleurs mises en surbrillance lorsque les valeurs dépassent ces limites.",
-          "header": "Seuils"
         }
       },
       "taskbar": {
@@ -412,11 +384,12 @@
       "blocked": "Bloqué",
       "connect": "Connecter",
       "connected-devices": "Appareils connectés",
+      "connecting": "Connexion en cours...",
       "disabled": "Le Bluetooth est désactivé",
       "disconnect": "Déconnecter",
       "enable-message": "Activez le Bluetooth pour voir les appareils disponibles.",
       "known-devices": "Appareils connus",
-      "pairing": "Appairage...",
+      "pairing": "Appairage en cours...",
       "pairing-mode": "Assurez-vous que votre appareil est en mode d'appairage.",
       "scanning": "Recherche d'appareils en cours...",
       "title": "Bluetooth"
@@ -425,6 +398,19 @@
   "calendar": {
     "panel": {
       "week": "Semaine"
+    },
+    "timer": {
+      "countdown": "Compte à rebours",
+      "duration": "Durée",
+      "hours": "h",
+      "minutes": "m",
+      "pause": "Pause",
+      "reset": "Réinitialiser",
+      "seconds": "s",
+      "start": "Commencer",
+      "stopwatch": "Chronomètre",
+      "timer": "Minuteur",
+      "title": "Minuteur"
     },
     "weather": {
       "loading": "Chargement de la météo…"
@@ -1474,6 +1460,20 @@
       "title": "Lanceur"
     },
     "location": {
+      "calendar": {
+        "banner": {
+          "label": "En-tête"
+        },
+        "calendar": {
+          "label": "Calendrier"
+        },
+        "cards": {
+          "section": {
+            "description": "Organiser et activer/désactiver les cartes dans le panneau de calendrier.",
+            "label": "Cartes de calendrier"
+          }
+        }
+      },
       "date-time": {
         "12hour-format": {
           "description": "Affiche l'heure au format 12 heures sur l'écran de verrouillage et dans le calendrier. L'horloge de la barre possède ses propres paramètres.",
@@ -1832,6 +1832,9 @@
       "memory-section": {
         "label": "Utilisation mémoire"
       },
+      "polling-interval": {
+        "label": "Intervalle d'interrogation"
+      },
       "temp-critical-threshold": {
         "label": "Seuil critique"
       },
@@ -1842,8 +1845,11 @@
         "label": "Température CPU"
       },
       "thresholds-section": {
-        "description": "Définir des seuils pour les métriques système ; les valeurs supérieures à ces seuils seront mises en évidence.",
+        "description": "Ajustez les seuils d’avertissement/critiques et les intervalles d’interrogation pour chaque métrique système.",
         "label": "Seuils"
+      },
+      "network-section": {
+        "label": "Réseau"
       },
       "title": "Moniteur système",
       "use-custom-highlight-colors": {
@@ -2073,6 +2079,11 @@
     "clipboard": {
       "unavailable": "Historique du presse-papiers indisponible",
       "unavailable-desc": "L'application 'cliphist' n'est pas installée. Veuillez l'installer pour utiliser les fonctionnalités d'historique du presse-papiers."
+    },
+    "dark-mode": {
+      "dark-mode": "Mode sombre",
+      "enabled": "Activé",
+      "light-mode": "Mode clair"
     },
     "do-not-disturb": {
       "disabled": "'Ne pas déranger' désactivé",
