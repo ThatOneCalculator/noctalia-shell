@@ -122,9 +122,8 @@ Item {
     forceOpen: isReady && (testMode || battery.isLaptopBattery) && displayMode === "alwaysShow"
     forceClose: displayMode === "alwaysHide" || !isReady || (!testMode && !battery.isLaptopBattery)
 
-    // Charging is the most important, then low battery
-    customBackgroundColor: charging ? Color.mPrimary : (isLowBattery ? Color.mError : Color.transparent)
-    customTextIconColor: charging ? Color.mOnPrimary : (isLowBattery ? Color.mOnError : Color.transparent)
+    customBackgroundColor: isLowBattery ? Color.mError : Color.transparent
+    customTextIconColor: charging ? "#f6c177" : (isLowBattery ? Color.mOnError : Color.transparent)
 
     tooltipText: {
       let lines = [];
