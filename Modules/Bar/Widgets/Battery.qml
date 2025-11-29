@@ -33,7 +33,7 @@ Item {
 
   readonly property bool isBarVertical: Settings.data.bar.position === "left" || Settings.data.bar.position === "right"
   readonly property string displayMode: widgetSettings.displayMode !== undefined ? widgetSettings.displayMode : widgetMetadata.displayMode
-  readonly property real warningThreshold: widgetSettings.warningThreshold !== undefined ? widgetSettings.warningThreshold : widgetMetadata.warningThreshold
+  readonly property real warningThreshold: Settings.data.battery.warningThreshold
   readonly property bool isLowBattery: !charging && percent <= warningThreshold
 
   // Test mode

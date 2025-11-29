@@ -49,10 +49,6 @@
         "display-mode": {
           "description": "Choose how you'd like this value to appear.",
           "label": "Display mode"
-        },
-        "low-battery-threshold": {
-          "description": "Show a warning when battery falls below this percentage.",
-          "label": "Low battery warning threshold"
         }
       },
       "brightness": {
@@ -941,6 +937,14 @@
           "description": "Drag and drop widgets to reorder them. Badges indicate usage: [L]eft, [C]enter, [R]ight.",
           "label": "Widgets positioning"
         }
+      }
+    },
+    "battery": {
+      "title": "Battery",
+      "description": "Adjust battery settings",
+      "low-battery-threshold": {
+        "title": "Low battery warning threshold",
+        "description": "Show a warning when battery falls below this percentage."
       }
     },
     "color-scheme": {

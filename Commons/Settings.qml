@@ -420,6 +420,11 @@ Singleton {
       property string criticalColor: ""
     }
 
+    // battery
+    property JsonObject battery: JsonObject {
+      property int warningThreshold: 20
+    }
+
     // dock
     property JsonObject dock: JsonObject {
       property bool enabled: true

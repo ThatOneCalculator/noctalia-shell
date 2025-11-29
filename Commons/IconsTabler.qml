@@ -107,6 +107,7 @@ Singleton {
     "brightness-high": "brightness-up-filled",
     "settings-general": "adjustments-horizontal",
     "settings-bar": "crop-16-9",
+    "settings-battery": "battery-4",
     "settings-user-interface": "layout-board",
     "settings-control-center": "adjustments-horizontal",
     "settings-dock": "layout-bottombar",
