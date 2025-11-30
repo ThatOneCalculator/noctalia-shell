@@ -530,7 +530,7 @@ Item {
           radius: width * 0.5
           color: {
             if (model.isFocused)
-              return Color.mPrimary;
+              return "#c4a7e7";
             if (model.isUrgent)
               return Color.mError;
             if (model.isOccupied)
