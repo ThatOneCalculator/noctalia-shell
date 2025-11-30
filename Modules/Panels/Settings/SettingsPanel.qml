@@ -64,6 +64,7 @@ SmartPanel {
     About,
     Audio,
     Bar,
+    Battery,
     ColorScheme,
     LockScreen,
     ControlCenter,
@@ -171,6 +172,10 @@ SmartPanel {
   Component {
     id: systemMonitorTab
     SystemMonitorTab {}
+  }
+  Component {
+    id: batteryTab
+    BatteryTab {}
   }
 
   // Order *DOES* matter
@@ -283,6 +288,12 @@ SmartPanel {
             "label": "settings.system-monitor.title",
             "icon": "settings-system-monitor",
             "source": systemMonitorTab
+          },
+          {
+            "id": SettingsPanel.Tab.Battery,
+            "label": "settings.battery.title",
+            "icon": "settings-battery",
+            "source": batteryTab
           },
           {
             "id": SettingsPanel.Tab.Hooks,

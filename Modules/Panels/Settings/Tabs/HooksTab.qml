@@ -77,6 +77,94 @@ ColumnLayout {
       Layout.fillWidth: true
     }
 
+    // Battery Dropped Threshold Hook Section
+    NInputAction {
+      id: batteryDroppedThresholdHookInput
+      label: I18n.tr("settings.hooks.battery-dropped-threshold.label")
+      description: I18n.tr("settings.hooks.battery-dropped-threshold.description")
+      placeholderText: I18n.tr("settings.hooks.battery-dropped-threshold.placeholder")
+      text: Settings.data.hooks.batteryDroppedThreshold
+      onEditingFinished: {
+        Settings.data.hooks.batteryDroppedThreshold = batteryDroppedThresholdHookInput.text;
+      }
+      onActionClicked: {
+        if (batteryDroppedThresholdHookInput.text) {
+          HooksService.executeBatteryDroppedThresholdHook(Settings.data.battery.warningThreshold, false);
+        }
+      }
+      Layout.fillWidth: true
+    }
+
+    NDivider {
+      Layout.fillWidth: true
+    }
+
+    // Battery Surpassed Threshold Hook Section
+    NInputAction {
+      id: batterySurpassedThresholdHookInput
+      label: I18n.tr("settings.hooks.battery-surpassed-threshold.label")
+      description: I18n.tr("settings.hooks.battery-surpassed-threshold.description")
+      placeholderText: I18n.tr("settings.hooks.battery-surpassed-threshold.placeholder")
+      text: Settings.data.hooks.batterySurpassedThreshold
+      onEditingFinished: {
+        Settings.data.hooks.batterySurpassedThreshold = batterySurpassedThresholdHookInput.text;
+      }
+      onActionClicked: {
+        if (batterySurpassedThresholdHookInput.text) {
+          HooksService.executeBatterySurpassedThresholdHook(Settings.data.battery.warningThreshold + 5, false);
+        }
+      }
+      Layout.fillWidth: true
+    }
+
+    NDivider {
+      Layout.fillWidth: true
+    }
+
+    // AC Power Unplugged Hook Section
+    NInputAction {
+      id: acPowerUnpluggedHookInput
+      label: I18n.tr("settings.hooks.ac-power-unplugged.label")
+      description: I18n.tr("settings.hooks.ac-power-unplugged.description")
+      placeholderText: I18n.tr("settings.hooks.ac-power-unplugged.placeholder")
+      text: Settings.data.hooks.acPowerUnplugged
+      onEditingFinished: {
+        Settings.data.hooks.acPowerUnplugged = acPowerUnpluggedHookInput.text;
+      }
+      onActionClicked: {
+        if (acPowerUnpluggedHookInput.text) {
+          HooksService.executeAcPowerUnpluggedHook(false);
+        }
+      }
+      Layout.fillWidth: true
+    }
+
+    NDivider {
+      Layout.fillWidth: true
+    }
+
+    // AC Power Plugged Hook Section
+    NInputAction {
+      id: acPowerPluggedHookInput
+      label: I18n.tr("settings.hooks.ac-power-plugged.label")
+      description: I18n.tr("settings.hooks.ac-power-plugged.description")
+      placeholderText: I18n.tr("settings.hooks.ac-power-plugged.placeholder")
+      text: Settings.data.hooks.acPowerPlugged
+      onEditingFinished: {
+        Settings.data.hooks.acPowerPlugged = acPowerPluggedHookInput.text;
+      }
+      onActionClicked: {
+        if (acPowerPluggedHookInput.text) {
+          HooksService.executeAcPowerPluggedHook(true);
+        }
+      }
+      Layout.fillWidth: true
+    }
+
+    NDivider {
+      Layout.fillWidth: true
+    }
+
     // Info section
     ColumnLayout {
       spacing: Style.marginM

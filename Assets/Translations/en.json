@@ -49,10 +49,6 @@
         "display-mode": {
           "description": "Choose how you'd like this value to appear.",
           "label": "Display mode"
-        },
-        "low-battery-threshold": {
-          "description": "Show a warning when battery falls below this percentage.",
-          "label": "Low battery warning threshold"
         }
       },
       "brightness": {
@@ -943,6 +939,14 @@
         }
       }
     },
+    "battery": {
+      "title": "Battery",
+      "description": "Adjust battery settings",
+      "low-battery-threshold": {
+        "title": "Low battery warning threshold",
+        "description": "Show a warning when battery falls below this percentage."
+      }
+    },
     "color-scheme": {
       "color-source": {
         "matugen-scheme-type": {
@@ -1384,7 +1388,7 @@
           "label": "Hook command information"
         },
         "parameters": {
-          "description": "• Wallpaper hook: $1 = wallpaper path, $2 = screen name\n• Theme toggle hook: $1 = true/false (Dark Mode state)",
+          "description": "• Wallpaper hook: $1 = wallpaper path, $2 = screen name\n• Theme toggle hook: $1 = true/false (Dark Mode state)\n• Battery hooks: $1 = battery percentage, $2 = charging state (true/false)\n• AC power hooks: $1 = power adapter state (true/false for plugged/unplugged)",
           "label": "Available parameters"
         }
       },
@@ -1408,7 +1412,27 @@
         "description": "Command to be executed when wallpaper changes.",
         "label": "Wallpaper changed",
         "placeholder": "e.g., notify-send \"Wallpaper\" \"Changed\""
-      }
+      },
+      "battery-dropped-threshold": {
+				"description": "Command to be executed when battery percentage drops to or below the warning threshold.",
+				"label": "Battery dropped to threshold",
+				"placeholder": "e.g., notify-send \"Battery\" \"Low battery: $1%\""
+			},
+			"battery-surpassed-threshold": {
+				"description": "Command to be executed when battery percentage rises above the warning threshold.",
+				"label": "Battery surpassed threshold",
+				"placeholder": "e.g., notify-send \"Battery\" \"Battery recovered: $1%\""
+			},
+			"ac-power-unplugged": {
+				"description": "Command to be executed when AC power adapter is unplugged.",
+				"label": "AC power unplugged",
+				"placeholder": "e.g., notify-send \"Power\" \"AC adapter unplugged\""
+			},
+			"ac-power-plugged": {
+				"description": "Command to be executed when AC power adapter is plugged in.",
+				"label": "AC power plugged in",
+				"placeholder": "e.g., notify-send \"Power\" \"AC adapter connected\""
+			}
     },
     "launcher": {
       "settings": {
