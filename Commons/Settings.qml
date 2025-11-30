@@ -420,11 +420,6 @@ Singleton {
       property string criticalColor: ""
     }
 
-    // battery
-    property JsonObject battery: JsonObject {
-      property int warningThreshold: 20
-    }
-
     // dock
     property JsonObject dock: JsonObject {
       property bool enabled: true
@@ -576,10 +571,6 @@ Singleton {
       property bool enabled: false
       property string wallpaperChange: ""
       property string darkModeChange: ""
-      property string batteryDroppedThreshold: ""
-      property string batterySurpassedThreshold: ""
-      property string acPowerUnplugged: ""
-      property string acPowerPlugged: ""
     }
   }
 

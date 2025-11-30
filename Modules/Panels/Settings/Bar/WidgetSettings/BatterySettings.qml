@@ -14,12 +14,12 @@ ColumnLayout {
 
   // Local state
   property string valueDisplayMode: widgetData.displayMode !== undefined ? widgetData.displayMode : widgetMetadata.displayMode
-  property int valueWarningThreshold: Settings.data.battery.warningThreshold
+  property int valueWarningThreshold: widgetData.warningThreshold !== undefined ? widgetData.warningThreshold : widgetMetadata.warningThreshold
 
   function saveSettings() {
     var settings = Object.assign({}, widgetData || {});
     settings.displayMode = valueDisplayMode;
-    // warningThreshold is now saved globally in Settings.data.battery.warningThreshold
+    settings.warningThreshold = valueWarningThreshold;
     return settings;
   }
 
@@ -52,9 +52,6 @@ ColumnLayout {
     suffix: "%"
     minimum: 5
     maximum: 50
-    onValueChanged: {
-      valueWarningThreshold = value;
-      Settings.data.battery.warningThreshold = value;
-    }
+    onValueChanged: valueWarningThreshold = value
   }
 }
