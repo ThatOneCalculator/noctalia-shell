@@ -97,7 +97,7 @@ Rectangle {
         anchors.centerIn: parent
         spacing: -2
         Repeater {
-          model: I18n.locale.toString(now, formatVertical.trim()).split(" ")
+          model: I18n.locale.toString(now, formatVertical.replace("AP", "").trim()).split(" ")
           delegate: NText {
             visible: text !== ""
             text: modelData
