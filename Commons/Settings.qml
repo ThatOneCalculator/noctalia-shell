@@ -576,6 +576,10 @@ Singleton {
       property bool enabled: false
       property string wallpaperChange: ""
       property string darkModeChange: ""
+      property string batteryDroppedThreshold: ""
+      property string batterySurpassedThreshold: ""
+      property string acPowerUnplugged: ""
+      property string acPowerPlugged: ""
     }
   }
 
