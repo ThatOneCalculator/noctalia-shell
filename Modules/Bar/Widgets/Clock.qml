@@ -97,9 +97,9 @@ Rectangle {
         anchors.centerIn: parent
         spacing: -2
         Repeater {
-          model: I18n.locale.toString(now, formatVertical.replace("AP", "").trim()).split(" ")
+          model: I18n.locale.toString(now, formatVertical.trim()).split(" ")
           delegate: NText {
-            visible: text !== ""
+            visible: !["", "AM", "PM"].includes(text)
             text: modelData
             family: useCustomFont && customFont ? customFont : Settings.data.ui.fontDefault
             Binding on pointSize {
