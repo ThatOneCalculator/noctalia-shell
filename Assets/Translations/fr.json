@@ -46,6 +46,11 @@
         }
       },
       "battery": {
+        "device": {
+          "default": "Par défaut (périphérique d'affichage)",
+          "description": "Sélectionnez le périphérique de batterie à afficher.",
+          "label": "Dispositif à pile"
+        },
         "display-mode": {
           "description": "Choisissez comment vous souhaitez que cette valeur apparaisse.",
           "label": "Mode d'affichage"
@@ -503,6 +508,12 @@
       "description": "Vos notifications apparaîtront ici à mesure qu'elles arriveront.",
       "no-notifications": "Aucune notification",
       "title": "Notifications"
+    },
+    "range": {
+      "all": "Tout",
+      "earlier": "Plus anciennes",
+      "today": "Aujourd'hui",
+      "yesterday": "Hier"
     },
     "time": {
       "diffD": "il y a 1 jour",
@@ -1026,6 +1037,14 @@
         }
       },
       "templates": {
+        "compositors": {
+          "description": "Thématisation du compositeur.",
+          "label": "Compositeurs",
+          "niri": {
+            "description": "Écrire {filepath}. Requiert niri v25.11+",
+            "description-missing": "Nécessite l'installation de {app}"
+          }
+        },
         "misc": {
           "description": "Options de configuration supplémentaires.",
           "label": "Divers",
@@ -1248,9 +1267,11 @@
         },
         "temperature": {
           "day": "Jour",
+          "day-description": "Contrôle la température pendant la journée.",
           "description": "Réglez la chaleur des couleurs pour la nuit et le jour.",
           "label": "Température de couleur",
-          "night": "Nuit"
+          "night": "Nuit",
+          "night-description": "Contrôle la température pendant la nuit."
         }
       },
       "title": "Affichage"
@@ -1354,7 +1375,8 @@
           "description": "Modifiez vos informations utilisateur et votre avatar.",
           "label": "Profil"
         },
-        "select-avatar": "Sélectionner une image d'avatar"
+        "select-avatar": "Sélectionner une image d'avatar",
+        "tooltip": "Parcourir pour une image d’avatar"
       },
       "screen-corners": {
         "radius": {
@@ -1832,6 +1854,9 @@
       "memory-section": {
         "label": "Utilisation mémoire"
       },
+      "network-section": {
+        "label": "Réseau"
+      },
       "polling-interval": {
         "label": "Intervalle d'interrogation"
       },
@@ -1847,9 +1872,6 @@
       "thresholds-section": {
         "description": "Ajustez les seuils d’avertissement/critiques et les intervalles d’interrogation pour chaque métrique système.",
         "label": "Seuils"
-      },
-      "network-section": {
-        "label": "Réseau"
       },
       "title": "Moniteur système",
       "use-custom-highlight-colors": {
@@ -2178,10 +2200,14 @@
     "do-not-disturb-enabled": "'Ne pas déranger' activé",
     "enable-keep-awake": "Cliquez pour activer le mode 'rester éveillé'.\nFaites défiler pour ajuster le délai.",
     "forget-network": "Oublier le réseau",
+    "grid-view": "Vue en grille",
+    "hidden-files-hide": "Masquer les fichiers cachés",
+    "hidden-files-show": "Afficher les fichiers cachés",
     "home": "Accueil",
     "input-muted": "Couper l'entrée audio",
     "keep-awake": "Rester éveillé",
     "keyboard-layout": "Disposition du clavier {layout}",
+    "list-view": "Vue en liste",
     "manage-vpn": "Gérer les connexions VPN",
     "manage-wifi": "Gérer le Wi-Fi",
     "microphone-volume-at": "Volume du microphone à {volume}%.\nClic gauche pour les paramètres. Clic droit pour activer/désactiver le mode muet.\nFaites défiler pour modifier le volume.",
@@ -2214,6 +2240,8 @@
     "refresh-wallpaper-list": "Actualiser la liste des fonds d'écran",
     "remove-widget": "Supprimer le widget",
     "screen-recorder-not-installed": "L'enregistreur d'écran n'est pas installé",
+    "search": "Rechercher",
+    "search-close": "Fermer la recherche",
     "session-menu": "Menu de session",
     "set-power-profile": "Définir le profil d'alimentation \"{profile}\"",
     "start-screen-recording": "Démarrer l'enregistrement d'écran",

@@ -46,6 +46,11 @@
         }
       },
       "battery": {
+        "device": {
+          "default": "默认（显示设备）",
+          "description": "选择要显示的电池设备。",
+          "label": "电池设备"
+        },
         "display-mode": {
           "description": "选择您希望此值显示的方式。",
           "label": "显示模式"
@@ -503,6 +508,12 @@
       "description": "您的通知将在到达时显示在此处。",
       "no-notifications": "无通知",
       "title": "通知"
+    },
+    "range": {
+      "all": "全部",
+      "earlier": "更早",
+      "today": "今天",
+      "yesterday": "昨天"
     },
     "time": {
       "diffD": "1 天前",
@@ -1026,6 +1037,14 @@
         }
       },
       "templates": {
+        "compositors": {
+          "description": "合成器主题。",
+          "label": "合成器",
+          "niri": {
+            "description": "写入 {filepath}。需要 niri v25.11+",
+            "description-missing": "需要安装 {app}"
+          }
+        },
         "misc": {
           "description": "其他配置选项。",
           "label": "杂项",
@@ -1248,9 +1267,11 @@
         },
         "temperature": {
           "day": "白天",
+          "day-description": "控制白天的色温。",
           "description": "设置夜间和白天的颜色温暖度。",
           "label": "色温",
-          "night": "夜间"
+          "night": "夜间",
+          "night-description": "控制夜间的色温。"
         }
       },
       "title": "显示"
@@ -1354,7 +1375,8 @@
           "description": "编辑您的用户详细信息和头像。",
           "label": "个人资料"
         },
-        "select-avatar": "选择头像图片"
+        "select-avatar": "选择头像图片",
+        "tooltip": "浏览头像图片"
       },
       "screen-corners": {
         "radius": {
@@ -1832,6 +1854,9 @@
       "memory-section": {
         "label": "内存使用率"
       },
+      "network-section": {
+        "label": "网络"
+      },
       "polling-interval": {
         "label": "轮询间隔"
       },
@@ -1847,9 +1872,6 @@
       "thresholds-section": {
         "description": "为每个系统指标调整警告/严重阈值和轮询间隔。",
         "label": "阈值"
-      },
-      "network-section": {
-        "label": "网络"
       },
       "title": "系统监视器",
       "use-custom-highlight-colors": {
@@ -2178,10 +2200,14 @@
     "do-not-disturb-enabled": "'勿扰模式'已启用",
     "enable-keep-awake": "单击以启用保持唤醒。\n滚动以调整超时。",
     "forget-network": "忘记网络",
+    "grid-view": "网格视图",
+    "hidden-files-hide": "隐藏隐藏文件",
+    "hidden-files-show": "显示隐藏文件",
     "home": "主目录",
     "input-muted": "静音输入设备",
     "keep-awake": "保持唤醒",
     "keyboard-layout": "{layout} 键盘布局",
+    "list-view": "列表视图",
     "manage-vpn": "管理 VPN 连接",
     "manage-wifi": "管理 Wi-Fi",
     "microphone-volume-at": "麦克风音量 {volume}%\n左键点击进入设置。右键点击切换静音。\n滚动滚轮调节音量。",
@@ -2214,6 +2240,8 @@
     "refresh-wallpaper-list": "刷新壁纸列表",
     "remove-widget": "移除小部件",
     "screen-recorder-not-installed": "屏幕录制器未安装",
+    "search": "搜索",
+    "search-close": "关闭搜索",
     "session-menu": "会话菜单",
     "set-power-profile": "设置\"{profile}\"电源模式",
     "start-screen-recording": "开始屏幕录制",
