@@ -375,14 +375,14 @@ Item {
                 // Background circle (full track, not played yet)
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                ctx.lineWidth = 2 * scaling; // Thicker line width based on scaling property
-                ctx.strokeStyle = Qt.alpha(Color.mOnSurface, 0.2); // More opaque for better visibility
+                ctx.lineWidth = 1.5 * scaling; // Thicker line width based on scaling property
+                ctx.strokeStyle = Qt.alpha("#31748f", 0.1); // More opaque for better visibility
                 ctx.stroke();
 
                 // Progress arc (played portion)
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + progressRatio * 2 * Math.PI);
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 1.5; // Thicker line width based on scaling property
                 ctx.strokeStyle = "#31748f"; // Use primary color for progress
                 ctx.lineCap = "round";
                 ctx.stroke();
@@ -631,14 +631,14 @@ Item {
           // Background circle (full track, not played yet)
           ctx.beginPath();
           ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-          ctx.lineWidth = 2.5 * scaling; // Line width based on scaling property, thinner for vertical layout
-          ctx.strokeStyle = Qt.alpha(Color.mOnSurface, 0.2); // More opaque for better visibility
+          ctx.lineWidth = 2 * scaling; // Line width based on scaling property, thinner for vertical layout
+          ctx.strokeStyle = Qt.alpha("#31748f", 0.2); // More opaque for better visibility
           ctx.stroke();
 
           // Progress arc (played portion)
           ctx.beginPath();
           ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + progressRatio * 2 * Math.PI);
-          ctx.lineWidth = 2.5 * scaling; // Line width based on scaling property, thinner for vertical layout
+          ctx.lineWidth = 2 * scaling; // Line width based on scaling property, thinner for vertical layout
           ctx.strokeStyle = "#31748f";
           ctx.lineCap = "round";
           ctx.stroke();
