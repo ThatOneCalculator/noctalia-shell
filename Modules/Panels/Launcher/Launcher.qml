@@ -17,7 +17,7 @@ SmartPanel {
   readonly property bool previewActive: !!(searchText && searchText.startsWith(">clip") && Settings.data.appLauncher.enableClipPreview && ClipboardService.items && ClipboardService.items.length > 0 && selectedIndex >= 0 && results && results[selectedIndex] && results[selectedIndex].clipboardId)
 
   // Panel configuration
-  readonly property int listPanelWidth: Math.round(600 * Style.uiScaleRatio)
+  readonly property int listPanelWidth: Math.round(500 * Style.uiScaleRatio)
   readonly property int previewPanelWidth: Math.round(400 * Style.uiScaleRatio)
   readonly property int totalBaseWidth: listPanelWidth + (Style.marginL * 2)
 
@@ -68,8 +68,10 @@ SmartPanel {
   }
 
   // Target columns, but actual columns may vary based on available width
+  // Account for NTabBar margins (Style.marginXS on each side) to match category tabs width
   readonly property int targetGridColumns: 5
-  readonly property int gridCellSize: Math.floor((listPanelWidth - Style.marginS - (targetGridColumns * Style.marginXXS)) / targetGridColumns)
+  readonly property int gridContentWidth: listPanelWidth - (2 * Style.marginXS)
+  readonly property int gridCellSize: Math.floor((gridContentWidth - ((targetGridColumns - 1) * Style.marginS)) / targetGridColumns)
 
   // Actual columns that fit in the GridView
   // This gets updated dynamically by the GridView when its actual width is known
@@ -85,6 +87,12 @@ SmartPanel {
       var currentIndex = emojiPlugin.categories.indexOf(emojiPlugin.selectedCategory);
       var nextIndex = (currentIndex + 1) % emojiPlugin.categories.length;
       emojiPlugin.selectCategory(emojiPlugin.categories[nextIndex]);
+    } else if ((activePlugin === null || activePlugin === appsPlugin) && appsPlugin.isBrowsingMode) {
+      // In apps browsing mode (no search), Tab navigates between categories
+      var availableCategories = appsPlugin.availableCategories || ["all"];
+      var currentIndex = availableCategories.indexOf(appsPlugin.selectedCategory);
+      var nextIndex = (currentIndex + 1) % availableCategories.length;
+      appsPlugin.selectCategory(availableCategories[nextIndex]);
     } else {
       selectNextWrapped();
     }
@@ -631,12 +639,13 @@ SmartPanel {
           id: emojiCategoryTabs
           visible: root.activePlugin === emojiPlugin && emojiPlugin.isBrowsingMode
           Layout.fillWidth: true
-          currentIndex: {
+          property int computedCurrentIndex: {
             if (visible && emojiPlugin.categories) {
               return emojiPlugin.categories.indexOf(emojiPlugin.selectedCategory);
             }
             return 0;
           }
+          currentIndex: computedCurrentIndex
 
           Repeater {
             model: emojiPlugin.categories
@@ -650,6 +659,67 @@ SmartPanel {
                 emojiPlugin.selectCategory(modelData);
               }
             }
+          }
+        }
+
+        Connections {
+          target: emojiPlugin
+          enabled: emojiCategoryTabs.visible
+          function onSelectedCategoryChanged() {
+            // Force update of currentIndex when selectedCategory changes
+            Qt.callLater(() => {
+                           if (emojiCategoryTabs.visible && emojiPlugin.categories) {
+                             const newIndex = emojiPlugin.categories.indexOf(emojiPlugin.selectedCategory);
+                             if (newIndex >= 0 && emojiCategoryTabs.currentIndex !== newIndex) {
+                               emojiCategoryTabs.currentIndex = newIndex;
+                             }
+                           }
+                         });
+          }
+        }
+
+        // App category tabs (shown when browsing apps without search)
+        NTabBar {
+          id: appCategoryTabs
+          visible: (root.activePlugin === null || root.activePlugin === appsPlugin) && appsPlugin.isBrowsingMode && !root.searchText.startsWith(">")
+          Layout.fillWidth: true
+          property int computedCurrentIndex: {
+            if (visible && appsPlugin.availableCategories) {
+              return appsPlugin.availableCategories.indexOf(appsPlugin.selectedCategory);
+            }
+            return 0;
+          }
+          currentIndex: computedCurrentIndex
+
+          Repeater {
+            model: appsPlugin.availableCategories || []
+            NIconTabButton {
+              required property string modelData
+              required property int index
+              icon: appsPlugin.categoryIcons[modelData] || "apps"
+              tooltipText: appsPlugin.getCategoryName ? appsPlugin.getCategoryName(modelData) : modelData
+              tabIndex: index
+              checked: appCategoryTabs.currentIndex === index
+              onClicked: {
+                appsPlugin.selectCategory(modelData);
+              }
+            }
+          }
+        }
+
+        Connections {
+          target: appsPlugin
+          enabled: appCategoryTabs.visible
+          function onSelectedCategoryChanged() {
+            // Force update of currentIndex when selectedCategory changes
+            Qt.callLater(() => {
+                           if (appCategoryTabs.visible && appsPlugin.availableCategories) {
+                             const newIndex = appsPlugin.availableCategories.indexOf(appsPlugin.selectedCategory);
+                             if (newIndex >= 0 && appCategoryTabs.currentIndex !== newIndex) {
+                               appCategoryTabs.currentIndex = newIndex;
+                             }
+                           }
+                         });
           }
         }
 
@@ -691,12 +761,20 @@ SmartPanel {
               property bool isSelected: (!root.ignoreMouseHover && mouseArea.containsMouse) || (index === selectedIndex)
               property string appId: (modelData && modelData.appId) ? String(modelData.appId) : ""
 
+              // Helper function to normalize app IDs for case-insensitive matching
+              function normalizeAppId(appId) {
+                if (!appId || typeof appId !== 'string')
+                  return "";
+                return appId.toLowerCase().trim();
+              }
+
               // Pin helpers
               function togglePin(appId) {
                 if (!appId)
                   return;
+                const normalizedId = normalizeAppId(appId);
                 let arr = (Settings.data.dock.pinnedApps || []).slice();
-                const idx = arr.indexOf(appId);
+                const idx = arr.findIndex(pinnedId => normalizeAppId(pinnedId) === normalizedId);
                 if (idx >= 0)
                   arr.splice(idx, 1);
                 else
@@ -705,8 +783,11 @@ SmartPanel {
               }
 
               function isPinned(appId) {
+                if (!appId)
+                  return false;
                 const arr = Settings.data.dock.pinnedApps || [];
-                return appId && arr.indexOf(appId) >= 0;
+                const normalizedId = normalizeAppId(appId);
+                return arr.some(pinnedId => normalizeAppId(pinnedId) === normalizedId);
               }
 
               // Property to reliably track the current item's ID.
@@ -871,7 +952,7 @@ SmartPanel {
 
                   // Pin/Unpin action icon button
                   NIconButton {
-                    visible: !!entry.appId && !modelData.isImage && entry.isSelected && (Settings.data.dock.monitors && Settings.data.dock.monitors.length > 0)
+                    visible: !!entry.appId && !modelData.isImage && entry.isSelected && Settings.data.dock.enabled
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     icon: entry.isPinned(entry.appId) ? "unpin" : "pin"
                     tooltipText: entry.isPinned(entry.appId) ? I18n.tr("launcher.unpin") : I18n.tr("launcher.pin")
@@ -916,16 +997,21 @@ SmartPanel {
             height: parent.height
             cellWidth: {
               if (root.activePlugin === emojiPlugin && emojiPlugin.isBrowsingMode) {
-                return parent.width / 5;
+                return parent.width / root.targetGridColumns;
               }
-              return gridCellSize + Style.marginXXS;
+              // Make cells fit exactly like the tab bar
+              return parent.width / root.targetGridColumns;
             }
             cellHeight: {
               if (root.activePlugin === emojiPlugin && emojiPlugin.isBrowsingMode) {
-                return (parent.width / 5) * 1.2;
+                return (parent.width / root.targetGridColumns) * 1.2;
               }
-              return gridCellSize + Style.marginXXS;
+              return parent.width / root.targetGridColumns;
             }
+            leftMargin: 0
+            rightMargin: 0
+            topMargin: 0
+            bottomMargin: 0
             model: results
             cacheBuffer: resultsGrid.height * 2
             keyNavigationEnabled: false
@@ -996,18 +1082,37 @@ SmartPanel {
               property bool isSelected: (!root.ignoreMouseHover && mouseArea.containsMouse) || (index === selectedIndex)
               property string appId: (modelData && modelData.appId) ? String(modelData.appId) : ""
 
-              width: {
-                if (root.activePlugin === emojiPlugin && emojiPlugin.isBrowsingMode) {
-                  return resultsGrid.width / 5;
-                }
-                return gridCellSize;
+              // Helper function to normalize app IDs for case-insensitive matching
+              function normalizeAppId(appId) {
+                if (!appId || typeof appId !== 'string')
+                  return "";
+                return appId.toLowerCase().trim();
               }
-              height: {
-                if (root.activePlugin === emojiPlugin && emojiPlugin.isBrowsingMode) {
-                  return (resultsGrid.width / 5) * 1.2;
-                }
-                return gridCellSize;
+
+              // Pin helpers
+              function togglePin(appId) {
+                if (!appId)
+                  return;
+                const normalizedId = normalizeAppId(appId);
+                let arr = (Settings.data.dock.pinnedApps || []).slice();
+                const idx = arr.findIndex(pinnedId => normalizeAppId(pinnedId) === normalizedId);
+                if (idx >= 0)
+                  arr.splice(idx, 1);
+                else
+                  arr.push(appId);
+                Settings.data.dock.pinnedApps = arr;
               }
+
+              function isPinned(appId) {
+                if (!appId)
+                  return false;
+                const arr = Settings.data.dock.pinnedApps || [];
+                const normalizedId = normalizeAppId(appId);
+                return arr.some(pinnedId => normalizeAppId(pinnedId) === normalizedId);
+              }
+
+              width: resultsGrid.cellWidth
+              height: resultsGrid.cellHeight
               radius: Style.radiusM
               color: gridEntry.isSelected ? Color.mHover : Color.mSurface
 
@@ -1020,12 +1125,8 @@ SmartPanel {
 
               ColumnLayout {
                 anchors.fill: parent
-                anchors.margins: {
-                  if (root.activePlugin === emojiPlugin && emojiPlugin.isBrowsingMode) {
-                    return 4;
-                  }
-                  return Style.marginM;
-                }
+                anchors.margins: (root.activePlugin === emojiPlugin && emojiPlugin.isBrowsingMode) ? 4 : Style.marginM
+                anchors.bottomMargin: (root.activePlugin === emojiPlugin && emojiPlugin.isBrowsingMode) ? Style.marginL : Style.marginM
                 spacing: Style.marginS
 
                 // Icon badge or Image preview or Emoji
@@ -1133,10 +1234,24 @@ SmartPanel {
                   elide: Text.ElideRight
                   Layout.fillWidth: true
                   Layout.maximumWidth: gridEntry.width - 8
+                  Layout.leftMargin: (root.activePlugin === emojiPlugin && emojiPlugin.isBrowsingMode && modelData.emojiChar) ? Style.marginS : 0
+                  Layout.rightMargin: (root.activePlugin === emojiPlugin && emojiPlugin.isBrowsingMode && modelData.emojiChar) ? Style.marginS : 0
                   horizontalAlignment: Text.AlignHCenter
                   wrapMode: Text.NoWrap
                   maximumLineCount: 1
                 }
+              }
+
+              // Pin/Unpin action icon button (overlay in top-right corner)
+              NIconButton {
+                visible: !!gridEntry.appId && !modelData.isImage && gridEntry.isSelected && Settings.data.dock.enabled
+                anchors.top: parent.top
+                anchors.right: parent.right
+                anchors.margins: Style.marginXS
+                z: 10
+                icon: gridEntry.isPinned(gridEntry.appId) ? "unpin" : "pin"
+                tooltipText: gridEntry.isPinned(gridEntry.appId) ? I18n.tr("launcher.unpin") : I18n.tr("launcher.pin")
+                onClicked: gridEntry.togglePin(gridEntry.appId)
               }
 
               MouseArea {

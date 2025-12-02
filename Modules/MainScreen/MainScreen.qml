@@ -14,8 +14,8 @@ import qs.Modules.Panels.Audio
 import qs.Modules.Panels.Battery
 import qs.Modules.Panels.Bluetooth
 import qs.Modules.Panels.Brightness
-import qs.Modules.Panels.Calendar
 import qs.Modules.Panels.Changelog
+import qs.Modules.Panels.Clock
 import qs.Modules.Panels.ControlCenter
 import qs.Modules.Panels.Launcher
 import qs.Modules.Panels.NotificationHistory
@@ -39,7 +39,7 @@ PanelWindow {
   readonly property alias batteryPanel: batteryPanel
   readonly property alias bluetoothPanel: bluetoothPanel
   readonly property alias brightnessPanel: brightnessPanel
-  readonly property alias calendarPanel: calendarPanel
+  readonly property alias clockPanel: clockPanel
   readonly property alias changelogPanel: changelogPanel
   readonly property alias controlCenterPanel: controlCenterPanel
   readonly property alias launcherPanel: launcherPanel
@@ -56,7 +56,7 @@ PanelWindow {
   readonly property var batteryPanelPlaceholder: batteryPanel.panelRegion
   readonly property var bluetoothPanelPlaceholder: bluetoothPanel.panelRegion
   readonly property var brightnessPanelPlaceholder: brightnessPanel.panelRegion
-  readonly property var calendarPanelPlaceholder: calendarPanel.panelRegion
+  readonly property var clockPanelPlaceholder: clockPanel.panelRegion
   readonly property var changelogPanelPlaceholder: changelogPanel.panelRegion
   readonly property var controlCenterPanelPlaceholder: controlCenterPanel.panelRegion
   readonly property var launcherPanelPlaceholder: launcherPanel.panelRegion
@@ -80,12 +80,7 @@ PanelWindow {
     if (!root.isPanelOpen) {
       return WlrKeyboardFocus.None;
     }
-    if (CompositorService.isHyprland) {
-      // Exclusive focus on hyprland is too restrictive.
-      return WlrKeyboardFocus.OnDemand;
-    } else {
-      return PanelService.openedPanel.exclusiveKeyboard ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.OnDemand;
-    }
+    return PanelService.openedPanel.exclusiveKeyboard ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.OnDemand;
   }
 
   anchors {
@@ -245,9 +240,9 @@ PanelWindow {
       z: 50
     }
 
-    CalendarPanel {
-      id: calendarPanel
-      objectName: "calendarPanel-" + (root.screen?.name || "unknown")
+    ClockPanel {
+      id: clockPanel
+      objectName: "clockPanel-" + (root.screen?.name || "unknown")
       screen: root.screen
       z: 50
     }

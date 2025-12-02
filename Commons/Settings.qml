@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 import "../Helpers/QtObj2JS.js" as QtObj2JS
 import qs.Commons
+import qs.Commons.Migrations
 import qs.Modules.OSD
 import qs.Services.UI
 
@@ -21,7 +22,7 @@ Singleton {
   - Default cache directory: ~/.cache/noctalia
   */
   readonly property alias data: adapter  // Used to access via Settings.data.xxx.yyy
-  readonly property int settingsVersion: 25
+  readonly property int settingsVersion: 26
   readonly property bool isDebug: Quickshell.env("NOCTALIA_DEBUG") === "1"
   readonly property string shellName: "noctalia"
   readonly property string configDir: Quickshell.env("NOCTALIA_CONFIG_DIR") || (Quickshell.env("XDG_CONFIG_HOME") || Quickshell.env("HOME") + "/.config") + "/" + shellName + "/"
@@ -100,6 +101,10 @@ Singleton {
       if (!isLoaded) {
         Logger.i("Settings", "Settings loaded");
 
+        // -----------------
+        // Run versioned migrations from MigrationRegistry
+        runVersionedMigrations();
+
         upgradeSettingsData();
 
         root.isLoaded = true;
@@ -166,7 +171,13 @@ Singleton {
       widgets: JsonObject {
         property list<var> left: [
           {
-            "id": "ControlCenter"
+            "icon": "rocket",
+            "id": "CustomButton",
+            "leftClickExec": "qs -c noctalia-shell ipc call launcher toggle"
+          },
+          {
+            "id": "Clock",
+            "usePrimaryColor": false
           },
           {
             "id": "SystemMonitor"
@@ -203,7 +214,7 @@ Singleton {
             "id": "Brightness"
           },
           {
-            "id": "Clock"
+            "id": "ControlCenter"
           }
         ]
       }
@@ -217,6 +228,8 @@ Singleton {
       property bool forceBlackScreenCorners: false
       property real scaleRatio: 1.0
       property real radiusRatio: 1.0
+      property real iRadiusRatio: 1.0
+      property real boxRadiusRatio: 1.0
       property real screenRadiusRatio: 1.0
       property real animationSpeed: 1.0
       property bool animationDisabled: false
@@ -261,11 +274,11 @@ Singleton {
     property JsonObject calendar: JsonObject {
       property list<var> cards: [
         {
-          "id": "banner-card",
+          "id": "calendar-header-card",
           "enabled": true
         },
         {
-          "id": "calendar-card",
+          "id": "calendar-month-card",
           "enabled": true
         },
         {
@@ -422,7 +435,6 @@ Singleton {
       property bool enabled: true
       property string displayMode: "auto_hide" // "always_visible", "auto_hide", "exclusive"
       property real backgroundOpacity: 1.0
-      property real radiusRatio: 0.1
       property real floatingRatio: 1.0
       property real size: 1
       property bool onlySameOutput: true
@@ -622,6 +634,41 @@ Singleton {
   }
 
   // -----------------------------------------------------
+  // Run versioned migrations using MigrationRegistry
+  function runVersionedMigrations() {
+    const currentVersion = adapter.settingsVersion;
+    const migrations = MigrationRegistry.migrations;
+
+    // Get all migration versions and sort them
+    const versions = Object.keys(migrations).map(v => parseInt(v)).sort((a, b) => a - b);
+
+    // Run migrations in order for versions newer than current
+    for (var i = 0; i < versions.length; i++) {
+      const version = versions[i];
+
+      if (currentVersion < version) {
+        // Create migration instance and run it
+        const migrationComponent = migrations[version];
+        const migration = migrationComponent.createObject(root);
+
+        if (migration && typeof migration.migrate === "function") {
+          const success = migration.migrate(adapter, Logger);
+          if (!success) {
+            Logger.e("Settings", "Migration to v" + version + " failed");
+          }
+        } else {
+          Logger.e("Settings", "Invalid migration for v" + version);
+        }
+
+        // Clean up migration instance
+        if (migration) {
+          migration.destroy();
+        }
+      }
+    }
+  }
+
+  // -----------------------------------------------------
   // Function to clean up deprecated user/custom bar widgets settings
   function upgradeWidget(widget) {
     // Backup the widget definition before altering
@@ -671,31 +718,7 @@ Singleton {
     const sections = ["left", "center", "right"];
 
     // -----------------
-    // 1st. convert old widget id to new id
-    for (var s = 0; s < sections.length; s++) {
-      const sectionName = sections[s];
-      for (var i = 0; i < adapter.bar.widgets[sectionName].length; i++) {
-        var widget = adapter.bar.widgets[sectionName][i];
-
-        switch (widget.id) {
-        case "DarkModeToggle":
-          widget.id = "DarkMode";
-          break;
-        case "PowerToggle":
-          widget.id = "SessionMenu";
-          break;
-        case "ScreenRecorderIndicator":
-          widget.id = "ScreenRecorder";
-          break;
-        case "SidePanelToggle":
-          widget.id = "ControlCenter";
-          break;
-        }
-      }
-    }
-
-    // -----------------
-    // 2nd. remove any non existing widget type
+    // 1. remove any non existing widget type
     var removedWidget = false;
     for (var s = 0; s < sections.length; s++) {
       const sectionName = sections[s];
@@ -712,7 +735,7 @@ Singleton {
     }
 
     // -----------------
-    // 3nd. upgrade widget settings
+    // 2. upgrade user widget settings
     for (var s = 0; s < sections.length; s++) {
       const sectionName = sections[s];
       for (var i = 0; i < adapter.bar.widgets[sectionName].length; i++) {
@@ -731,7 +754,7 @@ Singleton {
     }
 
     // -----------------
-    // 4th. safety check
+    // 3. safety check
     // if a widget was deleted, ensure we still have a control center
     if (removedWidget) {
       var gotControlCenter = false;

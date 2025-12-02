@@ -3,6 +3,8 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+
+import Quickshell.Io
 import qs.Commons
 import qs.Services.System
 import qs.Services.Theming
@@ -127,15 +129,20 @@ Singleton {
                                               }
                                             } else if (app.id === "emacs" && app.checkDoomFirst) {
                                               if (Settings.data.templates.emacs) {
-                                                const doomPath = app.outputs[0].path;
-                                                const standardPath = app.outputs[1].path;
-                                                const doomConfigDir = "~/.config/doom";
-                                                const standardDir = standardPath.substring(0, standardPath.lastIndexOf('/'));
+                                                const homeDir = Quickshell.env("HOME");
+                                                const doomPathTemplate = app.outputs[0].path; // ~/.config/doom/themes/noctalia-theme.el
+                                                const standardPathTemplate = app.outputs[1].path; // ~/.emacs.d/themes/noctalia-theme.el
+                                                const doomPath = doomPathTemplate.replace("~", homeDir);
+                                                const standardPath = standardPathTemplate.replace("~", homeDir);
+                                                const doomConfigDir = `${homeDir}/.config/doom`;
+                                                const doomDir = doomPath.substring(0, doomPath.lastIndexOf('/'));
 
                                                 lines.push(`\n[templates.emacs]`);
                                                 lines.push(`input_path = "${Quickshell.shellDir}/Assets/MatugenTemplates/${app.input}"`);
-                                                lines.push(`output_path = "${doomPath}"`);
-                                                lines.push(`post_hook = "sh -c 'if [ ! -d \\"${doomConfigDir}\\" ]; then mkdir -p \\"${standardDir}\\" && mv \\"${doomPath}\\" \\"${standardPath}\\" ; fi'"`);
+                                                lines.push(`output_path = "${standardPathTemplate}"`);
+                                                // Move to doom if doom exists, then remove empty .emacs.d/themes and .emacs.d directories
+                                                // Check directories are empty before removing
+                                                lines.push(`post_hook = "sh -c 'if [ -d \\"${doomConfigDir}\\" ] && [ -f \\"${standardPath}\\" ]; then mkdir -p \\"${doomDir}\\" && mv \\"${standardPath}\\" \\"${doomPath}\\" && rmdir \\"${homeDir}/.emacs.d/themes\\" 2>/dev/null && rmdir \\"${homeDir}/.emacs.d\\" 2>/dev/null || true; fi'"`);
                                               }
                                             } else {
                                               // Handle regular apps
@@ -276,12 +283,13 @@ Singleton {
     if (app.id === "emacs" && app.checkDoomFirst) {
       const doomPath = app.outputs[0].path.replace("~", homeDir);
       const doomDir = doomPath.substring(0, doomPath.lastIndexOf('/'));
+      const doomConfigDir = doomDir.substring(0, doomDir.lastIndexOf('/')); // ~/.config/doom
       const standardPath = app.outputs[1].path.replace("~", homeDir);
       const standardDir = standardPath.substring(0, standardPath.lastIndexOf('/'));
       const templatePath = `${Quickshell.shellDir}/Assets/MatugenTemplates/${app.input}`;
 
       script += `\n`;
-      script += `if [ -d "${doomDir}" ]; then\n`;
+      script += `if [ -d "${doomConfigDir}" ]; then\n`;
       script += `  mkdir -p ${doomDir}\n`;
       script += `  cp '${templatePath}' '${doomPath}'\n`;
       script += replaceColorsInFile(doomPath, palette);
@@ -402,7 +410,10 @@ Singleton {
     const userConfigPath = getUserConfigPath();
     let script = "\n# Execute user config if it exists\n";
     script += `if [ -f '${userConfigPath}' ]; then\n`;
-    script += `  matugen image '${input}' --config '${userConfigPath}' --mode ${mode} --type ${Settings.data.colorSchemes.matugenSchemeType}\n`;
+    // If input is a shell variable (starts with $), use double quotes to allow expansion
+    // Otherwise, use single quotes for safety with file paths
+    const inputQuoted = input.startsWith("$") ? `"${input}"` : `'${input.replace(/'/g, "'\\''")}'`;
+    script += `  matugen image ${inputQuoted} --config '${userConfigPath}' --mode ${mode} --type ${Settings.data.colorSchemes.matugenSchemeType}\n`;
     script += "fi";
 
     return script;
@@ -426,7 +437,7 @@ Singleton {
                                "colors": palette
                              }, null, 2) + "\n";
     script += "EOF\n";
-    script += `  matugen json '${tempJsonPathEsc}' --config '${userConfigPath}' --mode ${mode}\n`;
+    script += `  matugen json '${tempJsonPathEsc}' --config '${userConfigPath}' --mode ${mode} --type ${Settings.data.colorSchemes.matugenSchemeType}\n`;
     script += "fi";
 
     return script;
