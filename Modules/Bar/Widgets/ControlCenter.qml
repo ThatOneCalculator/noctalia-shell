@@ -80,7 +80,6 @@ NIconButton {
   // If we have a custom path and not using distro logo, use the theme icon.
   // If using distro logo, don't use theme icon.
   icon: (customIconPath === "" && !useDistroLogo) ? customIcon : ""
-  nerd: !useDistroLogo && customIcon
   tooltipText: I18n.tr("tooltips.open-control-center")
   tooltipDirection: BarService.getTooltipDirection()
   baseSize: Style.capsuleHeight
@@ -154,7 +153,7 @@ NIconButton {
   IconImage {
     id: customOrDistroLogo
     anchors.centerIn: parent
-    width: root.width * 0.8
+    width: useDistroLogo ? root.width * 0.55 : root.width * 0.8
     height: width
     source: {
       if (useDistroLogo)

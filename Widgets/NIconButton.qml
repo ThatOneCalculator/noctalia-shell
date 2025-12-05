@@ -17,8 +17,6 @@ Rectangle {
   property bool enabled: true
   property bool allowClickWhenDisabled: false
   property bool hovering: false
-  property bool compact: false
-  property bool nerd: false
 
   property color colorBg: Color.mSurfaceVariant
   property color colorFg: Color.mPrimary
@@ -53,7 +51,6 @@ Rectangle {
 
   NIcon {
     icon: root.icon
-    visible: !root.nerd
     pointSize: {
       switch (root.density) {
       case "compact":
@@ -68,22 +65,6 @@ Rectangle {
     x: (root.width - width) / 2
     // Center vertically accounting for font metrics
     y: (root.height - height) / 2 + (height - contentHeight) / 2
-
-    Behavior on color {
-      ColorAnimation {
-        duration: Style.animationFast
-        easing.type: Easing.InOutQuad
-      }
-    }
-  }
-
-  NNerdIcon {
-    text: root.icon
-    visible: root.nerd
-    font.pointSize: Math.max(1, root.compact ? root.width * 0.65 : root.width * 0.48)
-    color: root.enabled && root.hovering ? colorFgHover : colorFg
-    x: ((root.width - width) / 2) + 0.5
-    y: (root.height - height) / 2 + (height - contentHeight) / 2 - 0.5
 
     Behavior on color {
       ColorAnimation {
