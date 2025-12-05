@@ -32,13 +32,32 @@ Singleton {
   // Plugin container from shell.qml (for placing Main instances in graphics scene)
   property var pluginContainer: null
 
+  // Track if we need to initialize once container is ready
+  property bool needsInit: false
+
+  // Watch for pluginContainer to be set
+  onPluginContainerChanged: {
+    if (root.pluginContainer && root.needsInit) {
+      Logger.d("PluginService", "Plugin container now available, initializing plugins");
+      root.needsInit = false;
+      root.init();
+    }
+  }
+
   // Listen for PluginRegistry to finish loading
   Connections {
     target: PluginRegistry
 
     function onPluginsChanged() {
       if (!root.initialized) {
-        root.init();
+        if (root.pluginContainer) {
+          // Container already available, init now
+          root.init();
+        } else {
+          // Container not ready, wait for it
+          Logger.d("PluginService", "Deferring plugin init until container is ready");
+          root.needsInit = true;
+        }
       }
     }
   }
@@ -92,7 +111,12 @@ Singleton {
         Logger.d("PluginService", "Manifest found for", enabledIds[i]);
         loadPlugin(enabledIds[i]);
       } else {
-        Logger.e("PluginService", "No manifest for enabled plugin:", enabledIds[i]);
+        Logger.w("PluginService", "Plugin", enabledIds[i], "is enabled but not found on disk - cleaning up");
+        // Plugin was deleted from disk but still marked as enabled
+        // Unregister it completely and remove its widget from bar
+        var widgetId = "plugin:" + enabledIds[i];
+        removeWidgetFromBar(widgetId);
+        PluginRegistry.unregisterPlugin(enabledIds[i]);
       }
     }
 
@@ -110,9 +134,10 @@ Singleton {
     Logger.i("PluginService", "Refreshing available plugins");
     root.availablePlugins = [];
 
-    var sources = PluginRegistry.pluginSources;
-    for (var i = 0; i < sources.length; i++) {
-      fetchPluginRegistry(sources[i]);
+    var enabledSources = PluginRegistry.getEnabledSources();
+    Logger.d("PluginService", "Fetching from", enabledSources.length, "enabled sources");
+    for (var i = 0; i < enabledSources.length; i++) {
+      fetchPluginRegistry(enabledSources[i]);
     }
   }
 
