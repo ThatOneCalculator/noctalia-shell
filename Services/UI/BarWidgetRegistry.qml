@@ -88,7 +88,9 @@ Singleton {
                                     "allowUserSettings": true,
                                     "displayMode": "onhover",
                                     "warningThreshold": 30,
-                                    "deviceNativePath": ""
+                                    "deviceNativePath": "",
+                                    "showPowerProfiles": false,
+                                    "showNoctaliaPerformance": false
                                   },
                                   "Bluetooth": {
                                     "allowUserSettings": true,
@@ -118,6 +120,8 @@ Singleton {
                                   "CustomButton": {
                                     "allowUserSettings": true,
                                     "icon": "heart",
+                                    "showIcon": true,
+                                    "hideMode": "alwaysExpanded",
                                     "leftClickExec": "",
                                     "leftClickUpdateText": false,
                                     "rightClickExec": "",

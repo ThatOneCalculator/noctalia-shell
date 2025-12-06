@@ -58,6 +58,14 @@
         "low-battery-threshold": {
           "description": "Показувати попередження, коли батарея падає нижче цього відсотка.",
           "label": "Поріг попередження про низький заряд батареї"
+        },
+        "show-noctalia-performance": {
+          "description": "Відображати перемикач режиму продуктивності Noctalia в панелі батареї.",
+          "label": "Показувати перемикач Продуктивність Noctalia"
+        },
+        "show-power-profile": {
+          "description": "Відображати вибір профілю живлення в панелі батареї.",
+          "label": "Показувати елементи керування профілем живлення"
         }
       },
       "brightness": {
@@ -131,10 +139,21 @@
           "label": "Відображати виведення команди",
           "stream-description": "Введіть команду для безперервного запуску."
         },
+        "hide-mode": {
+          "description": "Контролює видимість віджета, коли команда не має виведення.",
+          "label": "Режим приховування",
+          "expandWithOutput": "Розширити, якщо є виведення",
+          "alwaysExpanded": "Завжди розширено",
+          "maxTransparent": "Максимально розширено, але прозоро"
+        },
         "dynamic-text": "Динамічний текст",
         "icon": {
           "description": "Вибрати значок з бібліотеки.",
           "label": "Значок"
+        },
+        "show-icon": {
+          "description": "Перемикає видимість значка віджета.",
+          "label": "Показати значок"
         },
         "left-click": {
           "description": "Команда для виконання при лівому кліку на кнопку.",
@@ -377,14 +396,14 @@
     "battery-level": "Рівень заряду акумулятора",
     "brightness": "Яскравість",
     "charging": "Заряджається",
-    "charging-rate": "Швидкість зарядки: {rate} Вт.",
+    "charging-rate": "Швидкість зарядки: {rate} Вт",
     "discharging": "Розряджається",
-    "discharging-rate": "Швидкість розрядки: {rate} Вт.",
+    "discharging-rate": "Швидкість розрядки: {rate} Вт",
     "health": "Стан: {percent}%",
     "idle": "Простій",
     "inhibit-idle-description": "Підтримує систему активною.",
     "inhibit-idle-label": "Не давати заснути",
-    "no-battery-detected": "Батарею не виявлено.",
+    "no-battery-detected": "Батарею не виявлено",
     "panel-title": "Батарея",
     "plugged-in": "Підключено",
     "power-profile": "Профіль живлення",
@@ -462,6 +481,7 @@
     "add": "Додати",
     "apply": "Подати заявку",
     "cancel": "Скасувати",
+    "check-settings": "Перевірте налаштування для деталей.",
     "close": "Закрити",
     "save": "Зберегти"
   },
@@ -1490,6 +1510,10 @@
           "description": "Показувати елементи у вигляді сітки замість списку.",
           "label": "Режим сітки"
         },
+        "show-categories": {
+          "description": "Показувати вкладки категорій для фільтрації додатків.",
+          "label": "Показувати категорії"
+        },
         "position": {
           "description": "Виберіть, де з'являється панель лаунчера.",
           "label": "Положення"
@@ -1811,7 +1835,16 @@
       },
       "uninstall-error": "Не вдалося видалити: {error}",
       "uninstall-success": "Успішно видалено {plugin}",
-      "uninstalling": "Видалення {plugin}..."
+      "uninstalling": "Видалення {plugin}...",
+      "update": "Оновлення",
+      "update-all": "Оновити все ({count})",
+      "update-all-success": "Усі плагіни успішно оновлено.",
+      "update-available": "Доступно оновлень для {count} плагінів",
+      "update-error": "Не вдалося оновити плагін: {plugin}: {error}",
+      "update-incompatible": "Потрібна Noctalia v{version} або вище",
+      "update-success": "Оновлено {plugin} до версії {version}",
+      "update-version": "v{current} → v{new}",
+      "updating": "Оновлення {plugin}..."
     },
     "screen-recorder": {
       "audio": {
