@@ -58,6 +58,14 @@
         "low-battery-threshold": {
           "description": "当电量低于此百分比时显示警告。",
           "label": "低电量警告阈值"
+        },
+        "show-noctalia-performance": {
+          "description": "在电池面板中显示 Noctalia 性能模式切换。",
+          "label": "显示 Noctalia 性能切换"
+        },
+        "show-power-profile": {
+          "description": "在电池面板中显示电源配置文件选择。",
+          "label": "显示电源配置文件控件"
         }
       },
       "brightness": {
@@ -132,6 +140,13 @@
           "stream-description": "输入一个要持续运行的命令。"
         },
         "dynamic-text": "动态文本",
+        "hide-mode": {
+          "alwaysExpanded": "始终展开",
+          "description": "控制命令无输出时小部件的可见性。",
+          "expandWithOutput": "有输出时展开",
+          "label": "隐藏模式",
+          "maxTransparent": "最大展开但透明"
+        },
         "icon": {
           "description": "从库中选择图标。",
           "label": "图标"
@@ -166,6 +181,10 @@
           "description": "右键点击按钮时执行的命令。",
           "label": "右键点击",
           "update-text": "右键单击时更新显示的文本"
+        },
+        "show-icon": {
+          "description": "切换小部件图标的可见性。",
+          "label": "显示图标"
         },
         "text-stream": {
           "description": "来自命令的流式输出行将作为文本显示在按钮上。",
@@ -318,6 +337,10 @@
           "description": "当没有匹配的窗口时控制小部件的行为。",
           "label": "隐藏模式"
         },
+        "max-width": {
+          "description": "任务栏的最大宽度（占屏幕宽度的百分比）。",
+          "label": "最大宽度"
+        },
         "only-active-workspaces": {
           "description": "仅显示来自活动工作区的应用程序",
           "label": "仅显示活动工作区"
@@ -325,6 +348,24 @@
         "only-same-output": {
           "description": "仅显示任务栏所在屏幕上的应用程序",
           "label": "仅显示同屏幕"
+        },
+        "show-pinned-apps": {
+          "description": "在任务栏中显示 Dock 上固定的应用。",
+          "label": "显示已置顶的应用"
+        },
+        "show-title": {
+          "description": "在任务栏中显示窗口标题。",
+          "description-disabled": "垂直任务栏不支持显示标题。",
+          "label": "显示标题"
+        },
+        "smart-width": {
+          "description": "根据条目数量自动调整条目宽度。",
+          "label": "智能宽度"
+        },
+        "title-width": {
+          "description": "设置任务栏中窗口标题的宽度（以像素为单位）。",
+          "label": "标题宽度",
+          "reset-tooltip": "重置标题宽度"
         }
       },
       "taskbar-grouped": {
@@ -341,6 +382,10 @@
         "drawer-enabled": {
           "description": "启用时，未固定的托盘项显示在抽屉面板中。禁用时，所有托盘项都内联显示。",
           "label": "启用抽屉"
+        },
+        "hide-passive": {
+          "description": "启用后，将隐藏状态为“被动”的托盘图标。",
+          "label": "隐藏被动物品"
         }
       },
       "volume": {
@@ -372,20 +417,20 @@
   "battery": {
     "battery-level": "电池电量",
     "brightness": "亮度",
-    "charging": "正在充电。",
-    "charging-rate": "充电速率：{rate} W。",
-    "discharging": "正在放电。",
-    "discharging-rate": "放电速率：{rate} W。",
+    "charging": "正在充电",
+    "charging-rate": "充电速率：{rate} W",
+    "discharging": "正在放电",
+    "discharging-rate": "放电速率：{rate} W",
     "health": "健康状况：{percent}%",
-    "idle": "空闲。",
+    "idle": "空闲",
     "inhibit-idle-description": "保持系统唤醒。",
     "inhibit-idle-label": "保持唤醒",
-    "no-battery-detected": "未检测到电池。",
+    "no-battery-detected": "未检测到电池",
     "panel-title": "电池",
-    "plugged-in": "已接通电源。",
+    "plugged-in": "已接通电源",
     "power-profile": "电源模式",
-    "time-left": "剩余时间：{time}。",
-    "time-until-full": "充满所需时间：{time}。"
+    "time-left": "剩余时间：{time}",
+    "time-until-full": "充满所需时间：{time}"
   },
   "bluetooth": {
     "panel": {
@@ -452,12 +497,13 @@
     }
   },
   "clock": {
-    "tooltip": "打开日历"
+    "tooltip": "时钟"
   },
   "common": {
     "add": "添加",
     "apply": "应用",
     "cancel": "取消",
+    "check-settings": "查看设置了解详情",
     "close": "关闭",
     "save": "保存"
   },
@@ -512,11 +558,13 @@
       "misc": "杂项",
       "network": "网络",
       "office": "办公室",
+      "pinned": "已固定",
       "system": "系统",
       "webbrowser": "网页浏览器"
     },
-    "pin": "固定到 Dock",
-    "unpin": "从 Dock 取消固定"
+    "delete": "删除",
+    "pin": "固定",
+    "unpin": "取消固定"
   },
   "lock-screen": {
     "authenticating": "正在验证...",
@@ -712,11 +760,15 @@
     "clipboard-clear-description": "清除所有剪贴板历史记录",
     "clipboard-clear-description-full": "从剪贴板历史记录中移除所有项目",
     "clipboard-clear-history": "清除剪贴板历史记录",
+    "clipboard-delete": "删除剪贴板条目",
     "clipboard-history-disabled": "剪贴板历史记录已禁用",
     "clipboard-history-disabled-description": "在设置中启用剪贴板历史记录或安装 cliphist",
     "clipboard-loading": "正在加载剪贴板历史记录...",
     "clipboard-loading-description": "请稍候",
     "clipboard-search-description": "搜索剪贴板历史记录",
+    "command": "命令",
+    "command-description": "运行 shell 命令",
+    "command-name": "命令",
     "emoji": "表情符号选择器",
     "emoji-loading": "正在加载表情符号...",
     "emoji-loading-description": "请稍候",
@@ -816,7 +868,6 @@
         }
       },
       "noctalia": {
-        "download-latest": "下载最新版本",
         "git-commit": "Git提交:",
         "git-commit-loading": "加载中...",
         "installed-version": "已安装版本：",
@@ -1318,6 +1369,10 @@
           "description": "将主题颜色应用到 Dock 应用图标（仅限非聚焦应用）。",
           "label": "着色图标"
         },
+        "dead-opacity": {
+          "description": "调整未运行的应用程序图标的不透明度。",
+          "label": "死亡不透明度"
+        },
         "display": {
           "always-visible": "始终可见",
           "auto-hide": "自动隐藏",
@@ -1332,6 +1387,14 @@
         "icon-size": {
           "description": "调整 Dock 的整体大小。",
           "label": "Dock 大小"
+        },
+        "inactive-indicators": {
+          "description": "为所有应用显示指示器小药丸，而不仅仅是当前活跃的应用。",
+          "label": "运行指标"
+        },
+        "pinned-static": {
+          "description": "始终将固定的应用图标按静态顺序推到左侧。",
+          "label": "静态固定应用"
         },
         "section": {
           "description": "自定义 Dock 的行为和外观。",
@@ -1404,7 +1467,7 @@
           "label": "个人资料"
         },
         "select-avatar": "选择头像图片",
-        "tooltip": "浏览头像图片"
+        "tooltip": "头像"
       },
       "screen-corners": {
         "radius": {
@@ -1493,6 +1556,10 @@
         "section": {
           "description": "自定义启动器的行为和外观。",
           "label": "外观"
+        },
+        "show-categories": {
+          "description": "显示用于筛选应用程序的类别标签。",
+          "label": "显示类别"
         },
         "sort-by-usage": {
           "description": "启用后，经常启动的应用程序将显示在列表首位。",
@@ -1599,6 +1666,10 @@
         "description": "在电源操作中显示'休眠'选项。",
         "label": "显示休眠"
       },
+      "show-session-buttons": {
+        "description": "允许从锁屏访问电源设置。",
+        "label": "电源控制"
+      },
       "title": "锁屏"
     },
     "network": {
@@ -1671,6 +1742,61 @@
         "section": {
           "description": "配置通知的外观和行为。",
           "label": "外观"
+        }
+      },
+      "sounds": {
+        "enabled": {
+          "description": "为传入通知启用音效。",
+          "label": "启用通知声音"
+        },
+        "excluded-apps": {
+          "description": "跳过播放具有自己内置声音的特定应用程序的配置通知声音。",
+          "label": "排除的应用程序",
+          "placeholder": "discord,firefox,chrome,chromium,edge"
+        },
+        "files": {
+          "critical": {
+            "description": "为关键优先级通知播放的声音文件路径。",
+            "label": "关键紧急声音",
+            "select-title": "选择关键紧急声音文件"
+          },
+          "low": {
+            "description": "为低优先级通知播放的声音文件路径。",
+            "label": "低紧急声音",
+            "select-title": "选择低紧急声音文件"
+          },
+          "normal": {
+            "description": "为普通优先级通知播放的声音文件路径。",
+            "label": "普通紧急声音",
+            "select-title": "选择普通紧急声音文件"
+          },
+          "placeholder": "输入声音文件路径",
+          "section": {
+            "description": "为不同的通知紧急级别配置自定义声音文件。",
+            "label": "声音文件"
+          },
+          "select-file": "选择声音文件",
+          "unified": {
+            "description": "为通知播放的声音文件路径。",
+            "label": "通知声音",
+            "select-title": "选择通知声音文件"
+          }
+        },
+        "section": {
+          "description": "配置通知音效和音量。",
+          "label": "声音设置"
+        },
+        "separate": {
+          "description": "为低、普通和关键优先级通知使用不同的声音文件。",
+          "label": "按优先级使用不同声音"
+        },
+        "unavailable": {
+          "description": "安装 Qt6 多媒体以启用通知声音。",
+          "label": "通知声音不可用"
+        },
+        "volume": {
+          "description": "调整通知声音的音量级别。",
+          "label": "声音音量"
         }
       },
       "title": "通知",
@@ -1807,7 +1933,16 @@
       },
       "uninstall-error": "卸载失败：{error}",
       "uninstall-success": "成功卸载 {plugin}",
-      "uninstalling": "正在卸载 {plugin}..."
+      "uninstalling": "正在卸载 {plugin}...",
+      "update": "更新",
+      "update-all": "全部更新（{count}）",
+      "update-all-success": "所有插件已成功更新",
+      "update-available": "有{count}个插件可更新",
+      "update-error": "更新插件失败：{plugin}：{error}",
+      "update-incompatible": "需要 Noctalia v{version} 或更高版本",
+      "update-success": "已将 {plugin} 更新至 v{version}",
+      "update-version": "v{当前} → v{新}",
+      "updating": "正在更新 {plugin}..."
     },
     "screen-recorder": {
       "audio": {
@@ -1828,7 +1963,7 @@
         "output-folder": {
           "description": "屏幕录制将保存的文件夹。",
           "label": "输出文件夹",
-          "tooltip": "浏览输出文件夹"
+          "tooltip": "输出文件夹"
         },
         "section": {
           "description": "管理屏幕录制输出和内容。",
@@ -2114,7 +2249,7 @@
         "folder": {
           "description": "您的主壁纸文件夹路径。",
           "label": "壁纸文件夹",
-          "tooltip": "浏览壁纸文件夹"
+          "tooltip": "壁纸文件夹"
         },
         "hide-wallpaper-filenames": {
           "description": "在选择器中隐藏壁纸文件名。",
@@ -2123,7 +2258,7 @@
         "monitor-specific": {
           "description": "为每个显示器设置不同的壁纸文件夹。",
           "label": "显示器特定目录",
-          "tooltip": "浏览壁纸文件夹"
+          "tooltip": "显示器壁纸文件夹"
         },
         "recursive-search": {
           "description": "同时在壁纸目录的子文件夹中搜索壁纸。",
@@ -2138,7 +2273,7 @@
         "selector": {
           "description": "选择你的壁纸。",
           "label": "壁纸选择器",
-          "tooltip": "打开壁纸选择器"
+          "tooltip": "壁纸选择器"
         },
         "selector-position": {
           "description": "选择壁纸选择面板的显示位置。",
@@ -2254,7 +2389,7 @@
     "noctalia-performance": {
       "disabled": "性能模式已禁用",
       "enabled": "已启用性能模式",
-      "label": "夜之颂演出"
+      "label": "Noctalia 性能"
     },
     "power-profile": {
       "changed": "电源模式已更改",
@@ -2302,7 +2437,7 @@
     "clear-history": "清除历史记录",
     "click-to-start-recording": "屏幕录制器（开始录制）",
     "click-to-stop-recording": "屏幕录制器（停止录制）",
-    "close": "关闭按钮",
+    "close": "关闭",
     "connect-disconnect-devices": "蓝牙设备",
     "delete-notification": "删除通知",
     "disable-keep-awake": "保持唤醒",
@@ -2339,8 +2474,8 @@
     "open-tray-dropdown": "系统托盘",
     "open-wallpaper-selector": "壁纸选择器",
     "output-muted": "音频输出",
-    "pause": "暂停按钮",
-    "play": "播放按钮",
+    "pause": "暂停",
+    "play": "播放",
     "power-profile": "{profile} 电源模式",
     "previous-media": "上一首",
     "previous-month": "上个月",

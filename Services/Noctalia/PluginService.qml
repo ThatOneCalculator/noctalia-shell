@@ -17,11 +17,22 @@ Singleton {
   signal availablePluginsUpdated
   signal allPluginsLoaded
 
+  // When available plugins are updated, check if we should perform update check
+  onAvailablePluginsUpdated: {
+    if (shouldCheckUpdatesAfterFetch && Object.keys(activeFetches).length === 0) {
+      Logger.d("PluginService", "All registry fetches complete, performing update check");
+      performUpdateCheck();
+    }
+  }
+
   // Loaded plugin instances
   property var loadedPlugins: ({}) // { pluginId: { component, instance, api } }
 
   // Available plugins from all sources (fetched from registries)
   property var availablePlugins: ([]) // Array of plugin metadata from all sources
+
+  // Plugin updates available: { pluginId: { currentVersion, availableVersion } }
+  property var pluginUpdates: ({})
 
   // Track active fetches
   property var activeFetches: ({})
@@ -131,6 +142,12 @@ Singleton {
 
   // Refresh available plugins from all sources
   function refreshAvailablePlugins() {
+    // If fetches are already in progress, don't start new ones
+    if (Object.keys(activeFetches).length > 0) {
+      Logger.d("PluginService", "Refresh already in progress, skipping duplicate refresh");
+      return;
+    }
+
     Logger.i("PluginService", "Refreshing available plugins");
     root.availablePlugins = [];
 
@@ -327,7 +344,7 @@ Singleton {
   }
 
   // Enable a plugin
-  function enablePlugin(pluginId) {
+  function enablePlugin(pluginId, skipAddToBar) {
     if (PluginRegistry.isPluginEnabled(pluginId)) {
       Logger.w("PluginService", "Plugin already enabled:", pluginId);
       return true;
@@ -341,11 +358,13 @@ Singleton {
     PluginRegistry.setPluginEnabled(pluginId, true);
     loadPlugin(pluginId);
 
-    // Add plugin widget to bar if it provides one
-    var manifest = PluginRegistry.getPluginManifest(pluginId);
-    if (manifest && manifest.entryPoints && manifest.entryPoints.barWidget) {
-      var widgetId = "plugin:" + pluginId;
-      addWidgetToBar(widgetId, "right"); // Default to right section
+    // Add plugin widget to bar if it provides one (unless we're restoring from backup)
+    if (!skipAddToBar) {
+      var manifest = PluginRegistry.getPluginManifest(pluginId);
+      if (manifest && manifest.entryPoints && manifest.entryPoints.barWidget) {
+        var widgetId = "plugin:" + pluginId;
+        addWidgetToBar(widgetId, "right"); // Default to right section
+      }
     }
 
     updatePluginInAvailable(pluginId, {
@@ -451,7 +470,7 @@ Singleton {
 
     // Initialize plugin entry with API and manifest
     root.loadedPlugins[pluginId] = {
-      barWidgetComponent: null,
+      barWidget: null,
       mainInstance: null,
       api: pluginApi,
       manifest: manifest
@@ -481,6 +500,7 @@ Singleton {
           }
 
           root.loadedPlugins[pluginId].mainInstance = mainInstance;
+          pluginApi.mainInstance = mainInstance;
           Logger.i("PluginService", "Loaded Main.qml for plugin:", pluginId);
         } else {
           Logger.e("PluginService", "Failed to instantiate Main.qml for:", pluginId);
@@ -496,7 +516,8 @@ Singleton {
       var widgetComponent = Qt.createComponent("file://" + widgetPath);
 
       if (widgetComponent.status === Component.Ready) {
-        root.loadedPlugins[pluginId].barWidgetComponent = widgetComponent;
+        root.loadedPlugins[pluginId].barWidget = widgetComponent;
+        pluginApi.barWidget = widgetComponent;
 
         // Register with BarWidgetRegistry
         BarWidgetRegistry.registerPluginWidget(pluginId, widgetComponent, manifest.metadata);
@@ -549,6 +570,10 @@ Singleton {
         readonly property string pluginDir: "${pluginDir}"
         property var pluginSettings: ({})
         property var manifest: ({})
+
+        // Instance references (set after loading)
+        property var mainInstance: null
+        property var barWidget: null
 
         // IPC handlers storage
         property var ipcHandlers: ({})
@@ -837,6 +862,177 @@ Singleton {
     }
   }
 
+  // Find available plugin by ID
+  function findAvailablePlugin(pluginId) {
+    for (var i = 0; i < root.availablePlugins.length; i++) {
+      if (root.availablePlugins[i].id === pluginId) {
+        return root.availablePlugins[i];
+      }
+    }
+    return null;
+  }
+
+  // Internal flag to track if we should check for updates after registry fetch
+  property bool shouldCheckUpdatesAfterFetch: false
+
+  // Check for plugin updates (call this after availablePlugins are loaded)
+  function checkForUpdates() {
+    Logger.i("PluginService", "Checking for plugin updates");
+
+    // If we have available plugins, check immediately regardless of active fetches
+    if (root.availablePlugins.length > 0) {
+      Logger.d("PluginService", "Available plugins already loaded, checking now");
+      performUpdateCheck();
+      return;
+    }
+
+    // No plugins yet - check if fetch is in progress
+    if (Object.keys(activeFetches).length > 0) {
+      Logger.d("PluginService", "Registry fetch in progress, will check after fetch completes");
+      shouldCheckUpdatesAfterFetch = true;
+      return;
+    }
+
+    // No plugins and no fetches - trigger refresh
+    Logger.d("PluginService", "No available plugins yet, triggering refresh");
+    shouldCheckUpdatesAfterFetch = true;
+    refreshAvailablePlugins();
+  }
+
+  // Perform the actual update check
+  function performUpdateCheck() {
+    var updates = {};
+    var installedIds = PluginRegistry.getAllInstalledPluginIds();
+
+    Logger.d("PluginService", "Checking", installedIds.length, "installed plugins against", root.availablePlugins.length, "available plugins");
+
+    for (var i = 0; i < installedIds.length; i++) {
+      var pluginId = installedIds[i];
+      var installedManifest = PluginRegistry.getPluginManifest(pluginId);
+      var availablePlugin = findAvailablePlugin(pluginId);
+
+      if (installedManifest && availablePlugin) {
+        var currentVersion = installedManifest.version;
+        var availableVersion = availablePlugin.version;
+
+        Logger.d("PluginService", "Comparing", pluginId + ":", currentVersion, "vs", availableVersion);
+
+        // Compare versions
+        if (compareVersions(availableVersion, currentVersion) > 0) {
+          updates[pluginId] = {
+            currentVersion: currentVersion,
+            availableVersion: availableVersion
+          };
+          Logger.i("PluginService", "Update available for", pluginId + ":", currentVersion, "→", availableVersion);
+        }
+      } else if (installedManifest && !availablePlugin) {
+        Logger.d("PluginService", "Plugin", pluginId, "not found in available plugins (might be from disabled source)");
+      }
+    }
+
+    root.pluginUpdates = updates;
+    var updateCount = Object.keys(updates).length;
+
+    if (updateCount > 0) {
+      Logger.i("PluginService", updateCount, "plugin update(s) available");
+      ToastService.showNotice(I18n.tr("settings.plugins.update-available", {
+                                        "count": updateCount
+                                      }), I18n.tr("common.check-settings"));
+    } else {
+      Logger.i("PluginService", "All plugins are up to date");
+    }
+
+    shouldCheckUpdatesAfterFetch = false;
+  }
+
+  // Simple version comparison (semantic versioning x.y.z)
+  function compareVersions(a, b) {
+    var aParts = a.split('.').map(function (x) {
+      return parseInt(x) || 0;
+    });
+    var bParts = b.split('.').map(function (x) {
+      return parseInt(x) || 0;
+    });
+
+    for (var i = 0; i < 3; i++) {
+      var aNum = aParts[i] || 0;
+      var bNum = bParts[i] || 0;
+      if (aNum > bNum)
+        return 1;
+      if (aNum < bNum)
+        return -1;
+    }
+    return 0;
+  }
+
+  // Update a plugin to the latest version
+  function updatePlugin(pluginId, callback) {
+    Logger.i("PluginService", "Updating plugin:", pluginId);
+
+    // Find available plugin metadata
+    var availablePlugin = findAvailablePlugin(pluginId);
+    if (!availablePlugin) {
+      Logger.e("PluginService", "Plugin not found in available plugins:", pluginId);
+      if (callback)
+        callback(false, "Plugin not found");
+      return;
+    }
+
+    // Check Noctalia compatibility
+    if (availablePlugin.minNoctaliaVersion) {
+      // Simple check: just warn, don't block (UpdateService would have more sophisticated logic)
+      Logger.d("PluginService", "Plugin requires Noctalia v" + availablePlugin.minNoctaliaVersion);
+    }
+
+    // Backup entire bar layout
+    var barBackup = {
+      left: JSON.parse(JSON.stringify(Settings.data.bar.widgets.left || [])),
+      center: JSON.parse(JSON.stringify(Settings.data.bar.widgets.center || [])),
+      right: JSON.parse(JSON.stringify(Settings.data.bar.widgets.right || []))
+    };
+    Logger.d("PluginService", "Backed up bar layout");
+
+    // Disable plugin (this removes widgets and unloads code)
+    if (PluginRegistry.isPluginEnabled(pluginId)) {
+      disablePlugin(pluginId);
+    }
+
+    // Now install the new version (reuse installPlugin logic)
+    installPlugin(availablePlugin, function (success, error) {
+      if (success) {
+        Logger.i("PluginService", "Plugin updated successfully:", pluginId);
+
+        // Re-enable the plugin first, so the new component is registered
+        // Skip adding to bar since we'll restore the layout from backup
+        enablePlugin(pluginId, true);
+
+        // Then restore bar layout (so BarWidgetLoaders can find the new component)
+        Settings.data.bar.widgets.left = barBackup.left;
+        Settings.data.bar.widgets.center = barBackup.center;
+        Settings.data.bar.widgets.right = barBackup.right;
+        Logger.d("PluginService", "Restored bar layout");
+
+        // Remove from updates list
+        var updates = Object.assign({}, root.pluginUpdates);
+        delete updates[pluginId];
+        root.pluginUpdates = updates;
+
+        if (callback)
+          callback(true, null);
+      } else {
+        Logger.e("PluginService", "Failed to update plugin:", pluginId, error);
+
+        // Restore bar layout even on failure
+        Settings.data.bar.widgets.left = barBackup.left;
+        Settings.data.bar.widgets.center = barBackup.center;
+        Settings.data.bar.widgets.right = barBackup.right;
+
+        if (callback)
+          callback(false, error);
+      }
+    });
+  }
+
   // Get plugin API for a loaded plugin
   function getPluginAPI(pluginId) {
     return root.loadedPlugins[pluginId]?.api || null;
@@ -875,12 +1071,10 @@ Singleton {
 
         // If this slot is empty, use it
         if (panel.currentPluginId === "") {
-          // Open the panel first so the loader gets created
+          // Set the pluginId first - when panel opens and panelContent loads,
+          // Component.onCompleted will call loadPluginPanel automatically
+          panel.currentPluginId = pluginId;
           panel.open();
-          // Wait a brief moment for the panel to be fully created
-          Qt.callLater(function () {
-            panel.loadPluginPanel(pluginId);
-          });
           return true;
         }
       }
@@ -890,10 +1084,10 @@ Singleton {
     var panel1 = PanelService.getPanel("pluginPanel1", screen);
     if (panel1) {
       panel1.unloadPluginPanel();
+      // Set the pluginId first - when panel opens and panelContent loads,
+      // Component.onCompleted will call loadPluginPanel automatically
+      panel1.currentPluginId = pluginId;
       panel1.open();
-      Qt.callLater(function () {
-        panel1.loadPluginPanel(pluginId);
-      });
       return true;
     }
 

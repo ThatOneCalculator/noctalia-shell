@@ -68,7 +68,7 @@ SmartPanel {
   }
 
   // Target columns, but actual columns may vary based on available width
-  // Account for NTabBar margins (Style.marginXS on each side) to match category tabs width
+  // Account for NTabBar margins to match category tabs width
   readonly property int targetGridColumns: 5
   readonly property int gridContentWidth: listPanelWidth - (2 * Style.marginXS)
   readonly property int gridCellSize: Math.floor((gridContentWidth - ((targetGridColumns - 1) * Style.marginS)) / targetGridColumns)
@@ -87,7 +87,7 @@ SmartPanel {
       var currentIndex = emojiPlugin.categories.indexOf(emojiPlugin.selectedCategory);
       var nextIndex = (currentIndex + 1) % emojiPlugin.categories.length;
       emojiPlugin.selectCategory(emojiPlugin.categories[nextIndex]);
-    } else if ((activePlugin === null || activePlugin === appsPlugin) && appsPlugin.isBrowsingMode && !root.searchText.startsWith(">")) {
+    } else if ((activePlugin === null || activePlugin === appsPlugin) && appsPlugin.isBrowsingMode && !root.searchText.startsWith(">") && Settings.data.appLauncher.showCategories) {
       // In apps browsing mode (no search), Tab navigates between categories
       var availableCategories = appsPlugin.availableCategories || ["all"];
       var currentIndex = availableCategories.indexOf(appsPlugin.selectedCategory);
@@ -103,7 +103,7 @@ SmartPanel {
       var currentIndex = emojiPlugin.categories.indexOf(emojiPlugin.selectedCategory);
       var previousIndex = ((currentIndex - 1) % emojiPlugin.categories.length + emojiPlugin.categories.length) % emojiPlugin.categories.length;
       emojiPlugin.selectCategory(emojiPlugin.categories[previousIndex]);
-    } else if ((activePlugin === null || activePlugin === appsPlugin) && appsPlugin.isBrowsingMode && !root.searchText.startsWith(">")) {
+    } else if ((activePlugin === null || activePlugin === appsPlugin) && appsPlugin.isBrowsingMode && !root.searchText.startsWith(">") && Settings.data.appLauncher.showCategories) {
       var availableCategories = appsPlugin.availableCategories || ["all"];
       var currentIndex = availableCategories.indexOf(appsPlugin.selectedCategory);
       var previousIndex = ((currentIndex - 1) % availableCategories.length + availableCategories.length) % availableCategories.length;
@@ -317,6 +317,14 @@ SmartPanel {
         registerPlugin(this);
         Logger.d("Launcher", "Registered: ClipboardPlugin");
       }
+    }
+  }
+
+  CommandPlugin {
+    id: cmdPlugin
+    Component.onCompleted: {
+      registerPlugin(this);
+      Logger.d("Launcher", "Registered: CommandPlugin");
     }
   }
 
@@ -648,6 +656,7 @@ SmartPanel {
           id: emojiCategoryTabs
           visible: root.activePlugin === emojiPlugin && emojiPlugin.isBrowsingMode
           Layout.fillWidth: true
+          margins: Style.marginM
           property int computedCurrentIndex: {
             if (visible && emojiPlugin.categories) {
               return emojiPlugin.categories.indexOf(emojiPlugin.selectedCategory);
@@ -690,8 +699,9 @@ SmartPanel {
         // App category tabs (shown when browsing apps without search)
         NTabBar {
           id: appCategoryTabs
-          visible: (root.activePlugin === null || root.activePlugin === appsPlugin) && appsPlugin.isBrowsingMode && !root.searchText.startsWith(">")
+          visible: (root.activePlugin === null || root.activePlugin === appsPlugin) && appsPlugin.isBrowsingMode && !root.searchText.startsWith(">") && Settings.data.appLauncher.showCategories
           Layout.fillWidth: true
+          margins: Style.marginM
           property int computedCurrentIndex: {
             if (visible && appsPlugin.availableCategories) {
               return appsPlugin.availableCategories.indexOf(appsPlugin.selectedCategory);
@@ -959,13 +969,37 @@ SmartPanel {
                     }
                   }
 
-                  // Pin/Unpin action icon button
-                  NIconButton {
-                    visible: !!entry.appId && !modelData.isImage && entry.isSelected && Settings.data.dock.enabled
+                  // Action buttons row
+                  RowLayout {
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    icon: entry.isPinned(entry.appId) ? "unpin" : "pin"
-                    tooltipText: entry.isPinned(entry.appId) ? I18n.tr("launcher.unpin") : I18n.tr("launcher.pin")
-                    onClicked: entry.togglePin(entry.appId)
+                    spacing: Style.marginXS
+                    visible: (!!entry.appId && entry.isSelected) || (!!modelData.clipboardId && entry.isSelected)
+
+                    // Pin/Unpin action icon button
+                    NIconButton {
+                      visible: !!entry.appId && !modelData.isImage && entry.isSelected
+                      icon: entry.isPinned(entry.appId) ? "unpin" : "pin"
+                      tooltipText: entry.isPinned(entry.appId) ? I18n.tr("launcher.unpin") : I18n.tr("launcher.pin")
+                      onClicked: entry.togglePin(entry.appId)
+                    }
+
+                    // Delete action icon button for clipboard entries
+                    NIconButton {
+                      visible: !!modelData.clipboardId && entry.isSelected
+                      icon: "trash"
+                      tooltipText: I18n.tr("plugins.clipboard-delete")
+                      z: 1
+                      onClicked: {
+                        if (modelData.clipboardId) {
+                          // Set plugin state before deletion so refresh works
+                          clipPlugin.gotResults = false;
+                          clipPlugin.isWaitingForData = true;
+                          clipPlugin.lastSearchText = root.searchText;
+                          // Delete the item - deleteById now uses Process and will refresh automatically
+                          ClipboardService.deleteById(String(modelData.clipboardId));
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -1277,16 +1311,40 @@ SmartPanel {
                 }
               }
 
-              // Pin/Unpin action icon button (overlay in top-right corner)
-              NIconButton {
-                visible: !!gridEntry.appId && !modelData.isImage && gridEntry.isSelected && Settings.data.dock.enabled
+              // Action buttons (overlay in top-right corner)
+              Row {
+                visible: (!!gridEntry.appId && gridEntry.isSelected) || (!!modelData.clipboardId && gridEntry.isSelected)
                 anchors.top: parent.top
                 anchors.right: parent.right
                 anchors.margins: Style.marginXS
                 z: 10
-                icon: gridEntry.isPinned(gridEntry.appId) ? "unpin" : "pin"
-                tooltipText: gridEntry.isPinned(gridEntry.appId) ? I18n.tr("launcher.unpin") : I18n.tr("launcher.pin")
-                onClicked: gridEntry.togglePin(gridEntry.appId)
+                spacing: Style.marginXXS
+
+                // Pin/Unpin action icon button
+                NIconButton {
+                  visible: !!gridEntry.appId && !modelData.isImage && gridEntry.isSelected
+                  icon: gridEntry.isPinned(gridEntry.appId) ? "unpin" : "pin"
+                  tooltipText: gridEntry.isPinned(gridEntry.appId) ? I18n.tr("launcher.unpin") : I18n.tr("launcher.pin")
+                  onClicked: gridEntry.togglePin(gridEntry.appId)
+                }
+
+                // Delete action icon button for clipboard entries
+                NIconButton {
+                  visible: !!modelData.clipboardId && gridEntry.isSelected
+                  icon: "trash"
+                  tooltipText: I18n.tr("plugins.clipboard-delete")
+                  z: 11
+                  onClicked: {
+                    if (modelData.clipboardId) {
+                      // Set plugin state before deletion so refresh works
+                      clipPlugin.gotResults = false;
+                      clipPlugin.isWaitingForData = true;
+                      clipPlugin.lastSearchText = root.searchText;
+                      // Delete the item - deleteById now uses Process and will refresh automatically
+                      ClipboardService.deleteById(String(modelData.clipboardId));
+                    }
+                  }
+                }
               }
 
               MouseArea {

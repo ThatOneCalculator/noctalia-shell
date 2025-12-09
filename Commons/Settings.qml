@@ -232,6 +232,7 @@ Singleton {
       property bool animationDisabled: false
       property bool compactLockScreen: false
       property bool lockOnSuspend: true
+      property bool showSessionButtonsOnLockScreen: true
       property bool showHibernateOnLockScreen: false
       property bool enableShadows: true
       property string shadowDirection: "bottom_right"
@@ -346,6 +347,7 @@ Singleton {
       property string customLaunchPrefix: ""
       // View mode: "list" or "grid"
       property string viewMode: "list"
+      property bool showCategories: true
     }
 
     // control center
@@ -439,6 +441,10 @@ Singleton {
       // Desktop entry IDs pinned to the dock (e.g., "org.kde.konsole", "firefox.desktop")
       property list<string> pinnedApps: []
       property bool colorizeIcons: false
+
+      property bool pinnedStatic: false
+      property bool inactiveIndicators: false
+      property double deadOpacity: 0.6
     }
 
     // network
@@ -492,6 +498,15 @@ Singleton {
       property int normalUrgencyDuration: 8
       property int criticalUrgencyDuration: 15
       property bool enableKeyboardLayoutToast: true
+      property JsonObject sounds: JsonObject {
+        property bool enabled: false
+        property real volume: 0.5
+        property bool separateSounds: false
+        property string criticalSoundFile: ""
+        property string normalSoundFile: ""
+        property string lowSoundFile: ""
+        property string excludedApps: "discord,firefox,chrome,chromium,edge"
+      }
     }
 
     // on-screen display
@@ -568,10 +583,6 @@ Singleton {
       property string dayTemp: "6500"
       property string manualSunrise: "06:30"
       property string manualSunset: "18:30"
-    }
-
-    property JsonObject changelog: JsonObject {
-      property string lastSeenVersion: ""
     }
 
     // hooks

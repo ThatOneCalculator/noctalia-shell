@@ -88,7 +88,9 @@ Singleton {
                                     "allowUserSettings": true,
                                     "displayMode": "onhover",
                                     "warningThreshold": 30,
-                                    "deviceNativePath": ""
+                                    "deviceNativePath": "",
+                                    "showPowerProfiles": false,
+                                    "showNoctaliaPerformance": false
                                   },
                                   "Bluetooth": {
                                     "allowUserSettings": true,
@@ -118,6 +120,8 @@ Singleton {
                                   "CustomButton": {
                                     "allowUserSettings": true,
                                     "icon": "heart",
+                                    "showIcon": true,
+                                    "hideMode": "alwaysExpanded",
                                     "leftClickExec": "",
                                     "leftClickUpdateText": false,
                                     "rightClickExec": "",
@@ -200,7 +204,12 @@ Singleton {
                                     "onlySameOutput": true,
                                     "onlyActiveWorkspaces": true,
                                     "hideMode": "hidden",
-                                    "colorizeIcons": false
+                                    "colorizeIcons": false,
+                                    "showTitle": false,
+                                    "titleWidth": 120,
+                                    "showPinnedApps": true,
+                                    "smartWidth": true,
+                                    "maxTaskbarWidth": 40
                                   },
                                   "TaskbarGrouped": {
                                     "allowUserSettings": true,

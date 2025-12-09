@@ -58,6 +58,14 @@
         "low-battery-threshold": {
           "description": "Muestra una advertencia cuando la batería cae por debajo de este porcentaje.",
           "label": "Umbral de advertencia de batería baja"
+        },
+        "show-noctalia-performance": {
+          "description": "Muestra el interruptor del modo de rendimiento Noctalia en el panel de batería.",
+          "label": "Mostrar interruptor de Noctalia Rendimiento"
+        },
+        "show-power-profile": {
+          "description": "Muestra la selección de perfil de energía en el panel de batería.",
+          "label": "Mostrar controles de perfil de energía"
         }
       },
       "brightness": {
@@ -132,6 +140,13 @@
           "stream-description": "Introduce un comando para ejecutar continuamente."
         },
         "dynamic-text": "Texto dinámico",
+        "hide-mode": {
+          "alwaysExpanded": "Siempre expandido",
+          "description": "Controla la visibilidad del widget cuando el comando no tiene salida.",
+          "expandWithOutput": "Expandir cuando tiene salida",
+          "label": "Modo de ocultar",
+          "maxTransparent": "Máximo expandido pero transparente"
+        },
         "icon": {
           "description": "Selecciona un icono de la biblioteca.",
           "label": "Icono"
@@ -166,6 +181,10 @@
           "description": "Comando a ejecutar cuando se hace clic derecho en el botón.",
           "label": "Clic derecho",
           "update-text": "Actualizar el texto mostrado al hacer clic derecho"
+        },
+        "show-icon": {
+          "description": "Alterna la visibilidad del icono del widget.",
+          "label": "Mostrar icono"
         },
         "text-stream": {
           "description": "Las líneas transmitidas desde el comando se mostrarán como texto en el botón.",
@@ -318,6 +337,10 @@
           "description": "Controla cómo se comporta el widget cuando no hay ventanas coincidentes.",
           "label": "Modo de ocultación"
         },
+        "max-width": {
+          "description": "Ancho máximo de la barra de tareas como porcentaje del ancho de la pantalla.",
+          "label": "Ancho máximo"
+        },
         "only-active-workspaces": {
           "description": "Mostrar solo las aplicaciones de los espacios de trabajo activos.",
           "label": "Solo desde espacios de trabajo activos"
@@ -325,6 +348,24 @@
         "only-same-output": {
           "description": "Muestra solo las aplicaciones del resultado donde se encuentra la barra.",
           "label": "Solo de la misma salida"
+        },
+        "show-pinned-apps": {
+          "description": "Mostrar las aplicaciones ancladas desde el dock en la barra de tareas.",
+          "label": "Mostrar aplicaciones ancladas"
+        },
+        "show-title": {
+          "description": "Mostrar títulos de ventanas en la barra de tareas.",
+          "description-disabled": "La barra de tareas vertical no admite mostrar títulos.",
+          "label": "Mostrar título"
+        },
+        "smart-width": {
+          "description": "Ajustar automáticamente el ancho de las entradas según el número de entradas.",
+          "label": "Ancho inteligente"
+        },
+        "title-width": {
+          "description": "Establecer el ancho de los títulos de ventanas en la barra de tareas (en píxeles).",
+          "label": "Ancho del título",
+          "reset-tooltip": "Restablecer ancho del título"
         }
       },
       "taskbar-grouped": {
@@ -341,6 +382,10 @@
         "drawer-enabled": {
           "description": "Cuando está habilitado, los elementos de la bandeja no anclados se muestran en un panel cajón. Cuando está deshabilitado, todos los elementos de la bandeja se muestran en línea.",
           "label": "Habilitar cajón"
+        },
+        "hide-passive": {
+          "description": "Cuando está activado, los elementos de la bandeja con estado Pasivo se ocultarán.",
+          "label": "Ocultar objetos pasivos"
         }
       },
       "volume": {
@@ -372,20 +417,20 @@
   "battery": {
     "battery-level": "Nivel de batería",
     "brightness": "Brillo",
-    "charging": "Cargando.",
-    "charging-rate": "Tasa de carga: {rate} W.",
-    "discharging": "Descargando.",
-    "discharging-rate": "Tasa de descarga: {rate} W.",
+    "charging": "Cargando",
+    "charging-rate": "Tasa de carga: {rate} W",
+    "discharging": "Descargando",
+    "discharging-rate": "Tasa de descarga: {rate} W",
     "health": "Salud: {percent}%",
-    "idle": "Inactivo.",
+    "idle": "Inactivo",
     "inhibit-idle-description": "Mantiene el sistema despierto.",
     "inhibit-idle-label": "Mantener despierto",
-    "no-battery-detected": "No se detectó ninguna batería.",
+    "no-battery-detected": "No se detectó ninguna batería",
     "panel-title": "Batería",
-    "plugged-in": "Conectado.",
+    "plugged-in": "Conectado",
     "power-profile": "Perfil de energía",
-    "time-left": "Tiempo restante: {time}.",
-    "time-until-full": "Tiempo hasta carga completa: {time}."
+    "time-left": "Tiempo restante: {time}",
+    "time-until-full": "Tiempo hasta carga completa: {time}"
   },
   "bluetooth": {
     "panel": {
@@ -452,12 +497,13 @@
     }
   },
   "clock": {
-    "tooltip": "Abrir calendario"
+    "tooltip": "Reloj"
   },
   "common": {
     "add": "Añadir",
     "apply": "Aplicar",
     "cancel": "Cancelar",
+    "check-settings": "Consultar la configuración para más detalles.",
     "close": "Cerrar",
     "save": "Guardar"
   },
@@ -512,11 +558,13 @@
       "misc": "Varios",
       "network": "Red",
       "office": "Oficina",
+      "pinned": "Anclado",
       "system": "Sistema",
       "webbrowser": "Navegador web"
     },
-    "pin": "Anclar al dock",
-    "unpin": "Desanclar del dock"
+    "delete": "Borrar",
+    "pin": "Anclar",
+    "unpin": "Desanclar"
   },
   "lock-screen": {
     "authenticating": "Autenticando...",
@@ -712,11 +760,15 @@
     "clipboard-clear-description": "Limpiar todo el historial del portapapeles",
     "clipboard-clear-description-full": "Eliminar todos los elementos del historial del portapapeles",
     "clipboard-clear-history": "Limpiar historial del portapapeles",
+    "clipboard-delete": "Borrar entrada del portapapeles",
     "clipboard-history-disabled": "Historial del portapapeles desactivado",
     "clipboard-history-disabled-description": "Activa el historial del portapapeles en la configuración o instala cliphist",
     "clipboard-loading": "Cargando historial del portapapeles...",
     "clipboard-loading-description": "Por favor espera",
     "clipboard-search-description": "Buscar en el historial del portapapeles",
+    "command": "Comando",
+    "command-description": "Ejecutar comandos de shell",
+    "command-name": "Comando",
     "emoji": "Selector de emojis",
     "emoji-loading": "Cargando emojis...",
     "emoji-loading-description": "Por favor espera",
@@ -816,7 +868,6 @@
         }
       },
       "noctalia": {
-        "download-latest": "Descargar la última versión",
         "git-commit": "Commit de Git:",
         "git-commit-loading": "Cargando...",
         "installed-version": "Versión instalada:",
@@ -1318,6 +1369,10 @@
           "description": "Aplicar colores del tema a los iconos de aplicaciones del dock (solo aplicaciones no enfocadas).",
           "label": "Colorear iconos"
         },
+        "dead-opacity": {
+          "description": "Ajustar la opacidad de los iconos de las aplicaciones que no están en ejecución.",
+          "label": "Opacidad Muerta"
+        },
         "display": {
           "always-visible": "Siempre visible",
           "auto-hide": "Ocultar automáticamente",
@@ -1332,6 +1387,14 @@
         "icon-size": {
           "description": "Ajusta el tamaño general del Dock.",
           "label": "Tamaño del Dock"
+        },
+        "inactive-indicators": {
+          "description": "Mostrar indicadores en forma de pastillas para todas las aplicaciones, no solo para la que está activa actualmente.",
+          "label": "Indicadores de ejecución"
+        },
+        "pinned-static": {
+          "description": "Siempre empuja los iconos de las aplicaciones ancladas a la izquierda en orden estático.",
+          "label": "Aplicaciones ancladas estáticas"
         },
         "section": {
           "description": "Personaliza el comportamiento y la apariencia del dock.",
@@ -1404,7 +1467,7 @@
           "label": "Perfil"
         },
         "select-avatar": "Seleccionar imagen de avatar",
-        "tooltip": "Buscar imagen de avatar"
+        "tooltip": "Foto de perfil"
       },
       "screen-corners": {
         "radius": {
@@ -1493,6 +1556,10 @@
         "section": {
           "description": "Personaliza el comportamiento y la apariencia del lanzador.",
           "label": "Apariencia"
+        },
+        "show-categories": {
+          "description": "Mostrar pestañas de categorías para filtrar aplicaciones.",
+          "label": "Mostrar categorías"
         },
         "sort-by-usage": {
           "description": "Cuando está activado, las aplicaciones más utilizadas aparecen primero en la lista.",
@@ -1599,6 +1666,10 @@
         "description": "Mostrar la opción 'hibernar' en las acciones de energía.",
         "label": "Mostrar hibernar"
       },
+      "show-session-buttons": {
+        "description": "Permitir el acceso a la configuración de energía desde la pantalla de bloqueo.",
+        "label": "Controles de energía"
+      },
       "title": "Pantalla de bloqueo"
     },
     "network": {
@@ -1671,6 +1742,61 @@
         "section": {
           "description": "Configura la apariencia y el comportamiento de las notificaciones.",
           "label": "Apariencia"
+        }
+      },
+      "sounds": {
+        "enabled": {
+          "description": "Activar efectos de sonido para notificaciones entrantes.",
+          "label": "Activar sonidos de notificación"
+        },
+        "excluded-apps": {
+          "description": "Omitir la reproducción del sonido de notificación configurado para aplicaciones específicas que tienen sus propios sonidos integrados.",
+          "label": "Aplicaciones excluidas",
+          "placeholder": "discord,firefox,chrome,chromium,edge"
+        },
+        "files": {
+          "critical": {
+            "description": "Ruta al archivo de sonido reproducido para notificaciones de prioridad crítica.",
+            "label": "Sonido de urgencia crítica",
+            "select-title": "Seleccionar Archivo de Sonido de Urgencia Crítica"
+          },
+          "low": {
+            "description": "Ruta al archivo de sonido reproducido para notificaciones de prioridad baja.",
+            "label": "Sonido de urgencia baja",
+            "select-title": "Seleccionar Archivo de Sonido de Urgencia Baja"
+          },
+          "normal": {
+            "description": "Ruta al archivo de sonido reproducido para notificaciones de prioridad normal.",
+            "label": "Sonido de urgencia normal",
+            "select-title": "Seleccionar Archivo de Sonido de Urgencia Normal"
+          },
+          "placeholder": "Introducir ruta al archivo de sonido",
+          "section": {
+            "description": "Configurar archivos de sonido personalizados para diferentes niveles de urgencia de notificación.",
+            "label": "Archivos de sonido"
+          },
+          "select-file": "Seleccionar Archivo de Sonido",
+          "unified": {
+            "description": "Ruta al archivo de sonido reproducido para notificaciones.",
+            "label": "Sonido de notificación",
+            "select-title": "Seleccionar Archivo de Sonido de Notificación"
+          }
+        },
+        "section": {
+          "description": "Configurar efectos de sonido y volumen de notificaciones.",
+          "label": "Configuración de sonido"
+        },
+        "separate": {
+          "description": "Usar diferentes archivos de sonido para notificaciones de prioridad baja, normal y crítica.",
+          "label": "Usar sonidos diferentes por prioridad"
+        },
+        "unavailable": {
+          "description": "Instala Qt6 Multimedia para habilitar los sonidos de notificación.",
+          "label": "Sonidos de notificación no disponibles"
+        },
+        "volume": {
+          "description": "Ajustar el nivel de volumen para los sonidos de notificación.",
+          "label": "Volumen del sonido"
         }
       },
       "title": "Notificaciones",
@@ -1807,7 +1933,16 @@
       },
       "uninstall-error": "Error al desinstalar: {error}",
       "uninstall-success": "{plugin} desinstalado correctamente",
-      "uninstalling": "Desinstalando {plugin}..."
+      "uninstalling": "Desinstalando {plugin}...",
+      "update": "Actualizar",
+      "update-all": "Actualizar todo ({count})",
+      "update-all-success": "Todos los plugins se actualizaron correctamente.",
+      "update-available": "{count} actualización(es) de plugin(s) disponible(s)",
+      "update-error": "Error al actualizar el plugin: {plugin}: {error}",
+      "update-incompatible": "Requiere Noctalia v{version} o superior",
+      "update-success": "{plugin} actualizado a la versión {version}",
+      "update-version": "v{actual} → v{nuevo}",
+      "updating": "Actualizando {plugin}..."
     },
     "screen-recorder": {
       "audio": {
@@ -1828,7 +1963,7 @@
         "output-folder": {
           "description": "Carpeta donde se guardarán las grabaciones de pantalla.",
           "label": "Carpeta de salida",
-          "tooltip": "Buscar carpeta de salida"
+          "tooltip": "Carpeta de salida"
         },
         "section": {
           "description": "Gestiona la salida y el contenido de la grabación de pantalla.",
@@ -2114,7 +2249,7 @@
         "folder": {
           "description": "Ruta a tu carpeta principal de fondos de pantalla.",
           "label": "Carpeta de fondos de pantalla",
-          "tooltip": "Buscar carpeta de fondos de pantalla"
+          "tooltip": "Carpeta de fondos de pantalla"
         },
         "hide-wallpaper-filenames": {
           "description": "Oculta los nombres de archivo del fondo de pantalla en el selector.",
@@ -2123,7 +2258,7 @@
         "monitor-specific": {
           "description": "Establece una carpeta de fondos de pantalla diferente para cada monitor.",
           "label": "Directorios específicos por monitor",
-          "tooltip": "Buscar carpeta de fondos de pantalla"
+          "tooltip": "Carpeta de fondos de pantalla del monitor"
         },
         "recursive-search": {
           "description": "Buscar fondos de pantalla también en subcarpetas del directorio de fondos de pantalla.",
@@ -2138,7 +2273,7 @@
         "selector": {
           "description": "Elige tu fondo de pantalla.",
           "label": "Selector de fondo de pantalla",
-          "tooltip": "Abrir el selector de fondo de pantalla"
+          "tooltip": "Selector de fondo de pantalla"
         },
         "selector-position": {
           "description": "Elige dónde aparece el panel selector de fondo de pantalla.",
@@ -2254,7 +2389,7 @@
     "noctalia-performance": {
       "disabled": "Modo de rendimiento desactivado",
       "enabled": "Modo de rendimiento activado",
-      "label": "Actuación de Noctalia"
+      "label": "Noctalia Rendimiento"
     },
     "power-profile": {
       "changed": "Perfil de energía cambiado",
@@ -2302,7 +2437,7 @@
     "clear-history": "Limpiar historial",
     "click-to-start-recording": "Grabadora de pantalla (iniciar grabación)",
     "click-to-stop-recording": "Grabadora de pantalla (detener grabación)",
-    "close": "Botón cerrar",
+    "close": "Cerrar",
     "connect-disconnect-devices": "Dispositivo Bluetooth",
     "delete-notification": "Eliminar notificación",
     "disable-keep-awake": "Mantener despierto",
@@ -2339,8 +2474,8 @@
     "open-tray-dropdown": "Bandeja del sistema",
     "open-wallpaper-selector": "Selector de fondos de pantalla",
     "output-muted": "Salida de audio",
-    "pause": "Botón pausa",
-    "play": "Botón reproducir",
+    "pause": "Pausa",
+    "play": "Reproducir",
     "power-profile": "{profile} perfil de energía",
     "previous-media": "Pista anterior",
     "previous-month": "Mes anterior",

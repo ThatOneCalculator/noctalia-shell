@@ -58,6 +58,14 @@
         "low-battery-threshold": {
           "description": "Show a warning when battery falls below this percentage.",
           "label": "Low battery warning threshold"
+        },
+        "show-noctalia-performance": {
+          "description": "Display the Noctalia Performance Mode toggle inside the battery panel.",
+          "label": "Show Noctalia Performance toggle"
+        },
+        "show-power-profile": {
+          "description": "Display the power profile selection inside the battery panel.",
+          "label": "Show power profile controls"
         }
       },
       "brightness": {
@@ -132,6 +140,13 @@
           "stream-description": "Enter a command to run continuously."
         },
         "dynamic-text": "Dynamic text",
+        "hide-mode": {
+          "alwaysExpanded": "Always expanded",
+          "description": "Controls widget visibility when the command has no output.",
+          "expandWithOutput": "Expand when has output",
+          "label": "Hide mode",
+          "maxTransparent": "Max expanded but transparent"
+        },
         "icon": {
           "description": "Select an icon from the library.",
           "label": "Icon"
@@ -166,6 +181,10 @@
           "description": "Command to execute when the button is right-clicked.",
           "label": "Right click",
           "update-text": "Update displayed text on right-click"
+        },
+        "show-icon": {
+          "description": "Toggles the visibility of the widget's icon.",
+          "label": "Show icon"
         },
         "text-stream": {
           "description": "Streamed lines from the command will be displayed as text on the button.",
@@ -318,6 +337,10 @@
           "description": "Controls how the widget behaves when there are no matching windows.",
           "label": "Hiding mode"
         },
+        "max-width": {
+          "description": "Maximum width of the taskbar as a percentage of screen width.",
+          "label": "Maximum width"
+        },
         "only-active-workspaces": {
           "description": "Show only apps from active workspaces.",
           "label": "Only from active workspaces"
@@ -325,6 +348,24 @@
         "only-same-output": {
           "description": "Show only apps from the output where the bar is located.",
           "label": "Only from same output"
+        },
+        "show-pinned-apps": {
+          "description": "Show pinned apps from the dock in the taskbar.",
+          "label": "Show pinned apps"
+        },
+        "show-title": {
+          "description": "Display window titles in the taskbar.",
+          "description-disabled": "Vertical taskbar does not support showing titles.",
+          "label": "Show title"
+        },
+        "smart-width": {
+          "description": "Automatically adjust entry width based on the number of entries.",
+          "label": "Smart width"
+        },
+        "title-width": {
+          "description": "Set the width of window titles in the taskbar (in pixels).",
+          "label": "Title width",
+          "reset-tooltip": "Reset title width"
         }
       },
       "taskbar-grouped": {
@@ -341,6 +382,10 @@
         "drawer-enabled": {
           "description": "When enabled, unpinned tray items are shown in a drawer panel. When disabled, all tray items are shown inline.",
           "label": "Enable drawer"
+        },
+        "hide-passive": {
+          "description": "When enabled, tray items with Passive status will be hidden.",
+          "label": "Hide passive items"
         }
       },
       "volume": {
@@ -458,6 +503,7 @@
     "add": "Add",
     "apply": "Apply",
     "cancel": "Cancel",
+    "check-settings": "Check Settings for details",
     "close": "Close",
     "save": "Save"
   },
@@ -512,11 +558,13 @@
       "misc": "Misc",
       "network": "Network",
       "office": "Office",
+      "pinned": "Pinned",
       "system": "System",
       "webbrowser": "Web Browser"
     },
-    "pin": "Pin to dock",
-    "unpin": "Unpin from dock"
+    "delete": "Delete",
+    "pin": "Pin",
+    "unpin": "Unpin"
   },
   "lock-screen": {
     "authenticating": "Authenticating...",
@@ -712,11 +760,15 @@
     "clipboard-clear-description": "Clear all clipboard history",
     "clipboard-clear-description-full": "Remove all items from clipboard history",
     "clipboard-clear-history": "Clear clipboard history",
+    "clipboard-delete": "Delete clipboard entry",
     "clipboard-history-disabled": "Clipboard history disabled",
     "clipboard-history-disabled-description": "Enable clipboard history in settings or install cliphist",
     "clipboard-loading": "Loading clipboard history...",
     "clipboard-loading-description": "Please wait",
     "clipboard-search-description": "Search clipboard history",
+    "command": "Command",
+    "command-description": "Run shell commands",
+    "command-name": "Command",
     "emoji": "Emoji picker",
     "emoji-loading": "Loading emojis...",
     "emoji-loading-description": "Please wait",
@@ -816,7 +868,6 @@
         }
       },
       "noctalia": {
-        "download-latest": "Download latest release",
         "git-commit": "Git commit:",
         "git-commit-loading": "Loading...",
         "installed-version": "Installed version:",
@@ -932,7 +983,7 @@
           "label": "Bar density"
         },
         "floating": {
-          "description": "Displays the bar as a floating 'pill'.",
+          "description": "Display the bar as a floating 'pill'.",
           "label": "Floating bar"
         },
         "margins": {
@@ -942,7 +993,7 @@
           "vertical": "Vertical"
         },
         "outer-corners": {
-          "description": "Displays outwardly curved corners on the bar.",
+          "description": "Display outwardly curved corners on the bar.",
           "label": "Outer corners"
         },
         "position": {
@@ -1318,6 +1369,10 @@
           "description": "Apply theme colors to dock app icons (non-focused apps only).",
           "label": "Colorize Icons"
         },
+        "dead-opacity": {
+          "description": "Adjust the opacity of app icons that are not running.",
+          "label": "Dead Opacity"
+        },
         "display": {
           "always-visible": "Always visible",
           "auto-hide": "Auto hide",
@@ -1332,6 +1387,14 @@
         "icon-size": {
           "description": "Adjust the overall size of the dock.",
           "label": "Dock size"
+        },
+        "inactive-indicators": {
+          "description": "Display indicatator pills for all apps, not just the currently active one.",
+          "label": "Running Indicators"
+        },
+        "pinned-static": {
+          "description": "Always push pinned app icons to the left in static order.",
+          "label": "Static Pinned Apps"
         },
         "section": {
           "description": "Customize the dock's behavior and appearance.",
@@ -1494,6 +1557,10 @@
           "description": "Customize the launcher's behavior and appearance.",
           "label": "Appearance"
         },
+        "show-categories": {
+          "description": "Show category tabs for filtering applications.",
+          "label": "Show categories"
+        },
         "sort-by-usage": {
           "description": "When enabled, frequently launched apps appear first in the list.",
           "label": "Sort by most used"
@@ -1526,7 +1593,7 @@
       },
       "date-time": {
         "12hour-format": {
-          "description": "Displays time in 12-hour format on the lock screen and calendar. The bar clock has its own settings.",
+          "description": "Display time in 12-hour format on the lock screen and calendar. The bar clock has its own settings.",
           "label": "Use 12-hour time format"
         },
         "first-day-of-week": {
@@ -1547,7 +1614,7 @@
           "label": "Use analog style clock"
         },
         "week-numbers": {
-          "description": "Displays the week of the year (e.g., week 38) in the calendar.",
+          "description": "Display the week of the year (e.g., week 38) in the calendar.",
           "label": "Show week numbers"
         }
       },
@@ -1577,7 +1644,7 @@
           "label": "Weather"
         },
         "show-effects": {
-          "description": "Shows additional visual effects (like rain, snow, or lightning) on the weather card.",
+          "description": "Show additional visual effects (like rain, snow, or lightning) on the weather card.",
           "label": "Display weather effects"
         },
         "show-in-calendar": {
@@ -1598,6 +1665,10 @@
       "show-hibernate": {
         "description": "Show the option 'hibernate' in the energy actions.",
         "label": "Show hibernate"
+      },
+      "show-session-buttons": {
+        "description": "Allow access to power settings from the lock screen.",
+        "label": "Power controls"
       },
       "title": "Lock Screen"
     },
@@ -1671,6 +1742,61 @@
         "section": {
           "description": "Configure notifications appearance and behavior.",
           "label": "Appearance"
+        }
+      },
+      "sounds": {
+        "enabled": {
+          "description": "Enable sound effects for incoming notifications.",
+          "label": "Enable notification sounds"
+        },
+        "excluded-apps": {
+          "description": "Skip playing the configured notification sound for specific applications that have their own built-in sounds.",
+          "label": "Excluded applications",
+          "placeholder": "discord,firefox,chrome,chromium,edge"
+        },
+        "files": {
+          "critical": {
+            "description": "Path to the sound file played for critical priority notifications.",
+            "label": "Critical urgency sound",
+            "select-title": "Select Critical Urgency Sound File"
+          },
+          "low": {
+            "description": "Path to the sound file played for low priority notifications.",
+            "label": "Low urgency sound",
+            "select-title": "Select Low Urgency Sound File"
+          },
+          "normal": {
+            "description": "Path to the sound file played for normal priority notifications.",
+            "label": "Normal urgency sound",
+            "select-title": "Select Normal Urgency Sound File"
+          },
+          "placeholder": "Enter path to sound file",
+          "section": {
+            "description": "Configure custom sound files for different notification urgency levels.",
+            "label": "Sound files"
+          },
+          "select-file": "Select Sound File",
+          "unified": {
+            "description": "Path to the sound file played for notifications.",
+            "label": "Notification sound",
+            "select-title": "Select Notification Sound File"
+          }
+        },
+        "section": {
+          "description": "Configure notification sound effects and volume.",
+          "label": "Sound settings"
+        },
+        "separate": {
+          "description": "Use different sound files for low, normal, and critical priority notifications.",
+          "label": "Use different sounds per priority"
+        },
+        "unavailable": {
+          "description": "Install Qt6 Multimedia to enable notification sounds.",
+          "label": "Notification sounds unavailable"
+        },
+        "volume": {
+          "description": "Adjust the volume level for notification sounds.",
+          "label": "Sound volume"
         }
       },
       "title": "Notifications",
@@ -1807,8 +1933,16 @@
       },
       "uninstall-error": "Failed to uninstall: {error}",
       "uninstall-success": "Successfully uninstalled {plugin}",
-      "uninstall.tooltip": "Uninstall plugin",
-      "uninstalling": "Uninstalling {plugin}..."
+      "uninstalling": "Uninstalling {plugin}...",
+      "update": "Update",
+      "update-all": "Update All ({count})",
+      "update-all-success": "All plugins updated successfully",
+      "update-available": "{count} plugins update(s) available",
+      "update-error": "Failed to update plugin: {plugin}: {error}",
+      "update-incompatible": "Requires Noctalia v{version} or higher",
+      "update-success": "Updated {plugin} to v{version}",
+      "update-version": "v{current} → v{new}",
+      "updating": "Updating {plugin}..."
     },
     "screen-recorder": {
       "audio": {
@@ -2255,7 +2389,7 @@
     "noctalia-performance": {
       "disabled": "Performance mode disabled",
       "enabled": "Performance mode enabled",
-      "label": "Noctalia performance"
+      "label": "Noctalia Performance"
     },
     "power-profile": {
       "changed": "Power profile changed",
@@ -2303,7 +2437,7 @@
     "clear-history": "Clear history",
     "click-to-start-recording": "Screen recorder (start recording)",
     "click-to-stop-recording": "Screen recorder (stop recording)",
-    "close": "Close button",
+    "close": "Close",
     "connect-disconnect-devices": "Bluetooth device",
     "delete-notification": "Delete notification",
     "disable-keep-awake": "Keep Awake",
@@ -2331,8 +2465,8 @@
     "night-light-enabled": "Night Light",
     "night-light-forced": "Night Light",
     "night-light-not-installed": "Night Light (not available)",
-    "noctalia-performance-disabled": "Noctalia performance mode",
-    "noctalia-performance-enabled": "Noctalia performance mode",
+    "noctalia-performance-disabled": "Noctalia Performance Mode",
+    "noctalia-performance-enabled": "Noctalia Performance Mode",
     "open-control-center": "Control center",
     "open-notification-history-disable-dnd": "Notification history",
     "open-notification-history-enable-dnd": "Notification history",
@@ -2340,8 +2474,8 @@
     "open-tray-dropdown": "System tray",
     "open-wallpaper-selector": "Wallpaper selector",
     "output-muted": "Audio output",
-    "pause": "Pause button",
-    "play": "Play button",
+    "pause": "Pause",
+    "play": "Play",
     "power-profile": "{profile} power profile",
     "previous-media": "Previous track",
     "previous-month": "Previous month",

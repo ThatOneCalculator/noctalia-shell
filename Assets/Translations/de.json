@@ -58,6 +58,14 @@
         "low-battery-threshold": {
           "description": "Warnung anzeigen, wenn Batterie unter diesen Prozentsatz fällt.",
           "label": "Schwellenwert für niedrigen Batteriestand"
+        },
+        "show-noctalia-performance": {
+          "description": "Zeige den Noctalia-Leistungsmodus-Schalter im Batterie-Panel an.",
+          "label": "Noctalia-Performance-Schalter anzeigen"
+        },
+        "show-power-profile": {
+          "description": "Zeige die Auswahl des Energieprofils im Batterie-Panel an.",
+          "label": "Energieprofil-Steuerung anzeigen"
         }
       },
       "brightness": {
@@ -132,6 +140,13 @@
           "stream-description": "Geben Sie einen Befehl ein, der kontinuierlich ausgeführt werden soll."
         },
         "dynamic-text": "Dynamischer Text",
+        "hide-mode": {
+          "alwaysExpanded": "Immer erweitert",
+          "description": "Steuert die Sichtbarkeit des Widgets, wenn der Befehl keine Ausgabe hat.",
+          "expandWithOutput": "Mit Ausgabe erweitern",
+          "label": "Ausblendmodus",
+          "maxTransparent": "Maximal erweitert aber transparent"
+        },
         "icon": {
           "description": "Symbol aus der Bibliothek auswählen.",
           "label": "Symbol"
@@ -166,6 +181,10 @@
           "description": "Befehl, der ausgeführt wird, wenn die Schaltfläche rechts angeklickt wird.",
           "label": "Rechtsklick",
           "update-text": "Text beim Rechtsklick aktualisieren"
+        },
+        "show-icon": {
+          "description": "Schaltet die Sichtbarkeit des Widget-Symbols um.",
+          "label": "Symbol anzeigen"
         },
         "text-stream": {
           "description": "Gestreamte Zeilen aus dem Befehl werden als Text auf der Schaltfläche angezeigt.",
@@ -318,6 +337,10 @@
           "description": "Steuert das Verhalten des Widgets, wenn keine übereinstimmenden Fenster vorhanden sind.",
           "label": "Ausblendmodus"
         },
+        "max-width": {
+          "description": "Maximale Breite der Taskleiste als Prozentsatz der Bildschirmbreite.",
+          "label": "Maximale Breite"
+        },
         "only-active-workspaces": {
           "description": "Zeige nur Apps von aktiven Arbeitsbereichen.",
           "label": "Nur von aktiven Arbeitsbereichen"
@@ -325,6 +348,24 @@
         "only-same-output": {
           "description": "Zeige nur Apps von dem Bildschirm, auf dem sich die Taskbar befindet.",
           "label": "Nur vom gleichen Bildschirm"
+        },
+        "show-pinned-apps": {
+          "description": "Angeheftete Apps aus dem Dock in der Taskleiste anzeigen.",
+          "label": "Angeheftete Apps anzeigen"
+        },
+        "show-title": {
+          "description": "Fenstertitel in der Taskleiste anzeigen.",
+          "description-disabled": "Vertikale Taskleiste unterstützt keine Titelanzeige.",
+          "label": "Titel anzeigen"
+        },
+        "smart-width": {
+          "description": "Breite der Einträge automatisch basierend auf der Anzahl der Einträge anpassen.",
+          "label": "Intelligente Breite"
+        },
+        "title-width": {
+          "description": "Breite der Fenstertitel in der Taskleiste festlegen (in Pixel).",
+          "label": "Titelbreite",
+          "reset-tooltip": "Titelbreite zurücksetzen"
         }
       },
       "taskbar-grouped": {
@@ -341,6 +382,10 @@
         "drawer-enabled": {
           "description": "Wenn aktiviert, werden nicht angeheftete Tray-Elemente in einem Schubladen-Panel angezeigt. Wenn deaktiviert, werden alle Tray-Elemente inline angezeigt.",
           "label": "Schublade aktivieren"
+        },
+        "hide-passive": {
+          "description": "Wenn aktiviert, werden Tray-Elemente mit dem Status \"Passiv\" ausgeblendet.",
+          "label": "Passive Gegenstände ausblenden"
         }
       },
       "volume": {
@@ -372,20 +417,20 @@
   "battery": {
     "battery-level": "Akkustand",
     "brightness": "Helligkeit",
-    "charging": "Wird geladen.",
-    "charging-rate": "Laderate: {rate} W.",
-    "discharging": "Wird entladen.",
-    "discharging-rate": "Entladerate: {rate} W.",
+    "charging": "Wird geladen",
+    "charging-rate": "Laderate: {rate} W",
+    "discharging": "Wird entladen",
+    "discharging-rate": "Entladerate: {rate} W",
     "health": "Zustand: {percent}%",
-    "idle": "Leerlauf.",
+    "idle": "Leerlauf",
     "inhibit-idle-description": "Hält das System wach.",
     "inhibit-idle-label": "Wach halten",
-    "no-battery-detected": "Keine Batterie erkannt.",
+    "no-battery-detected": "Keine Batterie erkannt",
     "panel-title": "Akku",
-    "plugged-in": "Angeschlossen.",
+    "plugged-in": "Angeschlossen",
     "power-profile": "Energieprofil",
-    "time-left": "Verbleibende Zeit: {time}.",
-    "time-until-full": "Verbleibende Ladezeit: {time}."
+    "time-left": "Verbleibende Zeit: {time}",
+    "time-until-full": "Verbleibende Ladezeit: {time}"
   },
   "bluetooth": {
     "panel": {
@@ -452,12 +497,13 @@
     }
   },
   "clock": {
-    "tooltip": "Kalender öffnen"
+    "tooltip": "Uhr"
   },
   "common": {
     "add": "Hinzufügen",
     "apply": "Anwenden",
     "cancel": "Abbrechen",
+    "check-settings": "Überprüfe die Einstellungen für Details.",
     "close": "Schließen",
     "save": "Speichern"
   },
@@ -512,11 +558,13 @@
       "misc": "Verschiedenes",
       "network": "Netzwerk",
       "office": "Büro",
+      "pinned": "Angeheftet",
       "system": "System",
       "webbrowser": "Webbrowser"
     },
-    "pin": "An das Dock anheften",
-    "unpin": "Vom Dock lösen"
+    "delete": "Löschen",
+    "pin": "Anheften",
+    "unpin": "Lösen"
   },
   "lock-screen": {
     "authenticating": "Authentifizierung...",
@@ -712,11 +760,15 @@
     "clipboard-clear-description": "Gesamten Zwischenablageverlauf löschen",
     "clipboard-clear-description-full": "Alle Elemente aus dem Zwischenablageverlauf entfernen",
     "clipboard-clear-history": "Zwischenablageverlauf löschen",
+    "clipboard-delete": "Zwischenablageeintrag löschen",
     "clipboard-history-disabled": "Zwischenablageverlauf deaktiviert",
     "clipboard-history-disabled-description": "Zwischenablageverlauf in den Einstellungen aktivieren oder cliphist installieren",
     "clipboard-loading": "Lade Zwischenablageverlauf...",
     "clipboard-loading-description": "Bitte warten",
     "clipboard-search-description": "Zwischenablageverlauf durchsuchen",
+    "command": "Befehl",
+    "command-description": "Shell-Befehle ausführen",
+    "command-name": "Befehl",
     "emoji": "Emoji-Auswahl",
     "emoji-loading": "Lade Emojis...",
     "emoji-loading-description": "Bitte warten",
@@ -816,7 +868,6 @@
         }
       },
       "noctalia": {
-        "download-latest": "Neueste Version herunterladen",
         "git-commit": "Git-Commit:",
         "git-commit-loading": "Lädt...",
         "installed-version": "Installierte Version:",
@@ -942,7 +993,7 @@
           "vertical": "Vertikal"
         },
         "outer-corners": {
-          "description": "Zeigt nach außen gewölbte Ecken auf der Leiste an.",
+          "description": "Nach außen gewölbte Ecken auf der Leiste anzeigen.",
           "label": "Äußere Ecken"
         },
         "position": {
@@ -1318,6 +1369,10 @@
           "description": "Theme-Farben auf Dock-App-Symbole anwenden (nur nicht fokussierte Apps).",
           "label": "Symbole einfärben"
         },
+        "dead-opacity": {
+          "description": "Die Deckkraft von App-Symbolen anpassen, die nicht ausgeführt werden.",
+          "label": "Tote Opazität"
+        },
         "display": {
           "always-visible": "Immer sichtbar",
           "auto-hide": "Automatisch ausblenden",
@@ -1332,6 +1387,14 @@
         "icon-size": {
           "description": "Gesamtgröße des Docks anpassen.",
           "label": "Dock-Größe"
+        },
+        "inactive-indicators": {
+          "description": "Anzeige von Indikator-Pillen für alle Apps, nicht nur für die aktuell aktive.",
+          "label": "Laufende Indikatoren"
+        },
+        "pinned-static": {
+          "description": "Gepinnten App-Symbole immer in statischer Reihenfolge nach links schieben.",
+          "label": "Statische angeheftete Apps"
         },
         "section": {
           "description": "Verhalten und Erscheinungsbild des Docks anpassen.",
@@ -1404,7 +1467,7 @@
           "label": "Profil"
         },
         "select-avatar": "Avatar auswählen",
-        "tooltip": "Nach Avatarbild suchen"
+        "tooltip": "Profilbild"
       },
       "screen-corners": {
         "radius": {
@@ -1467,7 +1530,7 @@
           "label": "Hintergrund-Transparenz"
         },
         "clip-preview": {
-          "description": "Zeigt eine Vorschau des Inhalts der Zwischenablage an, wenn der Befehl >clip verwendet wird.",
+          "description": "Zeige eine Vorschau des Inhalts der Zwischenablage an, wenn der Befehl >clip verwendet wird.",
           "label": "Clip-Vorschau aktivieren"
         },
         "clipboard-history": {
@@ -1493,6 +1556,10 @@
         "section": {
           "description": "Verhalten und Erscheinungsbild des Starters anpassen.",
           "label": "Erscheinungsbild"
+        },
+        "show-categories": {
+          "description": "Kategorienregisterkarten zum Filtern von Anwendungen anzeigen.",
+          "label": "Kategorien anzeigen"
         },
         "sort-by-usage": {
           "description": "Wenn aktiviert, erscheinen häufig gestartete Apps zuerst in der Liste.",
@@ -1526,7 +1593,7 @@
       },
       "date-time": {
         "12hour-format": {
-          "description": "Zeigt die Uhrzeit im 12-Stunden-Format auf dem Sperrbildschirm und im Kalender an. Die Uhr in der Statusleiste hat eigene Einstellungen.",
+          "description": "Zeige die Uhrzeit im 12-Stunden-Format auf dem Sperrbildschirm und im Kalender an. Die Uhr in der Statusleiste hat eigene Einstellungen.",
           "label": "12-Stunden-Zeitformat benutzen"
         },
         "first-day-of-week": {
@@ -1547,7 +1614,7 @@
           "label": "Analoge Uhr verwenden"
         },
         "week-numbers": {
-          "description": "Zeigt die Kalenderwochen an (z.B. Woche 38).",
+          "description": "Zeige die Woche des Jahres (z.B. Woche 38) im Kalender an.",
           "label": "Wochennummern anzeigen"
         }
       },
@@ -1577,7 +1644,7 @@
           "label": "Wetter"
         },
         "show-effects": {
-          "description": "Zeigt zusätzliche visuelle Effekte (wie Regen, Schnee oder Blitze) auf der Wetterkarte an.",
+          "description": "Zeige zusätzliche visuelle Effekte (wie Regen, Schnee oder Blitze) auf der Wetterkarte an.",
           "label": "Wettereffekte anzeigen"
         },
         "show-in-calendar": {
@@ -1598,6 +1665,10 @@
       "show-hibernate": {
         "description": "Die Option 'Ruhezustand' in den Energieaktionen anzeigen.",
         "label": "Ruhezustand anzeigen"
+      },
+      "show-session-buttons": {
+        "description": "Zugriff auf die Energieeinstellungen vom Sperrbildschirm aus erlauben.",
+        "label": "Leistungsregler"
       },
       "title": "Sperrbildschirm"
     },
@@ -1671,6 +1742,61 @@
         "section": {
           "description": "Erscheinungsbild und Verhalten von Benachrichtigungen konfigurieren.",
           "label": "Erscheinungsbild"
+        }
+      },
+      "sounds": {
+        "enabled": {
+          "description": "Soundeffekte für eingehende Benachrichtigungen aktivieren.",
+          "label": "Benachrichtigungstöne aktivieren"
+        },
+        "excluded-apps": {
+          "description": "Überspringen Sie das Abspielen der konfigurierten Benachrichtigungstöne für bestimmte Anwendungen, die ihre eigenen integrierten Töne haben.",
+          "label": "Ausgeschlossene Anwendungen",
+          "placeholder": "discord,firefox,chrome,chromium,edge"
+        },
+        "files": {
+          "critical": {
+            "description": "Pfad zur Sound-Datei, die für Benachrichtigungen mit kritischer Priorität abgespielt wird.",
+            "label": "Sound bei kritischer Dringlichkeit",
+            "select-title": "Sound-Datei für kritische Dringlichkeit auswählen"
+          },
+          "low": {
+            "description": "Pfad zur Sound-Datei, die für Benachrichtigungen mit niedriger Priorität abgespielt wird.",
+            "label": "Sound bei niedriger Dringlichkeit",
+            "select-title": "Sound-Datei für niedrige Dringlichkeit auswählen"
+          },
+          "normal": {
+            "description": "Pfad zur Sound-Datei, die für Benachrichtigungen mit normaler Priorität abgespielt wird.",
+            "label": "Sound bei normaler Dringlichkeit",
+            "select-title": "Sound-Datei für normale Dringlichkeit auswählen"
+          },
+          "placeholder": "Pfad zur Sound-Datei eingeben",
+          "section": {
+            "description": "Benutzerdefinierte Sound-Dateien für verschiedene Benachrichtigungsdringlichkeitsstufen konfigurieren.",
+            "label": "Sound-Dateien"
+          },
+          "select-file": "Sound-Datei auswählen",
+          "unified": {
+            "description": "Pfad zur Sound-Datei, die für Benachrichtigungen abgespielt wird.",
+            "label": "Benachrichtigungssound",
+            "select-title": "Benachrichtigungssound-Datei auswählen"
+          }
+        },
+        "section": {
+          "description": "Benachrichtigungs-Soundeffekte und Lautstärke konfigurieren.",
+          "label": "Sound-Einstellungen"
+        },
+        "separate": {
+          "description": "Unterschiedliche Sound-Dateien für niedrige, normale und kritische Benachrichtigungsprioritäten verwenden.",
+          "label": "Verschiedene Sounds pro Priorität verwenden"
+        },
+        "unavailable": {
+          "description": "Installieren Sie Qt6 Multimedia, um Benachrichtigungstöne zu aktivieren.",
+          "label": "Benachrichtigungstöne nicht verfügbar"
+        },
+        "volume": {
+          "description": "Lautstärke für Benachrichtigungstöne anpassen.",
+          "label": "Sound-Lautstärke"
         }
       },
       "title": "Benachrichtigungen",
@@ -1807,7 +1933,16 @@
       },
       "uninstall-error": "Deinstallation fehlgeschlagen: {error}",
       "uninstall-success": "{plugin} wurde erfolgreich deinstalliert.",
-      "uninstalling": "{Plugin} wird deinstalliert..."
+      "uninstalling": "{Plugin} wird deinstalliert...",
+      "update": "Aktualisierung",
+      "update-all": "Alle aktualisieren ({count})",
+      "update-all-success": "Alle Plugins wurden erfolgreich aktualisiert.",
+      "update-available": "{count} Plugin-Update(s) verfügbar",
+      "update-error": "Fehler beim Aktualisieren des Plugins: {plugin}: {error}",
+      "update-incompatible": "Benötigt Noctalia v{version} oder höher",
+      "update-success": "{plugin} wurde auf v{version} aktualisiert",
+      "update-version": "v{aktuell} → v{neu}",
+      "updating": "{Plugin} wird aktualisiert..."
     },
     "screen-recorder": {
       "audio": {
@@ -1828,7 +1963,7 @@
         "output-folder": {
           "description": "Ordner, in dem Bildschirmaufnahmen gespeichert werden.",
           "label": "Ausgabe-Ordner",
-          "tooltip": "Nach Ausgabe-Ordner suchen"
+          "tooltip": "Ausgabe-Ordner"
         },
         "section": {
           "description": "Bildschirmaufnahme-Ausgabe und -Inhalt verwalten.",
@@ -1990,7 +2125,7 @@
     "user-interface": {
       "allow-panels-without-bar": {
         "description": "Wenn aktiviert, können sich Panels auf jedem Bildschirm öffnen. Wenn deaktiviert, öffnen sich Panels nur auf Bildschirmen mit einer Leiste, was den Speicherverbrauch reduzieren kann.",
-        "label": "Paneele auf Bildschirmen ohne Leiste zulassen"
+        "label": "Panels auf Bildschirmen ohne Leiste zulassen"
       },
       "animation-disable": {
         "description": "Deaktivieren Sie alle Animationen für eine schnellere und reaktionsfreudigere Erfahrung.",
@@ -2021,12 +2156,12 @@
         "reset": "Deckkraft des gedimmten Desktops zurücksetzen"
       },
       "panel-background-opacity": {
-        "description": "Hintergrunddeckkraft für alle Paneele festlegen (Launcher, Kontrollzentrum, Einstellungen usw.).",
-        "label": "Paneel-Hintergrunddeckkraft"
+        "description": "Hintergrunddeckkraft für alle Panels festlegen (Launcher, Kontrollzentrum, Einstellungen usw.).",
+        "label": "Panel-Hintergrunddeckkraft"
       },
       "panels-attached-to-bar": {
-        "description": "Die Paneele rasten an der Stange und den Bildschirmrändern ein und sorgen so für ein nahtloses Erscheinungsbild mit stilvollen, umgekehrten Ecken.",
-        "label": "Paneele an Kanten ausrichten"
+        "description": "Die Panels rasten an der Stange und den Bildschirmrändern ein und sorgen so für ein nahtloses Erscheinungsbild mit stilvollen, umgekehrten Ecken.",
+        "label": "Panels an Kanten ausrichten"
       },
       "panels-overlay": {
         "description": "Stellt sicher, dass Panels und die Leiste sichtbar bleiben, auch über Vollbildanwendungen.",
@@ -2114,7 +2249,7 @@
         "folder": {
           "description": "Pfad zu Ihrem Haupt-Hintergrundbild-Ordner.",
           "label": "Hintergrundbild-Ordner",
-          "tooltip": "Nach Hintergrundbild-Ordner suchen"
+          "tooltip": "Hintergrundbild-Ordner"
         },
         "hide-wallpaper-filenames": {
           "description": "Hintergrundbilddateinamen im Auswahlmenü ausblenden.",
@@ -2123,7 +2258,7 @@
         "monitor-specific": {
           "description": "Unterschiedlichen Hintergrundbild-Ordner für jeden Monitor festlegen.",
           "label": "Monitor-spezifische Verzeichnisse",
-          "tooltip": "Nach Hintergrundbild-Ordner suchen"
+          "tooltip": "Monitor-Hintergrundbild-Ordner"
         },
         "recursive-search": {
           "description": "Auch nach Hintergrundbildern in Unterordnern des Hintergrundbild-Verzeichnisses suchen.",
@@ -2138,7 +2273,7 @@
         "selector": {
           "description": "Wählen Sie Ihr Hintergrundbild aus.",
           "label": "Hintergrundbild-Auswahl",
-          "tooltip": "Hintergrundbild-Auswahl öffnen"
+          "tooltip": "Hintergrundbild-Auswahl"
         },
         "selector-position": {
           "description": "Wählen Sie aus, wo das Hintergrundbild-Auswahlfeld angezeigt wird.",
@@ -2254,7 +2389,7 @@
     "noctalia-performance": {
       "disabled": "Leistungsmodus deaktiviert",
       "enabled": "Leistungsmodus aktiviert",
-      "label": "Noctalia-Aufführung"
+      "label": "Noctalia-Performance"
     },
     "power-profile": {
       "changed": "Energieprofil geändert",
@@ -2302,7 +2437,7 @@
     "clear-history": "Verlauf löschen",
     "click-to-start-recording": "Bildschirmrekorder (Aufnahme starten)",
     "click-to-stop-recording": "Bildschirmrekorder (Aufnahme stoppen)",
-    "close": "Schließen-Button",
+    "close": "Schließen",
     "connect-disconnect-devices": "Bluetooth-Gerät",
     "delete-notification": "Benachrichtigung löschen",
     "disable-keep-awake": "Wach halten",
@@ -2339,8 +2474,8 @@
     "open-tray-dropdown": "System-Tray",
     "open-wallpaper-selector": "Hintergrundbild-Auswahl",
     "output-muted": "Audio-Ausgabe",
-    "pause": "Pause-Button",
-    "play": "Wiedergabe-Button",
+    "pause": "Pause",
+    "play": "Wiedergabe",
     "power-profile": "{profile} Energieprofil",
     "previous-media": "Vorheriger Titel",
     "previous-month": "Vorheriger Monat",
