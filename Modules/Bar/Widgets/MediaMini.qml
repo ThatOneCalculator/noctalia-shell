@@ -325,7 +325,7 @@ Item {
           anchors.margins: -4
           visible: showProgressRing
           progress: MediaService.trackLength > 0 ? MediaService.currentPosition / MediaService.trackLength : 0
-          lineWidth: 2.5 * scaling
+          lineWidth: 2 * scaling
         }
 
         NImageRounded {
@@ -421,7 +421,7 @@ Item {
   // Progress Ring Component
   component ProgressRing: Canvas {
     property real progress: 0
-    property real lineWidth: 1.5
+    property real lineWidth: 2
 
     onProgressChanged: requestPaint()
     Component.onCompleted: requestPaint()
