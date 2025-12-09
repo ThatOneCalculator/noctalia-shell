@@ -24,7 +24,6 @@ ColumnLayout {
   property int valueMaxWidth: widgetData.maxWidth !== undefined ? widgetData.maxWidth : widgetMetadata.maxWidth
   property bool valueUseFixedWidth: widgetData.useFixedWidth !== undefined ? widgetData.useFixedWidth : widgetMetadata.useFixedWidth
   property bool valueShowProgressRing: widgetData.showProgressRing !== undefined ? widgetData.showProgressRing : widgetMetadata.showProgressRing
-  property real valueProgressRingWidth: widgetData.progressRingWidth !== undefined ? widgetData.progressRingWidth : widgetMetadata.progressRingWidth
 
   Component.onCompleted: {
     if (widgetData && widgetData.hideMode !== undefined) {
@@ -44,7 +43,6 @@ ColumnLayout {
     settings.maxWidth = parseInt(widthInput.text) || widgetMetadata.maxWidth;
     settings.useFixedWidth = valueUseFixedWidth;
     settings.showProgressRing = valueShowProgressRing;
-    settings.progressRingWidth = parseFloat(progressRingWidthInput.text) || widgetMetadata.maxWidth;
     return settings;
   }
 
@@ -161,14 +159,5 @@ ColumnLayout {
     currentKey: valueScrollingMode
     onSelected: key => valueScrollingMode = key
     minimumWidth: 200
-  }
-
-  NTextInput {
-    id: progressRingWidthInput
-    Layout.fillWidth: true
-    label: I18n.tr("bar.widget-settings.media-mini.progress-ring-width.label")
-    description: I18n.tr("bar.widget-settings.media-mini.progress-ring-width.description")
-    placeholderText: widgetMetadata.progressRingWidth
-    text: valueProgressRingWidth
   }
 }

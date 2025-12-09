@@ -251,10 +251,6 @@
         "visualizer-type": {
           "description": "Gösterilecek ses görselleştirici stilini seçin.",
           "label": "Görselleştirici türü"
-        },
-        "progress-ring-width": {
-          "description": "Görüntülenirse, ilerleme halkasının çizgi genişliği.",
-          "label": "İlerleme halkası genişliği"
         }
       },
       "microphone": {
