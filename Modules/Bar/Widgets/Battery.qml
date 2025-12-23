@@ -204,10 +204,11 @@ Item {
     text: (isReady || testMode) ? Math.round(percent) : "-"
     suffix: "%"
     autoHide: false
-    forceOpen: isReady && displayMode === "alwaysShow"
-    forceClose: displayMode === "alwaysHide" || (initializationComplete && !isReady)
-    customBackgroundColor: !initializationComplete ? Color.transparent : (charging ? Color.mPrimary : (isLowBattery ? Color.mError : Color.transparent))
-    customTextIconColor: !initializationComplete ? Color.transparent : (charging ? Color.mOnPrimary : (isLowBattery ? Color.mOnError : Color.transparent))
+    forceOpen: isReady && (testMode || battery.isLaptopBattery) && displayMode === "alwaysShow"
+    forceClose: displayMode === "alwaysHide" || !isReady || (!testMode && !battery.isLaptopBattery)
+
+    customBackgroundColor: !initializationComplete ? Color.transparent : (isLowBattery ? Color.mError : Color.transparent)
+    customTextIconColor: !initializationComplete ? Color.transparent : (charging ? "#f6c177" : (isLowBattery ? Color.mOnError : Color.transparent))
 
     tooltipText: {
       let lines = [];

@@ -148,7 +148,7 @@ DraggableDesktopWidget {
       NLinearSpectrum {
         anchors.fill: parent
         values: CavaService.values
-        fillColor: Color.mPrimary
+        fillColor: "#c4a7e7"
         opacity: 0.6
       }
     }
@@ -158,7 +158,7 @@ DraggableDesktopWidget {
       NMirroredSpectrum {
         anchors.fill: parent
         values: CavaService.values
-        fillColor: Color.mPrimary
+        fillColor: "#c4a7e7"
         opacity: 0.6
       }
     }
@@ -168,7 +168,7 @@ DraggableDesktopWidget {
       NWaveSpectrum {
         anchors.fill: parent
         values: CavaService.values
-        fillColor: Color.mPrimary
+        fillColor: "#c4a7e7"
         opacity: 0.6
       }
     }
@@ -211,7 +211,7 @@ DraggableDesktopWidget {
 
       NText {
         Layout.fillWidth: true
-        text: hasPlayer ? (MediaService.trackTitle || "Unknown Track") : "No media playing"
+        text: hasPlayer ? (MediaService.trackTitle || "Unknown Track") : "Just chillin'"
         pointSize: Style.fontSizeS
         font.weight: Style.fontWeightSemiBold
         color: Color.mOnSurface

@@ -57,8 +57,7 @@ Singleton {
                           },
                           "smoothing": {
                             "monstercat": 1,
-                            "noise_reduction"// Enable monstercat smoothing for less jittery animation
-                            : 77
+                            "noise_reduction": 22
                           },
                           "output": {
                             "method": "raw",

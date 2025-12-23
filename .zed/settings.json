@@ -1,0 +1,10 @@
+{
+  "languages": {
+    "QML": {
+      "format_on_save": "off"
+    },
+    "JSON": {
+      "format_on_save": "off"
+    }
+  }
+}

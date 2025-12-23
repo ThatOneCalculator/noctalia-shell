@@ -278,7 +278,7 @@ Item {
   }
 
   function triggerUnifiedWave() {
-    effectColor = Color.mPrimary;
+    effectColor = "#c4a7e7";
     masterAnimation.restart();
   }
 
@@ -286,7 +286,7 @@ Item {
     for (var i = 0; i < localWorkspaces.count; i++) {
       const ws = localWorkspaces.get(i);
       if (ws.isFocused === true) {
-        root.workspaceChanged(ws.id, Color.mPrimary);
+        root.workspaceChanged(ws.id, "#c4a7e7");
         break;
       }
     }
@@ -527,13 +527,13 @@ Item {
           radius: Style.radiusM
           color: {
             if (model.isFocused)
-              return Color.mPrimary;
+              return "#c4a7e7";
             if (model.isUrgent)
               return Color.mError;
             if (model.isOccupied)
               return Color.mSecondary;
 
-            return Qt.alpha(Color.mSecondary, 0.3);
+            return "#6e6a86";
           }
           z: 0
 
@@ -675,7 +675,7 @@ Item {
           radius: Style.radiusM
           color: {
             if (model.isFocused)
-              return Color.mPrimary;
+              return "#c4a7e7";
             if (model.isUrgent)
               return Color.mError;
             if (model.isOccupied)

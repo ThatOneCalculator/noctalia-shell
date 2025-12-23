@@ -80,8 +80,8 @@ Rectangle {
                 }
               }
             }
+            // font.weight: Style.fontWeightBold
             applyUiScale: false
-            font.weight: Style.fontWeightBold
             color: usePrimaryColor ? Color.mPrimary : Color.mOnSurface
             wrapMode: Text.WordWrap
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -101,7 +101,7 @@ Rectangle {
         Repeater {
           model: I18n.locale.toString(now, formatVertical.trim()).split(" ")
           delegate: NText {
-            visible: text !== ""
+            visible: !["", "AM", "PM"].includes(text)
             text: modelData
             family: useCustomFont && customFont ? customFont : Settings.data.ui.fontDefault
             Binding on pointSize {

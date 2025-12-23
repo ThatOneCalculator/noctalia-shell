@@ -7,7 +7,7 @@ Singleton {
   id: root
 
   function iconFromName(iconName, fallbackName) {
-    const fallback = fallbackName || "application-x-executable";
+    const fallback = fallbackName || "application-x-executable-symbolic";
     try {
       if (iconName && typeof Quickshell !== 'undefined' && Quickshell.iconPath) {
         const p = Quickshell.iconPath(iconName, fallback);
@@ -27,7 +27,7 @@ Singleton {
 
   // Resolve icon path for a DesktopEntries appId - safe on missing entries
   function iconForAppId(appId, fallbackName) {
-    const fallback = fallbackName || "application-x-executable";
+    const fallback = fallbackName || "application-x-executable-symbolic";
     if (!appId)
       return iconFromName(fallback, fallback);
     try {

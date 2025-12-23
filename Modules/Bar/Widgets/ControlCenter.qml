@@ -88,7 +88,8 @@ NIconButton {
   density: Settings.data.bar.density
   customRadius: Style.radiusL
   colorBg: Style.capsuleColor
-  colorFg: iconColor
+  colorFg: "#31748f"
+  // colorFg: iconColor
   colorBgHover: useDistroLogo ? Color.mSurfaceVariant : Color.mHover
   colorFgHover: iconHoverColor
   colorBorder: Color.transparent
@@ -157,7 +158,7 @@ NIconButton {
   IconImage {
     id: customOrDistroLogo
     anchors.centerIn: parent
-    width: root.width * 0.8
+    width: useDistroLogo ? root.width * 0.55 : root.width * 0.8
     height: width
     source: {
       if (useDistroLogo)

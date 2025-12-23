@@ -324,7 +324,7 @@ Item {
           ScrollingText {
             anchors.fill: parent
             text: title
-            textColor: hasPlayer ? Color.mOnSurface : Color.mOnSurfaceVariant
+            textColor: hasPlayer ? Color.mSecondary : Color.mOnSurfaceVariant
             fontSize: Style.fontSizeS * scaling
             scrollMode: scrollingMode
             needsScroll: titleMetrics.contentWidth > parent.width
@@ -345,7 +345,7 @@ Item {
           anchors.margins: -4
           visible: showProgressRing
           progress: MediaService.trackLength > 0 ? MediaService.currentPosition / MediaService.trackLength : 0
-          lineWidth: 2.5 * scaling
+          lineWidth: 2 * scaling
         }
 
         NImageRounded {
@@ -364,7 +364,7 @@ Item {
           width: parent.width
           height: parent.height
           icon: hasPlayer ? (MediaService.isPlaying ? "media-pause" : "media-play") : "disc"
-          color: hasPlayer ? Color.mOnSurface : Color.mOnSurfaceVariant
+          color: hasPlayer ? Color.mSecondary : Color.mOnSurfaceVariant
           pointSize: Style.fontSizeM * scaling
         }
       }
@@ -440,7 +440,7 @@ Item {
   // Progress Ring Component
   component ProgressRing: Canvas {
     property real progress: 0
-    property real lineWidth: 2.5
+    property real lineWidth: 2
 
     onProgressChanged: requestPaint()
     Component.onCompleted: requestPaint()
@@ -467,14 +467,14 @@ Item {
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
       ctx.lineWidth = lineWidth;
-      ctx.strokeStyle = Qt.alpha(Color.mOnSurface, 0.4);
+      ctx.strokeStyle = Qt.alpha("#31748f", 0.1);
       ctx.stroke();
 
       // Progress
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + progress * 2 * Math.PI);
       ctx.lineWidth = lineWidth;
-      ctx.strokeStyle = Color.mPrimary;
+      ctx.strokeStyle = "#31748f";
       ctx.lineCap = "round";
       ctx.stroke();
     }
