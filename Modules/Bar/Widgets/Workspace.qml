@@ -681,7 +681,8 @@ Item {
             if (model.isOccupied)
               return Color.mSecondary;
 
-            return Qt.alpha(Color.mSecondary, 0.3);
+            // return Qt.alpha(Color.mSecondary, 0.3);
+            return "#6e6a86";
           }
           z: 0
 
