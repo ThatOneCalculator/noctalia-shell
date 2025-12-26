@@ -61,7 +61,7 @@ SmartPanel {
   property int timeRemaining: 0
 
   // Navigation properties
-  property int selectedIndex: 0
+  property int selectedIndex: -1
 
   // Action metadata mapping
   readonly property var actionMetadata: {
@@ -148,12 +148,12 @@ SmartPanel {
 
   // Lifecycle handlers
   onOpened: {
-    selectedIndex = 0;
+    selectedIndex = -1;
   }
 
   onClosed: {
     cancelTimer();
-    selectedIndex = 0;
+    selectedIndex = -1;
   }
 
   // Timer management
@@ -258,25 +258,37 @@ SmartPanel {
   // Navigation functions
   function selectNextWrapped() {
     if (powerOptions.length > 0) {
-      selectedIndex = (selectedIndex + 1) % powerOptions.length;
+      if (selectedIndex < 0) {
+        selectedIndex = 0;
+      } else {
+        selectedIndex = (selectedIndex + 1) % powerOptions.length;
+      }
     }
   }
 
   function selectPreviousWrapped() {
     if (powerOptions.length > 0) {
-      selectedIndex = (((selectedIndex - 1) % powerOptions.length) + powerOptions.length) % powerOptions.length;
+      if (selectedIndex < 0) {
+        selectedIndex = powerOptions.length - 1;
+      } else {
+        selectedIndex = (((selectedIndex - 1) % powerOptions.length) + powerOptions.length) % powerOptions.length;
+      }
     }
   }
 
   function selectFirst() {
-    selectedIndex = 0;
+    if (powerOptions.length > 0) {
+      selectedIndex = 0;
+    } else {
+      selectedIndex = -1;
+    }
   }
 
   function selectLast() {
     if (powerOptions.length > 0) {
       selectedIndex = powerOptions.length - 1;
     } else {
-      selectedIndex = 0;
+      selectedIndex = -1;
     }
   }
 
@@ -286,8 +298,8 @@ SmartPanel {
     return {
       columns,
       rows,
-      currentRow: Math.floor(selectedIndex / columns),
-      currentCol: selectedIndex % columns,
+      currentRow: selectedIndex >= 0 ? Math.floor(selectedIndex / columns) : -1,
+      currentCol: selectedIndex >= 0 ? selectedIndex % columns : -1,
       itemsInRow: row => Math.min(columns, powerOptions.length - row * columns)
     };
   }
@@ -298,8 +310,9 @@ SmartPanel {
       return;
 
     const grid = getGridInfo();
-    let newRow = grid.currentRow;
-    let newCol = grid.currentCol;
+    // If no selection, start at first item
+    let newRow = grid.currentRow >= 0 ? grid.currentRow : 0;
+    let newCol = grid.currentCol >= 0 ? grid.currentCol : 0;
 
     switch (direction) {
     case "left":
@@ -329,7 +342,7 @@ SmartPanel {
   }
 
   function activate() {
-    if (powerOptions.length > 0 && powerOptions[selectedIndex]) {
+    if (powerOptions.length > 0 && selectedIndex >= 0 && powerOptions[selectedIndex]) {
       const option = powerOptions[selectedIndex];
       startTimer(option.action);
     }
@@ -405,10 +418,14 @@ SmartPanel {
   }
 
   function onNumberPressed(number) {
+    if (!Settings.data.sessionMenu.showNumberLabels) {
+      return;
+    }
     // Number is 1-based, convert to 0-based index
     const index = number - 1;
     if (index >= 0 && index < powerOptions.length) {
       const option = powerOptions[index];
+      selectedIndex = index;
       startTimer(option.action);
     }
   }
@@ -700,10 +717,10 @@ SmartPanel {
       // Text content in the middle
       ColumnLayout {
         anchors.left: iconElement.right
-        anchors.right: numberIndicator.visible ? numberIndicator.left : (pendingIndicator.visible ? pendingIndicator.left : parent.right)
+        anchors.right: numberIndicator.visible ? numberIndicator.left : parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: Style.marginL
-        anchors.rightMargin: (pendingIndicator.visible || numberIndicator.visible) ? Style.marginM : 0
+        anchors.rightMargin: numberIndicator.visible ? Style.marginM : 0
         spacing: 0
 
         NText {
@@ -732,23 +749,21 @@ SmartPanel {
       // Number indicator on the right (when not pending)
       Rectangle {
         id: numberIndicator
-        anchors.right: pendingIndicator.visible ? pendingIndicator.left : parent.right
+        anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        anchors.rightMargin: pendingIndicator.visible ? Style.marginXS : 0
-        width: numberText.width + Style.marginM
-        height: 24
+        width: Style.marginM * 2
+        height: width
         radius: Math.min(Style.radiusM, height / 2)
         color: Qt.alpha(Color.mSurfaceVariant, 0.5)
         border.width: Style.borderS
         border.color: Color.mOutline
-        visible: buttonRoot.number > 0 && !buttonRoot.pending
+        visible: Settings.data.sessionMenu.showNumberLabels && buttonRoot.number > 0 && !buttonRoot.pending
 
         NText {
           id: numberText
           anchors.centerIn: parent
-          text: "Shift+" + buttonRoot.number
+          text: buttonRoot.number
           pointSize: Style.fontSizeS
-          font.weight: Style.fontWeightBold
           color: {
             if (buttonRoot.isSelected || mouseArea.containsMouse)
               return Color.mOnHover;
@@ -761,26 +776,6 @@ SmartPanel {
               easing.type: Easing.OutCirc
             }
           }
-        }
-      }
-
-      // Pending indicator on the right
-      Rectangle {
-        id: pendingIndicator
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        width: 20
-        height: 20
-        radius: Math.min(Style.radiusL, width / 2)
-        color: Color.mPrimary
-        visible: buttonRoot.pending
-
-        NText {
-          anchors.centerIn: parent
-          text: Math.ceil(timeRemaining / 1000)
-          pointSize: Style.fontSizeS
-          font.weight: Style.fontWeightBold
-          color: Color.mOnPrimary
         }
       }
     }
@@ -830,17 +825,6 @@ SmartPanel {
       origin.y: largeButtonRoot.height / 2
       xScale: hoverScale
       yScale: hoverScale
-    }
-
-    // Subtle shadow/glow effect
-    layer.enabled: isSelected || mouseArea.containsMouse || pending
-    layer.effect: MultiEffect {
-      shadowEnabled: true
-      shadowBlur: 20
-      shadowOpacity: 0.3
-      shadowColor: pending ? Color.mPrimary : (isShutdown ? Color.mError : Color.mPrimary)
-      shadowHorizontalOffset: 0
-      shadowVerticalOffset: 0
     }
 
     Behavior on color {
@@ -945,21 +929,20 @@ SmartPanel {
       anchors.top: parent.top
       anchors.right: parent.right
       anchors.margins: Style.marginM
-      width: largeNumberText.width + Style.marginM
-      height: 28
+      width: Style.fontSizeM * 2
+      height: width
       radius: Math.min(Style.radiusM, height / 2)
       color: Qt.alpha(Color.mSurfaceVariant, 0.7)
       border.width: Style.borderS
       border.color: Color.mOutline
-      visible: largeButtonRoot.number > 0 && !largeButtonRoot.pending
+      visible: Settings.data.sessionMenu.showNumberLabels && largeButtonRoot.number > 0 && !largeButtonRoot.pending
       z: 10
 
       NText {
         id: largeNumberText
         anchors.centerIn: parent
-        text: "Shift+" + largeButtonRoot.number
+        text: largeButtonRoot.number
         pointSize: Style.fontSizeM
-        font.weight: Style.fontWeightBold
         color: {
           if (largeButtonRoot.isSelected || mouseArea.containsMouse)
             return Color.mOnPrimary;

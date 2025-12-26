@@ -33,7 +33,7 @@
       },
       "audio-visualizer": {
         "color-name": {
-          "description": "Wähle die Farbe für den Visualisierer aus.",
+          "description": "Wählen Sie die Farbe für den Visualisierer aus.",
           "label": "Füllfarbe"
         },
         "hide-when-idle": {
@@ -303,6 +303,10 @@
         }
       },
       "system-monitor": {
+        "compact-mode": {
+          "description": "Statistiken als Mini-Balkendiagramme anstelle von Textwerten anzeigen. Verhindert Layoutverschiebungen.",
+          "label": "Kompaktmodus"
+        },
         "cpu-temperature": {
           "description": "CPU-Temperaturwerte anzeigen, falls verfügbar.",
           "label": "CPU-Temperatur"
@@ -334,6 +338,10 @@
         "storage-usage": {
           "description": "Festplattenspeicher-Nutzungsinformationen anzeigen.",
           "label": "Speichernutzung"
+        },
+        "use-monospace-font": {
+          "description": "Verwende eine Monospace-Schriftart für eine konsistente Zeichenbreite.",
+          "label": "Schriftart mit fester Breite"
         }
       },
       "taskbar": {
@@ -465,11 +473,13 @@
       "enable-message": "Aktivieren Sie Bluetooth, um verfügbare Geräte zu sehen.",
       "info": "Info",
       "known-devices": "Bekannte Geräte",
+      "no-devices": "Keine Geräte verfügbar",
       "pair": "Koppeln",
       "paired": "Gekoppelt",
       "paired-devices": "Gekoppelte Geräte",
       "pairing": "Koppeln...",
       "pairing-mode": "Stellen Sie sicher, dass sich Ihr Gerät im Kopplungsmodus befindet.",
+      "refresh-devices": "Geräte aktualisieren",
       "scanning": "Scannen nach Geräten...",
       "signal": "Signal",
       "title": "Bluetooth",
@@ -749,7 +759,7 @@
       "never": "Nie Scrollen"
     },
     "settings-panel-mode": {
-      "attached": "An Platte an einer Stange befestigt",
+      "attached": "Panel an der Leiste angeheftet",
       "centered": "Zentriertes Feld",
       "window": "Eigenes Fenster"
     },
@@ -1064,7 +1074,7 @@
           "label": "Widget-Umrisse anzeigen"
         },
         "transparent": {
-          "description": "Dies verhindert, dass Paneele an der Stange befestigt werden können.",
+          "description": "Dies verhindert, dass die Panels an der Leiste angeheftet werden können.",
           "label": "Transparenter Hintergrund"
         }
       },
@@ -1178,14 +1188,14 @@
         "compositors": {
           "description": "Compositor-Theming.",
           "hyprland": {
-            "description": "Schreibe {Dateipfad}."
+            "description": "Schreibe {filepath}"
           },
           "label": "Compositor",
           "mango": {
-            "description": "Schreibe {filepath}. Benötigt mango"
+            "description": "Schreibe {filepath} — benötigt Mango"
           },
           "niri": {
-            "description": "Schreibe {filepath}. Benötigt niri v25.11+"
+            "description": "Schreibe {filepath} — benötigt Niri v25.11+"
           }
         },
         "misc": {
@@ -1201,14 +1211,18 @@
             "description": "Schreibe {filepath}"
           },
           "code": {
-            "description": "Schreibe {filepath} — das HyprLuna-Theme muss manuell installiert und aktiviert werden"
+            "description": "Schreibe {filepath}",
+            "description-detected": "Auf Standardprofil angewendet — erkannt: {clients}",
+            "description-missing": "Kein Code-Editor erkannt (VSCode oder VSCodium)"
           },
           "description": "Anwendungsspezifisches Theming.",
           "discord": {
-            "description": "Schreibe {filepath} für {client} — das HyprLuna-Theme muss manuell installiert und aktiviert werden"
+            "description": "Schreibe {filepath} für {client} — das Theme muss manuell aktiviert werden",
+            "description-detected": "Erkannt: {clients}",
+            "description-missing": "Kein Discord-Client erkannt"
           },
           "emacs": {
-            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>Standard: ~/.emacs.d/themes/noctalia.el<br>Manuell anwenden: (load-theme 'noctalia t)"
+            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>Standard: ~/.emacs.d/themes/noctalia.el"
           },
           "fuzzel": {
             "description": "Schreibe {filepath} und lade neu"
@@ -1262,14 +1276,14 @@
         "ui": {
           "description": "Desktop-Umgebung und UI-Toolkit-Theming.",
           "gtk": {
-            "description": "Schreibt {filepath}"
+            "description": "Schreibe {filepath}"
           },
           "kcolorscheme": {
-            "description": "Schreibt {filepath}"
+            "description": "Schreibe {filepath}"
           },
           "label": "UI",
           "qt": {
-            "description": "Schreibt {filepath}"
+            "description": "Schreibe {filepath}"
           }
         }
       },
@@ -1397,7 +1411,8 @@
         },
         "style": {
           "analog": "Analog",
-          "description": "Wähle den Anzeigestil der Uhr.",
+          "binary": "Binär",
+          "description": "Wählen Sie den Anzeigestil der Uhr.",
           "digital": "Digital",
           "label": "Uhrstil",
           "minimal": "Minimal"
@@ -1920,6 +1935,24 @@
           "label": "Benachrichtigungsdauer"
         }
       },
+      "history": {
+        "critical-urgency": {
+          "description": "Kritische Prioritätsbenachrichtigungen im Verlauf speichern.",
+          "label": "Kritische Dringlichkeit im Verlauf speichern"
+        },
+        "low-urgency": {
+          "description": "Niedrige Prioritätsbenachrichtigungen im Verlauf speichern.",
+          "label": "Niedrige Dringlichkeit im Verlauf speichern"
+        },
+        "normal-urgency": {
+          "description": "Normale Prioritätsbenachrichtigungen im Verlauf speichern.",
+          "label": "Normale Dringlichkeit im Verlauf speichern"
+        },
+        "section": {
+          "description": "Steuern, welche Benachrichtigungen basierend auf ihrer Dringlichkeitsstufe im Verlauf gespeichert werden.",
+          "label": "Verlauf"
+        }
+      },
       "monitors": {
         "section": {
           "description": "Benachrichtigungen auf bestimmten Monitoren anzeigen. Standardmäßig werden sie auf allen Monitoren angezeigt.",
@@ -2274,6 +2307,10 @@
         "description": "Zeige den Titel und die Schließen-Schaltfläche oben im Sitzungsmenü.",
         "label": "Kopfzeile anzeigen"
       },
+      "show-number-labels": {
+        "description": "Nummern-Labels (1-2-3-4...) auf Schaltflächen anzeigen und Nummern-Tastenkürzel für schnelle Auswahl aktivieren.",
+        "label": "Nummern-Labels anzeigen"
+      },
       "title": "Sitzungsmenü"
     },
     "system-monitor": {
@@ -2389,8 +2426,8 @@
         "label": "Aussehen"
       },
       "settings-panel-mode": {
-        "description": "Wähle das Layout der Einstellungen (möglicherweise ist ein Neustart erforderlich).",
-        "label": "Einstellungsfeldmodus"
+        "description": "Wählen Sie das Layout der Einstellungen (möglicherweise ist ein Neustart erforderlich).",
+        "label": "Einstellungs-Panel-Modus"
       },
       "shadows": {
         "description": "Aktiviert Schlagschatten unter Balken und Panels.",
@@ -2408,6 +2445,12 @@
     },
     "wallpaper": {
       "automation": {
+        "change-mode": {
+          "alphabetical": "Alphabetisch",
+          "description": "Wählen Sie, wie Hintergrundbilder bei automatischem Wechsel ausgewählt werden.",
+          "label": "Wechselmodus",
+          "random": "Zufällig"
+        },
         "custom-interval": {
           "description": "Zeit als HH:MM eingeben (z.B. 01:30).",
           "label": "Benutzerdefiniertes Intervall"
@@ -2419,6 +2462,10 @@
         "random-wallpaper": {
           "description": "Zufällige Hintergrundbild-Wechsel in regelmäßigen Abständen planen.",
           "label": "Zufälliges Hintergrundbild"
+        },
+        "scheduled-change": {
+          "description": "Hintergrundbilder automatisch in regelmäßigen Abständen wechseln.",
+          "label": "Geplanter Wechsel"
         },
         "section": {
           "label": "Automatisierung"
@@ -2540,6 +2587,18 @@
     "user-requested": "Vom Benutzer angefordert",
     "welcome-back": "Willkommen zurück,",
     "widget-settings-title": "{widget} Einstellungen"
+  },
+  "system-monitor": {
+    "cpu-temp": "CPU-Temperatur",
+    "cpu-usage": "CPU-Auslastung",
+    "disk": "Festplatte",
+    "download": "Herunterladen",
+    "download-speed": "Download-Geschwindigkeit",
+    "gpu-temp": "GPU-Temperatur",
+    "memory": "Arbeitsspeicher",
+    "title": "Systemüberwachung",
+    "upload": "Hochladen",
+    "upload-speed": "Upload-Geschwindigkeit"
   },
   "toast": {
     "airplane-mode": {
@@ -2743,6 +2802,11 @@
     "no-match": "Keine Übereinstimmung gefunden.",
     "no-wallpaper": "Kein Hintergrundbild gefunden.",
     "panel": {
+      "apikey": {
+        "help": "Ein API-Schlüssel ist erforderlich, um auf NSFW-Inhalte zuzugreifen.",
+        "label": "API-Schlüssel",
+        "placeholder": "Gib deinen Wallhaven API-Schlüssel ein"
+      },
       "apply-all-monitors": {
         "description": "Ausgewähltes Hintergrundbild auf alle Monitore gleichzeitig anwenden.",
         "label": "Auf alle Monitore anwenden"
@@ -2761,6 +2825,7 @@
       "purity": {
         "all": "Alle",
         "label": "Inhaltsfilter",
+        "nsfw": "Nicht jugendfrei",
         "sfw": "SFW",
         "sketchy": "Sketchy"
       },
@@ -2908,6 +2973,7 @@
   },
   "wifi": {
     "panel": {
+      "action-required": "Aktion erforderlich",
       "available-networks": "Verfügbare Netzwerke",
       "connect": "Verbinden",
       "connected": "Verbunden",
@@ -2920,6 +2986,7 @@
       "forget": "Vergessen",
       "forget-network": "Dieses Netzwerk vergessen?",
       "forgetting": "Wird vergessen...",
+      "frequency": "Frequenz",
       "gateway": "Gateway: Gateway",
       "info": "Info",
       "internet": "Internet",
@@ -2934,8 +3001,15 @@
       "scan-again": "Erneut scannen",
       "searching": "Suche nach nahegelegenen Netzwerken...",
       "security": "Sicherheit",
-      "signal": "Signal",
       "title": "WLAN"
+    },
+    "signal": {
+      "excellent": "Ausgezeichnet",
+      "fair": "Mäßig",
+      "good": "Gut",
+      "poor": "Schlecht",
+      "very-good": "Sehr gut",
+      "weak": "Schwach"
     }
   }
 }
