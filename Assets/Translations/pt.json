@@ -94,6 +94,10 @@
           "label": "Barra horizontal"
         },
         "preview": "Pré-visualização",
+        "tooltip-format": {
+          "description": "String de formato para a dica de ferramenta exibida ao passar o mouse sobre o relógio. Deixe vazio para usar a dica de ferramenta padrão.",
+          "label": "Formato da dica de ferramenta"
+        },
         "use-custom-font": {
           "description": "Substitua a fonte padrão por uma fonte personalizada para o relógio.",
           "label": "Usar fonte personalizada"
@@ -421,6 +425,10 @@
           "description": "Exibir áreas de trabalho da tela atualmente em foco, em vez da tela onde a barra está localizada.",
           "label": "Seguir Tela em Foco"
         },
+        "grouped-border-opacity": {
+          "description": "Definir o nível de opacidade para as bordas do contêiner do espaço de trabalho.",
+          "label": "Opacidade da borda"
+        },
         "hide-unoccupied": {
           "description": "Não exibir áreas de trabalho sem janelas.",
           "label": "Ocultar desocupados"
@@ -436,6 +444,10 @@
         "show-labels-only-when-occupied": {
           "description": "Mostrar rótulos de área de trabalho apenas quando contiverem janelas.",
           "label": "Mostrar rótulos apenas quando ocupado."
+        },
+        "unfocused-icons-opacity": {
+          "description": "Definir o nível de opacidade para ícones de aplicativos não focados.",
+          "label": "Opacidade dos ícones desfocados"
         }
       }
     }
@@ -536,7 +548,7 @@
     }
   },
   "clock": {
-    "tooltip": "Relógio"
+    "tooltip": "Calendário"
   },
   "common": {
     "add": "Adicionar",
@@ -561,6 +573,7 @@
     "enable-bluetooth": "Ativar Bluetooth",
     "enable-dnd": "Ativar Não Perturbe",
     "enable-wifi": "Ativar Wi-Fi",
+    "lower-to-bottom": "Abaixar para o fundo",
     "next": "Próximo(a)",
     "open-calendar": "Abrir calendário",
     "open-display-settings": "Configurações de exibição",
@@ -570,7 +583,9 @@
     "pause": "Pausa",
     "play": "Jogar",
     "previous": "Anterior",
+    "raise-to-top": "Elevar ao topo",
     "random-wallpaper": "Papel de parede aleatório",
+    "reset": "Reiniciar",
     "toggle-mute": "Alternar mudo",
     "widget-settings": "Configurações do widget"
   },
@@ -1035,6 +1050,10 @@
     },
     "bar": {
       "appearance": {
+        "background-opacity": {
+          "description": "Defina a opacidade do fundo especificamente para a barra.",
+          "label": "Opacidade do fundo da barra"
+        },
         "capsule-opacity": {
           "description": "Define o nível de opacidade para fundos dos widgets quando a cápsula é mostrada.",
           "label": "Opacidade da cápsula"
@@ -1073,9 +1092,9 @@
           "description": "Exibe uma borda visível ao redor de cada widget.",
           "label": "Mostrar contornos do widget"
         },
-        "transparent": {
-          "description": "Isto impedirá que os painéis se fixem à barra.",
-          "label": "Fundo transparente"
+        "use-separate-opacity": {
+          "description": "Permitir usar um valor de opacidade separado para o fundo da barra.",
+          "label": "Usar opacidade separada para as barras."
         }
       },
       "monitors": {
@@ -1366,6 +1385,10 @@
         "sectionLeft": "Esquerda",
         "sectionRight": "Direito/Certo/À direita"
       },
+      "system-monitor-disk-path": {
+        "description": "Selecione qual ponto de montagem do disco o cartão do monitor do sistema no centro de controle deve monitorar.",
+        "label": "Caminho do disco do monitor do sistema"
+      },
       "title": "Central de Controle"
     },
     "desktop-widgets": {
@@ -1397,6 +1420,10 @@
           "label": "Modo minimalista"
         },
         "preview": "Pré-visualização",
+        "rounded-corners": {
+          "description": "Use cantos arredondados para o fundo do widget.",
+          "label": "Cantos arredondados"
+        },
         "show-background": {
           "description": "Mostrar o contêiner de fundo para o widget de relógio.",
           "label": "Mostrar plano de fundo"
@@ -1463,6 +1490,14 @@
           "description": "Controla o comportamento do widget quando nenhuma mídia está sendo reproduzida.",
           "label": "Modo de ocultação"
         },
+        "rounded-corners": {
+          "description": "Ativar cantos arredondados nas bordas do widget.",
+          "label": "Cantos arredondados"
+        },
+        "show-album-art": {
+          "description": "Mostrar a capa do álbum e as informações da faixa (título e artista).",
+          "label": "Mostrar a capa do álbum e o título"
+        },
         "show-background": {
           "description": "Mostrar o contêiner de fundo para o widget do reprodutor de mídia.",
           "label": "Mostrar plano de fundo"
@@ -1471,13 +1506,13 @@
           "description": "Mostrar botões de controle de mídia (reproduzir/pausar, anterior, próximo) no widget do reprodutor de mídia.",
           "label": "Mostrar botões"
         },
+        "show-visualizer": {
+          "description": "Mostrar a sobreposição do visualizador de áudio.",
+          "label": "Mostrar visualizador"
+        },
         "visualizer-type": {
           "description": "Escolha um tipo de visualização para o fundo do reprodutor de mídia na área de trabalho.",
           "label": "Tipo de visualização"
-        },
-        "visualizer-visibility": {
-          "description": "Controlar quando o visualizador de áudio está visível.",
-          "label": "Visibilidade do visualizador de áudio"
         }
       },
       "title": "Widgets da Área de Trabalho",
@@ -2214,6 +2249,10 @@
         }
       },
       "general": {
+        "copy-to-clipboard": {
+          "description": "Copiar o arquivo para a área de transferência após a gravação terminar.",
+          "label": "Copiar para a área de transferência"
+        },
         "output-folder": {
           "description": "Pasta onde as gravações de tela serão salvas.",
           "label": "Pasta de saída",
@@ -2322,6 +2361,10 @@
       },
       "custom-highlight-colors-title": {
         "label": "Cores de destaque personalizadas"
+      },
+      "disk-path": {
+        "description": "Selecione qual ponto de montagem do disco monitorar.",
+        "label": "Caminho do disco"
       },
       "disk-section": {
         "label": "Uso do disco"
