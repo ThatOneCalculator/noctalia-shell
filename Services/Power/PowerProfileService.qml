@@ -80,19 +80,19 @@ Singleton {
 
   function getColor(p) {
     if (!available)
-      return "#e0def4";
+      return Color.mOnSurface;
 
     const prof = (p !== undefined) ? p : profile;
 
     switch (prof) {
     case PowerProfile.Performance:
-      return "#ebbcba";
+      return Color.mPrimary;
     case PowerProfile.Balanced:
       return "#c4a7e7";
     case PowerProfile.PowerSaver:
-      return "#9ccfd8";
+      return Color.mSecondary;
     default:
-      return "#e0def4";
+      return Color.mOnSurface;
     }
   }
 
