@@ -204,9 +204,8 @@ Item {
     text: (isReady || testMode) ? Math.round(percent) : "-"
     suffix: "%"
     autoHide: false
-    forceOpen: isReady && (testMode || battery.isLaptopBattery) && displayMode === "alwaysShow"
-    forceClose: displayMode === "alwaysHide" || !isReady || (!testMode && !battery.isLaptopBattery)
-
+    forceOpen: isReady && displayMode === "alwaysShow"
+    forceClose: displayMode === "alwaysHide" || (initializationComplete && !isReady)
     customBackgroundColor: !initializationComplete ? Color.transparent : (isLowBattery ? Color.mError : Color.transparent)
     customTextIconColor: !initializationComplete ? Color.transparent : (charging ? "#f6c177" : (isLowBattery ? Color.mOnError : Color.transparent))
 
