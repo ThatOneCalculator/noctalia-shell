@@ -39,7 +39,6 @@ Item {
 
     screen: root.screen
     text: IdleInhibitorService.timeout == null ? "" : Time.formatVagueHumanReadableDuration(IdleInhibitorService.timeout)
-    density: Settings.data.bar.density
     oppositeDirection: BarService.getPillDirection(root)
     icon: IdleInhibitorService.isInhibited ? "keep-awake-on" : "keep-awake-off"
     customTextIconColor: IdleInhibitorService.isInhibited ? "#ebbcba" : "#e0def4"
