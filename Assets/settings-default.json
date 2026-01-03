@@ -17,13 +17,10 @@
     "widgets": {
       "left": [
         {
-          "icon": "rocket",
-          "id": "CustomButton",
-          "leftClickExec": "qs -c noctalia-shell ipc call launcher toggle"
+          "id": "Launcher"
         },
         {
-          "id": "Clock",
-          "usePrimaryColor": false
+          "id": "Clock"
         },
         {
           "id": "SystemMonitor"
@@ -97,9 +94,7 @@
     "panelBackgroundOpacity": 0.93,
     "panelsAttachedToBar": true,
     "settingsPanelMode": "attached",
-    "wifiDetailsViewMode": "grid",
-    "bluetoothDetailsViewMode": "grid",
-    "bluetoothHideUnnamedDevices": false
+    "boxBorderEnabled": false
   },
   "location": {
     "name": "Tokyo",
@@ -155,6 +150,8 @@
     "setWallpaperOnAllMonitors": true,
     "fillMode": "crop",
     "fillColor": "#000000",
+    "useSolidColor": false,
+    "solidColor": "#1a1a2e",
     "randomEnabled": false,
     "wallpaperChangeMode": "random",
     "randomIntervalSec": 300,
@@ -188,7 +185,9 @@
     "viewMode": "list",
     "showCategories": true,
     "iconMode": "tabler",
-    "ignoreMouseInput": false
+    "showIconBackground": true,
+    "ignoreMouseInput": false,
+    "screenshotAnnotationTool": ""
   },
   "controlCenter": {
     "position": "close_to_bar_button",
@@ -292,7 +291,10 @@
   "network": {
     "wifiEnabled": true,
     "bluetoothRssiPollingEnabled": false,
-    "bluetoothRssiPollIntervalMs": 10000
+    "bluetoothRssiPollIntervalMs": 10000,
+    "wifiDetailsViewMode": "grid",
+    "bluetoothDetailsViewMode": "grid",
+    "bluetoothHideUnnamedDevices": false
   },
   "sessionMenu": {
     "enableCountdown": true,

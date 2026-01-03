@@ -142,12 +142,20 @@
           "description": "Si el texto de salida coincide con este valor, el botón se colapsará.",
           "label": "Condición de colapso"
         },
+        "color-selection": {
+          "description": "Aplicar colores del tema al icono y al texto.",
+          "label": "Seleccionar color"
+        },
         "display-command-output": {
           "description": "Ingresa un comando para ejecutar a intervalos regulares. La primera línea de su salida se mostrará como texto.",
           "label": "Mostrar salida de comando",
           "stream-description": "Introduce un comando para ejecutar continuamente."
         },
         "dynamic-text": "Texto dinámico",
+        "enable-colorization": {
+          "description": "Habilitar la coloración para el icono y el texto del botón personalizado, aplicando los colores del tema.",
+          "label": "Habilitar coloración"
+        },
         "hide-mode": {
           "alwaysExpanded": "Siempre expandido",
           "description": "Controla la visibilidad del widget cuando el comando no tiene salida.",
@@ -228,6 +236,12 @@
         "show-icon": {
           "description": "Mostrar el icono de la distribución del teclado.",
           "label": "Mostrar icono"
+        }
+      },
+      "launcher": {
+        "use-primary-color": {
+          "description": "Cuando está habilitado, esto aplica el color primario para dar énfasis.",
+          "label": "Usar color primario"
         }
       },
       "lock-keys": {
@@ -590,6 +604,7 @@
     "enable-bluetooth": "Activar Bluetooth",
     "enable-dnd": "Activar No molestar",
     "enable-wifi": "Activar Wi-Fi",
+    "launcher-settings": "Ajustes del lanzador",
     "lower-to-bottom": "Bajar hasta el fondo",
     "next": "Siguiente",
     "open-calendar": "Abrir calendario",
@@ -649,6 +664,32 @@
     },
     "delete": "Borrar",
     "pin": "Anclar",
+    "providers": {
+      "applications": "Aplicaciones",
+      "calculator": "Calculadora",
+      "calculator-deprecated": "El comando >calc está obsoleto y será eliminado pronto. Por favor, escribe expresiones matemáticas directamente en la búsqueda en su lugar.",
+      "calculator-description": "Calculadora — evalúa expresiones matemáticas",
+      "calculator-enter-expression": "Ingresa una expresión matemática",
+      "calculator-error": "Error",
+      "calculator-name": "Calculadora",
+      "clipboard": "Historial del portapapeles",
+      "clipboard-clear-description": "Limpiar todo el historial del portapapeles",
+      "clipboard-clear-description-full": "Eliminar todos los elementos del historial del portapapeles",
+      "clipboard-clear-history": "Limpiar historial del portapapeles",
+      "clipboard-delete": "Borrar entrada del portapapeles",
+      "clipboard-history-disabled": "Historial del portapapeles desactivado",
+      "clipboard-history-disabled-description": "Activa el historial del portapapeles en la configuración o instala cliphist",
+      "clipboard-loading": "Cargando historial del portapapeles...",
+      "clipboard-loading-description": "Por favor espera",
+      "clipboard-search-description": "Buscar en el historial del portapapeles",
+      "command": "Comando",
+      "command-description": "Ejecutar comandos de shell",
+      "command-name": "Comando",
+      "emoji": "Selector de emojis",
+      "emoji-loading": "Cargando emojis...",
+      "emoji-loading-description": "Por favor espera",
+      "emoji-search-description": "Buscar y copiar emojis"
+    },
     "unpin": "Desanclar"
   },
   "lock-screen": {
@@ -844,32 +885,6 @@
     "search-wallpapers": "Escribe para filtrar fondos de pantalla...",
     "select": "Seleccionar",
     "test": "Probar"
-  },
-  "plugins": {
-    "applications": "Aplicaciones",
-    "calculator": "Calculadora",
-    "calculator-deprecated": "El comando >calc está obsoleto y será eliminado pronto. Por favor, escribe expresiones matemáticas directamente en la búsqueda en su lugar.",
-    "calculator-description": "Calculadora — evalúa expresiones matemáticas",
-    "calculator-enter-expression": "Ingresa una expresión matemática",
-    "calculator-error": "Error",
-    "calculator-name": "Calculadora",
-    "clipboard": "Historial del portapapeles",
-    "clipboard-clear-description": "Limpiar todo el historial del portapapeles",
-    "clipboard-clear-description-full": "Eliminar todos los elementos del historial del portapapeles",
-    "clipboard-clear-history": "Limpiar historial del portapapeles",
-    "clipboard-delete": "Borrar entrada del portapapeles",
-    "clipboard-history-disabled": "Historial del portapapeles desactivado",
-    "clipboard-history-disabled-description": "Activa el historial del portapapeles en la configuración o instala cliphist",
-    "clipboard-loading": "Cargando historial del portapapeles...",
-    "clipboard-loading-description": "Por favor espera",
-    "clipboard-search-description": "Buscar en el historial del portapapeles",
-    "command": "Comando",
-    "command-description": "Ejecutar comandos de shell",
-    "command-name": "Comando",
-    "emoji": "Selector de emojis",
-    "emoji-loading": "Cargando emojis...",
-    "emoji-loading-description": "Por favor espera",
-    "emoji-search-description": "Buscar y copiar emojis"
   },
   "quickSettings": {
     "bluetooth": {
@@ -1809,6 +1824,11 @@
     },
     "launcher": {
       "settings": {
+        "annotation-tool": {
+          "description": "Comando para ejecutar al hacer clic en el botón de anotar en el historial del portapapeles. La imagen se enviará a este comando.",
+          "label": "Herramienta de anotación",
+          "placeholder": "gradia, satty -f -"
+        },
         "clip-preview": {
           "description": "Muestra una vista previa del contenido del portapapeles al usar el comando >clip.",
           "label": "Activar vista previa del portapapeles"
@@ -1848,6 +1868,10 @@
         "show-categories": {
           "description": "Mostrar pestañas de categorías para filtrar aplicaciones.",
           "label": "Mostrar categorías"
+        },
+        "show-icon-background": {
+          "description": "Mostrar un fondo rectangular redondeado detrás de los iconos.",
+          "label": "Mostrar fondo del icono"
         },
         "sort-by-usage": {
           "description": "Cuando está activado, las aplicaciones más utilizadas aparecen primero en la lista.",
@@ -2483,6 +2507,10 @@
         "label": "Velocidad de animación",
         "reset": "Restablecer la velocidad de la animación"
       },
+      "box-border": {
+        "description": "Muestra un contorno alrededor de las áreas de contenido.",
+        "label": "Contorno del contenedor"
+      },
       "box-border-radius": {
         "description": "Ajusta la redondez de las esquinas de las secciones principales del diseño, como barras laterales, tarjetas y paneles de contenido.",
         "label": "Radio del contenedor",
@@ -2860,6 +2888,7 @@
     "night-light-not-installed": "Luz nocturna (no disponible)",
     "noctalia-performance-disabled": "Modo de rendimiento Noctalia",
     "noctalia-performance-enabled": "Modo de rendimiento Noctalia",
+    "open-annotation-tool": "Abrir con herramienta de anotación",
     "open-control-center": "Centro de control",
     "open-notification-history-disable-dnd": "Historial de notificaciones",
     "open-notification-history-enable-dnd": "Historial de notificaciones",

@@ -1,2 +1,4 @@
 .qmlls.ini
 .idea
+.vscode
+RELEASE.md
