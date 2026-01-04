@@ -1306,6 +1306,9 @@
           },
           "zed": {
             "description": "Écrire {filepath} — le thème Comfy doit être installé et activé manuellement"
+          },
+          "zen-browser": {
+            "description": "Écrivez dans {filepath} ; copiez dans le fichier chrome/userChrome.css de votre profil Zen."
           }
         },
         "section": {
@@ -2879,6 +2882,7 @@
     "move-to-center-section": "Section centrale",
     "move-to-left-section": "Section de gauche",
     "move-to-right-section": "Section de droite",
+    "move-to-section": "Aller à {section}",
     "mute": "Muet / Couper le son",
     "next-media": "Piste suivante",
     "next-month": "Mois suivant",
@@ -2936,6 +2940,7 @@
       "apikey": {
         "help": "Une clé API est requise pour accéder au contenu NSFW.",
         "label": "Clé API",
+        "managed-by-env": "Géré via la variable d'environnement NOCTALIA_WALLHAVEN_API_KEY.",
         "placeholder": "Entrez votre clé API Wallhaven"
       },
       "apply-all-monitors": {

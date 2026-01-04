@@ -1306,6 +1306,9 @@
           },
           "zed": {
             "description": "Escrever {filepath} e recarregar"
+          },
+          "zen-browser": {
+            "description": "Escreva em {filepath}; copie para o chrome/userChrome.css do seu perfil Zen."
           }
         },
         "section": {
@@ -2879,6 +2882,7 @@
     "move-to-center-section": "Seção central",
     "move-to-left-section": "Seção esquerda",
     "move-to-right-section": "Seção direita",
+    "move-to-section": "Mover para {section}",
     "mute": "Silenciar",
     "next-media": "Próxima faixa",
     "next-month": "Próximo mês",
@@ -2936,6 +2940,7 @@
       "apikey": {
         "help": "É necessária uma chave de API para acessar conteúdo NSFW.",
         "label": "Chave de API",
+        "managed-by-env": "Gerenciado através da variável de ambiente NOCTALIA_WALLHAVEN_API_KEY.",
         "placeholder": "Insira sua chave da API Wallhaven"
       },
       "apply-all-monitors": {

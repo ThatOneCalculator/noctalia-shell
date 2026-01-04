@@ -1306,6 +1306,9 @@
           },
           "zed": {
             "description": "{filepath} írása és újratöltés"
+          },
+          "zen-browser": {
+            "description": "Írd be ezt a fájlba: {filepath}; másold be a Zen profilod chrome/userChrome.css fájljába."
           }
         },
         "section": {
@@ -2879,6 +2882,7 @@
     "move-to-center-section": "Középső szakasz",
     "move-to-left-section": "Bal oldali szakasz",
     "move-to-right-section": "Jobb oldali szakasz",
+    "move-to-section": "Ugrás a(z) {section} szakaszhoz",
     "mute": "Némítás",
     "next-media": "Következő zene",
     "next-month": "Következő hónap",
@@ -2936,6 +2940,7 @@
       "apikey": {
         "help": "NSFW tartalom eléréséhez API kulcs szükséges.",
         "label": "API kulcs",
+        "managed-by-env": "A NOCTALIA_WALLHAVEN_API_KEY környezeti változóval kezelhető.",
         "placeholder": "Add meg a Wallhaven API kulcsodat!"
       },
       "apply-all-monitors": {

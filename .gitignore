@@ -1,4 +1,5 @@
 .qmlls.ini
 .idea
 .vscode
+*.code-workspace
 RELEASE.md
