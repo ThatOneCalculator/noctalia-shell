@@ -14,6 +14,7 @@ Item {
   property string supportedLayouts: "grid" // Only grid layout for emoji
   property int preferredGridColumns: 7 // More columns for compact emoji display
   property real preferredGridCellRatio: 1.0 // Square cells like apps
+  property bool supportsAutoPaste: true // Emoji can be auto-pasted
 
   property string selectedCategory: "recent"
   property bool showsCategories: true // Default to showing categories
@@ -38,16 +39,16 @@ Item {
 
   function getCategoryName(category) {
     const names = {
-      "recent": I18n.tr("launcher.categories.emoji.recent"),
-      "people": I18n.tr("launcher.categories.emoji.people"),
-      "animals": I18n.tr("launcher.categories.emoji.animals"),
-      "nature": I18n.tr("launcher.categories.emoji.nature"),
-      "food": I18n.tr("launcher.categories.emoji.food"),
-      "activity": I18n.tr("launcher.categories.emoji.activity"),
-      "travel": I18n.tr("launcher.categories.emoji.travel"),
-      "objects": I18n.tr("launcher.categories.emoji.objects"),
-      "symbols": I18n.tr("launcher.categories.emoji.symbols"),
-      "flags": I18n.tr("launcher.categories.emoji.flags")
+      "recent": I18n.tr("launcher.categories.emoji-recent"),
+      "people": I18n.tr("launcher.categories.emoji-people"),
+      "animals": I18n.tr("launcher.categories.emoji-animals"),
+      "nature": I18n.tr("launcher.categories.emoji-nature"),
+      "food": I18n.tr("launcher.categories.emoji-food"),
+      "activity": I18n.tr("launcher.categories.emoji-activity"),
+      "travel": I18n.tr("launcher.categories.emoji-travel"),
+      "objects": I18n.tr("launcher.categories.emoji-objects"),
+      "symbols": I18n.tr("launcher.categories.emoji-symbols"),
+      "flags": I18n.tr("launcher.categories.emoji-flags")
     };
     return names[category] || category;
   }
@@ -149,7 +150,11 @@ Item {
       "icon": null,
       "isImage": false,
       "displayString": emojiChar,
+      "autoPasteText": emojiChar,
       "provider": root,
+      "onAutoPaste": function () {
+        EmojiService.recordUsage(emojiChar);
+      },
       "onActivate": function () {
         EmojiService.copy(emojiChar);
         launcher.close();

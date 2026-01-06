@@ -146,7 +146,7 @@ Item {
       return [
             {
               "name": I18n.tr("launcher.providers.clipboard-loading"),
-              "description": I18n.tr("launcher.providers.clipboard-loading-description"),
+              "description": I18n.tr("launcher.providers.emoji-loading-description"),
               "icon": iconMode === "tabler" ? "refresh" : "view-refresh",
               "isTablerIcon": true,
               "isImage": false,
@@ -165,7 +165,7 @@ Item {
       return [
             {
               "name": I18n.tr("launcher.providers.clipboard-loading"),
-              "description": I18n.tr("launcher.providers.clipboard-loading-description"),
+              "description": I18n.tr("launcher.providers.emoji-loading-description"),
               "icon": iconMode === "tabler" ? "refresh" : "view-refresh",
               "isTablerIcon": true,
               "isImage": false,
@@ -196,8 +196,15 @@ Item {
 
       // Add activation handler
       entry.onActivate = function () {
-        ClipboardService.copyToClipboard(item.id);
-        launcher.close();
+        if (Settings.data.appLauncher.autoPasteClipboard) {
+          launcher.closeImmediately();
+          Qt.callLater(() => {
+                         ClipboardService.pasteFromClipboard(item.id, item.mime);
+                       });
+        } else {
+          ClipboardService.copyToClipboard(item.id);
+          launcher.close();
+        }
       };
 
       results.push(entry);
@@ -254,9 +261,14 @@ Item {
         description = description.substring(0, 77) + "...";
       }
     } else {
-      const chars = preview.length;
-      const words = preview.split(/\s+/).length;
-      description = `${chars} characters, ${words} word${words !== 1 ? 's' : ''}`;
+      // Preview is truncated at ~100 chars, so we can't show exact count
+      if (preview.length >= 100) {
+        description = I18n.tr("toast.clipboard.long-text");
+      } else {
+        const chars = preview.length;
+        const words = preview.split(/\s+/).length;
+        description = `${chars} characters, ${words} word${words !== 1 ? 's' : ''}`;
+      }
     }
 
     return {

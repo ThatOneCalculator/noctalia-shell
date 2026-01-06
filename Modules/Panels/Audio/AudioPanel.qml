@@ -297,7 +297,7 @@ SmartPanel {
           }
 
           NText {
-            text: I18n.tr("settings.audio.title")
+            text: I18n.tr("panels.audio.title")
             pointSize: Style.fontSizeL
             font.weight: Style.fontWeightBold
             color: Color.mOnSurface
@@ -306,7 +306,7 @@ SmartPanel {
 
           NIconButton {
             icon: "close"
-            tooltipText: I18n.tr("tooltips.close")
+            tooltipText: I18n.tr("common.close")
             baseSize: Style.baseWidgetSize * 0.8
             onClicked: {
               root.close();
@@ -320,20 +320,17 @@ SmartPanel {
         id: tabBar
         Layout.fillWidth: true
         currentIndex: panelContent.currentTabIndex
+        distributeEvenly: true
         onCurrentIndexChanged: panelContent.currentTabIndex = currentIndex
 
         NTabButton {
-          Layout.fillWidth: true
-          Layout.preferredWidth: 0
-          text: I18n.tr("settings.audio.panel.tabs.volumes")
+          text: I18n.tr("common.volumes")
           tabIndex: 0
           checked: tabBar.currentIndex === 0
         }
 
         NTabButton {
-          Layout.fillWidth: true
-          Layout.preferredWidth: 0
-          text: I18n.tr("settings.audio.panel.tabs.devices")
+          text: I18n.tr("common.devices")
           tabIndex: 1
           checked: tabBar.currentIndex === 1
         }
@@ -378,7 +375,7 @@ SmartPanel {
                     spacing: Style.marginXS
 
                     NText {
-                      text: I18n.tr("settings.audio.panel.output")
+                      text: I18n.tr("common.output")
                       pointSize: Style.fontSizeM
                       color: Color.mPrimary
                     }
@@ -443,7 +440,7 @@ SmartPanel {
                     spacing: Style.marginXS
 
                     NText {
-                      text: I18n.tr("settings.audio.panel.input")
+                      text: I18n.tr("common.input")
                       pointSize: Style.fontSizeM
                       color: Color.mPrimary
                     }
@@ -771,7 +768,7 @@ SmartPanel {
             // Empty state
             NText {
               visible: panelContent.appStreams.length === 0
-              text: I18n.tr("settings.audio.panel.applications.empty")
+              text: I18n.tr("panels.audio.panel-applications-empty")
               pointSize: Style.fontSizeM
               color: Color.mOnSurfaceVariant
               horizontalAlignment: Text.AlignHCenter
@@ -812,7 +809,7 @@ SmartPanel {
                 spacing: Style.marginS
 
                 NText {
-                  text: I18n.tr("settings.audio.devices.output-device.label")
+                  text: I18n.tr("panels.audio.devices-output-device-label")
                   pointSize: Style.fontSizeL
                   color: Color.mPrimary
                 }
@@ -855,7 +852,7 @@ SmartPanel {
                 spacing: Style.marginS
 
                 NText {
-                  text: I18n.tr("settings.audio.devices.input-device.label")
+                  text: I18n.tr("panels.audio.devices-input-device-label")
                   pointSize: Style.fontSizeL
                   color: Color.mPrimary
                 }

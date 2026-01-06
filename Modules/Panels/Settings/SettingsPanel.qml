@@ -10,7 +10,7 @@ import qs.Widgets
 SmartPanel {
   id: root
 
-  preferredWidth: Math.round(820 * Style.uiScaleRatio)
+  preferredWidth: Math.round(840 * Style.uiScaleRatio)
   preferredHeight: Math.round(910 * Style.uiScaleRatio)
 
   // Settings panel mode: "centered", "attached", "window"
@@ -221,7 +221,7 @@ SmartPanel {
 
   panelContent: Rectangle {
     id: panelContent
-    color: Color.transparent
+    color: "transparent"
 
     SettingsContent {
       id: settingsContent

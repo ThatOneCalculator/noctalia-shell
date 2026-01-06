@@ -182,8 +182,8 @@ NBox {
         model: availableWidgets ?? null
         label: ""
         description: ""
-        placeholder: I18n.tr("bar.widget-settings.section-editor.placeholder")
-        searchPlaceholder: I18n.tr("bar.widget-settings.section-editor.search-placeholder")
+        placeholder: I18n.tr("bar.section-editor.placeholder")
+        searchPlaceholder: I18n.tr("bar.section-editor.search-placeholder")
         onSelected: key => comboBox.currentKey = key
         popupHeight: 300 * Style.uiScaleRatio
         minimumWidth: 200 * Style.uiScaleRatio
@@ -408,7 +408,7 @@ NBox {
                   active: root.widgetHasSettings(modelData.id)
                   sourceComponent: NIconButton {
                     icon: "settings"
-                    tooltipText: I18n.tr("tooltips.widget-settings")
+                    tooltipText: I18n.tr("actions.widget-settings")
                     baseSize: miniButtonSize
                     colorBorder: Qt.alpha(Color.mOutline, Style.opacityLight)
                     colorBg: Color.mOnSurface
@@ -477,7 +477,7 @@ NBox {
         width: 0
         height: Style.baseWidgetSize * 1.15
         radius: Style.iRadiusL
-        color: Color.transparent
+        color: "transparent"
         border.color: Color.mOutline
         border.width: Style.borderS
         opacity: 0.7

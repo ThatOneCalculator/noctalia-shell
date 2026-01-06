@@ -31,7 +31,7 @@ NBox {
       }
 
       NText {
-        text: I18n.tr("calendar.timer.title")
+        text: I18n.tr("common.timer")
         pointSize: Style.fontSizeL
         font.weight: Style.fontWeightBold
         color: Color.mOnSurface
@@ -434,12 +434,12 @@ NBox {
         Layout.fillWidth: true
         Layout.preferredWidth: 0
         implicitHeight: startButton.implicitHeight
-        color: Color.transparent
+        color: "transparent"
 
         NButton {
           id: startButton
           anchors.fill: parent
-          text: isRunning ? I18n.tr("calendar.timer.pause") : (totalSeconds > 0 ? I18n.tr("calendar.timer.resume") : I18n.tr("calendar.timer.start"))
+          text: isRunning ? I18n.tr("common.pause") : (totalSeconds > 0 ? I18n.tr("common.resume") : I18n.tr("common.start"))
           icon: isRunning ? "player-pause" : "player-play"
           enabled: isStopwatchMode || remainingSeconds > 0
           onClicked: {
@@ -456,12 +456,12 @@ NBox {
         Layout.fillWidth: true
         Layout.preferredWidth: 0
         implicitHeight: resetButton.implicitHeight
-        color: Color.transparent
+        color: "transparent"
 
         NButton {
           id: resetButton
           anchors.fill: parent
-          text: I18n.tr("calendar.timer.reset")
+          text: I18n.tr("common.reset")
           icon: "refresh"
           enabled: (isStopwatchMode && (elapsedSeconds > 0 || isRunning)) || (!isStopwatchMode && (remainingSeconds > 0 || isRunning || soundPlaying))
           onClicked: {
@@ -479,6 +479,7 @@ NBox {
       visible: totalSeconds === 0
       currentIndex: isStopwatchMode ? 1 : 0
       margins: 0
+      distributeEvenly: true
       onCurrentIndexChanged: {
         const newMode = currentIndex === 1;
         if (newMode !== isStopwatchMode) {
@@ -513,18 +514,14 @@ NBox {
       }
 
       NTabButton {
-        Layout.fillWidth: true
-        Layout.preferredWidth: 0
-        text: I18n.tr("calendar.timer.countdown")
+        text: I18n.tr("common.countdown")
         tabIndex: 0
         checked: !isStopwatchMode
         radius: Style.iRadiusS
       }
 
       NTabButton {
-        Layout.fillWidth: true
-        Layout.preferredWidth: 0
-        text: I18n.tr("calendar.timer.stopwatch")
+        text: I18n.tr("common.stopwatch")
         tabIndex: 1
         checked: isStopwatchMode
         radius: Style.iRadiusS

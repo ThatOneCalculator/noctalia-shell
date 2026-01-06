@@ -249,7 +249,7 @@ Loader {
             anchors.fill: parent
             visible: Settings.data.general.showScreenCorners
 
-            property color cornerColor: Settings.data.general.forceBlackScreenCorners ? Color.black : Color.mSurface
+            property color cornerColor: Settings.data.general.forceBlackScreenCorners ? "black" : Color.mSurface
             property real cornerRadius: Style.screenRadius
             property real cornerSize: Style.screenRadius
 
@@ -425,12 +425,12 @@ Loader {
                   Layout.preferredHeight: 70
                   Layout.alignment: Qt.AlignVCenter
                   radius: width / 2
-                  color: Color.transparent
+                  color: "transparent"
 
                   Rectangle {
                     anchors.fill: parent
                     radius: parent.radius
-                    color: Color.transparent
+                    color: "transparent"
                     border.color: Qt.alpha(Color.mPrimary, 0.8)
                     border.width: 2
 
@@ -480,7 +480,7 @@ Loader {
 
                   // Welcome back + Username on one line
                   NText {
-                    text: I18n.tr("lock-screen.welcome-back") + " " + HostService.displayName + "!"
+                    text: I18n.tr("system.welcome-back") + " " + HostService.displayName + "!"
                     pointSize: Style.fontSizeXXL
                     color: Color.mOnSurface
                     horizontalAlignment: Text.AlignLeft
@@ -529,6 +529,47 @@ Loader {
               }
             }
 
+            // Info notification
+            Rectangle {
+              width: infoRowLayout.implicitWidth + Style.marginXL * 1.5
+              height: 50
+              anchors.horizontalCenter: parent.horizontalCenter
+              anchors.bottom: parent.bottom
+              anchors.bottomMargin: (Settings.data.general.compactLockScreen ? 280 : 360) * Style.uiScaleRatio
+              radius: Style.radiusL
+              color: Color.mTertiary
+              border.color: Color.mTertiary
+              border.width: 1
+              visible: lockContext.showInfo && lockContext.infoMessage
+              opacity: visible ? 1.0 : 0.0
+
+              RowLayout {
+                id: infoRowLayout
+                anchors.centerIn: parent
+                spacing: 10
+
+                NIcon {
+                  icon: "circle-key"
+                  pointSize: Style.fontSizeXL
+                  color: Color.mOnTertiary
+                }
+
+                NText {
+                  text: lockContext.infoMessage
+                  color: Color.mOnTertiary
+                  pointSize: Style.fontSizeL
+                  horizontalAlignment: Text.AlignHCenter
+                }
+              }
+
+              Behavior on opacity {
+                NumberAnimation {
+                  duration: 300
+                  easing.type: Easing.OutCubic
+                }
+              }
+            }
+
             // Error notification
             Rectangle {
               width: errorRowLayout.implicitWidth + Style.marginXL * 1.5
@@ -550,7 +591,7 @@ Loader {
 
                 NIcon {
                   icon: "alert-circle"
-                  pointSize: Style.fontSizeL
+                  pointSize: Style.fontSizeXL
                   color: Color.mOnError
                 }
 
@@ -668,27 +709,27 @@ Loader {
                 // Measure all button text widths
                 NText {
                   id: logoutText
-                  text: I18n.tr("session-menu.logout")
+                  text: I18n.tr("common.logout")
                   font.pointSize: buttonRowTextMeasurer.fontSize
                 }
                 NText {
                   id: suspendText
-                  text: I18n.tr("session-menu.suspend")
+                  text: I18n.tr("common.suspend")
                   font.pointSize: buttonRowTextMeasurer.fontSize
                 }
                 NText {
                   id: hibernateText
-                  text: Settings.data.general.showHibernateOnLockScreen ? I18n.tr("session-menu.hibernate") : ""
+                  text: Settings.data.general.showHibernateOnLockScreen ? I18n.tr("common.hibernate") : ""
                   font.pointSize: buttonRowTextMeasurer.fontSize
                 }
                 NText {
                   id: rebootText
-                  text: I18n.tr("session-menu.reboot")
+                  text: I18n.tr("common.reboot")
                   font.pointSize: buttonRowTextMeasurer.fontSize
                 }
                 NText {
                   id: shutdownText
-                  text: I18n.tr("session-menu.shutdown")
+                  text: I18n.tr("common.shutdown")
                   font.pointSize: buttonRowTextMeasurer.fontSize
                 }
 
@@ -725,7 +766,7 @@ Loader {
                     Layout.fillWidth: !(Settings.data.location.weatherEnabled && LocationService.data.weather !== null)
                     Layout.preferredHeight: 50
                     radius: Style.radiusL
-                    color: Color.transparent
+                    color: "transparent"
                     clip: true
                     visible: MediaService.currentPlayer && MediaService.canPlay
 
@@ -778,7 +819,7 @@ Loader {
                         Layout.preferredWidth: 34
                         Layout.preferredHeight: 34
                         radius: Math.min(Style.radiusL, width / 2)
-                        color: Color.transparent
+                        color: "transparent"
                         clip: true
 
                         NImageRounded {
@@ -890,6 +931,7 @@ Loader {
                           text: Settings.data.location.name.split(",")[0]
                           pointSize: Style.fontSizeM
                           color: Color.mOnSurfaceVariant
+                          visible: !Settings.data.location.hideWeatherCityName
                         }
 
                         NText {
@@ -1041,7 +1083,7 @@ Loader {
                         width: 0
                         height: 0
                         visible: false
-                        enabled: !lockContext.unlockInProgress
+                        enabled: !lockContext.unlockInProgress || lockContext.waitingForPassword
                         font.pointSize: Style.fontSizeM
                         color: Color.mPrimary
                         echoMode: parent.parent.passwordVisible ? TextInput.Normal : TextInput.Password
@@ -1150,7 +1192,7 @@ Loader {
                       width: 36
                       height: 36
                       radius: Math.min(Style.iRadiusL, width / 2)
-                      color: eyeButtonArea.containsMouse ? Color.mPrimary : Color.transparent
+                      color: eyeButtonArea.containsMouse ? Color.mPrimary : "transparent"
                       visible: passwordInput.text.length > 0
                       enabled: !lockContext.unlockInProgress
 
@@ -1193,10 +1235,10 @@ Loader {
                       width: 36
                       height: 36
                       radius: Math.min(Style.iRadiusL, width / 2)
-                      color: submitButtonArea.containsMouse ? Color.mPrimary : Color.transparent
+                      color: submitButtonArea.containsMouse ? Color.mPrimary : "transparent"
                       border.color: Color.mPrimary
                       border.width: Style.borderS
-                      enabled: !lockContext.unlockInProgress
+                      enabled: !lockContext.unlockInProgress || lockContext.waitingForPassword
 
                       NIcon {
                         anchors.centerIn: parent
@@ -1256,7 +1298,7 @@ Loader {
                     Layout.fillWidth: true
                     Layout.preferredHeight: Settings.data.general.compactLockScreen ? 36 : 48
                     icon: "logout"
-                    text: I18n.tr("session-menu.logout")
+                    text: I18n.tr("common.logout")
                     outlined: true
                     backgroundColor: Color.mOnSurfaceVariant
                     textColor: Color.mOnPrimary
@@ -1277,7 +1319,7 @@ Loader {
                     Layout.fillWidth: true
                     Layout.preferredHeight: Settings.data.general.compactLockScreen ? 36 : 48
                     icon: "suspend"
-                    text: I18n.tr("session-menu.suspend")
+                    text: I18n.tr("common.suspend")
                     outlined: true
                     backgroundColor: Color.mOnSurfaceVariant
                     textColor: Color.mOnPrimary
@@ -1299,7 +1341,7 @@ Loader {
                     Layout.fillWidth: true
                     Layout.preferredHeight: Settings.data.general.compactLockScreen ? 36 : 48
                     icon: "hibernate"
-                    text: I18n.tr("session-menu.hibernate")
+                    text: I18n.tr("common.hibernate")
                     outlined: true
                     backgroundColor: Color.mOnSurfaceVariant
                     textColor: Color.mOnPrimary
@@ -1321,7 +1363,7 @@ Loader {
                     Layout.fillWidth: true
                     Layout.preferredHeight: Settings.data.general.compactLockScreen ? 36 : 48
                     icon: "reboot"
-                    text: I18n.tr("session-menu.reboot")
+                    text: I18n.tr("common.reboot")
                     outlined: true
                     backgroundColor: Color.mOnSurfaceVariant
                     textColor: Color.mOnPrimary
@@ -1342,7 +1384,7 @@ Loader {
                     Layout.fillWidth: true
                     Layout.preferredHeight: Settings.data.general.compactLockScreen ? 36 : 48
                     icon: "shutdown"
-                    text: I18n.tr("session-menu.shutdown")
+                    text: I18n.tr("common.shutdown")
                     outlined: true
                     backgroundColor: Color.mError
                     textColor: Color.mOnError

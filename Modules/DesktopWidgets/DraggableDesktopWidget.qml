@@ -343,8 +343,8 @@ Item {
     id: decorationRect
     anchors.fill: parent
     anchors.margins: -outlineMargin
-    color: DesktopWidgetRegistry.editMode ? Qt.rgba(Color.mPrimary.r, Color.mPrimary.g, Color.mPrimary.b, 0.1) : Color.transparent
-    border.color: (DesktopWidgetRegistry.editMode || internal.isDragging) ? (internal.isDragging ? Color.mOutline : Color.mPrimary) : Color.transparent
+    color: DesktopWidgetRegistry.editMode ? Qt.rgba(Color.mPrimary.r, Color.mPrimary.g, Color.mPrimary.b, 0.1) : "transparent"
+    border.color: (DesktopWidgetRegistry.editMode || internal.isDragging) ? (internal.isDragging ? Color.mOutline : Color.mPrimary) : "transparent"
     border.width: DesktopWidgetRegistry.editMode ? 3 : 0
     radius: Math.round(Style.radiusL * root.widgetScale)
     z: -1
@@ -367,7 +367,7 @@ Item {
       shadowEnabled: true
       shadowBlur: Style.shadowBlur * 1.5
       shadowOpacity: Style.shadowOpacity * 0.6
-      shadowColor: Color.black
+      shadowColor: "black"
       shadowHorizontalOffset: Settings.data.general.shadowOffsetX
       shadowVerticalOffset: Settings.data.general.shadowOffsetY
       blurMax: Style.shadowBlurMax
@@ -397,28 +397,28 @@ Item {
     var items = [];
     if (hasSettings) {
       items.push({
-                   "label": I18n.tr("context-menu.widget-settings"),
+                   "label": I18n.tr("actions.widget-settings"),
                    "action": "widget-settings",
                    "icon": "settings"
                  });
     }
     items.push({
-                 "label": I18n.tr("context-menu.reset"),
+                 "label": I18n.tr("common.reset"),
                  "action": "reset",
                  "icon": "restore"
                });
     items.push({
-                 "label": I18n.tr("context-menu.raise-to-top"),
+                 "label": I18n.tr("actions.raise-to-top"),
                  "action": "raise-to-top",
                  "icon": "stack-front"
                });
     items.push({
-                 "label": I18n.tr("context-menu.lower-to-bottom"),
+                 "label": I18n.tr("actions.lower-to-bottom"),
                  "action": "lower-to-bottom",
                  "icon": "stack-back"
                });
     items.push({
-                 "label": I18n.tr("context-menu.delete"),
+                 "label": I18n.tr("common.delete"),
                  "action": "delete",
                  "icon": "trash"
                });

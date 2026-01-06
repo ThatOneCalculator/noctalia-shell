@@ -357,7 +357,7 @@ Rectangle {
         }
       }
       items.push({
-                   "label": I18n.tr("context-menu.widget-settings"),
+                   "label": I18n.tr("actions.widget-settings"),
                    "action": "widget-settings",
                    "icon": "settings"
                  });
@@ -614,7 +614,7 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Style.toOdd(root.itemSize * 0.25)
                 height: 4
-                color: taskbarItem.isFocused ? Color.mPrimary : Color.transparent
+                color: taskbarItem.isFocused ? Color.mPrimary : "transparent"
                 radius: Math.min(Style.radiusXXS, width / 2)
               }
             }
@@ -725,7 +725,7 @@ Rectangle {
       }
     }
     items.push({
-                 "label": I18n.tr("context-menu.widget-settings"),
+                 "label": I18n.tr("actions.widget-settings"),
                  "action": "widget-settings",
                  "icon": "settings"
                });

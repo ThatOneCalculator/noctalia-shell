@@ -91,8 +91,8 @@ NIconButton {
   // colorFg: iconColor
   colorBgHover: useDistroLogo ? Color.mSurfaceVariant : Color.mHover
   colorFgHover: iconHoverColor
-  colorBorder: Color.transparent
-  colorBorderHover: useDistroLogo ? Color.mHover : Color.transparent
+  colorBorder: "transparent"
+  colorBorderHover: useDistroLogo ? Color.mHover : "transparent"
 
   border.color: Style.capsuleBorderColor
   border.width: Style.capsuleBorderWidth
@@ -102,17 +102,17 @@ NIconButton {
 
     model: [
       {
-        "label": I18n.tr("context-menu.open-launcher"),
+        "label": I18n.tr("actions.open-launcher"),
         "action": "open-launcher",
         "icon": "search"
       },
       {
-        "label": I18n.tr("context-menu.open-settings"),
+        "label": I18n.tr("actions.open-settings"),
         "action": "open-settings",
         "icon": "adjustments"
       },
       {
-        "label": I18n.tr("context-menu.widget-settings"),
+        "label": I18n.tr("actions.widget-settings"),
         "action": "widget-settings",
         "icon": "settings"
       },

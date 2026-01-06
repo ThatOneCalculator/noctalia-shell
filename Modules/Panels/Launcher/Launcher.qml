@@ -33,7 +33,7 @@ SmartPanel {
 
   preferredWidth: totalBaseWidth
   preferredHeight: Math.round(600 * Style.uiScaleRatio)
-  preferredWidthRatio: 0.3
+  preferredWidthRatio: 0.25
   preferredHeightRatio: 0.5
 
   // Positioning
@@ -376,21 +376,21 @@ SmartPanel {
   // Search handling
   function updateResults() {
     results = [];
-    activeProvider = null;
+    var newActiveProvider = null;
 
     // Check for command mode
     if (searchText.startsWith(">")) {
       // Find provider that handles this command
       for (let provider of providers) {
         if (provider.handleCommand && provider.handleCommand(searchText)) {
-          activeProvider = provider;
+          newActiveProvider = provider;
           results = provider.getResults(searchText);
           break;
         }
       }
 
       // Show available commands if just ">" or filter commands if partial match
-      if (!activeProvider) {
+      if (!newActiveProvider) {
         // Collect all commands from all providers
         let allCommands = [];
         for (let provider of providers) {
@@ -436,6 +436,8 @@ SmartPanel {
       }
     }
 
+    // Update activeProvider only after computing new state to avoid UI flicker
+    activeProvider = newActiveProvider;
     selectedIndex = 0;
   }
 
@@ -587,6 +589,21 @@ SmartPanel {
   function activate() {
     if (results.length > 0 && results[selectedIndex]) {
       const item = results[selectedIndex];
+      const provider = item.provider || currentProvider;
+
+      // Check if auto-paste is enabled and provider/item supports it
+      if (Settings.data.appLauncher.autoPasteClipboard && provider && provider.supportsAutoPaste && item.autoPasteText) {
+        // Call optional pre-paste callback (e.g., to record usage)
+        if (item.onAutoPaste) {
+          item.onAutoPaste();
+        }
+        root.closeImmediately();
+        Qt.callLater(() => {
+                       ClipboardService.pasteText(item.autoPasteText);
+                     });
+        return;
+      }
+
       if (item.onActivate) {
         item.onActivate();
       }
@@ -641,7 +658,7 @@ SmartPanel {
   // ---------------------------------------------------
   panelContent: Rectangle {
     id: ui
-    color: Color.transparent
+    color: "transparent"
     opacity: resultsReady ? 1.0 : 0.0
 
     // Preview Panel (external) - uses provider's preview component
@@ -917,6 +934,7 @@ SmartPanel {
 
               width: resultsList.width
               implicitHeight: entryHeight
+              clip: true
               color: entry.isSelected ? Color.mHover : Color.mSurface
 
               Behavior on color {
@@ -1076,9 +1094,9 @@ SmartPanel {
                       font.weight: Style.fontWeightBold
                       color: entry.isSelected ? Color.mOnHover : Color.mOnSurface
                       elide: Text.ElideRight
-                      maximumLineCount: modelData.singleLine ? 1 : 100
-                      wrapMode: modelData.singleLine ? Text.NoWrap : Text.Wrap
-                      clip: modelData.singleLine || false
+                      maximumLineCount: 1
+                      wrapMode: Text.Wrap
+                      clip: true
                       Layout.fillWidth: true
                     }
 

@@ -176,7 +176,7 @@ Item {
 
     model: [
       {
-        "label": I18n.tr("context-menu.widget-settings"),
+        "label": I18n.tr("actions.widget-settings"),
         "action": "widget-settings",
         "icon": "settings"
       },
@@ -205,8 +205,8 @@ Item {
     autoHide: false
     forceOpen: isReady && displayMode === "alwaysShow"
     forceClose: displayMode === "alwaysHide" || (initializationComplete && !isReady)
-    customBackgroundColor: !initializationComplete ? Color.transparent : (isLowBattery ? Color.mError : Color.transparent)
-    customTextIconColor: !initializationComplete ? Color.transparent : (charging ? "#f6c177" : (isLowBattery ? Color.mOnError : Color.transparent))
+    customBackgroundColor: !initializationComplete ? "transparent" : (isLowBattery ? Color.mError : Color.transparent)
+    customTextIconColor: !initializationComplete ? "transparent" : (charging ? "#f6c177" : (isLowBattery ? Color.mOnError : "transparent"))
 
     tooltipText: {
       let lines = [];
@@ -241,10 +241,10 @@ Item {
                              }));
         } else {
           // Rate is 0 - check if plugged in (charging state) or idle
-          lines.push(charging ? I18n.tr("battery.plugged-in") : I18n.tr("battery.idle"));
+          lines.push(charging ? I18n.tr("battery.plugged-in") : I18n.tr("common.idle"));
         }
       } else {
-        lines.push(charging ? I18n.tr("battery.charging") : I18n.tr("battery.discharging"));
+        lines.push(charging ? I18n.tr("common.charging") : I18n.tr("common.discharging"));
       }
       if (battery.healthPercentage !== undefined && battery.healthPercentage > 0) {
         lines.push(I18n.tr("battery.health", {
