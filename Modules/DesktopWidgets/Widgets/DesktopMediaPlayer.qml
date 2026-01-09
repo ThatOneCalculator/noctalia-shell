@@ -117,7 +117,7 @@ DraggableDesktopWidget {
         anchors.fill: parent
         values: CavaService.values
         fillColor: "#c4a7e7"
-        opacity: 0.6
+        opacity: 1
       }
     }
 
@@ -127,7 +127,7 @@ DraggableDesktopWidget {
         anchors.fill: parent
         values: CavaService.values
         fillColor: "#c4a7e7"
-        opacity: 0.6
+        opacity: 1
       }
     }
 
@@ -137,7 +137,7 @@ DraggableDesktopWidget {
         anchors.fill: parent
         values: CavaService.values
         fillColor: "#c4a7e7"
-        opacity: 0.6
+        opacity: 1
       }
     }
   }
