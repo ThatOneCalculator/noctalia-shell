@@ -11,11 +11,12 @@ ColumnLayout {
   NTabBar {
     id: subTabBar
     Layout.fillWidth: true
+    Layout.bottomMargin: Style.marginM
     distributeEvenly: true
     currentIndex: tabView.currentIndex
 
     NTabButton {
-      text: I18n.tr("common.version")
+      text: I18n.tr("common.info")
       tabIndex: 0
       checked: subTabBar.currentIndex === 0
     }

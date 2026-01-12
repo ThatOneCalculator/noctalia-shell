@@ -124,10 +124,6 @@
       },
       {
         "enabled": true,
-        "id": "timer-card"
-      },
-      {
-        "enabled": true,
         "id": "weather-card"
       }
     ]
@@ -266,6 +262,7 @@
   },
   "dock": {
     "enabled": true,
+    "position": "bottom",
     "displayMode": "auto_hide",
     "backgroundOpacity": 1,
     "floatingRatio": 1,
@@ -367,8 +364,7 @@
     "cavaFrameRate": 30,
     "visualizerType": "linear",
     "mprisBlacklist": [],
-    "preferredPlayer": "",
-    "externalMixer": "pwvucontrol || pavucontrol"
+    "preferredPlayer": ""
   },
   "brightness": {
     "brightnessStep": 5,
@@ -428,7 +424,8 @@
     "screenLock": "",
     "screenUnlock": "",
     "performanceModeEnabled": "",
-    "performanceModeDisabled": ""
+    "performanceModeDisabled": "",
+    "session": ""
   },
   "desktopWidgets": {
     "enabled": false,
