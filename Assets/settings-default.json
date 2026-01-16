@@ -356,7 +356,8 @@
     "enabledTypes": [
       0,
       1,
-      2
+      2,
+      4
     ],
     "monitors": []
   },
@@ -402,7 +403,8 @@
     "screenLock": "",
     "screenUnlock": "",
     "performanceModeEnabled": "",
-    "performanceModeDisabled": ""
+    "performanceModeDisabled": "",
+    "session": ""
   },
   "desktopWidgets": {
     "enabled": false,
