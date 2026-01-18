@@ -209,6 +209,8 @@
       "network-traffic-label": "Ruch sieciowy",
       "storage-usage-description": "Pokaż informacje o użyciu miejsca na dysku.",
       "storage-usage-label": "Użycie dysku",
+      "swap-usage-description": "Pokaż użycie pamięci wymiany.",
+      "swap-usage-label": "Użycie pamięci wymiany",
       "use-monospace-font-description": "Użyj czcionki o stałej szerokości znaków dla zachowania spójnej szerokości znaków.",
       "use-monospace-font-label": "Czcionka o stałej szerokości znaków"
     },
@@ -357,6 +359,7 @@
     "contributors": "Współtwórcy",
     "countdown": "Odliczanie",
     "date": "Data",
+    "default": "Domyślny",
     "delete": "Usuń",
     "devices": "Urządzenia",
     "disabled": "Wyłączone",
@@ -533,7 +536,10 @@
     "results": "wyniki"
   },
   "lock-screen": {
-    "password": "Wprowadź hasło..."
+    "authenticating": "Uwierzytelnianie...",
+    "password": "Wprowadź hasło...",
+    "restart": "Restart",
+    "shut-down": "Wyłącz"
   },
   "notifications": {
     "panel": {
@@ -609,6 +615,7 @@
       "noctalia-installed-version": "Zainstalowana wersja:",
       "noctalia-latest-version": "Najnowsza wersja:",
       "noctalia-title": "Noctalia shell",
+      "privacy-policy": "Polityka prywatności",
       "support": "Wesprzyj nas",
       "system-cpu": "Procesor:",
       "system-disk": "Dysk:",
@@ -622,6 +629,7 @@
       "system-not-installed": "fastfetch nie jest zainstalowany",
       "system-os": "System operacyjny:",
       "system-packages": "Paczki:",
+      "system-product": "Produkt:",
       "system-title": "Informacje o systemie",
       "system-uptime": "Czas pracy:",
       "system-wm": "WM:",
@@ -714,11 +722,7 @@
       "widgets-title": "Pozycjonowanie widżetów"
     },
     "color-scheme": {
-      "color-source-desc": "Główne ustawienia kolorów Noctalia.",
-      "color-source-matugen-scheme-type-description": "Wybierz metodę generowania schematu kolorów, której Matugen użyje do tworzenia kolorów z twojej tapety.",
-      "color-source-matugen-scheme-type-label": "Typ schematu Matugen",
-      "color-source-title": "Źródło kolorów",
-      "color-source-use-wallpaper-colors-description": "Generuj schematy kolorów z tapety za pomocą Matugen. Automatycznie dopasowuje motyw.",
+      "color-source-use-wallpaper-colors-description": "Generuj schematy kolorów z tapety. Automatycznie wyodrębnia kolory, aby stworzyć spójny motyw.",
       "color-source-use-wallpaper-colors-label": "Użyj kolorów tapety",
       "dark-mode-mode-description": "Włącza automatyczne przełączanie między trybem jasnym a ciemnym.",
       "dark-mode-mode-label": "Harmonogram trybu ciemnego",
@@ -757,7 +761,9 @@
       "templates-misc-user-templates-label": "Włącz szablony użytkownika",
       "templates-none-detected": "Nie wykryto",
       "templates-write-path": "Zapisuje: {filepath}",
-      "title": "Schemat kolorów"
+      "title": "Schemat kolorów",
+      "wallpaper-method-description": "Wybierz swoją ulubioną metodę ekstrakcji kolorów.",
+      "wallpaper-method-label": "Metoda ekstrakcji kolorów"
     },
     "control-center": {
       "cards-desc": "Dostosuj, które kontrolki pojawiają się w centrum sterowania i w jakiej kolejności.",
@@ -899,6 +905,7 @@
       "title": "Dok"
     },
     "general": {
+      "copy-settings": "Kopiuj ustawienia",
       "fonts-default-description": "Główna czcionka używana w całym interfejsie.",
       "fonts-default-label": "Czcionka domyślna",
       "fonts-default-placeholder": "Wybierz czcionkę domyślną...",
@@ -933,7 +940,8 @@
       "screen-corners-show-corners-label": "Pokaż narożniki ekranu",
       "screen-corners-solid-black-description": "Użyj jednolitej czerni zamiast koloru tła paska.",
       "screen-corners-solid-black-label": "Jednolicie czarne narożniki",
-      "screen-corners-title": "Narożniki ekranu"
+      "screen-corners-title": "Narożniki ekranu",
+      "settings-copied": "Ustawienia skopiowane do schowka"
     },
     "hooks": {
       "info-command-info-description": "• Polecenia są wykonywane przez powłokę (sh -lc)<br>• Polecenia działają w tle (detached)<br>• Przyciski testowe wykonują się z aktualnymi wartościami",
@@ -1083,6 +1091,8 @@
       "history-low-urgency-label": "Odeślij niską pilność do historii",
       "history-normal-urgency-description": "Zapisuj powiadomienia o normalnym priorytecie w historii.",
       "history-normal-urgency-label": "Zapisz normalny priorytet do historii",
+      "media-toast-description": "Wyświetl toast, gdy zmieni się stan odtwarzania multimediów.",
+      "media-toast-label": "Media",
       "monitors-desc": "Pokazuj powiadomienia na konkretnych monitorach. Domyślnie na wszystkich.",
       "settings-always-on-top-description": "Wyświetlaj powiadomienia nad oknami pełnoekranowymi i innymi warstwami.",
       "settings-background-opacity-description": "Dostosuj przezroczystość tła powiadomień.",
@@ -1150,6 +1160,8 @@
       "types-input-volume-label": "Głośność wejściowa",
       "types-lockkey-description": "Pokazuj OSD podczas przełączania Caps Lock, Num Lock lub Scroll Lock.",
       "types-lockkey-label": "Klawisze blokady",
+      "types-media-description": "Wyświetlaj OSD, gdy zmieni się stan odtwarzania multimediów (odtwarzanie, pauza, pomijanie).",
+      "types-media-label": "Odtwarzanie multimediów",
       "types-title": "Zdarzenia wyzwalające OSD",
       "types-volume-description": "Pokazuj OSD podczas zmiany głośności wyjścia audio.",
       "types-volume-label": "Głośność wyjściowa"
@@ -1444,39 +1456,35 @@
     },
     "battery": {
       "low": "Słaba bateria",
-      "low-desc": "Poziom baterii wynosi {percent}%. Podłącz ładowarkę."
+      "low-desc": "Poziom baterii wynosi {percent}%. Podłącz ładowarkę"
     },
     "bluetooth": {
-      "address-copied": "Adres skopiowany do schowka.",
+      "address-copied": "Adres skopiowany do schowka",
       "confirm-code": "Potwierdź kod {value} na drugim urządzeniu.",
-      "connect-failed": "Nie udało się połączyć z urządzeniem.",
-      "disconnect-failed": "Nie udało się rozłączyć z urządzeniem.",
-      "discoverable-change-failed": "Nie udało się zmienić stanu wykrywalności.",
-      "discoverable-disabled": "Wykrywalność wyłączona.",
-      "discoverable-enabled": "Wykrywalność włączona.",
+      "connect-failed": "Nie udało się połączyć z urządzeniem",
+      "disconnect-failed": "Nie udało się rozłączyć z urządzeniem",
+      "discoverable-change-failed": "Nie udało się zmienić stanu wykrywalności",
+      "discoverable-disabled": "Wykrywalność wyłączona",
+      "discoverable-enabled": "Wykrywalność włączona",
       "display-code": "Wprowadź kod {value} na drugim urządzeniu.",
-      "forget-failed": "Nie udało się zapomnieć urządzenia.",
-      "pair-failed": "Nie udało się sparować urządzenia.",
+      "forget-failed": "Nie udało się zapomnieć urządzenia",
+      "pair-failed": "Nie udało się sparować urządzenia",
       "passkey-required": "Wymagany klucz dostępu przez urządzenie.",
       "pincode-required": "Kod PIN wymagany przez urządzenie.",
-      "state-change-failed": "Nie udało się zmienić stanu Bluetooth."
+      "state-change-failed": "Nie udało się zmienić stanu Bluetooth"
     },
     "clipboard": {
       "long-text": "Długi tekst",
       "unavailable": "Historia schowka niedostępna",
-      "unavailable-desc": "Aplikacja 'cliphist' nie jest zainstalowana. Zainstaluj ją, aby korzystać z historii schowka."
+      "unavailable-desc": "Aplikacja 'cliphist' nie jest zainstalowana. Zainstaluj ją, aby korzystać z historii schowka"
     },
     "do-not-disturb": {
       "disabled": "Nie przeszkadzać wyłączone",
-      "disabled-desc": "Pokazywanie wszystkich powiadomień.",
+      "disabled-desc": "Pokazywanie wszystkich powiadomień",
       "enabled": "Nie przeszkadzać włączone",
-      "enabled-desc": "Powiadomienia znajdziesz w swojej historii."
+      "enabled-desc": "Powiadomienia znajdziesz w swojej historii"
     },
-    "internet-limited": "Połączono bez dostępu do internetu.",
-    "ipc": {
-      "powerpanel-deprecated": "PowerPanel zmienił nazwę na SessionMenu, to wywołanie IPC zostanie wkrótce wycofane. Użyj \"ipc call sessionMenu toggle\".",
-      "sidepanel-deprecated": "SidePanel zmienił nazwę na ControlCenter, to wywołanie IPC zostanie wkrótce wycofane. Użyj \"ipc call controlCenter toggle\"."
-    },
+    "internet-limited": "Połączono bez dostępu do internetu",
     "keyboard-layout": {
       "changed": "Układ klawiatury zmieniony na {layout}.",
       "title": "Klawiatura"
@@ -1487,13 +1495,13 @@
       "label": "Ostatni widżet centrum sterowania usunięty"
     },
     "night-light": {
-      "forced": "Wymuszona aktywacja.",
-      "normal": "Tryb normalny.",
-      "not-installed": "wlsunset nie jest zainstalowany."
+      "forced": "Wymuszona aktywacja",
+      "normal": "Tryb normalny",
+      "not-installed": "wlsunset nie jest zainstalowany"
     },
     "noctalia-performance": {
-      "disabled": "Tryb wydajności wyłączony.",
-      "enabled": "Tryb wydajności włączony.",
+      "disabled": "Tryb wydajności wyłączony",
+      "enabled": "Tryb wydajności włączony",
       "label": "Wydajność Noctalia"
     },
     "power-profile": {
@@ -1506,22 +1514,22 @@
       "title-predefined": "Błąd przetwarzania predefiniowanego schematu kolorów"
     },
     "vpn": {
-      "connected": "Połączono z '{name}'.",
-      "disconnected": "Rozłączono z '{name}'."
+      "connected": "Połączono z '{name}'",
+      "disconnected": "Rozłączono z '{name}'"
     },
     "wallpaper-colors": {
-      "disabled": "Kolory tapety wyłączone.",
-      "enabled": "Kolory tapety włączone.",
+      "disabled": "Kolory tapety wyłączone",
+      "enabled": "Kolory tapety włączone",
       "label": "Generowanie kolorów tapety",
-      "not-installed": "Matugen nie jest zainstalowany — wymagany do ekstrakcji kolorów."
+      "not-installed": "Matugen nie jest zainstalowany — wymagany do ekstrakcji kolorów"
     },
     "wifi": {
-      "connected": "Połączono z '{ssid}'.",
-      "connection-failed": "Połączenie nieudane.",
-      "connection-timeout": "Przekroczenie czasu połączenia.",
-      "disabled": "Wyłączone.",
-      "disconnected": "Rozłączono z '{ssid}'.",
-      "enabled": "Włączone.",
+      "connected": "Połączono z '{ssid}'",
+      "connection-failed": "Połączenie nieudane",
+      "connection-timeout": "Przekroczenie czasu połączenia",
+      "disabled": "Wyłączone",
+      "disconnected": "Rozłączono z '{ssid}'",
+      "enabled": "Włączone",
       "incorrect-password": "Nieprawidłowe hasło.",
       "network-not-found": "Nie znaleziono sieci."
     }
@@ -1587,6 +1595,7 @@
     "fill-modes": {
       "crop": "Przytnij (Wypełnij)",
       "fit": "Dopasuj (Zmieść)",
+      "repeat": "Powtórz (Kafel)",
       "stretch": "Rozciągnij"
     },
     "no-match": "Nie znaleziono dopasowania.",
@@ -1689,10 +1698,11 @@
     "file-picker": {
       "item": "element",
       "items": "elementy",
+      "search-placeholder": "Szukaj plików i folderów...",
       "select-current": "Wybierz bieżący",
       "select-file": "Wybierz plik",
       "select-folder": "Wybierz folder",
-      "selected:": "Zaznaczone:",
+      "selected": "Wybrano:",
       "title": "Wybór plików"
     },
     "file-picker-title": "Wybierz plik",

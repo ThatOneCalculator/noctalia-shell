@@ -209,6 +209,8 @@
       "network-traffic-label": "Network traffic",
       "storage-usage-description": "Show disk space usage information.",
       "storage-usage-label": "Storage usage",
+      "swap-usage-description": "Show swap memory usage.",
+      "swap-usage-label": "Swap usage",
       "use-monospace-font-description": "Use monospace font for consistent character width.",
       "use-monospace-font-label": "Monospace font"
     },
@@ -357,6 +359,7 @@
     "contributors": "Contributors",
     "countdown": "Countdown",
     "date": "Date",
+    "default": "Default",
     "delete": "Delete",
     "devices": "Devices",
     "disabled": "Disabled",
@@ -533,7 +536,10 @@
     "results": "results"
   },
   "lock-screen": {
-    "password": "Enter your password..."
+    "authenticating": "Authenticating...",
+    "password": "Enter your password...",
+    "restart": "Restart",
+    "shut-down": "Shut down"
   },
   "notifications": {
     "panel": {
@@ -609,6 +615,7 @@
       "noctalia-installed-version": "Installed version:",
       "noctalia-latest-version": "Latest version:",
       "noctalia-title": "Noctalia shell",
+      "privacy-policy": "Privacy policy",
       "support": "Support us",
       "system-cpu": "CPU:",
       "system-disk": "Disk:",
@@ -622,6 +629,7 @@
       "system-not-installed": "fastfetch is not installed",
       "system-os": "OS:",
       "system-packages": "Packages:",
+      "system-product": "Product:",
       "system-title": "System Information",
       "system-uptime": "Uptime:",
       "system-wm": "WM:",
@@ -673,6 +681,8 @@
       "volumes-output-volume-description": "System-wide volume level.",
       "volumes-step-size-description": "Adjust the step size for volume changes (scroll wheel, keyboard shortcuts).",
       "volumes-step-size-label": "Volume step size",
+      "volumes-volume-feedback-description": "Play a feedback sound when adjusting volume",
+      "volumes-volume-feedback-label": "Play volume feedback sound",
       "volumes-volume-overdrive-description": "Allow raising volume above 100%. May not be supported by all hardware.",
       "volumes-volume-overdrive-label": "Allow volume overdrive"
     },
@@ -714,11 +724,7 @@
       "widgets-title": "Widgets positioning"
     },
     "color-scheme": {
-      "color-source-desc": "Main settings for Noctalia's colors.",
-      "color-source-matugen-scheme-type-description": "Choose the color scheme generation method that Matugen will use to create colors from your wallpaper.",
-      "color-source-matugen-scheme-type-label": "Matugen scheme type",
-      "color-source-title": "Color source",
-      "color-source-use-wallpaper-colors-description": "Generate color schemes from your wallpaper using Matugen. Automatically extracts colors to create a cohesive theme.",
+      "color-source-use-wallpaper-colors-description": "Generate color schemes from your wallpaper. Automatically extracts colors to create a cohesive theme.",
       "color-source-use-wallpaper-colors-label": "Use wallpaper colors",
       "dark-mode-mode-description": "Enables automatic switching between Light and Dark Mode.",
       "dark-mode-mode-label": "Dark Mode schedule",
@@ -757,7 +763,9 @@
       "templates-misc-user-templates-label": "Enable user templates",
       "templates-none-detected": "None detected",
       "templates-write-path": "Writes: {filepath}",
-      "title": "Color Scheme"
+      "title": "Color Scheme",
+      "wallpaper-method-description": "Choose your favorite color extraction method.",
+      "wallpaper-method-label": "Color extraction method"
     },
     "control-center": {
       "cards-desc": "Customize which controls appear in the control center and in what order.",
@@ -899,6 +907,7 @@
       "title": "Dock"
     },
     "general": {
+      "copy-settings": "Copy settings",
       "fonts-default-description": "Main font used throughout the interface.",
       "fonts-default-label": "Default font",
       "fonts-default-placeholder": "Select default font...",
@@ -933,7 +942,8 @@
       "screen-corners-show-corners-label": "Show screen corners",
       "screen-corners-solid-black-description": "Use solid black instead of the bar background color.",
       "screen-corners-solid-black-label": "Solid black corners",
-      "screen-corners-title": "Screen corners"
+      "screen-corners-title": "Screen corners",
+      "settings-copied": "Settings copied to clipboard"
     },
     "hooks": {
       "info-command-info-description": "• Commands are executed via shell (sh -lc)<br>• Commands run in background (detached)<br>• Test buttons execute with current values",
@@ -1083,6 +1093,8 @@
       "history-low-urgency-label": "Save low urgency to history",
       "history-normal-urgency-description": "Save normal priority notifications to history.",
       "history-normal-urgency-label": "Save normal urgency to history",
+      "media-toast-description": "Show a toast when media playback state changes.",
+      "media-toast-label": "Media",
       "monitors-desc": "Show notification on specific monitors. Defaults to all if none are chosen.",
       "settings-always-on-top-description": "Display notifications above fullscreen windows and other layers.",
       "settings-background-opacity-description": "Adjust the opacity of notification backgrounds.",
@@ -1150,11 +1162,11 @@
       "types-input-volume-label": "Input volume",
       "types-lockkey-description": "Show OSD when Caps Lock, Num Lock, or Scroll Lock are toggled.",
       "types-lockkey-label": "Lock keys",
+      "types-media-description": "Show OSD when media playback state changes (play, pause, skip).",
+      "types-media-label": "Media playback",
       "types-title": "OSD trigger events",
       "types-volume-description": "Show OSD when audio output volume changes.",
-      "types-volume-label": "Output volume",
-      "types-media-description": "Show OSD when media playback state changes (play, pause, skip).",
-      "types-media-label": "Media playback"
+      "types-volume-label": "Output volume"
     },
     "plugins": {
       "available-description": "Browse and install plugins from configured sources.",
@@ -1446,39 +1458,35 @@
     },
     "battery": {
       "low": "Low battery",
-      "low-desc": "Battery is at {percent}%. Please connect the charger."
+      "low-desc": "Battery is at {percent}%. Please connect the charger"
     },
     "bluetooth": {
-      "address-copied": "Address copied to clipboard.",
+      "address-copied": "Address copied to clipboard",
       "confirm-code": "Confirm code {value} on the other device.",
-      "connect-failed": "Failed to connect to device.",
-      "disconnect-failed": "Failed to disconnect from device.",
-      "discoverable-change-failed": "Failed to change discoverable state.",
-      "discoverable-disabled": "Discoverable disabled.",
-      "discoverable-enabled": "Discoverable enabled.",
+      "connect-failed": "Failed to connect to device",
+      "disconnect-failed": "Failed to disconnect from device",
+      "discoverable-change-failed": "Failed to change discoverable state",
+      "discoverable-disabled": "Discoverable disabled",
+      "discoverable-enabled": "Discoverable enabled",
       "display-code": "Enter code {value} on the other device.",
-      "forget-failed": "Failed to forget device.",
-      "pair-failed": "Failed to pair device.",
+      "forget-failed": "Failed to forget device",
+      "pair-failed": "Failed to pair device",
       "passkey-required": "Passkey required by the device.",
       "pincode-required": "PIN code required by the device.",
-      "state-change-failed": "Failed to change Bluetooth state."
+      "state-change-failed": "Failed to change Bluetooth state"
     },
     "clipboard": {
       "long-text": "Long text",
       "unavailable": "Clipboard history unavailable",
-      "unavailable-desc": "The 'cliphist' application is not installed. Please install it to use clipboard history features."
+      "unavailable-desc": "The 'cliphist' application is not installed. Please install it to use clipboard history features"
     },
     "do-not-disturb": {
       "disabled": "Do Not Disturb disabled",
-      "disabled-desc": "Showing all notifications.",
+      "disabled-desc": "Showing all notifications",
       "enabled": "Do Not Disturb enabled",
-      "enabled-desc": "You'll find these notifications in your history."
+      "enabled-desc": "You'll find these notifications in your history"
     },
-    "internet-limited": "Connected without internet.",
-    "ipc": {
-      "powerpanel-deprecated": "PowerPanel has been renamed to SessionMenu, this IPC call will be deprecated soon. Please use \"ipc call sessionMenu toggle\" instead.",
-      "sidepanel-deprecated": "SidePanel has been renamed to ControlCenter, this IPC call will be deprecated soon. Please use \"ipc call controlCenter toggle\" instead."
-    },
+    "internet-limited": "Connected without internet",
     "keyboard-layout": {
       "changed": "Keyboard layout changed to {layout}.",
       "title": "Keyboard"
@@ -1489,13 +1497,13 @@
       "label": "Last control center widget removed"
     },
     "night-light": {
-      "forced": "Forced activation.",
-      "normal": "Normal mode.",
-      "not-installed": "wlsunset not installed."
+      "forced": "Forced activation",
+      "normal": "Normal mode",
+      "not-installed": "wlsunset not installed"
     },
     "noctalia-performance": {
-      "disabled": "Performance mode disabled.",
-      "enabled": "Performance mode enabled.",
+      "disabled": "Performance mode disabled",
+      "enabled": "Performance mode enabled",
       "label": "Noctalia Performance"
     },
     "power-profile": {
@@ -1508,22 +1516,22 @@
       "title-predefined": "Predefined color scheme processing failed"
     },
     "vpn": {
-      "connected": "Connected to '{name}'.",
-      "disconnected": "Disconnected from '{name}'."
+      "connected": "Connected to '{name}'",
+      "disconnected": "Disconnected from '{name}'"
     },
     "wallpaper-colors": {
-      "disabled": "Wallpaper colors disabled.",
-      "enabled": "Wallpaper colors enabled.",
+      "disabled": "Wallpaper colors disabled",
+      "enabled": "Wallpaper colors enabled",
       "label": "Wallpaper colors",
       "not-installed": "Matugen not installed — required for wallpaper color extraction."
     },
     "wifi": {
-      "connected": "Connected to '{ssid}'.",
-      "connection-failed": "Connection failed.",
-      "connection-timeout": "Connection timeout.",
-      "disabled": "Disabled.",
-      "disconnected": "Disconnected from '{ssid}'.",
-      "enabled": "Enabled.",
+      "connected": "Connected to '{ssid}'",
+      "connection-failed": "Connection failed",
+      "connection-timeout": "Connection timeout",
+      "disabled": "Disabled",
+      "disconnected": "Disconnected from '{ssid}'",
+      "enabled": "Enabled",
       "incorrect-password": "Incorrect password.",
       "network-not-found": "Network not found."
     }
@@ -1589,6 +1597,7 @@
     "fill-modes": {
       "crop": "Crop (Fill)",
       "fit": "Fit (Contain)",
+      "repeat": "Repeat (Tile)",
       "stretch": "Stretch"
     },
     "no-match": "No match found.",
@@ -1691,6 +1700,7 @@
     "file-picker": {
       "item": "item",
       "items": "items",
+      "search-placeholder": "Search files and folders...",
       "select-current": "Select Current",
       "select-file": "Select File",
       "select-folder": "Select Folder",

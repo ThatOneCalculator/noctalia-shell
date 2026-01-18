@@ -209,6 +209,8 @@
       "network-traffic-label": "Сетевой трафик",
       "storage-usage-description": "Показывать информацию об использовании дискового пространства.",
       "storage-usage-label": "Использование хранилища",
+      "swap-usage-description": "Показать использование swap-памяти.",
+      "swap-usage-label": "Использование swap",
       "use-monospace-font-description": "Используйте моноширинный шрифт для единообразной ширины символов.",
       "use-monospace-font-label": "Моноширинный шрифт"
     },
@@ -357,6 +359,7 @@
     "contributors": "Участники",
     "countdown": "Обратный отсчёт",
     "date": "Дата",
+    "default": "По умолчанию",
     "delete": "Удалить",
     "devices": "Устройства",
     "disabled": "Отключено",
@@ -533,7 +536,10 @@
     "results": "результаты"
   },
   "lock-screen": {
-    "password": "Введите ваш пароль..."
+    "authenticating": "Аутентификация...",
+    "password": "Введите ваш пароль...",
+    "restart": "Перезагрузить",
+    "shut-down": "Выключить"
   },
   "notifications": {
     "panel": {
@@ -609,6 +615,7 @@
       "noctalia-installed-version": "Установленная версия:",
       "noctalia-latest-version": "Последняя версия:",
       "noctalia-title": "Оболочка Noctalia",
+      "privacy-policy": "Политика конфиденциальности",
       "support": "Поддержать нас",
       "system-cpu": "ЦП:",
       "system-disk": "Диск:",
@@ -622,6 +629,7 @@
       "system-not-installed": "fastfetch не установлен",
       "system-os": "ОС:",
       "system-packages": "Пакеты:",
+      "system-product": "Продукт:",
       "system-title": "Системная информация",
       "system-uptime": "Время работы:",
       "system-wm": "ВМ:",
@@ -714,11 +722,7 @@
       "widgets-title": "Расположение виджетов"
     },
     "color-scheme": {
-      "color-source-desc": "Основные настройки цветов Noctalia.",
-      "color-source-matugen-scheme-type-description": "Выберите метод генерации цветовой схемы, который Matugen будет использовать для создания цветов из ваших обоев.",
-      "color-source-matugen-scheme-type-label": "Тип схемы Matugen",
-      "color-source-title": "Источник цвета",
-      "color-source-use-wallpaper-colors-description": "Генерировать цветовые схемы из ваших обоев с помощью Matugen. Автоматически извлекает цвета для создания целостной темы.",
+      "color-source-use-wallpaper-colors-description": "Создавайте цветовые схемы на основе ваших обоев. Автоматически извлекает цвета для создания целостной темы.",
       "color-source-use-wallpaper-colors-label": "Использовать цвета обоев",
       "dark-mode-mode-description": "Включает автоматическое переключение между светлым и темным режимами.",
       "dark-mode-mode-label": "Расписание темного режима",
@@ -757,7 +761,9 @@
       "templates-misc-user-templates-label": "Включить пользовательские шаблоны",
       "templates-none-detected": "Не обнаружено",
       "templates-write-path": "Записывает: {filepath}",
-      "title": "Цветовая схема"
+      "title": "Цветовая схема",
+      "wallpaper-method-description": "Выберите ваш любимый метод извлечения цвета.",
+      "wallpaper-method-label": "Метод извлечения цвета"
     },
     "control-center": {
       "cards-desc": "Настройте, какие элементы управления появляются в центре управления и в каком порядке.",
@@ -899,6 +905,7 @@
       "title": "Док"
     },
     "general": {
+      "copy-settings": "Копировать настройки",
       "fonts-default-description": "Основной шрифт, используемый во всем интерфейсе.",
       "fonts-default-label": "Шрифт по умолчанию",
       "fonts-default-placeholder": "Выбрать шрифт по умолчанию...",
@@ -933,7 +940,8 @@
       "screen-corners-show-corners-label": "Показывать углы экрана",
       "screen-corners-solid-black-description": "Использовать сплошной черный цвет вместо цвета фона панели.",
       "screen-corners-solid-black-label": "Сплошные черные углы",
-      "screen-corners-title": "Углы экрана"
+      "screen-corners-title": "Углы экрана",
+      "settings-copied": "Настройки скопированы в буфер обмена"
     },
     "hooks": {
       "info-command-info-description": "• Команды выполняются через shell (sh -lc)<br>• Команды выполняются в фоновом режиме (отдельно)<br>• Кнопки 'Тест' выполняются с текущими значениями",
@@ -1083,6 +1091,8 @@
       "history-low-urgency-label": "Сохранять низкую срочность в истории",
       "history-normal-urgency-description": "Сохранять уведомления с нормальным приоритетом в истории.",
       "history-normal-urgency-label": "Сохранять нормальную срочность в истории",
+      "media-toast-description": "Показывать всплывающее уведомление при изменении состояния воспроизведения медиа.",
+      "media-toast-label": "Медиа",
       "monitors-desc": "Показывать уведомления на определенных мониторах. По умолчанию на всех, если ни один не выбран.",
       "settings-always-on-top-description": "Отображать уведомления поверх полноэкранных окон и других слоев.",
       "settings-background-opacity-description": "Настройка непрозрачности фона уведомлений.",
@@ -1150,6 +1160,8 @@
       "types-input-volume-label": "Входная громкость",
       "types-lockkey-description": "Показывать OSD при переключении клавиш Caps Lock, Num Lock или Scroll Lock.",
       "types-lockkey-label": "Клавиши блокировки",
+      "types-media-description": "Показывать OSD при изменении состояния воспроизведения медиа (воспроизведение, пауза, пропуск).",
+      "types-media-label": "Воспроизведение медиа",
       "types-title": "События, запускающие экранное меню",
       "types-volume-description": "Показывать OSD при изменении громкости аудиовыхода.",
       "types-volume-label": "Выходная громкость"
@@ -1444,39 +1456,35 @@
     },
     "battery": {
       "low": "Низкий заряд батареи",
-      "low-desc": "Заряд батареи {percent}%. Пожалуйста, подключите зарядное устройство."
+      "low-desc": "Заряд батареи {percent}%. Пожалуйста, подключите зарядное устройство"
     },
     "bluetooth": {
-      "address-copied": "Адрес скопирован в буфер обмена.",
+      "address-copied": "Адрес скопирован в буфер обмена",
       "confirm-code": "Подтвердите код {value} на другом устройстве.",
-      "connect-failed": "Не удалось подключиться к устройству.",
-      "disconnect-failed": "Не удалось отключиться от устройства.",
-      "discoverable-change-failed": "Не удалось изменить состояние видимости.",
-      "discoverable-disabled": "Обнаружение отключено.",
-      "discoverable-enabled": "Обнаружение включено.",
+      "connect-failed": "Не удалось подключиться к устройству",
+      "disconnect-failed": "Не удалось отключиться от устройства",
+      "discoverable-change-failed": "Не удалось изменить состояние видимости",
+      "discoverable-disabled": "Обнаружение отключено",
+      "discoverable-enabled": "Обнаружение включено",
       "display-code": "Введите код {value} на другом устройстве.",
-      "forget-failed": "Не удалось удалить устройство.",
-      "pair-failed": "Не удалось выполнить сопряжение устройства.",
+      "forget-failed": "Не удалось удалить устройство",
+      "pair-failed": "Не удалось выполнить сопряжение устройства",
       "passkey-required": "Требуется ключ доступа устройства.",
       "pincode-required": "PIN-код, требуемый устройством.",
-      "state-change-failed": "Не удалось изменить состояние Bluetooth."
+      "state-change-failed": "Не удалось изменить состояние Bluetooth"
     },
     "clipboard": {
       "long-text": "Длинный текст",
       "unavailable": "История буфера обмена недоступна",
-      "unavailable-desc": "Приложение 'cliphist' не установлено. Пожалуйста, установите его, чтобы использовать функции истории буфера обмена."
+      "unavailable-desc": "Приложение 'cliphist' не установлено. Пожалуйста, установите его, чтобы использовать функции истории буфера обмена"
     },
     "do-not-disturb": {
       "disabled": "Режим 'Не беспокоить' отключен",
-      "disabled-desc": "Отображаются все уведомления.",
+      "disabled-desc": "Отображаются все уведомления",
       "enabled": "Режим 'Не беспокоить' включен",
-      "enabled-desc": "Вы найдете эти уведомления в своей истории."
+      "enabled-desc": "Вы найдете эти уведомления в своей истории"
     },
-    "internet-limited": "Подключено без доступа к интернету.",
-    "ipc": {
-      "powerpanel-deprecated": "PowerPanel переименован в SessionMenu, этот IPC-вызов скоро будет устаревшим. Пожалуйста, используйте \"ipc call sessionMenu toggle\" вместо этого.",
-      "sidepanel-deprecated": "SidePanel переименован в ControlCenter, этот IPC-вызов скоро будет устаревшим. Пожалуйста, используйте \"ipc call controlCenter toggle\" вместо этого."
-    },
+    "internet-limited": "Подключено без доступа к интернету",
     "keyboard-layout": {
       "changed": "Раскладка клавиатуры изменена на {layout}.",
       "title": "Клавиатура"
@@ -1487,13 +1495,13 @@
       "label": "Последний виджет центра управления удален"
     },
     "night-light": {
-      "forced": "Принудительная активация.",
-      "normal": "Нормальный режим.",
-      "not-installed": "wlsunset не установлен."
+      "forced": "Принудительная активация",
+      "normal": "Нормальный режим",
+      "not-installed": "wlsunset не установлен"
     },
     "noctalia-performance": {
-      "disabled": "Режим производительности Noctalia отключен.",
-      "enabled": "Режим производительности Noctalia включен.",
+      "disabled": "Режим производительности Noctalia отключен",
+      "enabled": "Режим производительности Noctalia включен",
       "label": "Производительность Noctalia"
     },
     "power-profile": {
@@ -1506,22 +1514,22 @@
       "title-predefined": "Сбой обработки предопределенной цветовой схемы"
     },
     "vpn": {
-      "connected": "Подключено к '{name}'.",
-      "disconnected": "Отключено от '{name}'."
+      "connected": "Подключено к '{name}'",
+      "disconnected": "Отключено от '{name}'"
     },
     "wallpaper-colors": {
-      "disabled": "Цвета обоев отключены.",
-      "enabled": "Цвета обоев включены.",
+      "disabled": "Цвета обоев отключены",
+      "enabled": "Цвета обоев включены",
       "label": "Генерация цветов обоев",
-      "not-installed": "Matugen не установлен — требуется для извлечения цветов обоев."
+      "not-installed": "Matugen не установлен — требуется для извлечения цветов обоев"
     },
     "wifi": {
-      "connected": "Подключено к '{ssid}'.",
-      "connection-failed": "Соединение не установлено.",
-      "connection-timeout": "Превышено время ожидания соединения.",
-      "disabled": "Отключен.",
-      "disconnected": "Отключено от '{ssid}'.",
-      "enabled": "Включен.",
+      "connected": "Подключено к '{ssid}'",
+      "connection-failed": "Соединение не установлено",
+      "connection-timeout": "Превышено время ожидания соединения",
+      "disabled": "Отключен",
+      "disconnected": "Отключено от '{ssid}'",
+      "enabled": "Включен",
       "incorrect-password": "Неверный пароль.",
       "network-not-found": "Сеть не найдена."
     }
@@ -1587,6 +1595,7 @@
     "fill-modes": {
       "crop": "Обрезать (Заполнить)",
       "fit": "Подогнать (Вместить)",
+      "repeat": "Повторить (Замостить)",
       "stretch": "Растянуть"
     },
     "no-match": "Совпадений не найдено.",
@@ -1689,10 +1698,11 @@
     "file-picker": {
       "item": "элемент",
       "items": "элементы",
+      "search-placeholder": "Поиск файлов и папок...",
       "select-current": "Выбрать текущий",
       "select-file": "Выбрать файл",
       "select-folder": "Выбрать папку",
-      "selected:": "Выбрано:",
+      "selected": "Выбрано:",
       "title": "Выбор файла"
     },
     "file-picker-title": "Выберите файл",
