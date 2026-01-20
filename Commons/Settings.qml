@@ -49,7 +49,9 @@ Singleton {
     Quickshell.execDetached(["mkdir", "-p", cacheDir]);
 
     // Ensure PAM config file exists in configDir (create once, never override)
-    ensurePamConfig();
+    if (!Quickshell.env("NOCTALIA_PAM_CONFIG")) {
+      ensurePamConfig();
+    }
 
     // Mark directories as created and trigger file loading
     directoriesCreated = true;
@@ -275,6 +277,8 @@ Singleton {
       property bool allowPanelsOnScreenWithoutBar: true
       property bool showChangelogOnStartup: true
       property bool telemetryEnabled: false
+      property bool enableLockScreenCountdown: true
+      property int lockScreenCountdownDuration: 10000
     }
 
     // ui
@@ -405,6 +409,9 @@ Singleton {
           },
           {
             "id": "WallpaperSelector"
+          },
+          {
+            "id": "NoctaliaPerformance"
           }
         ]
         property list<var> right: [
@@ -609,7 +616,7 @@ Singleton {
       property string schedulingMode: "off"
       property string manualSunrise: "06:30"
       property string manualSunset: "18:30"
-      property string extractionMethod: "default"
+      property string generationMethod: "material"
     }
 
     // templates toggles
@@ -1092,7 +1099,7 @@ Singleton {
     var pamConfigFile = pamConfigDir + "/password.conf";
 
     // Check if file already exists
-    fileCheckPamProcess.command = ["sh", "-c", `grep -q '^ID=nixos' /etc/os-release || test -f ${pamConfigFile}`];
+    fileCheckPamProcess.command = ["test", "-f", pamConfigFile];
     fileCheckPamProcess.running = true;
   }
 
@@ -1127,7 +1134,7 @@ Singleton {
     onExited: function (exitCode) {
       if (exitCode === 0) {
         // File exists, skip creation
-        Logger.d("Settings", "On NixOS or PAM config file already exists, skipping creation");
+        Logger.d("Settings", "PAM config file already exists, skipping creation");
       } else {
         // File doesn't exist, create it
         doCreatePamConfig();

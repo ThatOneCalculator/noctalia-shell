@@ -48,6 +48,8 @@
       "device-default": "Predeterminado (Dispositivo de visualización)",
       "device-description": "Seleccione qué dispositivo de batería mostrar.",
       "device-label": "Dispositivo de batería",
+      "hide-if-idle-description": "Ocultar el widget cuando la batería no se esté cargando ni descargando.",
+      "hide-if-idle-label": "Ocultar cuando esté inactivo",
       "hide-if-not-detected-description": "Ocultar el widget cuando no se detecte batería en el sistema.",
       "hide-if-not-detected-label": "Ocultar si no se detecta",
       "low-battery-threshold-description": "Muestra una advertencia cuando la batería cae por debajo de este porcentaje.",
@@ -451,6 +453,7 @@
     "update": "Actualizar",
     "upload": "Subir",
     "version": "Versión",
+    "vibrant": "Vibrante",
     "visualizer": "Visualizador",
     "volume": "Volumen",
     "volumes": "Volúmenes",
@@ -758,7 +761,6 @@
       "download-success-title": "Esquema de colores descargado",
       "download-title": "Descargar esquemas de colores",
       "predefined-desc": "Elige entre una colección de esquemas de colores predefinidos.",
-      "predefined-generate-templates-description": "Genera plantillas de Matugen (GTK, temas de terminal, etc.) al usar esquemas de colores predefinidos.",
       "predefined-generate-templates-label": "Generar plantillas para esquemas predefinidos",
       "predefined-title": "Esquemas de colores predefinidos",
       "templates-desc": "Aplicar colores a aplicaciones externas.",
@@ -771,8 +773,8 @@
       "templates-none-detected": "Ninguno detectado",
       "templates-write-path": "Escribe: {filepath}",
       "title": "Esquema de colores",
-      "wallpaper-method-description": "Elige tu método de extracción de color favorito.",
-      "wallpaper-method-label": "Método de extracción de color"
+      "wallpaper-method-description": "Elige tu método de generación de paleta favorito.",
+      "wallpaper-method-label": "Método de generación de paleta"
     },
     "control-center": {
       "cards-desc": "Personaliza qué controles aparecen en el centro de control y en qué orden.",
@@ -1401,12 +1403,13 @@
   },
   "session-menu": {
     "action-in-seconds": "{action} en {seconds} segundos...",
+    "cancel-timer": "Cancelar temporizador",
     "title": "Menú de sesión"
   },
   "setup": {
     "all-done": "¡Listo!",
     "appearance": {
-      "subheader": "Elige modo oscuro y fuentes de color (Matugen o predefinido)."
+      "subheader": "Elige el Dark Mode y las fuentes de color (Wallpaper o predefinidas)."
     },
     "customize": {
       "header": "Personaliza tu experiencia",
@@ -1495,12 +1498,12 @@
     },
     "internet-limited": "Conectado sin Internet",
     "keyboard-layout": {
-      "changed": "Distribución de teclado cambiada a {layout}.",
+      "changed": "Distribución de teclado cambiada a {layout}",
       "title": "Teclado"
     },
-    "kofi-opened": "Página de Ko-fi abierta en tu navegador.",
+    "kofi-opened": "Página de Ko-fi abierta en tu navegador",
     "missing-control-center": {
-      "description": "El widget del centro de control se eliminó de la barra. Para acceder a él nuevamente desde la barra, debes volver a añadir el widget. También puedes abrirlo haciendo clic derecho en la barra.",
+      "description": "El widget del centro de control se eliminó de la barra. Para acceder a él nuevamente desde la barra, debes volver a añadir el widget. También puedes abrirlo haciendo clic derecho en la barra",
       "label": "Se eliminó el último widget del centro de control"
     },
     "night-light": {
@@ -1514,13 +1517,12 @@
       "label": "Noctalia Rendimiento"
     },
     "power-profile": {
-      "changed": "Perfil de energía cambiado.",
+      "changed": "Perfil de energía cambiado",
       "profile-name": "{profile"
     },
     "theming-processor-failed": {
-      "desc-generic": "Se encontró un error al procesar las plantillas.",
-      "title-matugen": "Falló el procesamiento de la plantilla Matugen",
-      "title-predefined": "Falló el procesamiento del esquema de color predefinido"
+      "desc-generic": "Se encontró un error al procesar las plantillas",
+      "title": "Falló el procesamiento de plantillas"
     },
     "vpn": {
       "connected": "Conectado a '{name}'",
@@ -1529,8 +1531,7 @@
     "wallpaper-colors": {
       "disabled": "Colores del fondo de pantalla desactivados",
       "enabled": "Colores del fondo de pantalla activados",
-      "label": "Generación de colores para fondos de pantalla",
-      "not-installed": "Matugen no instalado — requerido para extraer colores del fondo de pantalla"
+      "label": "Generación de colores para fondos de pantalla"
     },
     "wifi": {
       "connected": "Conectado a '{ssid}'",
@@ -1539,8 +1540,8 @@
       "disabled": "Desactivado",
       "disconnected": "Desconectado de '{ssid}'",
       "enabled": "Activado",
-      "incorrect-password": "Contraseña incorrecta.",
-      "network-not-found": "Red no encontrada."
+      "incorrect-password": "Contraseña incorrecta",
+      "network-not-found": "Red no encontrada"
     }
   },
   "tooltips": {

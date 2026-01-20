@@ -46,15 +46,17 @@
     },
     "battery": {
       "device-default": "Standaard (weergaveapparaat)",
-      "device-description": "Selecteer welk batterijapparaat u wilt weergeven.",
-      "device-label": "Batterijapparaat",
-      "hide-if-not-detected-description": "Verberg de widget als er geen batterij op het systeem wordt gedetecteerd.",
+      "device-description": "Selecteer welk accuapparaat u wilt weergeven.",
+      "device-label": "Accuapparaat",
+      "hide-if-idle-description": "Verberg de widget wanneer de accu niet wordt opgeladen of ontladen.",
+      "hide-if-idle-label": "Verbergen indien inactief",
+      "hide-if-not-detected-description": "Verberg de widget als er geen accu op het systeem wordt gedetecteerd.",
       "hide-if-not-detected-label": "Verbergen indien niet gedetecteerd",
-      "low-battery-threshold-description": "Toon een waarschuwing wanneer de batterij onder dit percentage komt.",
-      "low-battery-threshold-label": "Waarschuwingsdrempel voor lage batterij",
-      "show-noctalia-performance-description": "Toon de Noctalia-prestatiemodus-schakelaar in het batterijpaneel.<br>Schakelt schaduwen en animaties in Noctalia uit om het resourcegebruik te verminderen.",
+      "low-battery-threshold-description": "Toon een waarschuwing wanneer de accu onder dit percentage komt.",
+      "low-battery-threshold-label": "Waarschuwingsdrempel voor lage accu",
+      "show-noctalia-performance-description": "Toon de Noctalia-prestatiemodus-schakelaar in het accupaneel.<br>Schakelt schaduwen en animaties in Noctalia uit om het resourcegebruik te verminderen.",
       "show-noctalia-performance-label": "Noctalia-Performance-schakelaar tonen",
-      "show-power-profile-description": "Toon de keuze van het stroomprofiel in het batterijpaneel.",
+      "show-power-profile-description": "Toon de keuze van het stroomprofiel in het accupaneel.",
       "show-power-profile-label": "Stroomprofielbediening tonen"
     },
     "clock": {
@@ -271,12 +273,12 @@
     }
   },
   "battery": {
-    "battery-level": "Batterijniveau",
+    "battery-level": "Accuniveau",
     "charging-rate": "Laadsnelheid: {rate} W",
     "discharging-rate": "Ontlaadsnelheid: {rate} W",
     "health": "Gezondheid: {percent}%",
     "inhibit-idle-description": "Houdt het systeem wakker.",
-    "no-battery-detected": "Geen batterij gedetecteerd",
+    "no-battery-detected": "Geen accu gedetecteerd",
     "plugged-in": "Op netstroom",
     "power-profile": "Energieprofiel",
     "time-left": "Resterende tijd: {time}",
@@ -338,7 +340,7 @@
     "automation": "Automatisering",
     "available": "Beschikbaar",
     "back": "Terug",
-    "battery": "Batterij",
+    "battery": "Accu",
     "bluetooth": "Bluetooth",
     "brightness": "Helderheid",
     "browse": "Bladeren",
@@ -451,6 +453,7 @@
     "update": "Update",
     "upload": "Uploaden",
     "version": "Versie",
+    "vibrant": "Levendig",
     "visualizer": "Visualiseerder",
     "volume": "Volume",
     "volumes": "Volumes",
@@ -758,7 +761,6 @@
       "download-success-title": "Kleurenschema gedownload",
       "download-title": "Kleurenschema's downloaden",
       "predefined-desc": "Kies uit een verzameling vooraf gedefinieerde kleurenschema's.",
-      "predefined-generate-templates-description": "Genereer Matugen-sjablonen (GTK, terminalthema's, enz.) bij gebruik van vooraf gedefinieerde kleurenschema's.",
       "predefined-generate-templates-label": "Sjablonen genereren voor vooraf gedefinieerde schema's",
       "predefined-title": "Vooraf gedefinieerde kleurenschema's",
       "templates-desc": "Pas kleuren toe op externe applicaties.",
@@ -771,8 +773,8 @@
       "templates-none-detected": "Geen gedetecteerd",
       "templates-write-path": "Schrijft: {filepath}",
       "title": "Kleurschema",
-      "wallpaper-method-description": "Kies je favoriete methode voor kleur extractie.",
-      "wallpaper-method-label": "Kleurextractiemethode"
+      "wallpaper-method-description": "Kies je favoriete methode voor het genereren van paletten.",
+      "wallpaper-method-label": "Paletgeneratiemethode"
     },
     "control-center": {
       "cards-desc": "Pas aan welke bedieningselementen in het bedieningscentrum verschijnen en in welke volgorde.",
@@ -1267,7 +1269,7 @@
       "critical-color-label": "Kritische kleur",
       "custom-highlight-colors-title-label": "Aangepaste markeerkleuren",
       "disk-section-label": "Schijfgebruik",
-      "enable-dgpu-monitoring-description": "Waarschuwing: Dit zal uw dedicated GPU (NVIDIA/AMD) activeren, wat een aanzienlijke impact kan hebben op de batterijduur van laptops met hybride grafische kaarten.",
+      "enable-dgpu-monitoring-description": "Waarschuwing: Dit zal uw dedicated GPU (NVIDIA/AMD) activeren, wat een aanzienlijke impact kan hebben op de accuduur van laptops met hybride grafische kaarten.",
       "enable-dgpu-monitoring-label": "Dedicated GPU-monitoring inschakelen",
       "external-monitor-description": "Voer de opdracht of applicatiepad in om te starten bij het activeren van de externe systeemmonitor applicatie.",
       "external-monitor-label": "Externe systeemmonitor opdracht",
@@ -1401,12 +1403,13 @@
   },
   "session-menu": {
     "action-in-seconds": "{action} over {seconds} seconden...",
+    "cancel-timer": "Timer annuleren",
     "title": "Sessie-menu"
   },
   "setup": {
     "all-done": "Klaar!",
     "appearance": {
-      "subheader": "Kies donkere modus en kleurbronnen (Matugen of vooraf gedefinieerd)."
+      "subheader": "Kies Dark Mode en kleurbronnen (Wallpaper of vooraf gedefinieerd)."
     },
     "customize": {
       "header": "Pas je ervaring aan",
@@ -1464,8 +1467,8 @@
       "title": "Vliegtuigmodus"
     },
     "battery": {
-      "low": "Batterij bijna leeg",
-      "low-desc": "De batterij is op {percent}%. Sluit de oplader aan"
+      "low": "Accu bijna leeg",
+      "low-desc": "De accu is op {percent}%. Sluit de oplader aan"
     },
     "bluetooth": {
       "address-copied": "Adres gekopieerd naar klembord",
@@ -1495,12 +1498,12 @@
     },
     "internet-limited": "Verbonden zonder internet",
     "keyboard-layout": {
-      "changed": "Toetsenbordindeling gewijzigd naar {layout}.",
+      "changed": "Toetsenbordindeling gewijzigd naar {layout}",
       "title": "Toetsenbord"
     },
-    "kofi-opened": "Ko-fi-pagina geopend in je browser.",
+    "kofi-opened": "Ko-fi-pagina geopend in je browser",
     "missing-control-center": {
-      "description": "De bedieningscentrumwidget is uit de balk verwijderd. Om er vanuit de balk weer toegang toe te krijgen, moet je de widget opnieuw toevoegen. Je kunt het ook openen door met de rechtermuisknop op de balk te klikken.",
+      "description": "De bedieningscentrumwidget is uit de balk verwijderd. Om er vanuit de balk weer toegang toe te krijgen, moet je de widget opnieuw toevoegen. Je kunt het ook openen door met de rechtermuisknop op de balk te klikken",
       "label": "Laatste bedieningscentrumwidget verwijderd"
     },
     "night-light": {
@@ -1514,13 +1517,12 @@
       "label": "Noctalia Performance"
     },
     "power-profile": {
-      "changed": "Energieprofiel gewijzigd.",
+      "changed": "Energieprofiel gewijzigd",
       "profile-name": "{profile}"
     },
     "theming-processor-failed": {
-      "desc-generic": "Er is een fout opgetreden tijdens het verwerken van sjablonen.",
-      "title-matugen": "Matugen-sjabloonverwerking mislukt",
-      "title-predefined": "Verwerken van vooraf gedefinieerd kleurenschema mislukt"
+      "desc-generic": "Er is een fout opgetreden tijdens het verwerken van sjablonen",
+      "title": "Sjabloonverwerking mislukt"
     },
     "vpn": {
       "connected": "Verbonden met '{name}'",
@@ -1529,8 +1531,7 @@
     "wallpaper-colors": {
       "disabled": "Achtergrondkleuren uitgeschakeld",
       "enabled": "Achtergrondkleuren ingeschakeld",
-      "label": "Achtergrondkleuren genereren",
-      "not-installed": "Matugen niet geïnstalleerd — vereist voor het extraheren van achtergrondkleuren"
+      "label": "Achtergrondkleuren genereren"
     },
     "wifi": {
       "connected": "Verbonden met '{ssid}'",
@@ -1539,8 +1540,8 @@
       "disabled": "Wi-Fi uitgeschakeld",
       "disconnected": "Verbinding met '{ssid}' verbroken",
       "enabled": "Wi-Fi ingeschakeld",
-      "incorrect-password": "Onjuist wachtwoord.",
-      "network-not-found": "Netwerk niet gevonden."
+      "incorrect-password": "Onjuist wachtwoord",
+      "network-not-found": "Netwerk niet gevonden"
     }
   },
   "tooltips": {

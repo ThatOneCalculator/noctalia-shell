@@ -48,6 +48,8 @@
       "device-default": "Par défaut (périphérique d'affichage)",
       "device-description": "Sélectionnez le périphérique de batterie à afficher.",
       "device-label": "Dispositif à pile",
+      "hide-if-idle-description": "Masquer le widget lorsque la batterie n'est ni en charge ni en décharge.",
+      "hide-if-idle-label": "Masquer en cas d'inactivité",
       "hide-if-not-detected-description": "Masquer le widget lorsqu'aucune batterie n'est détectée sur le système.",
       "hide-if-not-detected-label": "Caché si non détecté",
       "low-battery-threshold-description": "Afficher un avertissement lorsque la batterie tombe en dessous de ce pourcentage.",
@@ -451,6 +453,7 @@
     "update": "Mise à jour",
     "upload": "Téléverser",
     "version": "Version",
+    "vibrant": "Vibrant",
     "visualizer": "Visualiseur",
     "volume": "Volume",
     "volumes": "Volumes",
@@ -758,7 +761,6 @@
       "download-success-title": "Jeu de couleurs téléchargé",
       "download-title": "Télécharger des jeux de couleurs",
       "predefined-desc": "Choisissez parmi une collection de jeux de couleurs prédéfinis.",
-      "predefined-generate-templates-description": "Génère des modèles Matugen (GTK, thèmes de terminal, etc.) lors de l'utilisation de schémas de couleurs prédéfinis.",
       "predefined-generate-templates-label": "Générer des modèles pour les schémas prédéfinis",
       "predefined-title": "Jeux de couleurs prédéfinis",
       "templates-desc": "Appliquer des couleurs aux applications externes.",
@@ -771,8 +773,8 @@
       "templates-none-detected": "Aucun détecté",
       "templates-write-path": "Écrit : {filepath}",
       "title": "Jeu de couleurs",
-      "wallpaper-method-description": "Choisissez votre méthode d'extraction de couleur préférée.",
-      "wallpaper-method-label": "Méthode d'extraction des couleurs"
+      "wallpaper-method-description": "Choisissez votre méthode de génération de palette préférée.",
+      "wallpaper-method-label": "Méthode de génération de palette"
     },
     "control-center": {
       "cards-desc": "Personnalisez les commandes qui apparaissent dans le centre de contrôle et leur ordre d'affichage.",
@@ -1401,12 +1403,13 @@
   },
   "session-menu": {
     "action-in-seconds": "{action} dans {seconds} secondes...",
+    "cancel-timer": "Annuler le minuteur",
     "title": "Menu de session"
   },
   "setup": {
     "all-done": "Terminé !",
     "appearance": {
-      "subheader": "Choisissez le mode sombre et la source des couleurs (Matugen ou prédéfinie)."
+      "subheader": "Choisissez le Dark Mode et les sources de couleurs (Fond d'écran ou prédéfinies)."
     },
     "customize": {
       "header": "Personnaliser votre expérience",
@@ -1495,12 +1498,12 @@
     },
     "internet-limited": "Connecté sans Internet",
     "keyboard-layout": {
-      "changed": "Disposition du clavier changée vers {layout}.",
+      "changed": "Disposition du clavier changée vers {layout}",
       "title": "Clavier"
     },
-    "kofi-opened": "Page Ko-fi ouverte dans votre navigateur.",
+    "kofi-opened": "Page Ko-fi ouverte dans votre navigateur",
     "missing-control-center": {
-      "description": "Le widget du centre de contrôle a été retiré de la barre. Pour y accéder à nouveau depuis la barre, veuillez ré‑ajouter le widget. Vous pouvez aussi l'ouvrir en cliquant avec le bouton droit sur la barre.",
+      "description": "Le widget du centre de contrôle a été retiré de la barre. Pour y accéder à nouveau depuis la barre, veuillez ré‑ajouter le widget. Vous pouvez aussi l'ouvrir en cliquant avec le bouton droit sur la barre",
       "label": "Dernier widget du centre de contrôle supprimé"
     },
     "night-light": {
@@ -1514,13 +1517,12 @@
       "label": "Noctalia Performance"
     },
     "power-profile": {
-      "changed": "Profil d'alimentation changé.",
+      "changed": "Profil d'alimentation changé",
       "profile-name": "{profile}"
     },
     "theming-processor-failed": {
-      "desc-generic": "Une erreur s'est produite lors du traitement des modèles.",
-      "title-matugen": "Le traitement du modèle Matugen a échoué",
-      "title-predefined": "Le traitement du schéma de couleurs prédéfini a échoué"
+      "desc-generic": "Une erreur s'est produite lors du traitement des modèles",
+      "title": "Le traitement du modèle a échoué"
     },
     "vpn": {
       "connected": "Connecté à '{name}'",
@@ -1529,8 +1531,7 @@
     "wallpaper-colors": {
       "disabled": "Couleurs du fond d'écran désactivées",
       "enabled": "Couleurs du fond d'écran activées",
-      "label": "Génération de couleurs pour fonds d'écran",
-      "not-installed": "Matugen non installé — requis pour l'extraction des couleurs du fond d'écran"
+      "label": "Génération de couleurs pour fonds d'écran"
     },
     "wifi": {
       "connected": "Connecté à '{ssid}'",
@@ -1539,8 +1540,8 @@
       "disabled": "Désactivé",
       "disconnected": "Déconnecté de '{ssid}'",
       "enabled": "Activé",
-      "incorrect-password": "Mot de passe incorrect.",
-      "network-not-found": "Réseau introuvable."
+      "incorrect-password": "Mot de passe incorrect",
+      "network-not-found": "Réseau introuvable"
     }
   },
   "tooltips": {

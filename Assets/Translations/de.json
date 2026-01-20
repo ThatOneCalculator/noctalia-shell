@@ -46,15 +46,17 @@
     },
     "battery": {
       "device-default": "Standard (Anzeigegerät)",
-      "device-description": "Wählen Sie das anzuzeigende Batteriegerät aus.",
-      "device-label": "Batteriebetriebenes Gerät",
-      "hide-if-not-detected-description": "Verberge das Widget, wenn keine Batterie im System erkannt wird.",
+      "device-description": "Wählen Sie das anzuzeigende Akkugerät aus.",
+      "device-label": "Akkugerät",
+      "hide-if-idle-description": "Das Widget ausblenden, wenn der Akku nicht geladen oder entladen wird.",
+      "hide-if-idle-label": "Ausblenden, wenn im Leerlauf",
+      "hide-if-not-detected-description": "Widget ausblenden, wenn kein Akku im System erkannt wird.",
       "hide-if-not-detected-label": "Ausblenden, wenn nicht erkannt",
-      "low-battery-threshold-description": "Warnung anzeigen, wenn Batterie unter diesen Prozentsatz fällt.",
-      "low-battery-threshold-label": "Schwellenwert für niedrigen Batteriestand",
-      "show-noctalia-performance-description": "Zeige den Noctalia-Leistungsmodus-Schalter im Batterie-Panel an.<br>Deaktiviert Schatten und Animationen in Noctalia, um Ressourcen zu sparen.",
+      "low-battery-threshold-description": "Warnung anzeigen, wenn Akku unter diesen Prozentsatz fällt.",
+      "low-battery-threshold-label": "Schwellenwert für niedrigen Akkustand",
+      "show-noctalia-performance-description": "Zeige den Noctalia-Leistungsmodus-Schalter im Akku-Panel an.<br>Deaktiviert Schatten und Animationen in Noctalia, um Ressourcen zu sparen.",
       "show-noctalia-performance-label": "Noctalia-Performance-Schalter anzeigen",
-      "show-power-profile-description": "Zeige die Auswahl des Energieprofils im Batterie-Panel an.",
+      "show-power-profile-description": "Zeige die Auswahl des Energieprofils im Akku-Panel an.",
       "show-power-profile-label": "Energieprofil-Steuerung anzeigen"
     },
     "clock": {
@@ -204,13 +206,13 @@
       "memory-percentage-description": "Speicherverbrauch als Prozentsatz statt absolute Werte anzeigen.",
       "memory-percentage-label": "Speicher als Prozentsatz",
       "memory-usage-description": "Aktuelle RAM-Nutzungsinformationen anzeigen.",
-      "memory-usage-label": "Speicherverbrauch",
+      "memory-usage-label": "Speicherauslastung",
       "network-traffic-description": "Upload- und Download-Geschwindigkeiten anzeigen.",
       "network-traffic-label": "Netzwerkverkehr",
       "storage-usage-description": "Festplattenspeicher-Nutzungsinformationen anzeigen.",
-      "storage-usage-label": "Speichernutzung",
+      "storage-usage-label": "Datenträgerauslastung",
       "swap-usage-description": "Swap-Speichernutzung anzeigen.",
-      "swap-usage-label": "Swap-Nutzung",
+      "swap-usage-label": "Swap-Auslastung",
       "use-monospace-font-description": "Verwende eine Monospace-Schriftart für eine konsistente Zeichenbreite.",
       "use-monospace-font-label": "Schriftart mit fester Breite"
     },
@@ -276,7 +278,7 @@
     "discharging-rate": "Entladerate: {rate} W",
     "health": "Zustand: {percent}%",
     "inhibit-idle-description": "Hält das System wach.",
-    "no-battery-detected": "Keine Batterie erkannt",
+    "no-battery-detected": "Kein Akku erkannt",
     "plugged-in": "Angeschlossen",
     "power-profile": "Energieprofil",
     "time-left": "Verbleibende Zeit: {time}",
@@ -338,7 +340,7 @@
     "automation": "Automatisierung",
     "available": "Verfügbar",
     "back": "Zurück",
-    "battery": "Batterie",
+    "battery": "Akku",
     "bluetooth": "Bluetooth",
     "brightness": "Helligkeit",
     "browse": "Durchsuchen",
@@ -451,6 +453,7 @@
     "update": "Aktualisieren",
     "upload": "Hochladen",
     "version": "Version",
+    "vibrant": "Lebhaft",
     "visualizer": "Visualisierer",
     "volume": "Lautstärke",
     "volumes": "Lautstärken",
@@ -758,7 +761,6 @@
       "download-success-title": "Farbschema heruntergeladen",
       "download-title": "Farbschemata herunterladen",
       "predefined-desc": "Wählen Sie aus einer Sammlung vordefinierter Farbschemata.",
-      "predefined-generate-templates-description": "Generiert Matugen-Templates (GTK, Terminal-Themen, etc.) bei der Verwendung vordefinierter Farbschemata.",
       "predefined-generate-templates-label": "Templates für vordefinierte Schemata generieren",
       "predefined-title": "Vordefinierte Farbschemata",
       "templates-desc": "Farben auf externe Anwendungen anwenden.",
@@ -771,8 +773,8 @@
       "templates-none-detected": "Keine erkannt",
       "templates-write-path": "Schreibt: {filepath}",
       "title": "Farbschema",
-      "wallpaper-method-description": "Wähle deine bevorzugte Farbgewinnungsmethode.",
-      "wallpaper-method-label": "Farbgewinnungsmethode"
+      "wallpaper-method-description": "Wählen Sie Ihre bevorzugte Methode zur Palettengenerierung.",
+      "wallpaper-method-label": "Methode zur Palettengenerierung"
     },
     "control-center": {
       "cards-desc": "Passen Sie an, welche Steuerelemente im Kontrollzentrum angezeigt werden und in welcher Reihenfolge.",
@@ -1387,7 +1389,7 @@
     "bottom-center": "Unten mittig",
     "bottom-left": "Unten links",
     "bottom-right": "Unten rechts",
-    "center": "Zentrieren",
+    "center": "Zentriert",
     "center-left": "Links mittig",
     "center-right": "Rechts mittig",
     "close-to-bar": "Nah zur Leisten-Schaltfläche",
@@ -1401,12 +1403,13 @@
   },
   "session-menu": {
     "action-in-seconds": "{action} in {seconds} Sekunden...",
+    "cancel-timer": "Timer abbrechen",
     "title": "Sitzungsmenü"
   },
   "setup": {
     "all-done": "Fertig!",
     "appearance": {
-      "subheader": "Dunkelmodus und Farbquellen wählen (Matugen oder vordefiniert)."
+      "subheader": "Wähle Dark Mode und Farbquellen (Wallpaper oder vordefiniert)."
     },
     "customize": {
       "header": "Erlebnis anpassen",
@@ -1464,8 +1467,8 @@
       "title": "Flugmodus"
     },
     "battery": {
-      "low": "Niedriger Batteriestand",
-      "low-desc": "Batterie ist bei {percent}%. Bitte schließen Sie das Ladegerät an"
+      "low": "Niedriger Akkustand",
+      "low-desc": "Akku ist bei {percent}%. Bitte schließen Sie das Ladegerät an"
     },
     "bluetooth": {
       "address-copied": "Adresse in die Zwischenablage kopiert",
@@ -1495,12 +1498,12 @@
     },
     "internet-limited": "Verbunden ohne Internet",
     "keyboard-layout": {
-      "changed": "Tastaturlayout geändert zu {layout}.",
+      "changed": "Tastaturlayout geändert zu {layout}",
       "title": "Tastatur"
     },
-    "kofi-opened": "Ko-fi-Seite in Ihrem Browser geöffnet.",
+    "kofi-opened": "Ko-fi-Seite in Ihrem Browser geöffnet",
     "missing-control-center": {
-      "description": "Das Kontrollzentrum-Widget wurde aus der Leiste entfernt. Um es erneut über die Leiste zu öffnen, fügen Sie das Widget wieder hinzu. Sie können es auch durch Rechtsklick auf die Leiste öffnen.",
+      "description": "Das Kontrollzentrum-Widget wurde aus der Leiste entfernt. Um es erneut über die Leiste zu öffnen, fügen Sie das Widget wieder hinzu. Sie können es auch durch Rechtsklick auf die Leiste öffnen",
       "label": "Letztes Kontrollzentrum-Widget entfernt"
     },
     "night-light": {
@@ -1514,13 +1517,12 @@
       "label": "Noctalia-Performance"
     },
     "power-profile": {
-      "changed": "Energieprofil geändert.",
+      "changed": "Energieprofil geändert",
       "profile-name": "{profile}"
     },
     "theming-processor-failed": {
-      "desc-generic": "Beim Verarbeiten von Vorlagen ist ein Fehler aufgetreten.",
-      "title-matugen": "Matugen-Templating-Verarbeitung fehlgeschlagen",
-      "title-predefined": "Verarbeitung des vordefinierten Farbschemas ist fehlgeschlagen"
+      "desc-generic": "Beim Verarbeiten von Vorlagen ist ein Fehler aufgetreten",
+      "title": "Vorlagenverarbeitung fehlgeschlagen"
     },
     "vpn": {
       "connected": "Verbunden mit '{name}'",
@@ -1529,8 +1531,7 @@
     "wallpaper-colors": {
       "disabled": "Hintergrundbild-Farben deaktiviert",
       "enabled": "Hintergrundbild-Farben aktiviert",
-      "label": "Hintergrundfarbengenerierung",
-      "not-installed": "Matugen nicht installiert — erforderlich für Hintergrundbild-Farbextraktion"
+      "label": "Hintergrundfarbengenerierung"
     },
     "wifi": {
       "connected": "Verbunden mit '{ssid}'",
@@ -1539,8 +1540,8 @@
       "disabled": "Deaktiviert",
       "disconnected": "Getrennt von '{ssid}'",
       "enabled": "Aktiviert",
-      "incorrect-password": "Falsches Passwort.",
-      "network-not-found": "Netzwerk nicht gefunden."
+      "incorrect-password": "Falsches Passwort",
+      "network-not-found": "Netzwerk nicht gefunden"
     }
   },
   "tooltips": {
