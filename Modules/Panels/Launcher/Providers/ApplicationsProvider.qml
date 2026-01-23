@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Services.System
 
 Item {
   id: root
@@ -477,7 +478,6 @@ Item {
     if (typeof FuzzySort !== 'undefined') {
       const fuzzyResults = FuzzySort.go(query, filteredEntries, {
                                           "keys": ["name", "comment", "genericName", "executableName"],
-                                          "threshold": -1000,
                                           "limit": 20
                                         });
 
@@ -492,7 +492,7 @@ Item {
         else
           nonFav.push(r);
       }
-      return fav.concat(nonFav).map(result => createResultEntry(result.obj));
+      return fav.concat(nonFav).map(result => createResultEntry(result.obj, result.score));
     } else {
       // Fallback to simple search
       const searchTerm = query.toLowerCase();
@@ -530,13 +530,14 @@ Item {
     }
   }
 
-  function createResultEntry(app) {
+  function createResultEntry(app, score) {
     return {
       "appId": getAppKey(app),
       "name": app.name || "Unknown",
       "description": app.genericName || app.comment || "",
       "icon": app.icon || "application-x-executable",
       "isImage": false,
+      "_score": (score !== undefined ? score : 0) + 1,
       "provider": root,
       "onActivate": function () {
         // Close the launcher/SmartPanel immediately without any animations.
@@ -563,7 +564,7 @@ Item {
                            const command = prefix.concat(app.command);
                            Quickshell.execDetached(command);
                          }
-                       } else if (Settings.data.appLauncher.useApp2Unit && app.id) {
+                       } else if (Settings.data.appLauncher.useApp2Unit && ProgramCheckerService.app2unitAvailable && app.id) {
                          Logger.d("ApplicationsProvider", `Using app2unit for: ${app.id}`);
                          if (app.runInTerminal)
                          Quickshell.execDetached(["app2unit", "--", app.id + ".desktop"]);

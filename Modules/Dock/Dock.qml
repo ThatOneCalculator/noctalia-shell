@@ -6,6 +6,7 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Widgets
 import qs.Commons
+import qs.Services.System
 import qs.Services.UI
 import qs.Widgets
 
@@ -102,6 +103,13 @@ Loader {
       // Combined model of running apps and pinned apps
       property var dockApps: []
 
+      // Track the session order of apps (transient reordering)
+      property var sessionAppOrder: []
+
+      // Drag and Drop state for visual feedback
+      property int dragSourceIndex: -1
+      property int dragTargetIndex: -1
+
       // Revision counter to force icon re-evaluation
       property int iconRevision: 0
 
@@ -109,6 +117,83 @@ Loader {
       function closeAllContextMenus() {
         if (currentContextMenu && currentContextMenu.visible) {
           currentContextMenu.hide();
+        }
+      }
+
+      function getAppKey(appData) {
+        if (!appData)
+          return null;
+        // prefer toplevel object identity for running apps to distinguish instances
+        if (appData.toplevel)
+          return appData.toplevel;
+        // fallback to appId for pinned-only apps
+        return appData.appId;
+      }
+
+      function sortDockApps(apps) {
+        if (!sessionAppOrder || sessionAppOrder.length === 0) {
+          return apps;
+        }
+
+        const sorted = [];
+        const remaining = [...apps];
+
+        // 1. Pick apps that are in the session order
+        for (let i = 0; i < sessionAppOrder.length; i++) {
+          const key = sessionAppOrder[i];
+          const idx = remaining.findIndex(app => getAppKey(app) === key);
+          if (idx !== -1) {
+            sorted.push(remaining[idx]);
+            remaining.splice(idx, 1);
+          }
+        }
+
+        // 2. Append any new/remaining apps
+        remaining.forEach(app => sorted.push(app));
+
+        return sorted;
+      }
+
+      function reorderApps(fromIndex, toIndex) {
+        if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || fromIndex >= dockApps.length || toIndex >= dockApps.length)
+          return;
+
+        const list = [...dockApps];
+        const item = list.splice(fromIndex, 1)[0];
+        list.splice(toIndex, 0, item);
+
+        dockApps = list;
+        sessionAppOrder = dockApps.map(getAppKey);
+        savePinnedOrder();
+      }
+
+      function savePinnedOrder() {
+        const currentPinned = Settings.data.dock.pinnedApps || [];
+        const newPinned = [];
+        const seen = new Set();
+
+        // Extract pinned apps in their current visual order
+        dockApps.forEach(app => {
+                           if (app.appId && !seen.has(app.appId)) {
+                             const isPinned = currentPinned.some(p => normalizeAppId(p) === normalizeAppId(app.appId));
+
+                             if (isPinned) {
+                               newPinned.push(app.appId);
+                               seen.add(app.appId);
+                             }
+                           }
+                         });
+
+        // Check if any pinned apps were missed (unlikely if dockApps is correct)
+        currentPinned.forEach(p => {
+                                if (!seen.has(p)) {
+                                  newPinned.push(p);
+                                  seen.add(p);
+                                }
+                              });
+
+        if (JSON.stringify(currentPinned) !== JSON.stringify(newPinned)) {
+          Settings.data.dock.pinnedApps = newPinned;
         }
       }
 
@@ -235,7 +320,11 @@ Loader {
           pushPinned();
         }
 
-        dockApps = combined;
+        dockApps = sortDockApps(combined);
+        // Sync session order if needed (e.g. first run or new apps added)
+        if (!sessionAppOrder || sessionAppOrder.length === 0 || sessionAppOrder.length !== dockApps.length) {
+          sessionAppOrder = dockApps.map(getAppKey);
+        }
       }
 
       // Timer to unload dock after hide animation completes
@@ -259,6 +348,7 @@ Loader {
             menuHovered = false;
           }
           if (autoHide && !dockHovered && !anyAppHovered && !peekHovered && !menuHovered) {
+            closeAllContextMenus();
             hidden = true;
             unloadTimer.restart(); // Start unload timer when hiding
           } else if (autoHide && !dockHovered && !peekHovered) {
@@ -543,6 +633,32 @@ Loader {
                       }
                       property bool isRunning: modelData && (modelData.type === "running" || modelData.type === "pinned-running")
 
+                      // Store index for drag-and-drop
+                      property int modelIndex: index
+                      objectName: "dockAppButton"
+
+                      DropArea {
+                        anchors.fill: parent
+                        keys: ["dock-app"]
+                        onEntered: function (drag) {
+                          if (drag.source && drag.source.objectName === "dockAppButton") {
+                            root.dragTargetIndex = appButton.modelIndex;
+                          }
+                        }
+                        onExited: function () {
+                          if (root.dragTargetIndex === appButton.modelIndex) {
+                            root.dragTargetIndex = -1;
+                          }
+                        }
+                        onDropped: function (drop) {
+                          root.dragSourceIndex = -1;
+                          root.dragTargetIndex = -1;
+                          if (drop.source && drop.source.objectName === "dockAppButton" && drop.source !== appButton) {
+                            root.reorderApps(drop.source.modelIndex, appButton.modelIndex);
+                          }
+                        }
+                      }
+
                       // Listen for the toplevel being closed
                       Connections {
                         target: modelData?.toplevel
@@ -551,33 +667,38 @@ Loader {
                         }
                       }
 
-                      IconImage {
-                        id: appIcon
+                      // Draggable container for the icon
+                      Item {
+                        id: iconContainer
                         width: iconSize
                         height: iconSize
-                        anchors.centerIn: parent
-                        source: {
-                          root.iconRevision; // Force re-evaluation when revision changes
-                          return dock.getAppIcon(modelData);
-                        }
-                        visible: source.toString() !== ""
-                        smooth: true
-                        asynchronous: true
 
-                        // Dim pinned apps that aren't running
-                        opacity: appButton.isRunning ? 1.0 : Settings.data.dock.deadOpacity
+                        // When dragging, remove anchors so MouseArea can position it
+                        anchors.centerIn: dragging ? undefined : parent
 
-                        scale: appButton.hovered ? 1.15 : 1.0
-
-                        // Apply dock-specific colorization shader only to non-focused apps
-                        layer.enabled: !appButton.isActive && Settings.data.dock.colorizeIcons
-                        layer.effect: ShaderEffect {
-                          property color targetColor: Settings.data.colorSchemes.darkMode ? Color.mOnSurface : Color.mSurfaceVariant
-                          property real colorizeMode: 0.0 // Dock mode (grayscale)
-
-                          fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")
+                        property bool dragging: appMouseArea.drag.active
+                        onDraggingChanged: {
+                          if (dragging) {
+                            root.dragSourceIndex = index;
+                          } else {
+                            // Reset if not handled by drop (e.g. dropped outside)
+                            Qt.callLater(() => {
+                                           if (!appMouseArea.drag.active && root.dragSourceIndex === index) {
+                                             root.dragSourceIndex = -1;
+                                             root.dragTargetIndex = -1;
+                                           }
+                                         });
+                          }
                         }
 
+                        Drag.active: dragging
+                        Drag.source: appButton
+                        Drag.hotSpot.x: width / 2
+                        Drag.hotSpot.y: height / 2
+                        Drag.keys: ["dock-app"]
+
+                        z: (root.dragSourceIndex === index) ? 1000 : ((dragging ? 1000 : 0))
+                        scale: dragging ? 1.1 : (appButton.hovered ? 1.15 : 1.0)
                         Behavior on scale {
                           NumberAnimation {
                             duration: Style.animationNormal
@@ -586,36 +707,92 @@ Loader {
                           }
                         }
 
-                        Behavior on opacity {
-                          NumberAnimation {
-                            duration: Style.animationFast
-                            easing.type: Easing.OutQuad
-                          }
-                        }
-                      }
+                        // Visual shifting logic
+                        readonly property bool isDragged: root.dragSourceIndex === index
+                        property real shiftOffset: 0
 
-                      // Fall back if no icon
-                      NIcon {
-                        anchors.centerIn: parent
-                        visible: !appIcon.visible
-                        icon: "question-mark"
-                        pointSize: iconSize * 0.7
-                        color: appButton.isActive ? Color.mPrimary : Color.mOnSurfaceVariant
-                        opacity: appButton.isRunning ? 1.0 : 0.6
-                        scale: appButton.hovered ? 1.15 : 1.0
-
-                        Behavior on scale {
-                          NumberAnimation {
-                            duration: Style.animationFast
-                            easing.type: Easing.OutBack
-                            easing.overshoot: 1.2
+                        Binding on shiftOffset {
+                          value: {
+                            if (root.dragSourceIndex !== -1 && root.dragTargetIndex !== -1 && !iconContainer.isDragged) {
+                              if (root.dragSourceIndex < root.dragTargetIndex) {
+                                // Dragging Forward: Items between source and target shift Backward
+                                if (index > root.dragSourceIndex && index <= root.dragTargetIndex) {
+                                  return -1 * (root.isVertical ? iconSize + Style.marginS : iconSize + Style.marginS);
+                                }
+                              } else if (root.dragSourceIndex > root.dragTargetIndex) {
+                                // Dragging Backward: Items between target and source shift Forward
+                                if (index >= root.dragTargetIndex && index < root.dragSourceIndex) {
+                                  return (root.isVertical ? iconSize + Style.marginS : iconSize + Style.marginS);
+                                }
+                              }
+                            }
+                            return 0;
                           }
                         }
 
-                        Behavior on opacity {
-                          NumberAnimation {
-                            duration: Style.animationFast
-                            easing.type: Easing.OutQuad
+                        transform: Translate {
+                          x: !root.isVertical ? iconContainer.shiftOffset : 0
+                          y: root.isVertical ? iconContainer.shiftOffset : 0
+
+                          Behavior on x {
+                            NumberAnimation {
+                              duration: Style.animationFast
+                              easing.type: Easing.OutQuad
+                            }
+                          }
+                          Behavior on y {
+                            NumberAnimation {
+                              duration: Style.animationFast
+                              easing.type: Easing.OutQuad
+                            }
+                          }
+                        }
+
+                        IconImage {
+                          id: appIcon
+                          anchors.fill: parent
+                          source: {
+                            root.iconRevision; // Force re-evaluation when revision changes
+                            return dock.getAppIcon(modelData);
+                          }
+                          visible: source.toString() !== ""
+                          smooth: true
+                          asynchronous: true
+
+                          // Dim pinned apps that aren't running
+                          opacity: appButton.isRunning ? 1.0 : Settings.data.dock.deadOpacity
+
+                          // Apply dock-specific colorization shader only to non-focused apps
+                          layer.enabled: !appButton.isActive && Settings.data.dock.colorizeIcons
+                          layer.effect: ShaderEffect {
+                            property color targetColor: Settings.data.colorSchemes.darkMode ? Color.mOnSurface : Color.mSurfaceVariant
+                            property real colorizeMode: 0.0 // Dock mode (grayscale)
+
+                            fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")
+                          }
+
+                          Behavior on opacity {
+                            NumberAnimation {
+                              duration: Style.animationFast
+                              easing.type: Easing.OutQuad
+                            }
+                          }
+                        }
+
+                        // Fall back if no icon
+                        NIcon {
+                          anchors.centerIn: parent
+                          visible: !appIcon.visible
+                          icon: "question-mark"
+                          pointSize: iconSize * 0.7
+                          color: appButton.isActive ? Color.mPrimary : Color.mOnSurfaceVariant
+                          opacity: appButton.isRunning ? 1.0 : 0.6
+
+                          Behavior on opacity {
+                            NumberAnimation {
+                              duration: Style.animationFast
+                              easing.type: Easing.OutQuad
+                            }
                           }
                         }
                       }
@@ -669,6 +846,26 @@ Loader {
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
                         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
+
+                        // Only allow left-click dragging via axis control
+                        drag.target: iconContainer
+                        drag.axis: (pressedButtons & Qt.LeftButton) ? (root.isVertical ? Drag.YAxis : Drag.XAxis) : Drag.None
+                        preventStealing: true
+
+                        onPressed: {
+                          var p1 = appButton.mapFromItem(dockContainer, 0, 0);
+                          var p2 = appButton.mapFromItem(dockContainer, dockContainer.width, dockContainer.height);
+                          drag.minimumX = p1.x;
+                          drag.maximumX = p2.x - iconContainer.width;
+                          drag.minimumY = p1.y;
+                          drag.maximumY = p2.y - iconContainer.height;
+                        }
+
+                        onReleased: {
+                          if (iconContainer.Drag.active) {
+                            iconContainer.Drag.drop();
+                          }
+                        }
 
                         onEntered: {
                           anyAppHovered = true;
@@ -746,7 +943,7 @@ Loader {
                                   const command = prefix.concat(app.command);
                                   Quickshell.execDetached(command);
                                 }
-                              } else if (Settings.data.appLauncher.useApp2Unit && app.id) {
+                              } else if (Settings.data.appLauncher.useApp2Unit && ProgramCheckerService.app2unitAvailable && app.id) {
                                 Logger.d("Dock", `Using app2unit for: ${app.id}`);
                                 if (app.runInTerminal)
                                   Quickshell.execDetached(["app2unit", "--", app.id + ".desktop"]);
