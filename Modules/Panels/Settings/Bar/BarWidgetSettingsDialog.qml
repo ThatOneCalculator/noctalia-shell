@@ -91,9 +91,10 @@ Popup {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.minimumHeight: 100
+        gradientColor: Color.mSurface
 
         ColumnLayout {
-          width: scrollView.width
+          width: scrollView.availableWidth
           spacing: Style.marginM
 
           // Settings based on widget type
@@ -151,7 +152,7 @@ Popup {
         }
 
         NButton {
-          text: I18n.tr("common.cancel")
+          text: I18n.tr("common.close")
           outlined: true
           onClicked: root.close()
         }
@@ -163,7 +164,6 @@ Popup {
             if (settingsLoader.item && settingsLoader.item.saveSettings) {
               var newSettings = settingsLoader.item.saveSettings();
               root.updateWidgetSettings(root.sectionId, root.widgetIndex, newSettings);
-              root.close();
             }
           }
         }

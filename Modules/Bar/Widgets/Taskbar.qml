@@ -21,16 +21,18 @@ Rectangle {
   property int sectionWidgetIndex: -1
   property int sectionWidgetsCount: 0
 
-  readonly property string barPosition: Settings.getBarPositionForScreen(screen?.name)
+  // Explicit screenName property ensures reactive binding when screen changes
+  readonly property string screenName: screen ? screen.name : ""
+  readonly property string barPosition: Settings.getBarPositionForScreen(screenName)
   readonly property bool isVerticalBar: barPosition === "left" || barPosition === "right"
-  readonly property real barHeight: Style.getBarHeightForScreen(screen?.name)
-  readonly property real capsuleHeight: Style.getCapsuleHeightForScreen(screen?.name)
-  readonly property real barFontSize: Style.getBarFontSizeForScreen(screen?.name)
+  readonly property real barHeight: Style.getBarHeightForScreen(screenName)
+  readonly property real capsuleHeight: Style.getCapsuleHeightForScreen(screenName)
+  readonly property real barFontSize: Style.getBarFontSizeForScreen(screenName)
 
   property var widgetMetadata: BarWidgetRegistry.widgetMetadata[widgetId]
   property var widgetSettings: {
-    if (section && sectionWidgetIndex >= 0) {
-      var widgets = Settings.getBarWidgetsForScreen(screen?.name)[section];
+    if (section && sectionWidgetIndex >= 0 && screenName) {
+      var widgets = Settings.getBarWidgetsForScreen(screenName)[section];
       if (widgets && sectionWidgetIndex < widgets.length) {
         return widgets[sectionWidgetIndex];
       }
@@ -458,10 +460,8 @@ Rectangle {
       return items;
     }
     onTriggered: (action, item) => {
-                   var popupMenuWindow = PanelService.getPopupMenuWindow(root.screen);
-                   if (popupMenuWindow) {
-                     popupMenuWindow.close();
-                   }
+                   contextMenu.close();
+                   PanelService.closeContextMenu(root.screen);
 
                    // Look up the window fresh each time to avoid stale references
                    const selectedWindow = root.getSelectedWindow();
@@ -964,30 +964,6 @@ Rectangle {
     // Set the model directly
     contextMenu.model = items;
 
-    var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
-    if (popupMenuWindow) {
-      popupMenuWindow.open();
-
-      // Calculate menu position
-      const globalPos = item.mapToItem(root, 0, 0);
-      let menuX, menuY;
-      if (root.barPosition === "top") {
-        menuX = globalPos.x + (item.width / 2) - (contextMenu.implicitWidth / 2);
-        menuY = barHeight + Style.marginS;
-      } else if (root.barPosition === "bottom") {
-        const menuHeight = 12 + contextMenu.model.length * contextMenu.itemHeight;
-        menuX = globalPos.x + (item.width / 2) - (contextMenu.implicitWidth / 2);
-        menuY = -menuHeight - Style.marginS;
-      } else if (root.barPosition === "left") {
-        menuX = barHeight + Style.marginS;
-        menuY = globalPos.y + (item.height / 2) - (contextMenu.implicitHeight / 2);
-      } else {
-        // right
-        menuX = -contextMenu.implicitWidth - Style.marginS;
-        menuY = globalPos.y + (item.height / 2) - (contextMenu.implicitHeight / 2);
-      }
-      popupMenuWindow.showContextMenu(contextMenu);
-      contextMenu.openAtItem(root, screen);
-    }
+    PanelService.showContextMenu(contextMenu, item, screen);
   }
 }

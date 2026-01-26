@@ -302,6 +302,10 @@ SmartPanel {
     activate();
   }
 
+  function onEnterPressed() {
+    activate();
+  }
+
   function onHomePressed() {
     selectFirst();
   }
@@ -318,12 +322,32 @@ SmartPanel {
     selectNextPage();
   }
 
+  function onCtrlHPressed() {
+    if (isGridView) {
+      selectPreviousWrapped();
+    }
+  }
+
   function onCtrlJPressed() {
-    selectNextWrapped();
+    if (isGridView) {
+      selectNextRow();
+    } else {
+      selectNextWrapped();
+    }
   }
 
   function onCtrlKPressed() {
-    selectPreviousWrapped();
+    if (isGridView) {
+      selectPreviousRow();
+    } else {
+      selectPreviousWrapped();
+    }
+  }
+
+  function onCtrlLPressed() {
+    if (isGridView) {
+      selectNextWrapped();
+    }
   }
 
   function onCtrlNPressed() {
@@ -853,8 +877,8 @@ SmartPanel {
 
     RowLayout {
       anchors.fill: parent
-      anchors.margins: Style.marginL // Apply overall margins here
-      spacing: Style.marginM // Apply spacing between elements here
+      anchors.margins: Style.marginL
+      spacing: Style.marginM
 
       // Left Pane
       ColumnLayout {
@@ -968,6 +992,8 @@ SmartPanel {
           }
         }
 
+        // --------------------------
+        // LIST VIEW
         Component {
           id: listViewComponent
           NListView {
@@ -975,6 +1001,8 @@ SmartPanel {
 
             horizontalPolicy: ScrollBar.AlwaysOff
             verticalPolicy: ScrollBar.AlwaysOff
+            reserveScrollbarSpace: false
+            gradientColor: Color.mSurface
 
             width: parent.width
             height: parent.height
@@ -1007,7 +1035,7 @@ SmartPanel {
                 }
               }
 
-              width: resultsList.width
+              width: resultsList.availableWidth
               implicitHeight: entryHeight
               clip: true
               color: entry.isSelected ? Color.mHover : Color.mSurface
@@ -1247,6 +1275,8 @@ SmartPanel {
           }
         }
 
+        // --------------------------
+        // SINGLE ITEM VIEW, ex: kaggi
         Component {
           id: singleViewComponent
 
@@ -1276,17 +1306,17 @@ SmartPanel {
                   }
                 }
 
-                ScrollView {
+                NScrollView {
+                  id: descriptionScrollView
                   Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                   Layout.topMargin: Style.fontSizeL + Style.marginXL
                   Layout.fillWidth: true
                   Layout.fillHeight: true
-                  clip: true
-                  ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-                  contentWidth: availableWidth
+                  horizontalPolicy: ScrollBar.AlwaysOff
+                  reserveScrollbarSpace: false
 
                   NText {
-                    width: parent.width
+                    width: descriptionScrollView.availableWidth
                     text: root.results.length > 0 ? root.results[0].description : ""
                     pointSize: Style.fontSizeM
                     font.weight: Font.Bold
@@ -1302,6 +1332,8 @@ SmartPanel {
           }
         }
 
+        // --------------------------
+        // GRID VIEW
         Component {
           id: gridViewComponent
           NGridView {
@@ -1309,6 +1341,8 @@ SmartPanel {
 
             horizontalPolicy: ScrollBar.AlwaysOff
             verticalPolicy: ScrollBar.AlwaysOff
+            reserveScrollbarSpace: false
+            gradientColor: "transparent" //Color.mSurface
 
             width: parent.width
             height: parent.height

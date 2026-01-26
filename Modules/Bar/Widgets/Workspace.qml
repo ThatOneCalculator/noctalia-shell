@@ -24,9 +24,11 @@ Item {
   property int sectionWidgetsCount: 0
 
   property var widgetMetadata: BarWidgetRegistry.widgetMetadata[widgetId]
+  // Explicit screenName property ensures reactive binding when screen changes
+  readonly property string screenName: screen ? screen.name : ""
   property var widgetSettings: {
-    if (section && sectionWidgetIndex >= 0) {
-      var widgets = Settings.getBarWidgetsForScreen(screen?.name)[section];
+    if (section && sectionWidgetIndex >= 0 && screenName) {
+      var widgets = Settings.getBarWidgetsForScreen(screenName)[section];
       if (widgets && sectionWidgetIndex < widgets.length) {
         return widgets[sectionWidgetIndex];
       }
@@ -34,11 +36,11 @@ Item {
     return {};
   }
 
-  readonly property string barPosition: Settings.getBarPositionForScreen(screen?.name)
+  readonly property string barPosition: Settings.getBarPositionForScreen(screenName)
   readonly property bool isVertical: barPosition === "left" || barPosition === "right"
-  readonly property real barHeight: Style.getBarHeightForScreen(screen?.name)
-  readonly property real capsuleHeight: Style.getCapsuleHeightForScreen(screen?.name)
-  readonly property real barFontSize: Style.getBarFontSizeForScreen(screen?.name)
+  readonly property real barHeight: Style.getBarHeightForScreen(screenName)
+  readonly property real capsuleHeight: Style.getCapsuleHeightForScreen(screenName)
+  readonly property real barFontSize: Style.getBarFontSizeForScreen(screenName)
   readonly property real baseDimensionRatio: 0.65 * (widgetSettings.labelMode === "none" ? 0.75 : 1)
 
   readonly property string labelMode: (widgetSettings.labelMode !== undefined) ? widgetSettings.labelMode : widgetMetadata.labelMode
@@ -55,6 +57,17 @@ Item {
   readonly property real groupedBorderOpacity: (widgetSettings.groupedBorderOpacity !== undefined) ? widgetSettings.groupedBorderOpacity : widgetMetadata.groupedBorderOpacity
   readonly property bool enableScrollWheel: (widgetSettings.enableScrollWheel !== undefined) ? widgetSettings.enableScrollWheel : widgetMetadata.enableScrollWheel
   readonly property real iconScale: (widgetSettings.iconScale !== undefined) ? widgetSettings.iconScale : widgetMetadata.iconScale
+  readonly property string focusedColor: (widgetSettings.focusedColor !== undefined) ? widgetSettings.focusedColor : widgetMetadata.focusedColor
+  readonly property string occupiedColor: (widgetSettings.occupiedColor !== undefined) ? widgetSettings.occupiedColor : widgetMetadata.occupiedColor
+  readonly property string emptyColor: (widgetSettings.emptyColor !== undefined) ? widgetSettings.emptyColor : widgetMetadata.emptyColor
+  readonly property bool showBadge: (widgetSettings.showBadge !== undefined) ? widgetSettings.showBadge : widgetMetadata.showBadge
+
+  readonly property var colorMap: {
+    "primary": [Color.mPrimary, Color.mOnPrimary],
+    "secondary": [Color.mSecondary, Color.mOnSecondary],
+    "tertiary": [Color.mTertiary, Color.mOnTertiary],
+    "onSurface": [Color.mOnSurface, Color.mSurface]
+  }
 
   // Only for grouped mode / show apps
   readonly property int baseItemSize: Style.toOdd(capsuleHeight * 0.8)
@@ -229,7 +242,9 @@ Item {
   }
 
   onScreenChanged: refreshWorkspaces()
+  onScreenNameChanged: refreshWorkspaces()
   onHideUnoccupiedChanged: refreshWorkspaces()
+  onShowApplicationsChanged: refreshWorkspaces()
 
   Connections {
     target: CompositorService
@@ -291,7 +306,17 @@ Item {
         };
 
         if (showApplications) {
-          workspaceData.windows = CompositorService.getWindowsForWorkspace(ws.id);
+          // Explicitly serialize window objects - Qt 6.9 and older lose nested object
+          // properties when stored in ListModel, causing window.id to become undefined
+          var rawWindows = CompositorService.getWindowsForWorkspace(ws.id);
+          workspaceData.windows = rawWindows.map(w => ({
+                                                         id: w.id,
+                                                         address: w.address ?? "",
+                                                         appId: w.appId,
+                                                         title: w.title,
+                                                         isFocused: w.isFocused,
+                                                         workspaceId: w.workspaceId
+                                                       }));
         }
 
         targetList.push(workspaceData);
@@ -424,10 +449,8 @@ Item {
     }
 
     onTriggered: (action, item) => {
-                   var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
-                   if (popupMenuWindow) {
-                     popupMenuWindow.close();
-                   }
+                   contextMenu.close();
+                   PanelService.closeContextMenu(screen);
 
                    const selectedWindow = root.getSelectedWindow();
 
@@ -469,11 +492,7 @@ Item {
       acceptedButtons: Qt.RightButton
       onClicked: mouse => {
                    if (mouse.button === Qt.RightButton) {
-                     var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
-                     if (popupMenuWindow) {
-                       popupMenuWindow.showContextMenu(contextMenu);
-                       contextMenu.openAtItem(workspaceBackground, screen);
-                     }
+                     PanelService.showContextMenu(contextMenu, workspaceBackground, screen);
                    }
                  }
     }
@@ -604,13 +623,13 @@ Item {
                 wrapMode: Text.Wrap
                 color: {
                   if (model.isFocused)
-                    return Color.mOnPrimary;
+                    return root.colorMap[root.focusedColor][1];
                   if (model.isUrgent)
                     return Color.mOnError;
                   if (model.isOccupied)
-                    return Color.mOnSecondary;
+                    return root.colorMap[root.occupiedColor][1];
 
-                  return Color.mOnSecondary;
+                  return root.colorMap[root.emptyColor][1];
                 }
               }
             }
@@ -619,12 +638,14 @@ Item {
           radius: Style.radiusM
           color: {
             if (model.isFocused)
+              // return root.colorMap[root.focusedColor][0];
               return "#c4a7e7";
             if (model.isUrgent)
               return Color.mError;
             if (model.isOccupied)
-              return Color.mSecondary;
+              return root.colorMap[root.occupiedColor][0];
 
+            // return Qt.alpha(root.colorMap[root.emptyColor][0], 0.3);
             return "#6e6a86";
           }
           z: 0
@@ -780,13 +801,13 @@ Item {
                 wrapMode: Text.Wrap
                 color: {
                   if (model.isFocused)
-                    return Color.mOnPrimary;
+                    return root.colorMap[root.focusedColor][1];
                   if (model.isUrgent)
                     return Color.mOnError;
                   if (model.isOccupied)
-                    return Color.mOnSecondary;
+                    return root.colorMap[root.occupiedColor][1];
 
-                  return Color.mOnSecondary;
+                  return root.colorMap[root.emptyColor][1];
                 }
               }
             }
@@ -795,13 +816,14 @@ Item {
           radius: Style.radiusM
           color: {
             if (model.isFocused)
+              // return root.colorMap[root.focusedColor][0];
               return "#c4a7e7";
             if (model.isUrgent)
               return Color.mError;
             if (model.isOccupied)
-              return Color.mSecondary;
+              return root.colorMap[root.occupiedColor][0];
 
-            // return Qt.alpha(Color.mSecondary, 0.3);
+            // return Qt.alpha(root.colorMap[root.emptyColor][0], 0.3);
             return "#6e6a86";
           }
           z: 0
@@ -992,6 +1014,7 @@ Item {
 
               onPressed: mouse => {
                            const win = (typeof modelData !== "undefined") ? modelData : model;
+                           console.log("DEBUG win:", JSON.stringify(win), "modelData:", typeof modelData, "model:", typeof model);
                            if (!win)
                            return;
                            if (mouse.button === Qt.LeftButton) {
@@ -1014,7 +1037,7 @@ Item {
               onEntered: {
                 const win = (typeof modelData !== "undefined") ? modelData : model;
                 groupedTaskbarItem.itemHovered = true;
-                TooltipService.show(groupedTaskbarItem, win.title || win.appId || "Unknown app.", BarService.getTooltipDirection(root.screen?.name));
+                TooltipService.show(groupedTaskbarItem, win.title || win.appId || "Unknown app.", BarService.getTooltipDirection(root.screenName));
               }
               onExited: {
                 groupedTaskbarItem.itemHovered = false;
@@ -1028,7 +1051,7 @@ Item {
       Item {
         id: groupedWorkspaceNumberContainer
 
-        visible: root.labelMode !== "none" && (!root.showLabelsOnlyWhenOccupied || groupedContainer.hasWindows || groupedContainer.workspaceModel.isFocused)
+        visible: root.labelMode !== "none" && root.showBadge && (!root.showLabelsOnlyWhenOccupied || groupedContainer.hasWindows || groupedContainer.workspaceModel.isFocused)
 
         anchors {
           left: parent.left
@@ -1048,17 +1071,13 @@ Item {
 
           color: {
             if (groupedContainer.workspaceModel.isFocused)
-              return Color.mPrimary;
+              return root.colorMap[root.focusedColor][0];
             if (groupedContainer.workspaceModel.isUrgent)
               return Color.mError;
             if (groupedContainer.hasWindows)
-              return Color.mSecondary;
+              return root.colorMap[root.occupiedColor][0];
 
-            if (Settings.data.colorSchemes.darkMode) {
-              return Qt.darker(Color.mSecondary, 1.5);
-            } else {
-              return Qt.lighter(Color.mSecondary, 1.5);
-            }
+            return root.colorMap[root.emptyColor][0];
           }
 
           scale: groupedContainer.workspaceModel.isActive ? 1.0 : 0.8
@@ -1121,11 +1140,13 @@ Item {
 
           color: {
             if (groupedContainer.workspaceModel.isFocused)
-              return Color.mOnPrimary;
+              return root.colorMap[root.focusedColor][1];
             if (groupedContainer.workspaceModel.isUrgent)
               return Color.mOnError;
+            if (groupedContainer.hasWindows)
+              return root.colorMap[root.occupiedColor][1];
 
-            return Color.mOnSecondary;
+            return root.colorMap[root.emptyColor][1];
           }
 
           Behavior on opacity {
@@ -1163,10 +1184,6 @@ Item {
   }
 
   function openGroupedContextMenu(item) {
-    var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
-    if (popupMenuWindow) {
-      popupMenuWindow.showContextMenu(contextMenu);
-      contextMenu.openAtItem(item, screen);
-    }
+    PanelService.showContextMenu(contextMenu, item, screen);
   }
 }
