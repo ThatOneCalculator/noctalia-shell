@@ -45,8 +45,6 @@ Item {
 
   // Visibility: show if hideIfNotDetected is false, or if battery is ready (after initialization)
   readonly property bool shouldShow: !hideIfNotDetected || (isReady && (hideIfIdle ? (!isCharging && !isPluggedIn) : true))
-  visible: shouldShow
-  opacity: shouldShow ? 1.0 : 0.0
 
   // Test mode
   readonly property bool testMode: false
@@ -55,30 +53,26 @@ Item {
   readonly property bool testPluggedIn: false
   readonly property string deviceNativePath: widgetSettings.deviceNativePath || ""
 
-  readonly property var battery: BatteryService.findUPowerDevice(deviceNativePath)
-  readonly property var bluetoothDevice: deviceNativePath ? BatteryService.findBluetoothDevice(deviceNativePath) : null
-  readonly property var device: bluetoothDevice || battery
+  readonly property var device: BatteryService.resolveDevice(deviceNativePath)
+  readonly property var battery: device && !BatteryService.isBluetoothDevice(device) ? device : null
+  readonly property var bluetoothDevice: device && BatteryService.isBluetoothDevice(device) ? device : null
   readonly property bool hasBluetoothBattery: BatteryService.isBluetoothDevice(device)
 
-  property bool initializationComplete: false
-  Timer {
-    interval: 500
-    running: true
-    onTriggered: root.initializationComplete = true
-  }
+  readonly property bool isReady: testMode ? true : (BatteryService.ready && BatteryService.isDeviceReady(device))
+  readonly property real percent: testMode ? testPercent : (isReady ? BatteryService.getPercentage(device) : 0)
+  readonly property bool isCharging: testMode ? testCharging : (isReady ? BatteryService.isCharging(device) : false)
+  readonly property bool isPluggedIn: testMode ? testPluggedIn : (isReady ? BatteryService.isPluggedIn(device) : false)
+
+  property bool hasNotifiedLowBattery: false
+
+  visible: shouldShow
+  opacity: shouldShow ? 1.0 : 0.0
 
   readonly property bool isDevicePresent: {
     if (testMode)
       return true;
     return BatteryService.isDevicePresent(device);
   }
-
-  readonly property bool isReady: testMode ? true : (initializationComplete && BatteryService.isDeviceReady(device))
-  readonly property real percent: testMode ? testPercent : (isReady ? BatteryService.getPercentage(device) : 0)
-  readonly property bool isCharging: testMode ? testCharging : (isReady ? BatteryService.isCharging(device) : false)
-  readonly property bool isPluggedIn: testMode ? testPluggedIn : (isReady ? BatteryService.isPluggedIn(device) : false)
-
-  property bool hasNotifiedLowBattery: false
 
   implicitWidth: pill.width
   implicitHeight: pill.height
@@ -155,9 +149,9 @@ Item {
     suffix: "%"
     autoHide: false
     forceOpen: isReady && displayMode === "alwaysShow"
-    forceClose: displayMode === "alwaysHide" || (initializationComplete && !isReady)
-    customBackgroundColor: !initializationComplete ? "transparent" : (isLowBattery ? Color.mError : Color.transparent)
-    customTextIconColor: !initializationComplete ? "transparent" : (isCharging ? "#f6c177" : (isLowBattery ? Color.mOnError : "transparent"))
+    forceClose: displayMode === "alwaysHide" || (BatteryService.ready && !isReady)
+    customBackgroundColor: !BatteryService.ready ? "transparent" : (isLowBattery ? Color.mError : "transparent")
+    customTextIconColor: !BatteryService.ready ? "transparent" : (isCharging ? "#f6c177" : (isLowBattery ? Color.mOnError : "transparent"))
 
     tooltipText: {
       let lines = [];
