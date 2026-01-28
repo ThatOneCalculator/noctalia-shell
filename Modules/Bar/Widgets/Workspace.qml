@@ -64,7 +64,7 @@ Item {
   readonly property bool showBadge: (widgetSettings.showBadge !== undefined) ? widgetSettings.showBadge : widgetMetadata.showBadge
 
   readonly property var colorMap: {
-    "primary": [Color.mPrimary, Color.mOnPrimary],
+    "primary": ["#c4a7e7", Color.mOnPrimary],
     "secondary": [Color.mSecondary, Color.mOnSecondary],
     "tertiary": [Color.mTertiary, Color.mOnTertiary],
     "onSurface": [Color.mOnSurface, Color.mSurface]
