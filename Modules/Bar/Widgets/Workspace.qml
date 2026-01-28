@@ -116,7 +116,7 @@ Item {
   property int lastFocusedWorkspaceId: -1
   property real masterProgress: 0.0
   property bool effectsActive: false
-  property color effectColor: Color.mPrimary
+  property color effectColor: "#c4a7e7"
 
   property int horizontalPadding: Style.marginS
   property int spacingBetweenPills: Style.marginXS
@@ -651,7 +651,7 @@ Item {
       height: Style.toOdd((hasWindows ? groupedIconsFlow.implicitHeight : root.iconSize) + (root.isVertical ? Style.marginL : (root.baseItemSize - root.iconSize + Style.marginXS)))
       color: Style.capsuleColor
       radius: Style.radiusS
-      border.color: Settings.data.bar.showOutline ? Style.capsuleBorderColor : Qt.alpha((workspaceModel.isFocused ? Color.mPrimary : Color.mOutline), root.groupedBorderOpacity)
+      border.color: Settings.data.bar.showOutline ? Style.capsuleBorderColor : Qt.alpha((workspaceModel.isFocused ? "#c4a7e7" : Color.mOutline), root.groupedBorderOpacity)
       border.width: Style.borderS
 
       Behavior on width {
@@ -731,7 +731,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Style.toOdd(root.iconSize * 0.25)
                 height: 4
-                color: Color.mPrimary
+                color: "#c4a7e7"
                 radius: Math.min(Style.radiusXXS, width / 2)
               }
 

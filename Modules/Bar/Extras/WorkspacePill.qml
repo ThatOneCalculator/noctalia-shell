@@ -34,7 +34,7 @@ Item {
   function getColorPair(colorKey) {
     switch (colorKey) {
     case "primary":
-      return [Color.mPrimary, Color.mOnPrimary];
+      return ["#c4a7e7", Color.mOnPrimary];
     case "secondary":
       return [Color.mSecondary, Color.mOnSecondary];
     case "tertiary":
