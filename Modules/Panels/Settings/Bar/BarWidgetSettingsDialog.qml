@@ -20,7 +20,7 @@ Popup {
 
   readonly property real maxHeight: screen ? screen.height * 0.9 : 800
 
-  width: Math.max(content.implicitWidth + padding * 2, 500)
+  width: Math.max(content.implicitWidth + padding * 2, 640)
   height: Math.min(content.implicitHeight + padding * 2, maxHeight)
   padding: Style.marginXL
   modal: true
@@ -136,25 +136,6 @@ Popup {
               return null;
             }
           }
-        }
-      }
-
-      // Action buttons
-      RowLayout {
-        id: buttonRow
-        Layout.fillWidth: true
-        Layout.topMargin: Style.marginM
-        Layout.preferredHeight: implicitHeight
-        spacing: Style.marginM
-
-        Item {
-          Layout.fillWidth: true
-        }
-
-        NButton {
-          text: I18n.tr("common.close")
-          outlined: true
-          onClicked: saveAndClose()
         }
       }
     }
