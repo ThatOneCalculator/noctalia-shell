@@ -86,7 +86,7 @@ Singleton {
                                   "Battery": {
                                     "displayMode": "onhover",
                                     "warningThreshold": 30,
-                                    "deviceNativePath": "",
+                                    "deviceNativePath": "__default__",
                                     "showPowerProfiles": false,
                                     "showNoctaliaPerformance": false,
                                     "hideIfNotDetected": true,
@@ -371,13 +371,7 @@ Singleton {
 
   // Helper function to check if widget has user settings
   function widgetHasUserSettings(id) {
-    var meta = widgetMetadata[id];
-    if (meta === undefined)
-      return false;
-    // allowUserSettings=false lets a widget opt out of the settings dialog
-    if (meta.allowUserSettings === false)
-      return false;
-    return true;
+    return widgetMetadata[id] !== undefined;
   }
 
   // ------------------------------

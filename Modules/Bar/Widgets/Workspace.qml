@@ -913,6 +913,7 @@ Item {
   }
 
   function openGroupedContextMenu(item) {
-    PanelService.showContextMenu(contextMenu, item, screen);
+    // Anchor to root (stable) but center horizontally on the clicked item
+    PanelService.showContextMenu(contextMenu, root, screen, item);
   }
 }
