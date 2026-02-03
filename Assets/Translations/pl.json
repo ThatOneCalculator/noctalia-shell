@@ -211,6 +211,10 @@
       "memory-usage-label": "Użycie pamięci",
       "network-traffic-description": "Wyświetl prędkość wysyłania i pobierania danych w sieci.",
       "network-traffic-label": "Ruch sieciowy",
+      "storage-as-percentage-description": "Wyświetlaj miejsce na dysku jako procent zamiast wartości bezwzględnych.",
+      "storage-as-percentage-label": "Dysk jako procent",
+      "storage-available-description": "Pokazuje, ile miejsca na dysku jest dostępne, zamiast ile jest używane.",
+      "storage-available-label": "Dostępne miejsce na dysku",
       "storage-usage-description": "Pokaż informacje o użyciu miejsca na dysku.",
       "storage-usage-label": "Użycie dysku",
       "swap-usage-description": "Pokaż użycie pamięci wymiany.",
@@ -272,6 +276,8 @@
       "label-mode-label": "Tryb etykiet",
       "occupied-color-description": "Ustaw kolor tła dla zajętych Workspace'ów.",
       "occupied-color-label": "Kolor zajętego obszaru roboczego",
+      "pill-size-description": "Dostosuj rozmiar pigułek obszaru roboczego (50%-100%).",
+      "pill-size-label": "Rozmiar pigułki",
       "reverse-scrolling-description": "Odwróć kierunek przełączania obszarów roboczych podczas przewijania.",
       "reverse-scrolling-label": "Odwróć przewijanie",
       "show-applications-description": "Wyświetl ikony aplikacji wewnątrz każdego obszaru roboczego.",
@@ -387,6 +393,7 @@
     "disconnecting": "Rozłączanie...",
     "download": "Pobierz",
     "duration": "Czas trwania",
+    "dysfunctional": "Dysfunkcyjny",
     "edit": "Edytuj",
     "enabled": "Włączone",
     "events": "Wydarzenia",
@@ -489,6 +496,7 @@
     "week": "Tydzień",
     "widgets": "Widżety",
     "width": "Szerokość",
+    "windows": "Okna",
     "yes": "Tak"
   },
   "control-center": {
@@ -508,6 +516,7 @@
     "on-hover": "Po najechaniu kursorem"
   },
   "hide-modes": {
+    "auto-hide": "Automatyczne ukrywanie",
     "hidden": "Ukryj, gdy puste",
     "idle": "Ukryj, gdy bezczynny",
     "transparent": "Przezroczysty, gdy pusty",
@@ -559,7 +568,9 @@
       "emoji-loading": "Ładowanie emoji...",
       "emoji-loading-description": "Proszę czekać",
       "emoji-no-recent": "Brak ostatnich emoji",
-      "emoji-search-description": "Szukaj i kopiuj emoji"
+      "emoji-search-description": "Szukaj i kopiuj emoji",
+      "settings-search-description": "Szukaj i przejdź do ustawień",
+      "windows-search-description": "Wyszukaj i aktywuj otwarte okna"
     }
   },
   "lock-screen": {
@@ -596,6 +607,7 @@
       "density-default": "Domyślny",
       "density-mini": "Mini",
       "density-spacious": "Przestronny",
+      "display-mode-always-visible": "Zawsze widoczne",
       "type-floating": "Pływający",
       "type-framed": "Obramowany",
       "type-simple": "Prosty"
@@ -717,6 +729,11 @@
       "volumes-volume-overdrive-label": "Zezwalaj na wzmocnienie głośności (overdrive)"
     },
     "bar": {
+      "appearance-auto-hide-delay-description": "Czas, po którym Bar zniknie po opuszczeniu go przez mysz.",
+      "appearance-auto-hide-delay-label": "Opóźnienie ukrywania",
+      "appearance-auto-hide-exclusive-note": "Uwaga: Strefa wyłączna jest automatycznie wyłączana, gdy autoukrywanie jest aktywne.",
+      "appearance-auto-show-delay-description": "Czas, zanim pasek pojawi się, gdy mysz wejdzie na krawędź.",
+      "appearance-auto-show-delay-label": "Opóźnienie Wyświetlania",
       "appearance-background-opacity-description": "Ustaw przezroczystość tła konkretnie dla paska.",
       "appearance-background-opacity-label": "Krycie tła paska",
       "appearance-capsule-opacity-description": "Ustaw poziom przezroczystości tła widżetów, gdy kapsuła jest widoczna.",
@@ -724,6 +741,8 @@
       "appearance-density-description": "Dostosuj odstępy paska dla kompaktowego lub przestronnego wyglądu.",
       "appearance-density-label": "Zagęszczenie paska",
       "appearance-desc": "Dostosuj wygląd i pozycję paska.",
+      "appearance-display-mode-description": "Wybierz, kiedy pasek jest widoczny",
+      "appearance-display-mode-label": "Tryb Wyświetlania",
       "appearance-floating-description": "Wyświetl pasek jako pływającą 'pigułkę'.",
       "appearance-floating-label": "Pływający pasek",
       "appearance-frame-radius": "Promień wewnętrzny",
@@ -795,6 +814,7 @@
       "download-title": "Pobierz schematy kolorów",
       "method-description": {
         "content": "Schemat Material Design z ekstrakcją kolorów o wysokiej wierności, która ściśle odpowiada rzeczywistym kolorom treści źródłowej.",
+        "dysfunctional": "Jak Faithful, ale wybiera drugą najbardziej dominującą rodzinę kolorów jako główną.",
         "faithful": "Próbuje pozostać blisko koloru źródłowego, jednocześnie generując harmonijną paletę.",
         "fruit-salad": "Schemat Material Design, który tworzy radosną, żywą paletę z różnorodnymi odcieniami.",
         "monochrome": "Schemat Material Design wykorzystujący jednobarwną skalę szarości z minimalną zawartością chromatyczną.",
@@ -891,6 +911,16 @@
       "media-player-show-buttons-label": "Pokaż przyciski",
       "media-player-show-visualizer-description": "Pokaż nakładkę wizualizatora audio.",
       "media-player-visualizer-type-description": "Wybierz typ wizualizacji dla tła odtwarzacza pulpitu.",
+      "system-stat-layout-bottom": "Dół",
+      "system-stat-layout-description": "Wybierz, jak legenda jest wyświetlana względem wykresu.",
+      "system-stat-layout-label": "Układ",
+      "system-stat-layout-side": "Strona",
+      "system-stat-rounded-corners-description": "Użyj zaokrąglonych rogów dla tła widżetu.",
+      "system-stat-rounded-corners-label": "Zaokrąglone Narożniki",
+      "system-stat-show-background-description": "Pokaż kontener tła dla widżetu statystyk systemowych.",
+      "system-stat-show-background-label": "Pokaż tło",
+      "system-stat-stat-type-description": "Wybierz, którą statystykę systemową wyświetlić.",
+      "system-stat-stat-type-label": "Typ Statystyki",
       "title": "Widżety pulpitu",
       "weather-enabled-description": "Pokaż widżet pogody na pulpicie.",
       "weather-enabled-label": "Włącz widżet pogody",
@@ -1063,6 +1093,8 @@
       "settings-desc": "Dostosuj zachowanie i wygląd launchera.",
       "settings-enable-settings-search-description": "Wyświetlaj wyniki ustawień podczas wyszukiwania w Launcherze.",
       "settings-enable-settings-search-label": "Włącz wyszukiwanie w ustawieniach",
+      "settings-enable-windows-search-description": "Wyszukaj i skup aktywne okna.",
+      "settings-enable-windows-search-label": "Włącz wyszukiwanie okien",
       "settings-grid-view-description": "Wyświetlaj elementy w układzie siatki zamiast listy.",
       "settings-icon-mode-description": "Używaj natywnych ikon systemowych zamiast ikon Tabler.",
       "settings-icon-mode-label": "Używaj natywnych ikon",
@@ -1278,6 +1310,7 @@
       "sources-placeholder": "Moje fajne repozytorium",
       "sources-remove-tooltip": "Usuń źródło wtyczek",
       "title": "Wtyczki",
+      "translations-reloaded": "Przeładowano tłumaczenia: {name}",
       "uninstall-dialog-description": "Czy na pewno chcesz odinstalować {plugin}? Spowoduje to usunięcie wszystkich danych wtyczki.",
       "uninstall-dialog-title": "Odinstaluj wtyczkę",
       "uninstall-error": "Błąd odinstalowywania: {error}",
@@ -1325,6 +1358,7 @@
     "system-monitor": {
       "critical-color-label": "Kolor krytyczny",
       "custom-highlight-colors-title-label": "Własne kolory podświetlenia",
+      "disk-available-label": "Dostępne miejsce na dysku",
       "disk-section-label": "Użycie dysku",
       "enable-dgpu-monitoring-description": "Ostrzeżenie: To obudzi twoją dedykowaną kartę graficzną (NVIDIA/AMD), co może znacząco wpłynąć na żywotność baterii w laptopach z hybrydową grafiką.",
       "enable-dgpu-monitoring-label": "Włącz monitorowanie dedykowanej karty graficznej",

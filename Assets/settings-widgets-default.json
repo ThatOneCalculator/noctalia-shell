@@ -129,6 +129,7 @@
       "usePrimaryColor": false,
       "useMonospaceFont": true,
       "showCpuUsage": true,
+      "showCpuFreq": false,
       "showCpuTemp": true,
       "showGpuTemp": false,
       "showLoadAverage": false,
@@ -137,6 +138,8 @@
       "showSwapUsage": false,
       "showNetworkStats": false,
       "showDiskUsage": false,
+      "showDiskUsageAsPercent": false,
+      "showDiskAvailable": false,
       "diskPath": "/"
     },
     "Taskbar": {
@@ -220,6 +223,13 @@
     },
     "Weather": {
       "showBackground": true
+    },
+    "SystemStat": {
+      "showBackground": true,
+      "statType": "CPU",
+      "diskPath": "/",
+      "roundedCorners": true,
+      "layout": "bottom"
     }
   }
 }

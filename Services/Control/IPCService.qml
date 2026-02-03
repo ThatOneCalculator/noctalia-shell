@@ -198,6 +198,46 @@ Item {
                                               }
                                             });
     }
+    function windows() {
+      root.screenDetector.withCurrentScreen(screen => {
+                                              var launcherPanel = PanelService.getPanel("launcherPanel", screen);
+                                              if (!launcherPanel)
+                                              return;
+                                              var searchText = launcherPanel.searchText || "";
+                                              var isInWindowsMode = searchText.startsWith(">win");
+                                              if (!launcherPanel.isPanelOpen) {
+                                                // Closed -> open in windows mode
+                                                launcherPanel.open();
+                                                launcherPanel.setSearchText(">win ");
+                                              } else if (isInWindowsMode) {
+                                                // Already in windows mode -> close
+                                                launcherPanel.close();
+                                              } else {
+                                                // In another mode -> switch to windows mode
+                                                launcherPanel.setSearchText(">win ");
+                                              }
+                                            });
+    }
+    function settings() {
+      root.screenDetector.withCurrentScreen(screen => {
+                                              var launcherPanel = PanelService.getPanel("launcherPanel", screen);
+                                              if (!launcherPanel)
+                                              return;
+                                              var searchText = launcherPanel.searchText || "";
+                                              var isInSettingsMode = searchText.startsWith(">settings");
+                                              if (!launcherPanel.isPanelOpen) {
+                                                // Closed -> open in settings mode
+                                                launcherPanel.open();
+                                                launcherPanel.setSearchText(">settings ");
+                                              } else if (isInSettingsMode) {
+                                                // Already in settings mode -> close
+                                                launcherPanel.close();
+                                              } else {
+                                                // In another mode -> switch to settings mode
+                                                launcherPanel.setSearchText(">settings ");
+                                              }
+                                            });
+    }
   }
 
   IpcHandler {
@@ -386,28 +426,6 @@ Item {
     }
     function enableAutomation() {
       Settings.data.wallpaper.automationEnabled = true;
-    }
-  }
-
-  IpcHandler {
-    target: "batteryManager"
-
-    function cycle() {
-      BatteryService.cycleModes();
-    }
-
-    function set(mode: string) {
-      switch (mode) {
-      case "full":
-        BatteryService.setChargingMode(BatteryService.ChargingMode.Full);
-        break;
-      case "balanced":
-        BatteryService.setChargingMode(BatteryService.ChargingMode.Balanced);
-        break;
-      case "lifespan":
-        BatteryService.setChargingMode(BatteryService.ChargingMode.Lifespan);
-        break;
-      }
     }
   }
 

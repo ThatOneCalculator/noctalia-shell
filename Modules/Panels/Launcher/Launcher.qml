@@ -762,6 +762,14 @@ SmartPanel {
     }
   }
 
+  WindowsProvider {
+    id: windowsProvider
+    Component.onCompleted: {
+      registerProvider(this);
+      Logger.d("Launcher", "Registered: WindowsProvider");
+    }
+  }
+
   // ---------------------------------------------------
   panelContent: Rectangle {
     id: ui
@@ -774,7 +782,7 @@ SmartPanel {
       visible: root.previewActive
       width: root.previewPanelWidth
       height: Math.round(400 * Style.uiScaleRatio)
-      x: ui.width + Style.marginM
+      x: root.panelAnchorRight ? -(root.previewPanelWidth + Style.marginM) : ui.width + Style.marginM
       y: {
         if (!resultsViewLoader.item)
           return Style.marginL;
@@ -1195,6 +1203,24 @@ SmartPanel {
                         color: Color.mOnSurfaceVariant
                       }
                     }
+
+                    // Badge icon overlay (generic indicator for any provider)
+                    Rectangle {
+                      visible: !!modelData.badgeIcon
+                      anchors.bottom: parent.bottom
+                      anchors.right: parent.right
+                      anchors.margins: 2
+                      width: height
+                      height: Style.fontSizeM + Style.marginXS
+                      color: Color.mSurfaceVariant
+                      radius: Style.radiusXXS
+                      NIcon {
+                        anchors.centerIn: parent
+                        icon: modelData.badgeIcon || ""
+                        pointSize: Style.fontSizeS
+                        color: Color.mOnSurfaceVariant
+                      }
+                    }
                   }
 
                   // Text content
@@ -1558,6 +1584,24 @@ SmartPanel {
                       }
                       font.weight: Style.fontWeightBold
                       color: modelData.displayString ? Color.mOnSurface : Color.mOnPrimary
+                    }
+
+                    // Badge icon overlay (generic indicator for any provider)
+                    Rectangle {
+                      visible: !!modelData.badgeIcon
+                      anchors.bottom: parent.bottom
+                      anchors.right: parent.right
+                      anchors.margins: 2
+                      width: height
+                      height: Style.fontSizeM + Style.marginXS
+                      color: Color.mSurfaceVariant
+                      radius: Style.radiusXXS
+                      NIcon {
+                        anchors.centerIn: parent
+                        icon: modelData.badgeIcon || ""
+                        pointSize: Style.fontSizeS
+                        color: Color.mOnSurfaceVariant
+                      }
                     }
                   }
 
