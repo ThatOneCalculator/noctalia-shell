@@ -69,14 +69,13 @@
       "horizontal-bar-description": "Tips: Använd \\n för att skapa en radbrytning.",
       "horizontal-bar-label": "Horisontell stapel",
       "preview": "Förhandsgranska",
+      "select-color-description": "Tillämpa temafärger för betoning.",
       "tooltip-format-description": "Formateringssträng för verktygstips som visas när du håller muspekaren över klockan. Lämna tomt för att använda standardverktygstipset.",
       "tooltip-format-label": "Verktygstipsformat",
       "use-custom-font-description": "Åsidosätt standardvalet av teckensnitt med ett anpassat teckensnitt för klockan.",
       "use-custom-font-label": "Använd anpassat teckensnitt",
       "use-monospaced-font-description": "När denna funktion är aktiverad använder klockan ett monospaced-teckensnitt.",
       "use-monospaced-font-label": "Använd monospaced-teckensnitt",
-      "use-primary-color-description": "När denna funktion är aktiverad används primärfärgen för att framhäva.",
-      "use-primary-color-label": "Använd primärfärg",
       "vertical-bar-description": "Använd ett mellanslag för att separera varje del till en ny rad.",
       "vertical-bar-label": "Vertikal stapel"
     },
@@ -94,7 +93,6 @@
       "collapse-condition-description": "Om utdatatexten matchar detta värde kommer knappen att döljas.",
       "collapse-condition-label": "Dölj villkor",
       "color-selection-description": "Tillämpa temafärger på ikon och text.",
-      "color-selection-label": "Välj färg",
       "display-command-output-description": "Ange ett kommando som ska köras med jämna mellanrum. Den första raden i utdata visas som text.",
       "display-command-output-label": "Visa kommandoutdata",
       "display-command-output-stream-description": "Ange ett kommando som ska köras kontinuerligt.",
@@ -345,13 +343,6 @@
       "version-new-user": "Ny installation"
     }
   },
-  "colors": {
-    "error": "Fel",
-    "on-surface": "På ytan",
-    "primary": "Primär",
-    "secondary": "Sekundär",
-    "tertiary": "Tertiär"
-  },
   "common": {
     "actions": "Åtgärder",
     "add": "Lägg till",
@@ -396,6 +387,7 @@
     "dysfunctional": "Dysfunktionell",
     "edit": "Redigera",
     "enabled": "Aktiverad",
+    "error": "Fel",
     "events": "Händelser",
     "execute": "Exekvera",
     "faithful": "Trogen",
@@ -464,6 +456,7 @@
     "secondary": "Sekundär",
     "security": "Säkerhet",
     "select": "Välj",
+    "select-color": "Välj färg",
     "shortcuts": "Genvägar",
     "shutdown": "Stäng av",
     "signal": "Signal",
@@ -723,7 +716,7 @@
       "volumes-output-volume-description": "Systemomfattande volymnivå.",
       "volumes-step-size-description": "Justera stegstorleken för volymändringar (rullhjul, kortkommandon).",
       "volumes-step-size-label": "Volymstegstorlek",
-      "volumes-volume-feedback-description": "Spela upp ett ljud när volymen justeras",
+      "volumes-volume-feedback-description": "Spela upp ett ljud när volymen justeras.",
       "volumes-volume-feedback-label": "Spela upp ljud vid volymjustering",
       "volumes-volume-overdrive-description": "Tillåt att volymen höjs över 100 %. Stöds kanske inte av all hårdvara.",
       "volumes-volume-overdrive-label": "Tillåt volymöverstyrning"
@@ -741,7 +734,7 @@
       "appearance-density-description": "Justera stapelns avstånd för ett kompakt eller rymligt utseende.",
       "appearance-density-label": "Stapeldensitet",
       "appearance-desc": "Anpassa stapelns utseende och position.",
-      "appearance-display-mode-description": "Välj när listen är synlig",
+      "appearance-display-mode-description": "Välj när listen är synlig.",
       "appearance-display-mode-label": "Visningsläge",
       "appearance-floating-description": "Visa stapeln som en flytande \"piller\".",
       "appearance-floating-label": "Flytande stapel",
@@ -763,7 +756,7 @@
       "appearance-show-capsule-label": "Visa kapsel",
       "appearance-show-outline-description": "Visar en synlig kant runt varje widget.",
       "appearance-show-outline-label": "Visa widgetkonturer",
-      "appearance-type-description": "Välj stil för fältet: Enkel, Flytande eller Inramad",
+      "appearance-type-description": "Välj stil för fältet: Enkel, Flytande eller Inramad.",
       "appearance-type-label": "Fälttyp",
       "appearance-use-separate-opacity-description": "Aktivera för att använda ett separat opacitetsvärde för fältets bakgrund.",
       "appearance-use-separate-opacity-label": "Använd separat opacitet för fältet",
@@ -831,7 +824,7 @@
       "templates-filter-label": "Filtrera efter kategori",
       "templates-misc-description": "Skapa dina egna mallar.",
       "templates-misc-label": "Avancerat",
-      "templates-misc-user-templates-description": "Aktivera endast om du vet vad du gör – se vår online-dokumentation.",
+      "templates-misc-user-templates-description": "Aktivera endast om du vet vad du gör — se vår online-dokumentation.",
       "templates-misc-user-templates-label": "Aktivera användarmallar",
       "templates-none-detected": "Inga upptäckta",
       "templates-write-path": "Skriver: {filepath}",
@@ -1153,7 +1146,7 @@
     "lock-screen": {
       "allow-password-with-fprintd-description": "När fprintd (fingeravtrycksautentisering) är aktivt, låter det här alternativet dig fortfarande logga in med ditt lösenord istället för ett fingeravtryck",
       "allow-password-with-fprintd-label": "Tillåt lösenordsinloggning med fprintd",
-      "auto-start-auth-description": "t.ex. startar automatiskt fingeravtrycksautentisering utan att du behöver trycka på en tangent eller knapp.",
+      "auto-start-auth-description": "Startar automatiskt fingeravtrycksautentisering utan att du behöver trycka på en tangent eller knapp.",
       "auto-start-auth-label": "Automatisk start av autentisering",
       "compact-lockscreen-description": "Visa endast inloggningsfältet och systemkontrollerna, dölj väder- och mediewidgets.",
       "compact-lockscreen-label": "Kompakt låsskärm",
@@ -1191,8 +1184,6 @@
       "history-low-urgency-label": "Spara låg prioritet i historiken",
       "history-normal-urgency-description": "Spara meddelanden med normal prioritet i historiken.",
       "history-normal-urgency-label": "Spara normal prioritet i historiken",
-      "media-toast-description": "Visa en toast när mediaspelningsstatus ändras.",
-      "media-toast-label": "Media",
       "monitors-desc": "Visa meddelanden på specifika skärmar. Standardinställningen är alla om ingen väljs.",
       "settings-always-on-top-description": "Visa meddelanden ovanför helskärmsfönster och andra lager.",
       "settings-background-opacity-description": "Justera opaciteten för meddelandenas bakgrund.",
@@ -1230,9 +1221,13 @@
       "sounds-unavailable-label": "Meddelandeljud otillgängliga",
       "sounds-volume-description": "Justera volymnivån för meddelandeljud.",
       "sounds-volume-label": "Ljudvolym",
+      "toast-battery-description": "Visa en varning när batterinivån sjunker under denna procentandel.",
+      "toast-battery-label": "Batterivarning",
       "toast-desc": "Konfigurera utseende och beteende för toast.",
       "toast-keyboard-description": "Visa en toast när tangentbordslayouten ändras.",
-      "toast-keyboard-label": "Tangentbordslayout"
+      "toast-keyboard-label": "Tangentbordslayout",
+      "toast-media-description": "Visa en toast när mediaspelningsstatus ändras.",
+      "toast-media-label": "Media"
     },
     "osd": {
       "always-on-top-description": "Visa OSD ovanför helskärmsfönster och andra lager.",
@@ -1276,7 +1271,7 @@
       "collision-official-version-exists": "Den officiella versionen av denna insticksmodul är redan installerad",
       "filter-downloaded": "Hämtade",
       "filter-not-downloaded": "Inte hämtade",
-      "filter-tags-description": "Filtrera insticksmoduler efter kategori eller hämtningsstatus",
+      "filter-tags-description": "Filtrera insticksmoduler efter kategori eller hämtningsstatus.",
       "filter-tags-label": "Taggar",
       "hot-reload-description": "Ladda om insticksmoduler automatiskt när deras filer ändras. Användbart för insticksutveckling.",
       "hot-reload-label": "Hot reload (dev mode)",
@@ -1516,7 +1511,7 @@
     },
     "skip-setup": "Hoppa över inställningar",
     "telemetry-wizard-done": "Jag fattar!",
-    "telemetry-wizard-note": "Du har kontrollen – aktivera eller inaktivera detta när som helst i Inställningar",
+    "telemetry-wizard-note": "Du har kontrollen — aktivera eller inaktivera detta när som helst i inställningar",
     "telemetry-wizard-subtitle": "Vi har lagt till anonym analys för att förbättra Noctalia",
     "telemetry-wizard-title": "Uppdatering av integritet",
     "wallpaper": {
@@ -1533,7 +1528,7 @@
       "select-prompt": "Välj en bakgrundsbild nedan",
       "subheader": "Skapa stämning med en vacker bakgrund."
     },
-    "welcome-note": "Bara några grundläggande tips för att komma igång – alla alternativ finns i inställningarna",
+    "welcome-note": "Bara några grundläggande tips för att komma igång — alla alternativ finns i inställningarna",
     "welcome-subtitle": "Låt oss göra ditt skrivbord unikt för dig",
     "welcome-title": "Välkommen till Noctalia!"
   },
@@ -1557,7 +1552,7 @@
     "disk": "Disk",
     "download-speed": "Hämtningshastighet",
     "gpu-temp": "GPU-temperatur",
-    "load-average": "Genomsnittlig belastning",
+    "load-average": "Genom. belastning",
     "title": "Systemövervakare",
     "upload-speed": "Sändningshastighet"
   },
@@ -1566,8 +1561,10 @@
       "title": "Flygplansläge"
     },
     "battery": {
+      "critical": "Kritisk batterinivå",
+      "critical-desc": "Batteriet är på {percent}% — anslut laddaren omedelbart",
       "low": "Lågt batteri",
-      "low-desc": "Batteriet är på {percent}%. Anslut laddaren"
+      "low-desc": "Batteriet är på {percent}% — anslut laddaren"
     },
     "bluetooth": {
       "address-copied": "Adress kopierad till urklipp",

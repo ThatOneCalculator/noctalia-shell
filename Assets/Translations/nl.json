@@ -69,14 +69,13 @@
       "horizontal-bar-description": "Tip: gebruik \\n om een regeleinde te maken.",
       "horizontal-bar-label": "Horizontale balk",
       "preview": "Voorbeeld",
+      "select-color-description": "Themakleuren toepassen voor nadruk.",
       "tooltip-format-description": "Opmaakreeks voor de tooltip die wordt weergegeven bij het zweven over de klok. Laat leeg om de standaard tooltip te gebruiken.",
       "tooltip-format-label": "Tooltip-opmaak",
       "use-custom-font-description": "Overschrijf het standaardlettertype met een aangepast lettertype voor de klok.",
       "use-custom-font-label": "Aangepast lettertype gebruiken",
       "use-monospaced-font-description": "Indien ingeschakeld gebruikt de klok het monospace-lettertype.",
       "use-monospaced-font-label": "Monospace-lettertype gebruiken",
-      "use-primary-color-description": "Indien ingeschakeld wordt de primaire kleur gebruikt voor nadruk.",
-      "use-primary-color-label": "Primaire kleur gebruiken",
       "vertical-bar-description": "Gebruik een spatie om elk deel op een nieuwe regel te plaatsen.",
       "vertical-bar-label": "Verticale balk"
     },
@@ -94,7 +93,6 @@
       "collapse-condition-description": "Als de uitvoer overeenkomt met deze waarde, wordt de knop samengevouwen.",
       "collapse-condition-label": "Inklapvoorwaarde",
       "color-selection-description": "Pas themakleuren toe op pictogram en tekst.",
-      "color-selection-label": "Kleur selecteren",
       "display-command-output-description": "Voer een commando in dat regelmatig wordt uitgevoerd. De eerste regel van de uitvoer wordt als tekst weergegeven.",
       "display-command-output-label": "Commando-uitvoer weergeven",
       "display-command-output-stream-description": "Voer een commando in dat continu wordt uitgevoerd.",
@@ -345,13 +343,6 @@
       "version-new-user": "Nieuwe installatie"
     }
   },
-  "colors": {
-    "error": "Fout",
-    "on-surface": "Op oppervlak",
-    "primary": "Primair",
-    "secondary": "Secundair",
-    "tertiary": "Tertiair"
-  },
   "common": {
     "actions": "Acties",
     "add": "Toevoegen",
@@ -396,6 +387,7 @@
     "dysfunctional": "Dysfunctioneel",
     "edit": "Bewerken",
     "enabled": "Ingeschakeld",
+    "error": "Fout",
     "events": "Evenementen",
     "execute": "Uitvoeren",
     "faithful": "Getrouw",
@@ -464,6 +456,7 @@
     "secondary": "Secundair",
     "security": "Beveiliging",
     "select": "Selecteer",
+    "select-color": "Kleur selecteren",
     "shortcuts": "Snelkoppelingen",
     "shutdown": "Afsluiten",
     "signal": "Signaal",
@@ -723,7 +716,7 @@
       "volumes-output-volume-description": "Systeembreed volumeniveau.",
       "volumes-step-size-description": "Pas de stapgrootte voor volumewijzigingen aan (scrollwiel, sneltoetsen).",
       "volumes-step-size-label": "Volumestapgrootte",
-      "volumes-volume-feedback-description": "Een feedbackgeluid afspelen bij het aanpassen van het volume",
+      "volumes-volume-feedback-description": "Een feedbackgeluid afspelen bij het aanpassen van het volume.",
       "volumes-volume-feedback-label": "Volume feedback geluid afspelen",
       "volumes-volume-overdrive-description": "Sta toe dat het volume boven 100% wordt verhoogd. Mogelijk niet door alle hardware ondersteund.",
       "volumes-volume-overdrive-label": "Volume-overdrive toestaan"
@@ -741,7 +734,7 @@
       "appearance-density-description": "Pas de opvulling van de balk aan voor een compacte of ruime uitstraling.",
       "appearance-density-label": "Balkdichtheid",
       "appearance-desc": "Pas de uitstraling en positie van de balk aan.",
-      "appearance-display-mode-description": "Kies wanneer de balk zichtbaar is",
+      "appearance-display-mode-description": "Kies wanneer de balk zichtbaar is.",
       "appearance-display-mode-label": "Weergavemodus",
       "appearance-floating-description": "Toon de balk weer als een zwevende 'pil'.",
       "appearance-floating-label": "Zwevende balk",
@@ -763,7 +756,7 @@
       "appearance-show-capsule-label": "Capsules tonen",
       "appearance-show-outline-description": "Toon een zichtbare rand rondom elke widget.",
       "appearance-show-outline-label": "Toon widget-omtrekken",
-      "appearance-type-description": "Kies de stijl van de balk: Eenvoudig, Zwevend of Omkaderd",
+      "appearance-type-description": "Kies de stijl van de balk: Eenvoudig, Zwevend of Omkaderd.",
       "appearance-type-label": "Balktype",
       "appearance-use-separate-opacity-description": "Maak het mogelijk om een aparte dekkingswaarde te gebruiken voor de achtergrond van de balk.",
       "appearance-use-separate-opacity-label": "Gebruik afzonderlijke balkdekking",
@@ -1153,7 +1146,7 @@
     "lock-screen": {
       "allow-password-with-fprintd-description": "Wanneer fprintd (vingerafdrukauthenticatie) actief is, kunt u met deze optie nog steeds inloggen met uw wachtwoord in plaats van een vingerafdruk.",
       "allow-password-with-fprintd-label": "Wachtwoordlogin toestaan met fprintd",
-      "auto-start-auth-description": "start bijvoorbeeld automatisch de vingerafdrukauthenticatie zonder dat er een toetsaanslag of klik nodig is.",
+      "auto-start-auth-description": "Start bijvoorbeeld automatisch de vingerafdrukauthenticatie zonder dat er een toetsaanslag of klik nodig is.",
       "auto-start-auth-label": "Automatische authenticatie bij opstarten",
       "compact-lockscreen-description": "Toon alleen de logininvoer en systeemknoppen, verberg weer- en mediawidgets.",
       "compact-lockscreen-label": "Compact vergrendelscherm",
@@ -1191,8 +1184,6 @@
       "history-low-urgency-label": "Lage urgentie opslaan in geschiedenis",
       "history-normal-urgency-description": "Meldingen met normale prioriteit opslaan in de geschiedenis.",
       "history-normal-urgency-label": "Normale urgentie opslaan in geschiedenis",
-      "media-toast-description": "Een toast weergeven wanneer de afspeelstatus van media verandert.",
-      "media-toast-label": "Media",
       "monitors-desc": "Meldingen op specifieke monitoren tonen. Standaard op alle als er geen zijn gekozen.",
       "settings-always-on-top-description": "Toon meldingen boven fullscreen-vensters en andere lagen.",
       "settings-background-opacity-description": "Pas de dekking van meldingsachtergronden aan.",
@@ -1230,9 +1221,13 @@
       "sounds-unavailable-label": "Meldingsgeluiden niet beschikbaar",
       "sounds-volume-description": "Pas het volumeniveau aan voor meldingsgeluiden.",
       "sounds-volume-label": "Geluidsvolume",
+      "toast-battery-description": "Toon een waarschuwing wanneer het accuniveau onder dit percentage zakt.",
+      "toast-battery-label": "Accuwaarschuwing",
       "toast-desc": "Configureer het uiterlijk en gedrag van toasts.",
       "toast-keyboard-description": "Toon een toastmelding wanneer de toetsenbordindeling verandert.",
-      "toast-keyboard-label": "Toetsenbordindeling"
+      "toast-keyboard-label": "Toetsenbordindeling",
+      "toast-media-description": "Een toast weergeven wanneer de afspeelstatus van media verandert.",
+      "toast-media-label": "Media"
     },
     "osd": {
       "always-on-top-description": "Toon OSD boven fullscreen-vensters en andere lagen.",
@@ -1276,7 +1271,7 @@
       "collision-official-version-exists": "De officiële versie van deze plugin is al geïnstalleerd",
       "filter-downloaded": "Gedownload",
       "filter-not-downloaded": "Niet gedownload",
-      "filter-tags-description": "Filter plug-ins op categorie of downloadstatus",
+      "filter-tags-description": "Filter plug-ins op categorie of downloadstatus.",
       "filter-tags-label": "Tags",
       "hot-reload-description": "Laad plugins automatisch opnieuw wanneer hun bestanden veranderen. Handig voor plugin-ontwikkeling.",
       "hot-reload-label": "Hot reload (ontwikkelmodus)",
@@ -1337,7 +1332,7 @@
       "entries-desc": "Aanpassen welke energieacties in het sessiemenu verschijnen en in welke volgorde.",
       "entries-title": "Energieacties",
       "entry-settings-command-description": "Aangepast commando om uit te voeren voor deze actie. Laat leeg om het standaard systeemcommando te gebruiken.",
-      "entry-settings-command-placeholder": "systemctl poweroff",
+      "entry-settings-command-placeholder": "bijv. systemctl poweroff",
       "entry-settings-default-command-lock": "Intern vergrendelscherm (geen commando)",
       "entry-settings-default-command-logout": "Interne afmelding (geen commando)",
       "entry-settings-default-info-description": "Als er geen aangepast commando is opgegeven, wordt het standaard systeemcommando gebruikt.",
@@ -1516,7 +1511,7 @@
     },
     "skip-setup": "Setup overslaan",
     "telemetry-wizard-done": "Begrepen!",
-    "telemetry-wizard-note": "Je hebt de controle - schakel dit op elk moment in of uit in de Instellingen",
+    "telemetry-wizard-note": "Je hebt de controle — schakel dit op elk moment in of uit in de instellingen",
     "telemetry-wizard-subtitle": "We hebben anonieme analyses toegevoegd om Noctalia te helpen verbeteren",
     "telemetry-wizard-title": "Privacy-update",
     "wallpaper": {
@@ -1533,7 +1528,7 @@
       "select-prompt": "Selecteer hieronder een achtergrond",
       "subheader": "Zet de toon met een mooie achtergrond."
     },
-    "welcome-note": "Een paar basisinstellingen om je op weg te helpen – alle opties vind je in instellingen",
+    "welcome-note": "Een paar basisinstellingen om je op weg te helpen — alle opties vind je in instellingen",
     "welcome-subtitle": "Laten we uw bureaublad uniek maken",
     "welcome-title": "Welkom bij Noctalia!"
   },
@@ -1557,7 +1552,7 @@
     "disk": "Schijf",
     "download-speed": "Downloadsnelheid",
     "gpu-temp": "GPU-temperatuur",
-    "load-average": "Belasting Ø",
+    "load-average": "Gem. belasting",
     "title": "Systeemmonitor",
     "upload-speed": "Uploadsnelheid"
   },
@@ -1566,8 +1561,10 @@
       "title": "Vliegtuigmodus"
     },
     "battery": {
+      "critical": "Kritiek accuniveau",
+      "critical-desc": "Accu is {percent}% — sluit de oplader onmiddellijk aan",
       "low": "Accu bijna leeg",
-      "low-desc": "De accu is op {percent}%. Sluit de oplader aan"
+      "low-desc": "Accu is op {percent}% — sluit de oplader aan"
     },
     "bluetooth": {
       "address-copied": "Adres gekopieerd naar klembord",

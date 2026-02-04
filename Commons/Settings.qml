@@ -374,7 +374,7 @@ Singleton {
       property string wallhavenResolutionWidth: ""
 
       property string wallhavenResolutionHeight: ""
-      property string sortOrder: "name" // "name", "name_desc", "date", "date_desc"
+      property string sortOrder: "name" // "name", "name_desc", "date", "date_desc", "random"
     }
 
     // applauncher
@@ -574,7 +574,6 @@ Singleton {
       property int lowUrgencyDuration: 3
       property int normalUrgencyDuration: 8
       property int criticalUrgencyDuration: 15
-      property bool enableKeyboardLayoutToast: true
       property JsonObject saveToHistory: JsonObject {
         property bool low: true
         property bool normal: true
@@ -590,6 +589,9 @@ Singleton {
         property string excludedApps: "discord,firefox,chrome,chromium,edge"
       }
       property bool enableMediaToast: false
+      property bool enableKeyboardLayoutToast: true
+      property int batteryWarningThreshold: 20
+      property int batteryCriticalThreshold: 5
     }
 
     // on-screen display

@@ -69,14 +69,13 @@
       "horizontal-bar-description": "팁: 줄바꿈을 하려면 \\n을 사용하세요.",
       "horizontal-bar-label": "수평 바",
       "preview": "미리보기",
+      "select-color-description": "강조를 위해 테마 색상을 적용합니다.",
       "tooltip-format-description": "시계 위에 마우스를 올렸을 때 표시되는 툴팁의 형식 문자열입니다. 기본 툴팁을 사용하려면 비워 두세요.",
       "tooltip-format-label": "툴팁 형식",
       "use-custom-font-description": "시계의 기본 글꼴 대신 사용자 지정 글꼴을 사용합니다.",
       "use-custom-font-label": "사용자 지정 글꼴 사용",
       "use-monospaced-font-description": "활성화하면 시계가 고정폭 글꼴을 사용합니다.",
       "use-monospaced-font-label": "고정폭 글꼴 사용",
-      "use-primary-color-description": "활성화하면 강조를 위해 첫번째 색상을 적용합니다.",
-      "use-primary-color-label": "첫번째 색 사용",
       "vertical-bar-description": "각 부분을 새 줄로 나누려면 공백을 사용하세요.",
       "vertical-bar-label": "수직 바"
     },
@@ -94,7 +93,6 @@
       "collapse-condition-description": "출력 텍스트가 이 값과 일치하면 버튼이 접힙니다.",
       "collapse-condition-label": "접히는 조건",
       "color-selection-description": "아이콘과 텍스트에 테마 색상을 적용합니다.",
-      "color-selection-label": "색상 선택",
       "display-command-output-description": "정기적인 간격으로 실행할 명령을 입력합니다. 출력의 첫 번째 줄이 텍스트로 표시됩니다.",
       "display-command-output-label": "명령 출력 표시",
       "display-command-output-stream-description": "지속적으로 실행할 명령을 입력합니다.",
@@ -345,13 +343,6 @@
       "version-new-user": "새로 설치됨"
     }
   },
-  "colors": {
-    "error": "오류",
-    "on-surface": "표면 색",
-    "primary": "첫번째 색",
-    "secondary": "두번째 색",
-    "tertiary": "세번째 색"
-  },
   "common": {
     "actions": "작업",
     "add": "추가",
@@ -396,6 +387,7 @@
     "dysfunctional": "기능 장애",
     "edit": "편집",
     "enabled": "활성화됨",
+    "error": "오류",
     "events": "일정",
     "execute": "실행",
     "faithful": "충실하게",
@@ -464,6 +456,7 @@
     "secondary": "두번째",
     "security": "보안",
     "select": "선택",
+    "select-color": "색상 선택",
     "shortcuts": "단축키",
     "shutdown": "시스템 종료",
     "signal": "신호",
@@ -723,7 +716,7 @@
       "volumes-output-volume-description": "시스템 전체 볼륨 레벨입니다.",
       "volumes-step-size-description": "볼륨 변경(스크롤 휠, 키보드 단축키)의 단계 크기를 조정합니다.",
       "volumes-step-size-label": "볼륨 단계 크기",
-      "volumes-volume-feedback-description": "볼륨 조절 시 피드백 소리를 재생합니다",
+      "volumes-volume-feedback-description": "볼륨 조절 시 피드백 소리를 재생합니다.",
       "volumes-volume-feedback-label": "볼륨 피드백 소리 재생",
       "volumes-volume-overdrive-description": "볼륨을 100% 이상으로 높일 수 있도록 허용합니다. 모든 하드웨어에서 지원되지 않을 수 있습니다.",
       "volumes-volume-overdrive-label": "볼륨 오버드라이브 허용"
@@ -763,7 +756,7 @@
       "appearance-show-capsule-label": "캡슐 표시",
       "appearance-show-outline-description": "모든 위젯 주위에 보이는 테두리를 표시합니다.",
       "appearance-show-outline-label": "위젯 윤곽선 표시",
-      "appearance-type-description": "바의 스타일을 선택하세요: 심플, 플로팅, 프레임",
+      "appearance-type-description": "바의 스타일을 선택하세요: 심플, 플로팅, 프레임.",
       "appearance-type-label": "바 유형",
       "appearance-use-separate-opacity-description": "바 배경에 대해 별도의 불투명도 값을 사용하려면 활성화하세요.",
       "appearance-use-separate-opacity-label": "별도 바 불투명도 사용",
@@ -1153,7 +1146,7 @@
     "lock-screen": {
       "allow-password-with-fprintd-description": "fprintd(지문 인증)가 활성화된 경우, 이 옵션을 사용하면 지문 대신 비밀번호로 로그인할 수 있습니다.",
       "allow-password-with-fprintd-label": "fprintd로 암호 로그인 허용",
-      "auto-start-auth-description": "예: 키 입력이나 버튼 클릭 없이 지문 인증을 자동으로 시작합니다.",
+      "auto-start-auth-description": "키 입력이나 버튼 클릭 없이 지문 인증을 자동으로 시작합니다.",
       "auto-start-auth-label": "인증 자동 시작",
       "compact-lockscreen-description": "로그인 입력과 시스템 제어만 표시하고 날씨 및 미디어 위젯을 숨깁니다.",
       "compact-lockscreen-label": "컴팩트 잠금 화면",
@@ -1191,8 +1184,6 @@
       "history-low-urgency-label": "중요도 낮음 기록 저장",
       "history-normal-urgency-description": "보통 레벨의 알림을 기록에 저장합니다.",
       "history-normal-urgency-label": "중요도 보통 기록 저장",
-      "media-toast-description": "미디어 재생 상태가 변경될 때 토스트를 표시합니다.",
-      "media-toast-label": "미디어",
       "monitors-desc": "특정 모니터에 알림을 표시합니다. 선택하지 않으면 모든 모니터에 표시됩니다.",
       "settings-always-on-top-description": "전체 화면 창 및 다른 레이어 위에 알림을 표시합니다.",
       "settings-background-opacity-description": "알림 배경의 불투명도를 조정합니다.",
@@ -1230,9 +1221,13 @@
       "sounds-unavailable-label": "알림 소리 사용 불가",
       "sounds-volume-description": "알림 소리의 볼륨 레벨을 조정합니다.",
       "sounds-volume-label": "소리 볼륨",
+      "toast-battery-description": "배터리 잔량이 이 비율 아래로 떨어지면 경고를 표시합니다.",
+      "toast-battery-label": "배터리 경고",
       "toast-desc": "토스트 모양과 동작을 구성합니다.",
       "toast-keyboard-description": "키보드 레이아웃 변경 시 토스트를 표시합니다.",
-      "toast-keyboard-label": "키보드 레이아웃"
+      "toast-keyboard-label": "키보드 레이아웃",
+      "toast-media-description": "미디어 재생 상태가 변경될 때 토스트를 표시합니다.",
+      "toast-media-label": "미디어"
     },
     "osd": {
       "always-on-top-description": "전체 화면 창 및 다른 레이어 위에 OSD를 표시합니다.",
@@ -1276,7 +1271,7 @@
       "collision-official-version-exists": "이 플러그인의 공식 버전이 이미 설치되어 있습니다",
       "filter-downloaded": "다운로드됨",
       "filter-not-downloaded": "다운로드되지 않음",
-      "filter-tags-description": "카테고리 또는 다운로드 상태별로 플러그인을 필터링합니다",
+      "filter-tags-description": "카테고리 또는 다운로드 상태별로 플러그인을 필터링합니다.",
       "filter-tags-label": "태그",
       "hot-reload-description": "파일이 변경될 때 자동으로 플러그인을 다시 로드합니다. 플러그인 개발에 유용합니다.",
       "hot-reload-label": "핫 리로드 (개발 모드)",
@@ -1566,8 +1561,10 @@
       "title": "비행기 모드"
     },
     "battery": {
+      "critical": "배터리 부족",
+      "critical-desc": "배터리 {percent}% — 즉시 충전기를 연결해주세요",
       "low": "배터리 부족",
-      "low-desc": "배터리가 {percent}%입니다. 충전기를 연결하세요"
+      "low-desc": "배터리가 {percent}%입니다 — 충전기를 연결해주세요"
     },
     "bluetooth": {
       "address-copied": "주소가 클립보드에 복사됨",

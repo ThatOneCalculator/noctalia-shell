@@ -90,10 +90,10 @@ SmartPanel {
             }
 
             NText {
-              text: `${Math.round(SystemStatService.cpuUsage)}%`
+              text: `${Math.round(SystemStatService.cpuUsage)}% ${SystemStatService.cpuFreq}`
               pointSize: Style.fontSizeXS
               color: Color.mPrimary
-              Layout.rightMargin: Style.marginS
+              font.family: Settings.data.ui.fontFixed
             }
 
             NIcon {
@@ -106,19 +106,8 @@ SmartPanel {
               text: `${Math.round(SystemStatService.cpuTemp)}°C`
               pointSize: Style.fontSizeXS
               color: Color.mError
+              font.family: Settings.data.ui.fontFixed
               Layout.rightMargin: Style.marginS
-            }
-
-            NIcon {
-              icon: "bolt"
-              pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
-            }
-
-            NText {
-              text: SystemStatService.cpuFreq
-              pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
             }
 
             Item {
@@ -138,13 +127,14 @@ SmartPanel {
             values: SystemStatService.cpuHistory
             values2: SystemStatService.cpuTempHistory
             minValue: 0
-            maxValue: Math.max(SystemStatService.cpuHistoryMax, 1)
+            maxValue: 100
             minValue2: Math.max(SystemStatService.cpuTempHistoryMin - 5, 0)
             maxValue2: Math.max(SystemStatService.cpuTempHistoryMax + 5, 1)
             color: Color.mPrimary
             color2: Color.mError
             fill: true
             fillOpacity: 0.15
+            updateInterval: Settings.data.systemMonitor.cpuPollingInterval
           }
         }
       }
@@ -170,23 +160,10 @@ SmartPanel {
             }
 
             NText {
-              text: `${Math.round(SystemStatService.memPercent)}% • ${SystemStatService.formatGigabytes(SystemStatService.memGb).replace(/[^0-9.]/g, "")} GB`
+              text: `${Math.round(SystemStatService.memPercent)}% ${SystemStatService.formatGigabytes(SystemStatService.memGb).replace(/[^0-9.]/g, "")} GB`
               pointSize: Style.fontSizeXS
               color: Color.mPrimary
-            }
-
-            NIcon {
-              visible: SystemStatService.swapTotalGb > 0
-              icon: "exchange"
-              pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
-            }
-
-            NText {
-              visible: SystemStatService.swapTotalGb > 0
-              text: `${Math.round(SystemStatService.swapPercent)}%`
-              pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              font.family: Settings.data.ui.fontFixed
             }
 
             Item {
@@ -205,10 +182,11 @@ SmartPanel {
             Layout.fillHeight: true
             values: SystemStatService.memHistory
             minValue: 0
-            maxValue: Math.max(SystemStatService.memHistoryMax, 1)
+            maxValue: 100
             color: Color.mPrimary
             fill: true
             fillOpacity: 0.15
+            updateInterval: Settings.data.systemMonitor.memPollingInterval
           }
         }
       }
@@ -237,6 +215,7 @@ SmartPanel {
               text: SystemStatService.formatSpeed(SystemStatService.rxSpeed).replace(/([0-9.]+)([A-Za-z]+)/, "$1 $2") + "/s"
               pointSize: Style.fontSizeXS
               color: Color.mPrimary
+              font.family: Settings.data.ui.fontFixed
               Layout.rightMargin: Style.marginS
             }
 
@@ -250,6 +229,7 @@ SmartPanel {
               text: SystemStatService.formatSpeed(SystemStatService.txSpeed).replace(/([0-9.]+)([A-Za-z]+)/, "$1 $2") + "/s"
               pointSize: Style.fontSizeXS
               color: Color.mError
+              font.family: Settings.data.ui.fontFixed
             }
 
             Item {
@@ -269,13 +249,15 @@ SmartPanel {
             values: SystemStatService.rxSpeedHistory
             values2: SystemStatService.txSpeedHistory
             minValue: 0
-            maxValue: Math.max(SystemStatService.rxMaxSpeed, 1)
+            maxValue: SystemStatService.rxMaxSpeed
             minValue2: 0
-            maxValue2: Math.max(SystemStatService.txMaxSpeed, 1)
+            maxValue2: SystemStatService.txMaxSpeed
             color: Color.mPrimary
             color2: Color.mError
             fill: true
             fillOpacity: 0.15
+            updateInterval: Settings.data.systemMonitor.networkPollingInterval
+            animateScale: true
           }
         }
       }
