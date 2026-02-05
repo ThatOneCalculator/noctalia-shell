@@ -191,7 +191,7 @@
       "width-description": "Mellomrom i piksel."
     },
     "system-monitor": {
-      "compact-mode-description": "Viser statistikk som små stolpediagram heller enn tekst. Stoggar oppsettet frå å skifta.",
+      "compact-mode-description": "Viser statistikk som småe stolpediagram heller enn tekst. Stoggar oppsettet frå å skifta.",
       "compact-mode-label": "Tettmodus",
       "cpu-temperature-description": "Viser temperaturmålingar frå prosessoren om mogeleg.",
       "cpu-temperature-label": "Prosessortemperatur",
@@ -251,8 +251,7 @@
       "hide-passive-label": "Gøym passive objekt"
     },
     "volume": {
-      "display-mode-description": "Vel korleis dette skal visast.",
-      "display-mode-label": "Visningsmodus"
+      "display-mode-description": "Vel korleis dette skal visast."
     },
     "workspace": {
       "character-count-description": "Kor mange teikn som skal visast frå arbeidsromnamn (1 - 10).",
@@ -386,7 +385,7 @@
     "dysfunctional": "I uorden",
     "edit": "Endra",
     "enabled": "Påslegen",
-    "events": "Arrangement",
+    "events": "Hende",
     "execute": "Utfør",
     "faithful": "Tru",
     "focus": "Fokus",
@@ -732,7 +731,6 @@
       "appearance-density-label": "Tettleik på oppgåvelina",
       "appearance-desc": "Måtar til kor oppgåvelina ser ut og kvar ho er.",
       "appearance-display-mode-description": "Vel når baren er synleg.",
-      "appearance-display-mode-label": "Visningsmodus",
       "appearance-floating-description": "Viser oppgåvelina som flytande \"pille\".",
       "appearance-floating-label": "Flytande oppgåvelina",
       "appearance-frame-radius": "Innradius",
@@ -1041,7 +1039,7 @@
       "session-description": "Kommandoen som køyrer før maskina er avslegen eller starta å nyo. Får handlingtype som $1 (slå av/start å nyo).",
       "session-label": "Øktslutt",
       "session-placeholder": "t.d. notify-send \"Økt\" \"$1\"",
-      "system-hooks-desc": "Set opp kommandoar som køyrer når systemhendingar skjer.",
+      "system-hooks-desc": "Set opp kommandoar som køyrer når systemhende skjer.",
       "system-hooks-enable-description": "Slår av eller på krokkommandoar.",
       "system-hooks-enable-label": "Slå på krokar",
       "system-hooks-title": "Systemkrokar",

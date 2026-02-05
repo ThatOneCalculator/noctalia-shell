@@ -95,12 +95,16 @@ ColumnLayout {
 
   NComboBox {
     Layout.fillWidth: true
-    label: I18n.tr("panels.bar.appearance-display-mode-label")
+    label: I18n.tr("common.display-mode")
     description: I18n.tr("panels.bar.appearance-display-mode-description")
     model: [
       {
         "key": "always_visible",
         "name": I18n.tr("hide-modes.visible")
+      },
+      {
+        "key": "non_exclusive",
+        "name": I18n.tr("hide-modes.non-exclusive")
       },
       {
         "key": "auto_hide",
