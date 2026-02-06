@@ -13,10 +13,14 @@ ColumnLayout {
   signal settingsChanged(var settings)
 
   property string valueDisplayMode: widgetData.displayMode !== undefined ? widgetData.displayMode : widgetMetadata.displayMode
+  property string valueIconColor: widgetData.iconColor !== undefined ? widgetData.iconColor : widgetMetadata.iconColor
+  property string valueTextColor: widgetData.textColor !== undefined ? widgetData.textColor : widgetMetadata.textColor
 
   function saveSettings() {
     var settings = Object.assign({}, widgetData || {});
     settings.displayMode = valueDisplayMode;
+    settings.iconColor = valueIconColor;
+    settings.textColor = valueTextColor;
     return settings;
   }
 
@@ -43,5 +47,29 @@ ColumnLayout {
                   root.valueDisplayMode = key;
                   settingsChanged(saveSettings());
                 }
+  }
+
+  NComboBox {
+    label: I18n.tr("common.select-icon-color")
+    description: I18n.tr("common.select-color-description")
+    model: Color.colorKeyModel
+    currentKey: valueIconColor
+    onSelected: key => {
+                  valueIconColor = key;
+                  settingsChanged(saveSettings());
+                }
+    minimumWidth: 200
+  }
+
+  NComboBox {
+    label: I18n.tr("common.select-color")
+    description: I18n.tr("common.select-color-description")
+    model: Color.colorKeyModel
+    currentKey: valueTextColor
+    onSelected: key => {
+                  valueTextColor = key;
+                  settingsChanged(saveSettings());
+                }
+    minimumWidth: 200
   }
 }

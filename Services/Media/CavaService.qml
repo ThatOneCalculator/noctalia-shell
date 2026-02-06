@@ -42,6 +42,10 @@ Singleton {
   property int idleFrameCount: 0
   readonly property int idleThreshold: 30 // Frames of silence before considered idle (0.5s at 60fps)
 
+  // Crash tracking for auto-restart
+  property int _crashCount: 0
+  property int _maxCrashes: 5
+
   // Pre-allocated array for quick parsing
   property var _parseBuffer: new Array(barsCount)
 
@@ -69,6 +73,18 @@ Singleton {
                           }
                         })
 
+  Timer {
+    id: restartTimer
+    interval: 2000
+    repeat: false
+    onTriggered: {
+      if (root.shouldRun && !process.running) {
+        Logger.w("Cava", "Restarting after crash...");
+        process.running = true;
+      }
+    }
+  }
+
   Process {
     id: process
     stdinEnabled: true
@@ -78,9 +94,20 @@ Singleton {
       Logger.d("Cava", "Process running:", running);
     }
     onExited: {
-      Logger.d("Cava", "Process exited");
       stdinEnabled = true;
       values = Array(barsCount).fill(0);
+      if (root.shouldRun) {
+        root._crashCount++;
+        if (root._crashCount <= root._maxCrashes) {
+          Logger.w("Cava", "Process exited unexpectedly, restarting in 2s... (attempt " + root._crashCount + "/" + root._maxCrashes + ")");
+          restartTimer.start();
+        } else {
+          Logger.e("Cava", "Process crashed too many times (" + root._maxCrashes + "), giving up");
+        }
+      } else {
+        Logger.d("Cava", "Process exited (no longer needed)");
+        root._crashCount = 0;
+      }
     }
     onStarted: {
       Logger.d("Cava", "Process started");
@@ -100,6 +127,9 @@ Singleton {
     }
     stdout: SplitParser {
       onRead: data => {
+        if (root._crashCount > 0)
+        root._crashCount = 0;
+
         // Optimized parsing directly into pre-allocated buffer
         const buffer = root._parseBuffer;
         let idx = 0;
