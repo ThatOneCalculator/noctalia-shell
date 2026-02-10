@@ -58,7 +58,6 @@
       "hide-if-idle-label": "閒置時隱藏",
       "hide-if-not-detected-description": "如果系統沒有偵測到電池就隱藏小工具",
       "hide-if-not-detected-label": "沒有偵測到時隱藏",
-      "low-battery-threshold-description": "在電池落到此百分比以下時顯示警告",
       "low-battery-threshold-label": "低電量警告",
       "show-noctalia-performance-description": "在電池面板內顯示 Noctalia 效能模式開關",
       "show-noctalia-performance-label": "顯示 Noctalia 效能模式開關",
@@ -251,8 +250,8 @@
       "title-width-reset-tooltip": "重設標題寬度"
     },
     "tray": {
-      "chevron-color-description": "將主題顏色套用至抽屜的V形圖示。",
-      "chevron-color-label": "V形顏色",
+      "chevron-color-description": "將主題顏色套用至抽屜的箭頭圖示。",
+      "chevron-color-label": "箭頭顏色",
       "colorize-icons-description": "將系統夾圖示套用主題用色",
       "colorize-icons-label": "為圖示上色",
       "drawer-enabled-description": "當啟用時, 沒有釘選的系統匣圖示將會顯示在抽屜面板中<br>如果停用則所有的圖示都會在工具列裡顯示",
@@ -457,6 +456,7 @@
     "refresh": "重新整理",
     "required": "(必要)",
     "reset": "重設",
+    "reset-to-default": "重設為預設值",
     "result-count": "{count} 筆結果",
     "result-count-plural": "{count} 筆結果",
     "resume": "繼續",
@@ -625,6 +625,15 @@
       "quick-settings-style-modern": "現代"
     },
     "frame-rates-fps": "{fps} FPS",
+    "launcher-density": {
+      "comfortable": "舒適",
+      "compact": "緊湊",
+      "default": "預設"
+    },
+    "launcher-view-mode": {
+      "grid": "網格",
+      "list": "列表"
+    },
     "scrolling-modes": {
       "always": "總是捲動",
       "hover": "游標移過時捲動",
@@ -1021,6 +1030,14 @@
       "fonts-monospace-search-placeholder": "搜尋等寬字型...",
       "fonts-reset-scaling": "重設文字大小",
       "fonts-title": "字型",
+      "keybinds-description": "配置面板和啟動器的全域導航鍵。",
+      "keybinds-down": "下移",
+      "keybinds-enter": "確認 / 動作",
+      "keybinds-escape": "關閉 / 返回",
+      "keybinds-left": "向左移動",
+      "keybinds-right": "向右移動",
+      "keybinds-title": "導覽按鍵綁定",
+      "keybinds-up": "上移",
       "language-desc": "選擇你偏好使用的語言",
       "language-select-auto-detect": "自動選擇",
       "language-select-description": "選擇要在應用程式所使用的介面語言",
@@ -1041,7 +1058,9 @@
       "screen-corners-solid-black-description": "使用黑色而不是工具列背景色",
       "screen-corners-solid-black-label": "黑色邊角",
       "screen-corners-title": "畫面邊角",
-      "settings-copied": "已複製設定至剪貼簿"
+      "settings-copied": "已複製設定至剪貼簿",
+      "tab-basics": "基礎",
+      "tab-keybinds": "按鍵綁定"
     },
     "hooks": {
       "info-command-info-description": "• 指令將透過 shell (sh -lc) 執行<br>• 指令會在背景 (detached 狀態) 執行<br>• 測試按鈕會以當下填寫的內容執行",
@@ -1096,14 +1115,16 @@
       "settings-clip-wrap-text-label": "剪貼簿文字換行",
       "settings-clipboard-history-description": "在啟動器存取先前所複製的項目",
       "settings-clipboard-history-label": "啟用剪貼簿歷史",
-      "settings-clipboard-watch-image-description": "傳遞給 wl-paste 以進行圖像更改的完整命令字串。(需要重新啟動)",
+      "settings-clipboard-watch-image-description": "傳遞給 wl-paste 以進行圖像更改的完整命令字串（需要重新啟動）。",
       "settings-clipboard-watch-image-label": "圖像監控命令",
-      "settings-clipboard-watch-text-description": "傳遞給 wl-paste 以進行文字變更的完整命令字串。(需要重新啟動)",
+      "settings-clipboard-watch-text-description": "傳遞給 wl-paste 以進行文字變更的完整命令字串（需要重新啟動）。",
       "settings-clipboard-watch-text-label": "文字監看指令",
       "settings-custom-launch-prefix-description": "在命令前加上自訂啟動器前綴（例如: 用「runapp」來整合 systemd）。",
       "settings-custom-launch-prefix-enabled-description": "使用自訂前綴而不是預設的方式來啟動應用程式",
       "settings-custom-launch-prefix-enabled-label": "啟用自訂的程式啟動前綴",
       "settings-custom-launch-prefix-label": "自訂啟動前綴",
+      "settings-density-description": "調整應用程式圖示大小和 Launcher 密度。",
+      "settings-density-label": "密度",
       "settings-desc": "自訂啟動器的外觀及行為",
       "settings-enable-settings-search-description": "在啟動器中搜尋時顯示設定結果。",
       "settings-enable-settings-search-label": "啟用設定搜尋",
@@ -1114,6 +1135,8 @@
       "settings-icon-mode-label": "使用原生圖示",
       "settings-ignore-mouse-input-description": "對啟動器停用滑鼠互動及滾輪捲動",
       "settings-ignore-mouse-input-label": "忽略滑鼠輸入",
+      "settings-overlay-layer-description": "在覆蓋層上顯示啟動器，位於全螢幕視窗之上。啟用時，啟動器不會附加到列。",
+      "settings-overlay-layer-label": "在全螢幕上方顯示",
       "settings-position-description": "選擇啟動器面板要出現的地方",
       "settings-show-categories-description": "顯示分類標籤來篩選應用程式",
       "settings-show-categories-label": "顯示分類",
@@ -1125,6 +1148,8 @@
       "settings-terminal-command-label": "終端機指令",
       "settings-use-app2unit-description": "使用替代的啟動方式，以更好地管理應用程式程序並避免問題。",
       "settings-use-app2unit-label": "使用 App2Unit 啟動應用程式",
+      "settings-view-mode-description": "選擇啟動器項目的版面配置。",
+      "settings-view-mode-label": "檢視模式",
       "title": "啟動器"
     },
     "location": {
@@ -1180,6 +1205,13 @@
       "compact-lockscreen-label": "精簡鎖定畫面",
       "lock-on-suspend-description": "在暫停系統時自動鎖定畫面",
       "lock-on-suspend-label": "暫停時鎖定",
+      "lock-screen-animations-description": "啟用或停用鎖定畫面動畫。",
+      "lock-screen-animations-label": "鎖定畫面動畫",
+      "lock-screen-blur-strength-description": "對鎖定畫面桌布套用模糊效果。",
+      "lock-screen-blur-strength-label": "鎖定螢幕模糊強度",
+      "lock-screen-tint-strength-description": "將色調疊加套用到鎖定畫面桌布。",
+      "lock-screen-tint-strength-label": "鎖定畫面著色強度",
+      "monitors-desc": "在特定顯示器上顯示鎖定畫面。如果未選擇，則預設為所有顯示器。",
       "show-hibernate-description": "在電源及工作階段選單顯示睡眠",
       "show-hibernate-label": "顯示睡眠",
       "show-session-buttons-description": "允許在鎖定畫面存取電源控制",
@@ -1290,10 +1322,14 @@
       "types-volume-label": "輸出音量"
     },
     "plugins": {
+      "auto-update": "自動更新外掛程式",
+      "auto-update-description": "在 shell 啟動時自動更新所有外掛程式。",
       "available-description": "從設定的來源檢視及安裝外掛模組",
       "available-label": "可用的外掛模組",
       "available-no-plugins-description": "檢查你的模組來源或者重新整理列表",
       "available-no-plugins-label": "沒有可用的外掛模組",
+      "check-for-updates": "檢查更新",
+      "checking-for-updates": "正在檢查更新...",
       "collision-already-installed": "這個模組已經安裝過了",
       "collision-custom-version-exists": "已經安裝了來自 \"{source}\" 的自訂版本",
       "collision-official-version-exists": "已經安裝了這個模組的官方版本",
@@ -1439,7 +1475,7 @@
       "settings-panel-mode-description": "選擇介面設定出現所用的佈局 (可能需要重新打開)",
       "settings-panel-mode-label": "設定面板顯示",
       "shadows-description": "為工具列及面板啟用陰影",
-      "shadows-direction-description": "選擇陰影要投射的方向",
+      "shadows-direction-description": "選擇陰影投射的位置。",
       "shadows-direction-label": "陰影方向",
       "shadows-label": "陰影",
       "title": "使用者介面",
@@ -1479,6 +1515,10 @@
       "settings-monitor-specific-description": "替個別顯示器設定不同的桌布文件夾",
       "settings-monitor-specific-label": "給特定顯示器所使用的文件夾",
       "settings-monitor-specific-tooltip": "顯示器桌布文件夾",
+      "settings-overview-blur-strength-description": "將模糊強度應用於概覽。",
+      "settings-overview-blur-strength-label": "概覽模糊強度",
+      "settings-overview-tint-description": "將著色強度套用至概覽。",
+      "settings-overview-tint-label": "概覽著色強度",
       "settings-recursive-search-description": "也同時搜尋桌布目錄底下的子文件夾",
       "settings-recursive-search-label": "搜尋子文件夾",
       "settings-select-monitor-folder": "選擇顯示器所使用的桌布文件夾",
@@ -1534,7 +1574,7 @@
   "setup": {
     "all-done": "完成!",
     "appearance": {
-      "subheader": "選擇 Dark Mode 和色彩來源 (桌布或預先定義)。"
+      "subheader": "選擇深色模式和顏色來源（桌布或預設）。"
     },
     "customize": {
       "header": "客製你的使用體驗",
@@ -1787,7 +1827,9 @@
     "wallhaven": {
       "loading": "正在載入桌布...",
       "no-results": "找不到桌布, 試著用不同的搜尋字串",
-      "page": "第 {current} / {total} 頁"
+      "page": "第 {current} / {total} 頁",
+      "page-prefix": "頁面",
+      "page-suffix": "共 {total} 個"
     }
   },
   "weather": {

@@ -703,8 +703,8 @@ Singleton {
         root.cpuThermalZonePaths = cpuZones.map(z => z.path);
         const types = cpuZones.map(z => z.type).join(", ");
         Logger.i("SystemStat", `Found ${cpuZones.length} CPU thermal zone(s): ${types}`);
-      } else {
-        Logger.w("No supported temperature sensor found");
+      } else if (root.cpuTempHwmonPath === "") {
+        Logger.w("SystemStat", "No supported temperature sensor found");
       }
 
       // GPU thermal zones
@@ -1319,16 +1319,17 @@ Singleton {
   // Priority (when dGPU monitoring enabled): NVIDIA > AMD dGPU > Intel Arc > AMD iGPU
   // Priority (when dGPU monitoring disabled): AMD iGPU only (discrete GPUs skipped to preserve D3cold)
   function selectBestGpu() {
+    const dgpuEnabled = Settings.data.systemMonitor.enableDgpuMonitoring;
+
     if (root.foundGpuSensors.length === 0) {
       // No hwmon GPU sensors found, try thermal_zone fallback
-      if (root.gpuThermalZonePath === "" && root.gpuThermalZonePaths.length === 0) {
+      if (dgpuEnabled && root.gpuThermalZonePath === "" && root.gpuThermalZonePaths.length === 0) {
         // Thermal zone scanner hasn't found GPU zones yet; start a scan
         thermalZoneScanner.startScan();
       }
       return;
     }
 
-    const dgpuEnabled = Settings.data.systemMonitor.enableDgpuMonitoring;
     let best = null;
 
     for (var i = 0; i < root.foundGpuSensors.length; i++) {

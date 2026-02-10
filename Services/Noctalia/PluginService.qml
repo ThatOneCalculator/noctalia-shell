@@ -116,8 +116,19 @@ Singleton {
             // Reload translations
             loadPluginTranslationsAsync(id, plugin.manifest, I18n.langCode, function (translations) {
               plugin.api.pluginTranslations = translations;
-              plugin.api.translationVersion++;
-              Logger.d("PluginService", "Reloaded translations for plugin:", id);
+
+              // Reload English fallback for non-English languages
+              if (I18n.langCode !== "en") {
+                loadPluginTranslationsAsync(id, plugin.manifest, "en", function (fallbackTranslations) {
+                  plugin.api.pluginFallbackTranslations = fallbackTranslations;
+                  plugin.api.translationVersion++;
+                  Logger.d("PluginService", "Reloaded translations for plugin:", id);
+                });
+              } else {
+                plugin.api.pluginFallbackTranslations = {};
+                plugin.api.translationVersion++;
+                Logger.d("PluginService", "Reloaded translations for plugin:", id);
+              }
             });
           }
         })(pluginId, root.loadedPlugins[pluginId]);
@@ -193,6 +204,7 @@ Singleton {
       root.pluginsFullyLoaded = true;
       Logger.i("PluginService", "No plugins to load");
       root.allPluginsLoaded();
+      root._isStartupCheck = true;
       refreshAvailablePlugins();
       return;
     }
@@ -218,6 +230,7 @@ Singleton {
       root.allPluginsLoaded();
 
       // Fetch available plugins from all sources
+      root._isStartupCheck = true;
       refreshAvailablePlugins();
     }
   }
@@ -670,8 +683,14 @@ Singleton {
     loadPluginSettings(pluginId, function (settings) {
       // Then load translations
       loadPluginTranslationsAsync(pluginId, manifest, I18n.langCode, function (translations) {
-        // Both ready - call back with complete data
-        callback(settings, translations);
+        // Load English fallback for non-English languages
+        if (I18n.langCode !== "en") {
+          loadPluginTranslationsAsync(pluginId, manifest, "en", function (fallbackTranslations) {
+            callback(settings, translations, fallbackTranslations);
+          });
+        } else {
+          callback(settings, translations, {});
+        }
       });
     });
   }
@@ -694,9 +713,9 @@ Singleton {
     Logger.i("PluginService", "Loading plugin:", pluginId);
 
     // Load settings and translations FIRST, then create API and instantiate components
-    loadPluginData(pluginId, manifest, function (settings, translations) {
+    loadPluginData(pluginId, manifest, function (settings, translations, fallbackTranslations) {
       // Create plugin API object with pre-loaded data
-      var pluginApi = createPluginAPI(pluginId, manifest, settings, translations);
+      var pluginApi = createPluginAPI(pluginId, manifest, settings, translations, fallbackTranslations);
 
       // Initialize plugin entry with API and manifest
       root.loadedPlugins[pluginId] = {
@@ -876,7 +895,7 @@ Singleton {
   }
 
   // Create plugin API object with pre-loaded settings and translations
-  function createPluginAPI(pluginId, manifest, settings, translations) {
+  function createPluginAPI(pluginId, manifest, settings, translations, fallbackTranslations) {
     var pluginDir = PluginRegistry.getPluginDir(pluginId);
 
     var api = Qt.createQmlObject(`
@@ -904,6 +923,7 @@ Singleton {
 
         // Translation storage
         property var pluginTranslations: ({})
+        property var pluginFallbackTranslations: ({})  // English fallback for missing keys
         property string currentLanguage: ""
         property int translationVersion: 0  // Increments when translations change - plugins should depend on this
 
@@ -912,6 +932,9 @@ Singleton {
         property var openPanel: null
         property var closePanel: null
         property var togglePanel: null
+        property var openLauncher: null
+        property var closeLauncher: null
+        property var toggleLauncher: null
         property var withCurrentScreen: null
         property var tr: null
         property var trp: null
@@ -928,6 +951,7 @@ Singleton {
     // Set pre-loaded settings and translations (available immediately!)
     api.pluginSettings = settings || {};
     api.pluginTranslations = translations || {};
+    api.pluginFallbackTranslations = fallbackTranslations || {};
 
     // ----------------------------------------
     // Helper function to get nested property by dot notation
@@ -991,6 +1015,53 @@ Singleton {
     };
 
     // ----------------------------------------
+    // Launcher provider methods
+    // ----------------------------------------
+
+    // Get the search prefix for this plugin's launcher provider
+    var getSearchPrefix = function () {
+      var metadata = LauncherProviderRegistry.getProviderMetadata("plugin:" + pluginId);
+      var prefix = (metadata && metadata.commandPrefix) ? metadata.commandPrefix : pluginId;
+      return ">" + prefix + " ";
+    };
+
+    api.openLauncher = function (screen) {
+      // Open the launcher with this plugin's provider active
+      if (!screen) {
+        Logger.w("PluginAPI", "No screen available for opening launcher");
+        return;
+      }
+      PanelService.openLauncherWithSearch(screen, getSearchPrefix());
+    };
+
+    api.closeLauncher = function (screen) {
+      // Close the launcher
+      if (!screen) {
+        Logger.w("PluginAPI", "No screen available for closing launcher");
+        return;
+      }
+      PanelService.closeLauncher(screen);
+    };
+
+    api.toggleLauncher = function (screen) {
+      // Toggle the launcher with this plugin's provider active
+      if (!screen) {
+        Logger.w("PluginAPI", "No screen available for toggling launcher");
+        return;
+      }
+      var searchPrefix = getSearchPrefix();
+      var searchText = PanelService.getLauncherSearchText(screen);
+      var isInThisMode = searchText.startsWith(searchPrefix);
+      if (!PanelService.isLauncherOpen(screen)) {
+        PanelService.openLauncherWithSearch(screen, searchPrefix);
+      } else if (isInThisMode) {
+        PanelService.closeLauncher(screen);
+      } else {
+        PanelService.setLauncherSearchText(screen, searchPrefix);
+      }
+    };
+
+    // ----------------------------------------
     api.withCurrentScreen = function (callback) {
       // Detect which screen the cursor is on and call callback with that screen
       if (!root.screenDetector) {
@@ -1010,7 +1081,12 @@ Singleton {
 
       var translation = getNestedProperty(api.pluginTranslations, key);
 
-      // Return formatted key if translation not found
+      // Fallback to English if not found in current language
+      if (translation === undefined || translation === null || typeof translation !== 'string') {
+        translation = getNestedProperty(api.pluginFallbackTranslations, key);
+      }
+
+      // Return formatted key if translation not found in any language
       if (translation === undefined || translation === null) {
         return `!!${key}!!`;
       }
@@ -1055,7 +1131,7 @@ Singleton {
     // ----------------------------------------
     // Check if translation exists
     api.hasTranslation = function (key) {
-      return getNestedProperty(api.pluginTranslations, key) !== undefined;
+      return getNestedProperty(api.pluginTranslations, key) !== undefined || getNestedProperty(api.pluginFallbackTranslations, key) !== undefined;
     };
 
     return api;
@@ -1200,9 +1276,13 @@ Singleton {
   }
 
   // Find available plugin by ID
-  function findAvailablePlugin(pluginId) {
+  function findAvailablePlugin(compositeKeyOrId) {
+    var parsed = PluginRegistry.parseCompositeKey(compositeKeyOrId);
+    var pluginId = parsed.pluginId;
+    var sourceUrl = PluginRegistry.getPluginSourceUrl(compositeKeyOrId);
+
     for (var i = 0; i < root.availablePlugins.length; i++) {
-      if (root.availablePlugins[i].id === pluginId) {
+      if (root.availablePlugins[i].id === pluginId && root.availablePlugins[i].source.url === sourceUrl) {
         return root.availablePlugins[i];
       }
     }
@@ -1211,6 +1291,9 @@ Singleton {
 
   // Internal flag to track if we should check for updates after registry fetch
   property bool shouldCheckUpdatesAfterFetch: false
+
+  // Flag to track if this is the initial startup update check (for auto-update)
+  property bool _isStartupCheck: false
 
   // Check for plugin updates (call this after availablePlugins are loaded)
   function checkForUpdates() {
@@ -1317,7 +1400,41 @@ Singleton {
       Logger.i("PluginService", "All installed plugins are up to date");
     }
 
+    // Auto-update on startup if enabled
+    if (root._isStartupCheck && Settings.data.plugins.autoUpdate && updateCount > 0) {
+      Logger.i("PluginService", "Auto-updating", updateCount, "plugin(s)");
+      updateAllPlugins();
+    }
+
+    root._isStartupCheck = false;
     shouldCheckUpdatesAfterFetch = false;
+  }
+
+  // Update all plugins sequentially
+  function updateAllPlugins(callback) {
+    var pluginIds = Object.keys(root.pluginUpdates);
+    var currentIndex = 0;
+
+    function updateNext() {
+      if (currentIndex >= pluginIds.length) {
+        ToastService.showNotice(I18n.tr("panels.plugins.title"), I18n.tr("panels.plugins.update-all-success"));
+        if (callback)
+          callback();
+        return;
+      }
+
+      var pluginId = pluginIds[currentIndex];
+      currentIndex++;
+
+      root.updatePlugin(pluginId, function (success, error) {
+        if (!success) {
+          Logger.w("PluginService", "Failed to auto-update", pluginId + ":", error);
+        }
+        Qt.callLater(updateNext);
+      });
+    }
+
+    updateNext();
   }
 
   // Simple version comparison (semantic versioning x.y.z)
@@ -1827,13 +1944,29 @@ Singleton {
 
     loadPluginTranslationsAsync(pluginId, plugin.manifest, I18n.langCode, function (translations) {
       plugin.api.pluginTranslations = translations;
-      plugin.api.translationVersion++;
 
-      var pluginName = plugin.manifest.name || pluginId;
-      ToastService.showNotice(I18n.tr("panels.plugins.title"), I18n.tr("panels.plugins.translations-reloaded", {
-                                                                         "name": pluginName
-                                                                       }));
-      Logger.i("PluginService", "Translation hot reload complete for plugin:", pluginId);
+      // Also reload English fallback for non-English languages
+      if (I18n.langCode !== "en") {
+        loadPluginTranslationsAsync(pluginId, plugin.manifest, "en", function (fallbackTranslations) {
+          plugin.api.pluginFallbackTranslations = fallbackTranslations;
+          plugin.api.translationVersion++;
+
+          var pluginName = plugin.manifest.name || pluginId;
+          ToastService.showNotice(I18n.tr("panels.plugins.title"), I18n.tr("panels.plugins.translations-reloaded", {
+                                                                             "name": pluginName
+                                                                           }));
+          Logger.i("PluginService", "Translation hot reload complete for plugin:", pluginId);
+        });
+      } else {
+        plugin.api.pluginFallbackTranslations = {};
+        plugin.api.translationVersion++;
+
+        var pluginName = plugin.manifest.name || pluginId;
+        ToastService.showNotice(I18n.tr("panels.plugins.title"), I18n.tr("panels.plugins.translations-reloaded", {
+                                                                           "name": pluginName
+                                                                         }));
+        Logger.i("PluginService", "Translation hot reload complete for plugin:", pluginId);
+      }
     });
 
     return true;
