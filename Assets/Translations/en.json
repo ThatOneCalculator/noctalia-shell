@@ -224,7 +224,11 @@
       "swap-usage-description": "Show swap memory usage.",
       "swap-usage-label": "Swap usage",
       "use-monospace-font-description": "Use monospace font for consistent character width.",
-      "use-monospace-font-label": "Monospace font"
+      "use-monospace-font-label": "Monospace font",
+      "use-padding-description": "Pads the text values with leading spaces to prevent layout shifting.",
+      "use-padding-description-disabled-monospace-font": "A monospace font is needed for this feature.",
+      "use-padding-description-disabled-vertical": "Vertical taskbar does not support padding text.",
+      "use-padding-label": "Pad text"
     },
     "taskbar": {
       "colorize-icons-description": "Apply theme colors to taskbar icons.",
@@ -396,6 +400,7 @@
     "edit": "Edit",
     "enabled": "Enabled",
     "error": "Error",
+    "ethernet": "Ethernet",
     "events": "Events",
     "execute": "Execute",
     "faithful": "Faithful",
@@ -503,8 +508,11 @@
     "week": "Week",
     "widgets": "Widgets",
     "width": "Width",
+    "wifi": "Wi-Fi",
     "windows": "Windows",
-    "yes": "Yes"
+    "yes": "Yes",
+    "confirm": "Confirm",
+    "settings": "Settings"
   },
   "control-center": {
     "power-profile": {
@@ -1037,15 +1045,18 @@
       "fonts-reset-scaling": "Reset scaling",
       "fonts-title": "Fonts",
       "keybinds-conflict-description": "The key combination is already assigned to {action}.",
-      "keybinds-conflict-title": "Keybind Conflict",
+      "keybinds-conflict-title": "Keybind conflict",
       "keybinds-description": "Configure global navigation keys for panels and launcher.",
-      "keybinds-down": "Move Down",
+      "keybinds-down": "Move down",
       "keybinds-enter": "Confirm / Action",
       "keybinds-escape": "Close / Back",
-      "keybinds-left": "Move Left",
-      "keybinds-right": "Move Right",
-      "keybinds-title": "Navigation Keybinds",
-      "keybinds-up": "Move Up",
+      "keybinds-left": "Move left",
+      "keybinds-modifier-description": "Shortcuts must include a modifier key (Ctrl or Alt).",
+      "keybinds-modifier-title": "Modifier required",
+      "keybinds-remove": "Remove / Delete",
+      "keybinds-right": "Move right",
+      "keybinds-title": "Navigation keybinds",
+      "keybinds-up": "Move up",
       "language-desc": "Choose your preferred language for the application.",
       "language-select-auto-detect": "Automatic",
       "language-select-description": "Select the language used in the application's interface.",
@@ -1228,11 +1239,21 @@
       "show-session-buttons-label": "Power controls",
       "title": "Lock Screen"
     },
-    "network": {
+    "connections": {
+      "authentication-required": "Authentication required",
       "bluetooth-description": "Activate Bluetooth management.",
+      "bluetooth-devices-unnamed": "Unnamed devices are not shown.",
+      "bluetooth-discoverable": "This device is discoverable as <b> {hostName} </b> while this settings tab is open.",
       "bluetooth-rssi-polling-description": "Periodically sample RSSI for connected devices via bluetoothctl. May not be available for all devices; uses minimal resources when enabled.",
+      "bluetooth-rssi-polling-interval-description": "Configure how often to update signal strength for connected devices.",
       "bluetooth-rssi-polling-label": "Bluetooth signal polling",
-      "desc": "Manage Wi-Fi and Bluetooth connections.",
+      "bluetooth-rssi-polling-interval-label": "Polling interval",
+      "disable-discoverability-label": "Disable device visibility",
+      "disable-discoverability-description": "Hide your device from nearby Bluetooth devices.",
+      "hide-unnamed-devices-label": "Hide unnamed devices",
+      "hide-unnamed-devices-description": "Hide devices that appear only as Bluetooth addresses.",
+      "pin-instructions": "Please enter the PIN code displayed on your device.",
+      "title": "Connections",
       "wifi-description": "Manage wireless networks (requires NetworkManager)."
     },
     "notifications": {
@@ -1427,7 +1448,9 @@
       "large-buttons-style-label": "Large buttons style",
       "position-description": "Choose where the session menu panel appears when opened.",
       "show-header-description": "Display the title and close button at the top of the session menu.",
-      "show-header-label": "Show header"
+      "show-header-label": "Show header",
+      "show-keybinds-description": "Display keybind hints on session options.",
+      "show-keybinds-label": "Show keybinds"
     },
     "system-monitor": {
       "critical-color-label": "Critical color",
@@ -1739,14 +1762,12 @@
     "forget-network": "Forget network",
     "grid-view": "Grid view",
     "hidden-files-hide": "Hidden files",
-    "hide-unnamed-devices": "Hide unnamed devices",
     "home": "Home directory",
     "input-muted": "Toggle input mute",
     "keep-awake": "Keep Awake",
     "keyboard-layout": "{layout} keyboard layout",
     "list-view": "List view",
     "manage-vpn": "VPN connections",
-    "manage-wifi": "Wi-Fi",
     "max-widgets-reached": "Maximum widgets reached",
     "microphone-volume-at": "Microphone volume: {volume}%",
     "move-to-section": "Move to {section}",

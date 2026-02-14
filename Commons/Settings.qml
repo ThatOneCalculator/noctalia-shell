@@ -297,6 +297,7 @@ Singleton {
         property list<string> keyRight: ["Right"]
         property list<string> keyEnter: ["Return"]
         property list<string> keyEscape: ["Esc"]
+        property list<string> keyRemove: ["Del"]
       }
     }
 
@@ -509,13 +510,7 @@ Singleton {
       property int diskAvailCriticalThreshold: 10
       property int batteryWarningThreshold: 20
       property int batteryCriticalThreshold: 5
-      property int cpuPollingInterval: 1000
-      property int gpuPollingInterval: 3000
       property bool enableDgpuMonitoring: false // Opt-in: reading dGPU sysfs/nvidia-smi wakes it from D3cold, draining battery
-      property int memPollingInterval: 1000
-      property int diskPollingInterval: 30000
-      property int networkPollingInterval: 1000
-      property int loadAvgPollingInterval: 3000
       property bool useCustomColors: false
       property string warningColor: ""
       property string criticalColor: ""
@@ -544,11 +539,13 @@ Singleton {
     // network
     property JsonObject network: JsonObject {
       property bool wifiEnabled: true
+      property bool airplaneModeEnabled: false
       property bool bluetoothRssiPollingEnabled: false  // Opt-in Bluetooth RSSI polling (uses bluetoothctl)
-      property int bluetoothRssiPollIntervalMs: 10000 // Polling interval in milliseconds for RSSI queries
+      property int bluetoothRssiPollIntervalMs: 60000 // Polling interval in milliseconds for RSSI queries
       property string wifiDetailsViewMode: "grid"   // "grid" or "list"
       property string bluetoothDetailsViewMode: "grid" // "grid" or "list"
       property bool bluetoothHideUnnamedDevices: false
+      property bool disableDiscoverability: false
     }
 
     // session menu
@@ -557,6 +554,7 @@ Singleton {
       property int countdownDuration: 10000
       property string position: "center"
       property bool showHeader: true
+      property bool showKeybinds: true
       property bool largeButtonsStyle: true
       property string largeButtonsLayout: "single-row"
       property list<var> powerOptions: [
