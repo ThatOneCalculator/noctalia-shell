@@ -6,7 +6,6 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Widgets
-import "../../../Helpers/Keybinds.js" as Keybinds
 import qs.Commons
 import qs.Modules.MainScreen
 import qs.Services.Compositor
@@ -102,6 +101,11 @@ SmartPanel {
     "reboot": {
       "icon": "reboot",
       "title": I18n.tr("common.reboot"),
+      "isShutdown": false
+    },
+    "rebootToUefi": {
+      "icon": "reboot",
+      "title": I18n.tr("common.reboot-to-uefi"),
       "isShutdown": false
     },
     "logout": {
@@ -230,6 +234,9 @@ SmartPanel {
       break;
     case "reboot":
       CompositorService.reboot();
+      break;
+    case "rebootToUefi":
+      CompositorService.rebootToUefi();
       break;
     case "logout":
       CompositorService.logout();

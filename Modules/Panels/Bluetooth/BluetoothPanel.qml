@@ -27,7 +27,7 @@ SmartPanel {
     ColumnLayout {
       id: mainColumn
       anchors.fill: parent
-      anchors.margins: Style.marginL
+      anchors.margins: Style.marginM
       spacing: Style.marginM
 
       // Header
@@ -39,7 +39,6 @@ SmartPanel {
           id: headerRow
           anchors.fill: parent
           anchors.margins: Style.marginM
-          spacing: Style.marginM
 
           NIcon {
             icon: BluetoothService.enabled ? "bluetooth" : "bluetooth-off"
@@ -47,11 +46,8 @@ SmartPanel {
             color: BluetoothService.enabled ? Color.mPrimary : Color.mOnSurfaceVariant
           }
 
-          NText {
-            text: I18n.tr("common.bluetooth")
-            pointSize: Style.fontSizeL
-            font.weight: Style.fontWeightBold
-            color: Color.mOnSurface
+          NLabel {
+            label: I18n.tr("common.bluetooth")
             Layout.fillWidth: true
           }
 
@@ -61,6 +57,13 @@ SmartPanel {
             enabled: !Settings.data.network.airplaneModeEnabled && BluetoothService.bluetoothAvailable
             onToggled: checked => BluetoothService.setBluetoothEnabled(checked)
             baseSize: Style.baseWidgetSize * 0.65
+          }
+
+          NIconButton {
+            icon: "settings"
+            tooltipText: I18n.tr("tooltips.open-settings")
+            baseSize: Style.baseWidgetSize * 0.8
+            onClicked: SettingsPanelService.openToTab(SettingsPanel.Tab.Connections, 1, screen)
           }
 
           NIconButton {
@@ -174,11 +177,9 @@ SmartPanel {
                 text: I18n.tr("common.settings")
                 icon: "settings"
                 Layout.alignment: Qt.AlignHCenter
-                onClicked: {
-                  SettingsPanel.openToTab(SettingsPanel.Tab.Bluetooth);
-                  root.close();
-                }
+                onClicked: SettingsPanelService.openToTab(SettingsPanel.Tab.Connections, 1, screen)
               }
+
               Item {
                 Layout.fillHeight: true
               }
