@@ -180,6 +180,24 @@
     "subTabLabel": "common.appearance"
   },
   {
+    "labelKey": "panels.bar.appearance-font-scale-label",
+    "descriptionKey": "panels.bar.appearance-font-scale-description",
+    "widget": "NValueSlider",
+    "tab": 4,
+    "tabLabel": "panels.bar.title",
+    "subTab": 0,
+    "subTabLabel": "common.appearance"
+  },
+  {
+    "labelKey": "panels.bar.appearance-widget-spacing-label",
+    "descriptionKey": "panels.bar.appearance-widget-spacing-description",
+    "widget": "NValueSlider",
+    "tab": 4,
+    "tabLabel": "panels.bar.title",
+    "subTab": 0,
+    "subTabLabel": "common.appearance"
+  },
+  {
     "labelKey": "panels.bar.appearance-show-outline-label",
     "descriptionKey": "panels.bar.appearance-show-outline-description",
     "widget": "NToggle",
@@ -291,6 +309,15 @@
     "labelKey": "panels.bar.appearance-auto-show-delay-label",
     "descriptionKey": "panels.bar.appearance-auto-show-delay-description",
     "widget": "NValueSlider",
+    "tab": 4,
+    "tabLabel": "panels.bar.title",
+    "subTab": 0,
+    "subTabLabel": "common.appearance"
+  },
+  {
+    "labelKey": "panels.bar.appearance-show-on-workspace-switch-label",
+    "descriptionKey": "panels.bar.appearance-show-on-workspace-switch-description",
+    "widget": "NToggle",
     "tab": 4,
     "tabLabel": "panels.bar.title",
     "subTab": 0,
@@ -674,6 +701,42 @@
     "subTabLabel": "common.appearance"
   },
   {
+    "labelKey": "panels.dock.appearance-group-apps-label",
+    "descriptionKey": "panels.dock.appearance-group-apps-description",
+    "widget": "NToggle",
+    "tab": 5,
+    "tabLabel": "panels.dock.title",
+    "subTab": 0,
+    "subTabLabel": "common.appearance"
+  },
+  {
+    "labelKey": "panels.dock.appearance-group-click-action-label",
+    "descriptionKey": "panels.dock.appearance-group-click-action-description",
+    "widget": "NComboBox",
+    "tab": 5,
+    "tabLabel": "panels.dock.title",
+    "subTab": 0,
+    "subTabLabel": "common.appearance"
+  },
+  {
+    "labelKey": "panels.dock.appearance-group-context-menu-mode-label",
+    "descriptionKey": "panels.dock.appearance-group-context-menu-mode-description",
+    "widget": "NComboBox",
+    "tab": 5,
+    "tabLabel": "panels.dock.title",
+    "subTab": 0,
+    "subTabLabel": "common.appearance"
+  },
+  {
+    "labelKey": "panels.dock.appearance-group-indicator-style-label",
+    "descriptionKey": "panels.dock.appearance-group-indicator-style-description",
+    "widget": "NComboBox",
+    "tab": 5,
+    "tabLabel": "panels.dock.title",
+    "subTab": 0,
+    "subTabLabel": "common.appearance"
+  },
+  {
     "labelKey": "panels.dock.monitors-only-same-monitor-label",
     "descriptionKey": "panels.dock.monitors-only-same-monitor-description",
     "widget": "NToggle",
@@ -686,6 +749,24 @@
     "labelKey": "panels.dock.appearance-colorize-icons-label",
     "descriptionKey": "panels.dock.appearance-colorize-icons-description",
     "widget": "NToggle",
+    "tab": 5,
+    "tabLabel": "panels.dock.title",
+    "subTab": 0,
+    "subTabLabel": "common.appearance"
+  },
+  {
+    "labelKey": "panels.dock.appearance-show-launcher-icon-label",
+    "descriptionKey": "panels.dock.appearance-show-launcher-icon-description",
+    "widget": "NToggle",
+    "tab": 5,
+    "tabLabel": "panels.dock.title",
+    "subTab": 0,
+    "subTabLabel": "common.appearance"
+  },
+  {
+    "labelKey": "panels.dock.appearance-launcher-position-label",
+    "descriptionKey": "panels.dock.appearance-launcher-position-description",
+    "widget": "NComboBox",
     "tab": 5,
     "tabLabel": "panels.dock.title",
     "subTab": 0,
