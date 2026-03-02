@@ -374,7 +374,7 @@ Singleton {
     function lock() {
       // Only lock if not already locked (prevents the red screen issue)
       if (!PanelService.lockScreen.active) {
-        PanelService.lockScreen.active = true;
+        CompositorService.lock();
       }
     }
   }
@@ -400,6 +400,16 @@ Singleton {
       val = Math.max(0.0, Math.min(1.0, val));
 
       BrightnessService.setBrightness(val);
+    }
+  }
+
+  IpcHandler {
+    target: "monitors"
+    function on() {
+      CompositorService.turnOnMonitors();
+    }
+    function off() {
+      CompositorService.turnOffMonitors();
     }
   }
 
@@ -509,11 +519,16 @@ Singleton {
     }
 
     function lock() {
-      CompositorService.lock();
+      if (!PanelService.lockScreen.active) {
+        CompositorService.lock();
+      }
     }
 
     function lockAndSuspend() {
-      CompositorService.lockAndSuspend();
+      // Only lock and suspend if not already locked
+      if (!PanelService.lockScreen.active) {
+        CompositorService.lockAndSuspend();
+      }
     }
   }
 
@@ -551,9 +566,32 @@ Singleton {
       }
     }
 
-    function random() {
+    function random(screen: string) {
       if (Settings.data.wallpaper.enabled) {
-        WallpaperService.setRandomWallpaper();
+        if (!screen || screen === "all" || screen.trim().length === 0) {
+          screen = undefined;
+        }
+        WallpaperService.setRandomWallpaper(screen);
+      }
+    }
+
+    function get(screen: string): string {
+      if (screen === "all" || screen === "") {
+        if (Quickshell.screens.length > 1) {
+          var map = {};
+          Quickshell.screens.forEach(s => {
+                                       map[s.name] = WallpaperService.currentWallpapers[s.name] ?? "";
+                                     });
+          return JSON.stringify(map);
+        }
+        return WallpaperService.currentWallpapers[Quickshell.screens[0].name] ?? "";
+      } else {
+        var found = Quickshell.screens.find(s => s.name === screen);
+        if (!found) {
+          Logger.w("IPC", "wallpaper get: unknown screen: " + screen);
+          return "";
+        }
+        return WallpaperService.currentWallpapers[screen] ?? "";
       }
     }
 
