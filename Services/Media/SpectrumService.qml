@@ -14,14 +14,14 @@ Singleton {
   function registerComponent(componentId) {
     root.registeredComponents[componentId] = true;
     root.registeredComponents = Object.assign({}, root.registeredComponents);
-    Logger.d("Cava", "Component registered:", componentId, "- total:", root.registeredCount);
+    Logger.d("Spectrum", "Component registered:", componentId, "- total:", root.registeredCount);
   }
 
   // Unregister a component when it no longer needs audio data.
   function unregisterComponent(componentId) {
     delete root.registeredComponents[componentId];
     root.registeredComponents = Object.assign({}, root.registeredComponents);
-    Logger.d("Cava", "Component unregistered:", componentId, "- total:", root.registeredCount);
+    Logger.d("Spectrum", "Component unregistered:", componentId, "- total:", root.registeredCount);
   }
 
   // Check if a component is registered
@@ -57,7 +57,7 @@ Singleton {
   property var config: ({
                           "general": {
                             "bars": barsCount,
-                            "framerate": Settings.data.audio.cavaFrameRate,
+                            "framerate": Settings.data.audio.spectrumFrameRate,
                             "autosens": 1,
                             "sensitivity": 100,
                             "lower_cutoff_freq": 50,
@@ -95,7 +95,7 @@ Singleton {
     repeat: false
     onTriggered: {
       if (root.shouldRun && !process.running) {
-        Logger.w("Cava", "Restarting after crash...");
+        Logger.w("Spectrum", "Restarting after crash...");
         process.running = true;
       }
     }
@@ -106,7 +106,7 @@ Singleton {
     stdinEnabled: true
     command: ["cava", "-p", "/dev/stdin"]
     onRunningChanged: {
-      Logger.d("Cava", "Process running:", running);
+      Logger.d("Spectrum", "Process running:", running);
     }
     onExited: {
       stdinEnabled = true;
@@ -114,18 +114,18 @@ Singleton {
       if (root.shouldRun) {
         root._crashCount++;
         if (root._crashCount <= root._maxCrashes) {
-          Logger.w("Cava", "Process exited unexpectedly, restarting in 2s... (attempt " + root._crashCount + "/" + root._maxCrashes + ")");
+          Logger.w("Spectrum", "Process exited unexpectedly, restarting in 2s... (attempt " + root._crashCount + "/" + root._maxCrashes + ")");
           restartTimer.start();
         } else {
-          Logger.e("Cava", "Process crashed too many times (" + root._maxCrashes + "), giving up");
+          Logger.e("Spectrum", "Process crashed too many times (" + root._maxCrashes + "), giving up");
         }
       } else {
-        Logger.d("Cava", "Process exited (no longer needed)");
+        Logger.d("Spectrum", "Process exited (no longer needed)");
         root._crashCount = 0;
       }
     }
     onStarted: {
-      Logger.d("Cava", "Process started");
+      Logger.d("Spectrum", "Process started");
       for (const k in config) {
         if (typeof config[k] !== "object") {
           write(k + "=" + config[k] + "\n");
@@ -183,7 +183,7 @@ Singleton {
               root.isIdle = true;
               // Set all values to 0 one final time
               root.values = Array(root.barsCount).fill(0);
-              Logger.d("Cava", "Idle detected - stopped rendering");
+              Logger.d("Spectrum", "Idle detected - stopped rendering");
             }
             // Don't update values while idle
             return;
@@ -193,7 +193,7 @@ Singleton {
           root.idleFrameCount = 0;
           if (root.isIdle) {
             root.isIdle = false;
-            Logger.d("Cava", "Audio detected - resumed rendering");
+            Logger.d("Spectrum", "Audio detected - resumed rendering");
           }
         }
 
@@ -207,7 +207,7 @@ Singleton {
     stderr: StdioCollector {
       onStreamFinished: {
         if (text.trim()) {
-          Logger.w("Cava", "Error", text);
+          Logger.w("Spectrum", "Error", text);
         }
       }
     }

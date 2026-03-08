@@ -25,7 +25,7 @@ Singleton {
   - Default cache directory: ~/.cache/noctalia
   */
   readonly property alias data: adapter  // Used to access via Settings.data.xxx.yyy
-  readonly property int settingsVersion: 54
+  readonly property int settingsVersion: 57
   property bool isDebug: Quickshell.env("NOCTALIA_DEBUG") === "1"
   readonly property string shellName: "noctalia"
   readonly property string configDir: Quickshell.env("NOCTALIA_CONFIG_DIR") || (Quickshell.env("XDG_CONFIG_HOME") || Quickshell.env("HOME") + "/.config") + "/" + shellName + "/"
@@ -259,6 +259,12 @@ Singleton {
       property string mouseWheelAction: "none"
       property bool reverseScroll: false
       property bool mouseWheelWrap: true
+      property string middleClickAction: "none"
+      property bool middleClickFollowMouse: false
+      property string middleClickCommand: ""
+      property string rightClickAction: "controlCenter"
+      property bool rightClickFollowMouse: true
+      property string rightClickCommand: ""
       // Per-screen overrides for position and widgets
       // Format: [{ "name": "HDMI-1", "position": "left" }, { "name": "DP-1", "position": "bottom", "widgets": {...} }]
       property list<var> screenOverrides: []
@@ -284,6 +290,7 @@ Singleton {
       property bool showHibernateOnLockScreen: false
       property bool enableLockScreenMediaControls: false
       property bool enableShadows: true
+      property bool enableBlurBehind: true
       property string shadowDirection: "bottom_right"
       property int shadowOffsetX: 2
       property int shadowOffsetY: 3
@@ -438,7 +445,6 @@ Singleton {
     property JsonObject controlCenter: JsonObject {
       // Position: close_to_bar_button, center, top_left, top_right, bottom_left, bottom_right, bottom_center, top_center
       property string position: "close_to_bar_button"
-      property bool openAtMouseOnBarRightClick: true
       property string diskPath: "/"
       property JsonObject shortcuts
       shortcuts: JsonObject {
@@ -524,6 +530,12 @@ Singleton {
       property string externalMonitor: "resources || missioncenter || jdsystemmonitor || corestats || system-monitoring-center || gnome-system-monitor || plasma-systemmonitor || mate-system-monitor || ukui-system-monitor || deepin-system-monitor || pantheon-system-monitor"
     }
 
+    // performance
+    property JsonObject noctaliaPerformance: JsonObject {
+      property bool disableWallpaper: true
+      property bool disableDesktopWidgets: true
+    }
+
     // dock
     property JsonObject dock: JsonObject {
       property bool enabled: true
@@ -566,6 +578,7 @@ Singleton {
       property string bluetoothDetailsViewMode: "grid" // "grid" or "list"
       property bool bluetoothHideUnnamedDevices: false
       property bool disableDiscoverability: false
+      property bool bluetoothAutoConnect: true
     }
 
     // session menu
@@ -664,7 +677,7 @@ Singleton {
     property JsonObject audio: JsonObject {
       property int volumeStep: 5
       property bool volumeOverdrive: false
-      property int cavaFrameRate: 30
+      property int spectrumFrameRate: 30
       property string visualizerType: "linear"
       property list<string> mprisBlacklist: []
       property string preferredPlayer: ""

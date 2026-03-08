@@ -398,6 +398,15 @@ Item {
     }
   }
 
+  // Clear highlight when the user scrolls so the outline doesn't stay in place
+  Connections {
+    target: root.activeScrollView ? root.activeScrollView.contentItem : null
+    enabled: root.highlightLabelKey !== "" && !highlightScrollTimer.running
+    function onContentYChanged() {
+      root.clearHighlightImmediately();
+    }
+  }
+
   // Save sidebar state when it changes
   onSidebarExpandedChanged: {
     ShellState.setSettingsSidebarExpanded(sidebarExpanded);
@@ -615,8 +624,8 @@ Item {
             "source": regionTab
           },
           {
-            "id": SettingsPanel.Tab.SystemMonitor,
-            "label": "system-monitor.title",
+            "id": SettingsPanel.Tab.System,
+            "label": "panels.system.title",
             "icon": "settings-system-monitor",
             "source": systemMonitorTab
           },
@@ -1255,6 +1264,7 @@ Item {
                   anchors.fill: parent
                   horizontalPolicy: ScrollBar.AlwaysOff
                   verticalPolicy: ScrollBar.AsNeeded
+                  showScrollbarWhenScrollable: true
                   leftPadding: Style.marginL
                   topPadding: Style.marginL
                   bottomPadding: Style.marginL
