@@ -134,7 +134,7 @@ Rectangle {
   readonly property int gridContentWidth: listPanelWidth - (2 * Style.marginXS)
   readonly property int gridCellSize: Math.floor((gridContentWidth - ((targetGridColumns - 1) * Style.marginS)) / targetGridColumns)
 
-  property int gridColumns: 5
+  readonly property int gridColumns: targetGridColumns
 
   // Check if current provider allows wrap navigation (default true)
   readonly property bool allowWrapNavigation: {
@@ -304,9 +304,20 @@ Rectangle {
 
       // Sort by _score (higher = better match), items without _score go first
       if (searchText.trim() !== "") {
+        const boostByUsage = Settings.data.appLauncher.sortByMostUsed;
+
         allResults.sort((a, b) => {
-                          const sa = a._score !== undefined ? a._score : 0;
-                          const sb = b._score !== undefined ? b._score : 0;
+                          let sa = a._score !== undefined ? a._score : 0;
+                          let sb = b._score !== undefined ? b._score : 0;
+
+                          // Boost scores for frequently used items from tracked providers
+                          if (boostByUsage) {
+                            if (a.provider && a.provider.trackUsage && a.usageKey)
+                            sa += 100.0 * Math.log2(1 + ShellState.getLauncherUsageCount(a.usageKey));
+                            if (b.provider && b.provider.trackUsage && b.usageKey)
+                            sb += 100.0 * Math.log2(1 + ShellState.getLauncherUsageCount(b.usageKey));
+                          }
+
                           return sb - sa;
                         });
       }
@@ -467,6 +478,11 @@ Rectangle {
     if (results.length > 0 && results[selectedIndex]) {
       const item = results[selectedIndex];
       const provider = item.provider || currentProvider;
+
+      // Track usage for providers that opt in (cross-provider "most used" tracking)
+      if (Settings.data.appLauncher.sortByMostUsed && provider && provider.trackUsage && item.usageKey) {
+        ShellState.recordLauncherUsage(item.usageKey);
+      }
 
       // Check if auto-paste is enabled and provider/item supports it
       if (Settings.data.appLauncher.autoPasteClipboard && provider && provider.supportsAutoPaste && item.autoPasteText) {
@@ -1039,7 +1055,7 @@ Rectangle {
                     baseSize: Style.baseWidgetSize * 0.75
                     tooltipText: modelData.tooltip
                     z: 1
-                    allowScroll: true
+                    handleWheel: true
                     onClicked: {
                       if (modelData.action) {
                         modelData.action();
@@ -1171,10 +1187,6 @@ Rectangle {
 
         // Completely disable GridView key handling
         Keys.enabled: false
-
-        Component.onCompleted: root.gridColumns = root.targetGridColumns
-        onWidthChanged: root.gridColumns = root.targetGridColumns
-        onModelChanged: {}
 
         // Handle scrolling to show selected item when it changes
         Connections {
@@ -1418,7 +1430,7 @@ Rectangle {
                   baseSize: Style.baseWidgetSize * 0.75
                   tooltipText: modelData.tooltip
                   z: 11
-                  allowScroll: true
+                  handleWheel: true
                   onClicked: {
                     if (modelData.action) {
                       modelData.action();
