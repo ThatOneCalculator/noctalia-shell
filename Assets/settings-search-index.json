@@ -849,7 +849,7 @@
     "subTab": 0,
     "subTabLabel": "common.appearance",
     "visibleWhen": [
-      "Settings.data.dock.dockType === \"static\" && Settings.data.bar.barType === \"framed\""
+      "Settings.data.dock.dockType === \"attached\" && Settings.data.bar.barType === \"framed\""
     ]
   },
   {
@@ -1307,15 +1307,6 @@
     "visibleWhen": [
       "Settings.data.appLauncher.enableClipboardHistory"
     ]
-  },
-  {
-    "labelKey": "panels.launcher.settings-use-app2unit-label",
-    "descriptionKey": "panels.launcher.settings-use-app2unit-description",
-    "widget": "NToggle",
-    "tab": 8,
-    "tabLabel": "panels.launcher.title",
-    "subTab": 2,
-    "subTabLabel": "common.execute"
   },
   {
     "labelKey": "panels.launcher.settings-terminal-command-label",
