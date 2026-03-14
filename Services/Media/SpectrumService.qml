@@ -46,7 +46,7 @@ Singleton {
     frameRate: Settings.data.audio.spectrumFrameRate
     lowerCutoff: 50
     upperCutoff: 12000
-    noiseReduction: 0.77
+    noiseReduction: 0.22
     smoothing: true
 
     onValuesChanged: {
