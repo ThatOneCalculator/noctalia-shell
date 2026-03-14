@@ -969,7 +969,8 @@
       "hide-unnamed-devices-description": "Hide devices that appear only as Bluetooth addresses.",
       "hide-unnamed-devices-label": "Hide unnamed devices",
       "pin-instructions": "Please enter the PIN code displayed on your device.",
-      "title": "Connections"
+      "title": "Connections",
+      "wifi-header-text": "Use Wi-Fi to see available networks and connect to the internet."
     },
     "control-center": {
       "cards-desc": "Customize which controls appear in the control center and in what order.",
@@ -1298,8 +1299,12 @@
       "settings-annotation-tool-placeholder": "e.g. 'gradia', 'satty -f -'",
       "settings-auto-paste-description": "Automatically paste the selected clipboard item. Requires wtype.",
       "settings-auto-paste-label": "Auto paste",
+      "settings-clip-chips-description": "Show a tab bar to filter clipboard history by type (Images, Links, Files, Code, etc).",
+      "settings-clip-chips-label": "Enable Category Chips",
       "settings-clip-preview-description": "Show a preview of the clipboard content when using the >clip command.",
       "settings-clip-preview-label": "Enable clip preview",
+      "settings-clip-smart-icons-description": "Show specific icons for links, files, colors, and code instead of a generic clipboard icon.",
+      "settings-clip-smart-icons-label": "Enable Smart Icons",
       "settings-clip-wrap-text-description": "Wrap text in the clipboard list instead of truncating it.",
       "settings-clip-wrap-text-label": "Wrap clipboard text",
       "settings-clipboard-history-description": "Access previously copied items from the launcher.",
@@ -1849,6 +1854,7 @@
   },
   "toast": {
     "airplane-mode": {
+      "description": "Disable all wireless communications.",
       "title": "Airplane Mode"
     },
     "battery": {
@@ -2136,6 +2142,7 @@
   "wifi": {
     "panel": {
       "action-required": "Action required",
+      "add-hidden-network": "Add hidden network",
       "available-interfaces": "Available interfaces",
       "available-networks": "Available networks",
       "disabled": "Wi‑Fi is disabled",
@@ -2151,13 +2158,18 @@
       "internet-limited": "No internet",
       "internet-status": "Internet status",
       "ipv4": "IPv4",
+      "ipv6": "IPv6",
       "known-networks": "Known networks",
       "link-speed": "Link speed",
+      "network-name-ssid": "Network name (SSID)",
       "no-ethernet-devices": "No Ethernet devices detected",
       "no-networks": "No Wi‑Fi networks found",
       "saved": "Saved",
       "scan-again": "Scan again",
       "searching": "Searching for networks...",
+      "security-open": "Open",
+      "security-wep": "WEP",
+      "security-wpa": "WPA/WPA2/WPA3 Personal",
       "title": "Wi‑Fi"
     },
     "signal": {
