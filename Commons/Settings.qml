@@ -25,7 +25,7 @@ Singleton {
   - Default cache directory: ~/.cache/noctalia
   */
   readonly property alias data: adapter  // Used to access via Settings.data.xxx.yyy
-  readonly property int settingsVersion: 58
+  readonly property int settingsVersion: 59
   property bool isDebug: Quickshell.env("NOCTALIA_DEBUG") === "1"
   readonly property string shellName: "noctalia"
   readonly property string configDir: Quickshell.env("NOCTALIA_CONFIG_DIR") || (Quickshell.env("XDG_CONFIG_HOME") || Quickshell.env("HOME") + "/.config") + "/" + shellName + "/"
@@ -389,7 +389,7 @@ Singleton {
       property string wallpaperChangeMode: "random" // "random" or "alphabetical"
       property int randomIntervalSec: 300 // 5 min
       property int transitionDuration: 1500 // 1500 ms
-      property string transitionType: "random"
+      property list<string> transitionType: ["fade", "disc", "stripes", "wipe", "pixelate", "honeycomb"]
       property bool skipStartupTransition: false
       property real transitionEdgeSmoothness: 0.05
       property string panelPosition: "follow_bar"
@@ -555,6 +555,8 @@ Singleton {
       property bool colorizeIcons: false
       property bool showLauncherIcon: false
       property string launcherPosition: "end" // "start", "end"
+      property bool launcherUseDistroLogo: false
+      property string launcherIcon: ""
       property string launcherIconColor: "none"
       property bool pinnedStatic: false
       property bool inactiveIndicators: false
@@ -738,11 +740,13 @@ Singleton {
       property string performanceModeDisabled: ""
       property string startup: ""
       property string session: ""
+      property string colorGeneration: ""
     }
 
     // plugins
     property JsonObject plugins: JsonObject {
       property bool autoUpdate: false
+      property bool notifyUpdates: true
     }
 
     // idle management
