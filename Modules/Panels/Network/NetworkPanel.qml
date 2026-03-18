@@ -447,10 +447,6 @@ SmartPanel {
                     delegate: NBox {
                       id: ethItem
 
-                      HoverHandler {
-                        id: itemHover
-                      }
-
                       function getContentColors(defaultColors = [Color.mSurface, Color.mOnSurface]) {
                         if (modelData.connected) {
                           return [Color.mPrimary, Color.mOnPrimary];
@@ -463,6 +459,7 @@ SmartPanel {
                       Layout.rightMargin: Style.marginXS
                       implicitHeight: ethItemColumn.implicitHeight + Style.margin2M
                       radius: Style.radiusM
+                      forceOpaque: true
                       color: ethItem.getContentColors()[0]
 
                       ColumnLayout {
@@ -522,7 +519,7 @@ SmartPanel {
                                   return I18n.tr("common.disconnected");
                                 }
                                 pointSize: Style.fontSizeXXS
-                                color: (!modelData.connected || NetworkService.networkConnectivity === "limited" || NetworkService.networkConnectivity === "portal" || NetworkService.networkConnectivity === "unknown") ? Color.mError : ethItem.getContentColors()[1]
+                                color: Qt.alpha(ethItem.getContentColors()[1], Style.opacityHeavy)
                               }
 
                               // Network speed indicators (visible when connected and speed > 0)
@@ -573,7 +570,6 @@ SmartPanel {
 
                           // Info button on the right
                           NIconButton {
-                            visible: itemHover.hovered
                             icon: "info"
                             tooltipText: I18n.tr("common.info")
                             baseSize: Style.baseWidgetSize * 0.75
@@ -620,9 +616,9 @@ SmartPanel {
                           visible: ethernetInfoExpanded && NetworkService.activeEthernetIf === modelData.ifname
                           Layout.fillWidth: true
                           color: Color.mSurfaceVariant
-                          radius: Style.radiusS
+                          radius: Style.radiusXS
                           border.width: Style.borderS
-                          border.color: Color.mOutline
+                          border.color: Style.boxBorderColor
                           implicitHeight: ethInfoGrid.implicitHeight + Style.margin2S
                           clip: true
                           Layout.topMargin: Style.marginXS
@@ -634,7 +630,7 @@ SmartPanel {
                             anchors.margins: Style.marginS
                             icon: ethernetDetailsGrid ? "layout-list" : "layout-grid"
                             tooltipText: ethernetDetailsGrid ? I18n.tr("tooltips.list-view") : I18n.tr("tooltips.grid-view")
-                            baseSize: Style.baseWidgetSize * 0.8
+                            baseSize: Style.baseWidgetSize * 0.65
                             onClicked: {
                               ethernetDetailsGrid = !ethernetDetailsGrid;
                               Settings.data.network.wifiDetailsViewMode = ethernetDetailsGrid ? "grid" : "list";

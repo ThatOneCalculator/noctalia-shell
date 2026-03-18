@@ -370,10 +370,6 @@ Item {
     NBox {
       id: device
 
-      HoverHandler {
-        id: itemHover
-      }
-
       readonly property bool canConnect: BluetoothService.canConnect(modelData)
       readonly property bool canDisconnect: BluetoothService.canDisconnect(modelData)
       readonly property bool canPair: BluetoothService.canPair(modelData)
@@ -397,7 +393,7 @@ Item {
       Layout.preferredHeight: deviceColumn.implicitHeight + (Style.marginXL)
       radius: Style.radiusM
       clip: true
-
+      forceOpaque: true
       color: device.getContentColors()[0]
 
       ColumnLayout {
@@ -448,7 +444,7 @@ Item {
               }
               visible: text !== ""
               pointSize: Style.fontSizeXS
-              color: device.getContentColors([Color.mSurfaceVariant, Color.mOnSurfaceVariant])[1]
+              color: Qt.alpah(device.getContentColors([Color.mSurfaceVariant, Color.mOnSurfaceVariant])[1], Style.opacityHeavy)
             }
 
             RowLayout {
@@ -460,7 +456,7 @@ Item {
                   return BatteryService.getIcon(b !== null ? b : 0, false, false, b !== null);
                 }
                 pointSize: Style.fontSizeXS
-                color: device.getContentColors()[1]
+                color: Qt.alpah(device.getContentColors()[1], Style.opacityHeavy)
               }
               NText {
                 text: {
@@ -468,7 +464,7 @@ Item {
                   return b === null ? "-" : (b + "%");
                 }
                 pointSize: Style.fontSizeXS
-                color: device.getContentColors([Color.mSurfaceVariant, Color.mOnSurfaceVariant])[1]
+                color: Qt.alpah(device.getContentColors([Color.mSurfaceVariant, Color.mOnSurfaceVariant])[1], Style.opacityHeavy)
               }
             }
           }
@@ -488,7 +484,7 @@ Item {
             }
 
             NIconButton {
-              visible: itemHover.hovered && modelData.connected && modelData.state !== BluetoothDeviceState.Disconnecting
+              visible: modelData.connected && modelData.state !== BluetoothDeviceState.Disconnecting
               icon: "info"
               tooltipText: I18n.tr("common.info")
               baseSize: Style.baseWidgetSize * 0.75
@@ -503,7 +499,7 @@ Item {
             }
 
             NIconButton {
-              visible: itemHover.hovered && !root.showOnlyLists && (modelData.paired || modelData.trusted) && !modelData.connected && !isBusy && !modelData.blocked
+              visible: !root.showOnlyLists && (modelData.paired || modelData.trusted) && !modelData.connected && !isBusy && !modelData.blocked
               icon: "trash"
               tooltipText: I18n.tr("common.unpair")
               baseSize: Style.baseWidgetSize * 0.75
@@ -552,7 +548,7 @@ Item {
           visible: device.isExpanded
           Layout.fillWidth: true
           implicitHeight: infoColumn.implicitHeight + Style.margin2S
-          radius: Style.radiusS
+          radius: Style.radiusXS
           color: Color.mSurfaceVariant
           border.width: Style.borderS
           border.color: Style.boxBorderColor
@@ -758,7 +754,7 @@ Item {
             inputItem.forceActiveFocus();
           }
         }
-        inputItem.onAccepted: {
+        inputItem.onEditingFinished: {
           if (text.length > 0) {
             BluetoothService.submitPin(text);
             text = "";

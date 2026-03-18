@@ -24,12 +24,21 @@ Item {
   property var workspaceCache: ({})
   property var windowCache: ({})
 
-  // Debounce timer for updates
+  // Debounce timer for window updates
   Timer {
     id: updateTimer
     interval: 50
     repeat: false
     onTriggered: safeUpdate()
+  }
+
+  // Deferred via Qt.callLater to coalesce workspace updates: onRawEvent calls
+  // refreshWorkspaces() which triggers onValuesChanged synchronously in the
+  // same call stack — without deferral the ListModel gets cleared+repopulated
+  // twice per event. Qt.callLater deduplicates by function identity.
+  function _deferredWorkspaceUpdate() {
+    safeUpdateWorkspaces();
+    workspaceChanged();
   }
 
   // Initialization
@@ -246,7 +255,7 @@ Item {
       }
 
       const hlToplevels = Hyprland.toplevels.values;
-      let newFocusedIndex = -1;
+      let focusedWindowId = null;
 
       // Get active workspaces to filter focus
       const activeWorkspaceIds = {};
@@ -288,12 +297,23 @@ Item {
           windowCache[normalized.id] = normalized;
 
           if (normalized.isFocused) {
-            newFocusedIndex = windowsList.length - 1;
+            focusedWindowId = normalized.id;
           }
         }
       }
 
       windows = toSortedWindowList(windowsList);
+
+      // Resolve focused index from sorted list (order changes after sort)
+      let newFocusedIndex = -1;
+      if (focusedWindowId) {
+        for (let k = 0; k < windows.length; k++) {
+          if (windows[k].id === focusedWindowId) {
+            newFocusedIndex = k;
+            break;
+          }
+        }
+      }
 
       if (newFocusedIndex !== focusedWindowIndex) {
         focusedWindowIndex = newFocusedIndex;
@@ -468,8 +488,7 @@ Item {
     target: Hyprland.workspaces
     enabled: initialized
     function onValuesChanged() {
-      safeUpdateWorkspaces();
-      workspaceChanged();
+      Qt.callLater(_deferredWorkspaceUpdate);
     }
   }
 
@@ -487,8 +506,10 @@ Item {
     function onRawEvent(event) {
       Hyprland.refreshWorkspaces();
       Hyprland.refreshToplevels();
-      safeUpdateWorkspaces();
-      workspaceChanged();
+      // Workspace and window updates are deferred — refreshWorkspaces()/
+      // refreshToplevels() trigger onValuesChanged which also calls
+      // Qt.callLater, so the deduplication coalesces into one update.
+      Qt.callLater(_deferredWorkspaceUpdate);
       updateTimer.restart();
 
       const monitorsEvents = ["configreloaded", "monitoradded", "monitorremoved", "monitoraddedv2", "monitorremovedv2"];

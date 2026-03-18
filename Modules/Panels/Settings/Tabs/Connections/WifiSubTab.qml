@@ -448,7 +448,7 @@ Item {
         label: I18n.tr("wifi.panel.network-name-ssid")
         text: addNetworkPopup.customSsid
         onTextChanged: addNetworkPopup.customSsid = text
-        onAccepted: {
+        onEditingFinished: {
           if (addNetworkPopup.customSsid.length > 0 && (addNetworkPopup.customSecurityKey === "open" || addNetworkPopup.customPassword.length > 0)) {
             NetworkService.connectManual(addNetworkPopup.customSsid, addNetworkPopup.customPassword, addNetworkPopup.customSecurityKey, addNetworkPopup.customIdentity, {
                                            eap: addNetworkPopup.customEnterpriseEap,
@@ -572,7 +572,7 @@ Item {
         text: addNetworkPopup.customPassword
         onTextChanged: addNetworkPopup.customPassword = text
         inputItem.echoMode: addNetworkPopup.customShowPassword ? TextInput.Normal : TextInput.Password
-        onAccepted: {
+        onEditingFinished: {
           if (addNetworkPopup.customSsid.length > 0 && addNetworkPopup.customPassword.length > 0) {
             NetworkService.connectManual(addNetworkPopup.customSsid, addNetworkPopup.customPassword, addNetworkPopup.customSecurityKey, addNetworkPopup.customIdentity, {
                                            eap: addNetworkPopup.customEnterpriseEap,
@@ -648,10 +648,6 @@ Item {
     NBox {
       id: networkItem
 
-      HoverHandler {
-        id: itemHover
-      }
-
       readonly property bool isBusy: NetworkService.connectingTo === modelData.ssid || NetworkService.disconnectingFrom === modelData.ssid || NetworkService.forgettingNetwork === modelData.ssid
       readonly property bool isExpanded: root.infoSsid === modelData.ssid
       readonly property bool isEnterprise: NetworkService.isEnterprise(modelData.security)
@@ -676,7 +672,7 @@ Item {
       Layout.preferredHeight: deviceColumn.implicitHeight + (Style.marginXL)
       radius: Style.radiusM
       clip: true
-
+      forceOpaque: true
       color: networkItem.getContentColors()[0]
 
       ColumnLayout {
@@ -819,7 +815,7 @@ Item {
             }
 
             NIconButton {
-              visible: itemHover.hovered && modelData.connected && NetworkService.disconnectingFrom !== modelData.ssid
+              visible: modelData.connected && NetworkService.disconnectingFrom !== modelData.ssid
               icon: "info"
               tooltipText: I18n.tr("common.info")
               baseSize: Style.baseWidgetSize * 0.75
@@ -838,7 +834,7 @@ Item {
             }
 
             NIconButton {
-              visible: itemHover.hovered && !root.showOnlyLists && (modelData.existing || modelData.cached) && !modelData.connected && !networkItem.isBusy
+              visible: !root.showOnlyLists && (modelData.existing || modelData.cached) && !modelData.connected && !networkItem.isBusy
               icon: "trash"
               tooltipText: I18n.tr("tooltips.forget-network")
               baseSize: Style.baseWidgetSize * 0.75
@@ -883,7 +879,7 @@ Item {
           visible: networkItem.isExpanded
           Layout.fillWidth: true
           implicitHeight: infoColumn.implicitHeight + Style.margin2S
-          radius: Style.radiusS
+          radius: Style.radiusXS
           color: Color.mSurfaceVariant
           border.width: Style.borderS
           border.color: Style.boxBorderColor
@@ -1282,7 +1278,7 @@ Item {
                   selectByMouse: true
                   text: root.enterpriseAnonIdentity
                   onTextChanged: root.enterpriseAnonIdentity = text
-                  onAccepted: identityInput.forceActiveFocus()
+                  onEditingFinished: identityInput.forceActiveFocus()
 
                   NText {
                     visible: parent.text.length === 0
@@ -1319,7 +1315,7 @@ Item {
                       forceActiveFocus();
                     }
                   }
-                  onAccepted: pwdInput.forceActiveFocus()
+                  onEditingFinished: pwdInput.forceActiveFocus()
 
                   NText {
                     visible: parent.text.length === 0
@@ -1357,7 +1353,7 @@ Item {
                       forceActiveFocus();
                     }
                   }
-                  onAccepted: {
+                  onEditingFinished: {
                     if (text && !NetworkService.connecting) {
                       if (!networkItem.isEnterprise || identityInput.text.length > 0) {
                         root.submitPassword(modelData.ssid, text, identityInput.text);
