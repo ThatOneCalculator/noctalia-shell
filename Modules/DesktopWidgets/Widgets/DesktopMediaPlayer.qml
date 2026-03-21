@@ -117,6 +117,7 @@ DraggableDesktopWidget {
         values: SpectrumService.values
         fillColor: "#c4a7e7"
         opacity: 0.5
+        mirrored: Settings.data.audio.spectrumMirrored
       }
     }
 
@@ -127,6 +128,7 @@ DraggableDesktopWidget {
         values: SpectrumService.values
         fillColor: "#c4a7e7"
         opacity: 0.5
+        mirrored: Settings.data.audio.spectrumMirrored
       }
     }
 
@@ -137,6 +139,7 @@ DraggableDesktopWidget {
         values: SpectrumService.values
         fillColor: "#c4a7e7"
         opacity: 0.5
+        mirrored: Settings.data.audio.spectrumMirrored
       }
     }
   }
