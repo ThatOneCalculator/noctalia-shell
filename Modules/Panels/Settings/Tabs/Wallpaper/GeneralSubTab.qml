@@ -160,15 +160,49 @@ ColumnLayout {
             }
 
             NTextInputButton {
+              id: monitorDirInput
               text: WallpaperService.getMonitorDirectory(modelData.name)
               buttonIcon: "folder-open"
               buttonTooltip: I18n.tr("panels.wallpaper.settings-monitor-specific-tooltip")
               Layout.fillWidth: true
-              onInputTextChanged: text => WallpaperService.setMonitorDirectory(modelData.name, text)
+              onInputEditingFinished: WallpaperService.setMonitorDirectory(modelData.name, monitorDirInput.text)
               onButtonClicked: root.openMonitorFolderPicker(modelData.name)
             }
           }
         }
+      }
+    }
+  }
+
+  NDivider {
+    Layout.fillWidth: true
+  }
+
+  NToggle {
+    label: I18n.tr("panels.wallpaper.settings-use-original-images-label")
+    description: I18n.tr("panels.wallpaper.settings-use-original-images-description")
+    checked: Settings.data.wallpaper.useOriginalImages
+    onToggled: checked => Settings.data.wallpaper.useOriginalImages = checked
+    defaultValue: Settings.getDefaultValue("wallpaper.useOriginalImages")
+  }
+
+  RowLayout {
+    spacing: Style.marginM
+    Layout.fillWidth: true
+
+    NLabel {
+      label: I18n.tr("panels.wallpaper.settings-clear-cache-label")
+      description: I18n.tr("panels.wallpaper.settings-clear-cache-description")
+      Layout.fillWidth: true
+    }
+
+    NButton {
+      icon: "trash"
+      text: I18n.tr("panels.wallpaper.settings-clear-cache-button")
+      outlined: true
+      onClicked: {
+        ImageCacheService.clearLarge();
+        ToastService.showNotice(I18n.tr("panels.wallpaper.settings-clear-cache-toast"));
       }
     }
   }
