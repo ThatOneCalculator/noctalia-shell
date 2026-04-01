@@ -352,6 +352,7 @@ Singleton {
       property int firstDayOfWeek: -1 // -1 = auto (use locale), 0 = Sunday, 1 = Monday, 6 = Saturday
       property bool hideWeatherTimezone: false
       property bool hideWeatherCityName: false
+      property bool autoLocate: true
     }
 
     // calendar
@@ -579,7 +580,6 @@ Singleton {
 
     // network
     property JsonObject network: JsonObject {
-      property bool airplaneModeEnabled: false
       property bool bluetoothRssiPollingEnabled: false  // Opt-in Bluetooth RSSI polling (uses bluetoothctl)
       property int bluetoothRssiPollIntervalMs: 60000 // Polling interval in milliseconds for RSSI queries
       property string networkPanelView: "wifi"

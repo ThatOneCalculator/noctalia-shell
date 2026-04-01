@@ -10,8 +10,17 @@ Singleton {
   id: root
 
   property string locationFile: Quickshell.env("NOCTALIA_WEATHER_FILE") || (Settings.cacheDir + "location.json")
-  property int weatherUpdateFrequency: 30 * 60 // 30 minutes expressed in seconds
+  property int weatherUpdateFrequency: 30 * 60
   property bool isFetchingWeather: false
+
+  // Talia weather
+  readonly property int taliaMascotWeatherMonth: 3
+  readonly property int taliaMascotWeatherDay: 1
+
+  readonly property bool taliaWeatherMascotDayActive: {
+    const d = Time.now;
+    return d.getMonth() === root.taliaMascotWeatherMonth && d.getDate() === root.taliaMascotWeatherDay;
+  }
 
   readonly property alias data: adapter
 
@@ -59,6 +68,16 @@ Singleton {
     const lat = parseFloat(root.stableLatitude).toFixed(4);
     const lon = parseFloat(root.stableLongitude).toFixed(4);
     return `${lat}, ${lon}`;
+  }
+
+  // Auto-geolocate timer - periodically updates location via IP geolocation
+  Timer {
+    id: autoLocateTimer
+    interval: 30 * 60 * 1000
+    running: Settings.data.location.autoLocate
+    repeat: true
+    triggeredOnStart: true
+    onTriggered: root.geolocateAndApply()
   }
 
   // Update timer runs when weather is enabled or location-based scheduling is active
@@ -235,6 +254,46 @@ Singleton {
     xhr.send();
   }
 
+  // Geolocate via IP address using the Noctalia API
+  function geolocate(callback, errorCallback) {
+    Logger.d("Location", "Geolocating via IP");
+    var url = "https://api.noctalia.dev/geolocate";
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            if (data.lat != null) {
+              callback(data.lat, data.lng, data.city, data.country);
+            } else {
+              errorCallback("Location", "Geolocate: no coordinates returned");
+            }
+          } catch (e) {
+            errorCallback("Location", "Failed to parse geolocate data: " + e);
+          }
+        } else {
+          errorCallback("Location", "Geolocate error: " + xhr.status);
+        }
+      }
+    };
+    xhr.open("GET", url);
+    xhr.send();
+  }
+
+  // Geolocate via IP and apply the result as the current location
+  function geolocateAndApply() {
+    if (isFetchingWeather) {
+      Logger.w("Location", "Geolocate skipped, fetch already in progress");
+      return;
+    }
+    geolocate(function (lat, lng, city, country) {
+      Logger.i("Location", "Geolocated to", city + ",", country);
+      Settings.data.location.name = city;
+      resetWeather();
+    }, errorCallback);
+  }
+
   // --------------------------------
   function errorCallback(module, message) {
     Logger.e(module, message);
@@ -264,6 +323,22 @@ Singleton {
     if (code >= 95 && code <= 99)
       return "weather-cloud-lightning";
     return "weather-cloud";
+  }
+
+  // --------------------------------
+  function taliaWeatherImageFromCode(code, isDay) {
+    if (code >= 40 && code <= 49)
+      return Quickshell.shellDir + "/Assets/Talia/TaliaDazed.png";
+    if (code >= 95 && code <= 99)
+      return Quickshell.shellDir + "/Assets/Talia/TaliaFear.png";
+    var wet = (code >= 51 && code <= 67) || (code >= 80 && code <= 82) || (code >= 71 && code <= 77) || (code >= 85 && code <= 86);
+    if (wet)
+      return Quickshell.shellDir + "/Assets/Talia/TaliaSob.png";
+    if ((code === 0 || code === 1 || code === 2) && isDay === false)
+      return Quickshell.shellDir + "/Assets/Talia/TaliaVampire.png";
+    if ((code === 0 && isDay === true) || code === 1 || code === 2)
+      return Quickshell.shellDir + "/Assets/Talia/TaliaParty.png";
+    return Quickshell.shellDir + "/Assets/Talia/TaliaBlank.png";
   }
 
   // --------------------------------
