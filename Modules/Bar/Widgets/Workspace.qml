@@ -746,14 +746,14 @@ Item {
 
       Behavior on width {
         NumberAnimation {
-          duration: Style.animationNormal
-          easing.type: Easing.OutBack
+          duration: Style.animationFast
+          easing.type: Easing.OutCubic
         }
       }
       Behavior on height {
         NumberAnimation {
-          duration: Style.animationNormal
-          easing.type: Easing.OutBack
+          duration: Style.animationFast
+          easing.type: Easing.OutCubic
         }
       }
 
@@ -794,13 +794,10 @@ Item {
           delegate: Item {
             id: groupedTaskbarItem
 
-            // liveWindows is reassigned on scroll/focus; delegates can outlive rows and see null modelData
-            readonly property var win: modelData
-            readonly property bool winOk: win !== undefined && win !== null
+            readonly property bool isFocused: modelData?.isFocused ?? false
 
-            width: winOk ? root.iconSize : 0
-            height: winOk ? root.iconSize : 0
-            visible: winOk
+            width: root.iconSize
+            height: root.iconSize
 
             HoverHandler {
               id: windowHoverHandler
@@ -814,25 +811,22 @@ Item {
 
               source: {
                 root.iconRevision; // Force re-evaluation when revision changes
-                const w = groupedTaskbarItem.win;
-                if (!w || !w.appId)
-                  return "";
-                return ThemeIcons.iconForAppId(w.appId.toLowerCase());
+                return ThemeIcons.iconForAppId(modelData?.appId?.toLowerCase());
               }
               smooth: true
               asynchronous: true
-              opacity: groupedTaskbarItem.winOk && groupedTaskbarItem.win.isFocused ? Style.opacityFull : unfocusedIconsOpacity
-              layer.enabled: root.colorizeIcons && groupedTaskbarItem.winOk && !groupedTaskbarItem.win.isFocused
+              opacity: groupedTaskbarItem.isFocused ? Style.opacityFull : unfocusedIconsOpacity
+              layer.enabled: root.colorizeIcons && !groupedTaskbarItem.isFocused
 
               Rectangle {
                 id: groupedFocusIndicator
-                visible: (groupedTaskbarItem.winOk && groupedTaskbarItem.win.isFocused) || windowHoverHandler.hovered
+                visible: groupedTaskbarItem.isFocused || windowHoverHandler.hovered
                 anchors.bottomMargin: -2
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Style.toOdd(root.iconSize * 0.25)
                 height: 4
-                color: (groupedTaskbarItem.winOk && groupedTaskbarItem.win.isFocused) ? "#c4a7e7" : Color.mHover
+                color: groupedTaskbarItem.isFocused ? "#c4a7e7" : Color.mHover
                 radius: Math.min(Style.radiusXXS, width / 2)
               }
 
@@ -851,26 +845,24 @@ Item {
               preventStealing: true
 
               onPressed: mouse => {
-                           if (mouse.button === Qt.LeftButton && groupedTaskbarItem.winOk) {
-                             CompositorService.focusWindow(groupedTaskbarItem.win);
+                           if (mouse.button === Qt.LeftButton && modelData) {
+                             CompositorService.focusWindow(modelData);
                            }
                          }
 
               onReleased: mouse => {
-                            if (mouse.button === Qt.RightButton && groupedTaskbarItem.winOk) {
-                              const w = groupedTaskbarItem.win;
+                            if (mouse.button === Qt.RightButton && modelData) {
                               mouse.accepted = true;
                               TooltipService.hide();
-                              root.selectedWindowId = w.id || w.address || "";
-                              root.selectedAppId = w.appId;
+                              root.selectedWindowId = modelData.id || modelData.address || "";
+                              root.selectedAppId = modelData.appId;
                               openGroupedContextMenu(groupedTaskbarItem);
                             }
                           }
               onEntered: {
-                if (!groupedTaskbarItem.winOk)
+                if (!modelData)
                   return;
-                const w = groupedTaskbarItem.win;
-                TooltipService.show(groupedTaskbarItem, w.title || w.appId || "Unknown app.", BarService.getTooltipDirection(root.screenName));
+                TooltipService.show(groupedTaskbarItem, modelData.title || modelData.appId || "Unknown app.", BarService.getTooltipDirection(root.screenName));
               }
               onExited: {
                 TooltipService.hide();
@@ -1006,7 +998,7 @@ Item {
     Behavior on scale {
       NumberAnimation {
         duration: Style.animationFast
-        easing.type: Easing.OutBack
+        easing.type: Easing.OutCubic
         easing.overshoot: 1.2
       }
     }

@@ -19,8 +19,8 @@ Singleton {
   property PwNode _lastFeedbackSink: null
 
   // Devices
-  readonly property PwNode sink: Pipewire.ready ? Pipewire.defaultAudioSink : null
-  readonly property PwNode source: validatedSource
+  readonly property var sink: Pipewire.ready ? Pipewire.defaultAudioSink : null
+  readonly property var source: validatedSource
   readonly property bool hasInput: !!source
   readonly property list<PwNode> sinks: deviceNodes.sinks
   readonly property list<PwNode> sources: deviceNodes.sources
@@ -190,7 +190,7 @@ Singleton {
                                                       }
 
   // Validated source (ensures it's a proper audio source, not a sink)
-  readonly property PwNode validatedSource: {
+  readonly property var validatedSource: {
     if (!Pipewire.ready) {
       return null;
     }
@@ -223,7 +223,12 @@ Singleton {
   // Track links to the default sink to find active streams
   PwNodeLinkTracker {
     id: sinkLinkTracker
-    node: root.sink
+  }
+
+  onSinkChanged: {
+    if (root.sink) {
+      sinkLinkTracker.node = root.sink;
+    }
   }
 
   // Track all streams globally to prevent binding loops for filtered out streams

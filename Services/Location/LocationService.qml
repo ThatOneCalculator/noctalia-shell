@@ -22,6 +22,8 @@ Singleton {
     return d.getMonth() === root.taliaMascotWeatherMonth && d.getDate() === root.taliaMascotWeatherDay;
   }
 
+  readonly property bool taliaWeatherMascotActive: taliaWeatherMascotDayActive || Settings.data.location.weatherTaliaMascotAlways
+
   readonly property alias data: adapter
 
   // Stable UI properties - only updated when location is successfully geocoded
@@ -137,7 +139,6 @@ Singleton {
     }
 
     if (isFetchingWeather) {
-      Logger.w("Location", "Location update already in progress");
       return;
     }
 
@@ -176,7 +177,6 @@ Singleton {
     }
 
     if (isFetchingWeather) {
-      Logger.w("Location", "Weather is still fetching");
       return;
     }
 
@@ -194,6 +194,11 @@ Singleton {
 
   // Query geocoding API to convert location name to coordinates
   function geocodeLocation(locationName, callback, errorCallback) {
+    if (locationName === "") {
+      isFetchingWeather = false;
+      return;
+    }
+
     Logger.d("Location", "Geocoding location name");
     var geoUrl = "https://api.noctalia.dev/geocode?city=" + encodeURIComponent(locationName);
     var xhr = new XMLHttpRequest();
@@ -288,9 +293,26 @@ Singleton {
       return;
     }
     geolocate(function (lat, lng, city, country) {
-      Logger.i("Location", "Geolocated to", city + ",", country);
+      Logger.i("Location", "Geolocated to", city + ",", country + ":", lat + "," + lng);
+
+      const locationChanged = adapter.name !== city;
       Settings.data.location.name = city;
-      resetWeather();
+      adapter.name = city;
+      adapter.latitude = lat.toString();
+      adapter.longitude = lng.toString();
+      root.stableLatitude = adapter.latitude;
+      root.stableLongitude = adapter.longitude;
+      root.stableName = `${city}, ${country}`;
+      root.coordinatesReady = true;
+
+      if (locationChanged) {
+        adapter.weatherLastFetch = 0;
+        adapter.weather = null;
+      }
+
+      if (Settings.data.location.weatherEnabled) {
+        updateWeatherData();
+      }
     }, errorCallback);
   }
 
