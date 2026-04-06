@@ -550,6 +550,7 @@
     "wallpaper": "Achtergrond",
     "weather": "Weer",
     "weather-loading": "Weer laden...",
+    "weather-no-location": "Stel een locatie in de Instellingen in om het weer te zien",
     "week": "Week",
     "widgets": "Widgets",
     "width": "Breedte",
@@ -1368,7 +1369,7 @@
     },
     "location": {
       "auto-locate-description": "Detecteert automatisch uw locatie periodiek met behulp van uw IP-adres.",
-      "auto-locate-label": "Automatische Lokalisatie",
+      "auto-locate-label": "Automatische locatie",
       "calendar-cards-desc": "Kaarten organiseren en in-/uitschakelen in het kalenderpaneel.",
       "calendar-cards-title": "Kalenderkaarten",
       "calendar-header-label": "Kalenderkop",

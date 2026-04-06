@@ -550,6 +550,7 @@
     "wallpaper": "Tapeta",
     "weather": "Pogoda",
     "weather-loading": "Ładowanie pogody...",
+    "weather-no-location": "Ustaw lokalizację w Ustawieniach, aby zobaczyć pogodę",
     "week": "Tydzień",
     "widgets": "Widżety",
     "width": "Szerokość",
@@ -1368,7 +1369,7 @@
     },
     "location": {
       "auto-locate-description": "Automatycznie wykrywaj swoją lokalizację okresowo, używając adresu IP.",
-      "auto-locate-label": "Automatyczne Wykrywanie",
+      "auto-locate-label": "Automatyczna lokalizacja",
       "calendar-cards-desc": "Organizuj i włączaj/wyłączaj karty w panelu kalendarza.",
       "calendar-cards-title": "Karty kalendarza",
       "calendar-header-label": "Nagłówek kalendarza",

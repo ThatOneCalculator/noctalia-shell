@@ -550,6 +550,7 @@
     "wallpaper": "Papel de parede",
     "weather": "Tempo",
     "weather-loading": "Carregando o clima...",
+    "weather-no-location": "Defina um local nas Definições para ver o tempo",
     "week": "Semana",
     "widgets": "Widgets",
     "width": "Largura",
@@ -1368,7 +1369,7 @@
     },
     "location": {
       "auto-locate-description": "Deteta automaticamente a sua localização periodicamente usando o seu endereço IP.",
-      "auto-locate-label": "Auto-Localização",
+      "auto-locate-label": "Localização automática",
       "calendar-cards-desc": "Organize e ative/desative cartões no painel do calendário.",
       "calendar-cards-title": "Cartões de calendário",
       "calendar-header-label": "Cabeçalho do calendário",

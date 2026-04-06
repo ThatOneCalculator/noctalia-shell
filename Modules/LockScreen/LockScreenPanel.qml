@@ -264,7 +264,7 @@ Item {
           Loader {
             anchors.fill: parent
             anchors.margins: 4
-            active: Settings.data.audio.visualizerType === "linear"
+            active: Settings.data.audio.visualizerType === "linear" && MediaService.isPlaying
             z: 0
             sourceComponent: NLinearSpectrum {
               anchors.fill: parent
@@ -278,7 +278,7 @@ Item {
           Loader {
             anchors.fill: parent
             anchors.margins: 4
-            active: Settings.data.audio.visualizerType === "mirrored"
+            active: Settings.data.audio.visualizerType === "mirrored" && MediaService.isPlaying
             z: 0
             sourceComponent: NMirroredSpectrum {
               anchors.fill: parent
@@ -292,7 +292,7 @@ Item {
           Loader {
             anchors.fill: parent
             anchors.margins: 4
-            active: Settings.data.audio.visualizerType === "wave"
+            active: Settings.data.audio.visualizerType === "wave" && MediaService.isPlaying
             z: 0
             sourceComponent: NWaveSpectrum {
               anchors.fill: parent
@@ -497,7 +497,7 @@ Item {
             NIcon {
               visible: !LocationService.taliaWeatherMascotActive || !weatherReady
               anchors.centerIn: parent
-              icon: weatherReady ? LocationService.weatherSymbolFromCode(LocationService.data.weather.current_weather.weathercode, LocationService.data.weather.current_weather.is_day) : "weather-cloud-off"
+              icon: weatherReady ? LocationService.weatherSymbolFromCode(LocationService.data.weather.current_weather.weathercode) : "weather-cloud-off"
               pointSize: Style.fontSizeXXXL
               color: Color.mPrimary
             }
@@ -512,7 +512,7 @@ Item {
                   smooth: true
                   mipmap: true
                   asynchronous: true
-                  source: Qt.resolvedUrl(LocationService.taliaWeatherImageFromCode(LocationService.data.weather.current_weather.weathercode, LocationService.data.weather.current_weather.is_day))
+                  source: Qt.resolvedUrl(LocationService.taliaWeatherImageFromCode(LocationService.data.weather.current_weather.weathercode))
                 }
               }
             }

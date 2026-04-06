@@ -26,6 +26,9 @@ Singleton {
 
   readonly property alias data: adapter
 
+  // True when the user has set a location name or enabled auto-locate
+  readonly property bool locationConfigured: Settings.data.location.name !== "" || Settings.data.location.autoLocate
+
   // Stable UI properties - only updated when location is successfully geocoded
   property bool coordinatesReady: false
   property string stableLatitude: ""
@@ -117,6 +120,7 @@ Singleton {
     adapter.name = "";
     adapter.weatherLastFetch = 0;
     adapter.weather = null;
+    isFetchingWeather = false;
     update();
   }
 
@@ -150,8 +154,6 @@ Singleton {
     }
 
     geocodeLocation(Settings.data.location.name, function (latitude, longitude, name, country) {
-      Logger.d("Location", "Geocoded", Settings.data.location.name, "to:", latitude, "/", longitude);
-
       adapter.name = Settings.data.location.name;
       adapter.latitude = latitude.toString();
       adapter.longitude = longitude.toString();
@@ -161,7 +163,7 @@ Singleton {
       root.coordinatesReady = true;
 
       isFetchingWeather = false;
-      Logger.i("Location", "Coordinates ready");
+      Logger.i("Location", `Geocoded ${Settings.data.location.name}: ${root.stableLatitude}, ${root.stableLongitude}`);
 
       if (locationChanged) {
         adapter.weatherLastFetch = 0;
@@ -216,7 +218,7 @@ Singleton {
             errorCallback("Location", "Failed to parse geocoding data: " + e);
           }
         } else {
-          errorCallback("Location", "Geocoding error: " + xhr.status);
+          errorCallback("Location", `Geocoding error: ${xhr.status} ${xhr.responseText}`);
         }
       }
     };
@@ -251,7 +253,7 @@ Singleton {
             errorCallback("Location", "Failed to parse weather data");
           }
         } else {
-          errorCallback("Location", "Weather fetch error: " + xhr.status);
+          errorCallback("Location", `Weather error: ${xhr.status} ${xhr.responseText}`);
         }
       }
     };
@@ -278,7 +280,7 @@ Singleton {
             errorCallback("Location", "Failed to parse geolocate data: " + e);
           }
         } else {
-          errorCallback("Location", "Geolocate error: " + xhr.status);
+          errorCallback("Location", `Geolocate error: ${xhr.status} ${xhr.responseText}`);
         }
       }
     };
@@ -318,12 +320,13 @@ Singleton {
 
   // --------------------------------
   function errorCallback(module, message) {
-    Logger.e(module, message);
+    Logger.w(module, message);
     isFetchingWeather = false;
   }
 
   // --------------------------------
-  function weatherSymbolFromCode(code, isDay) {
+  function weatherSymbolFromCode(code) {
+    var isDay = data.weather ? data.weather.current_weather.is_day : true;
     if (code === 0)
       return isDay ? "weather-sun" : "weather-moon";
     if (code === 1 || code === 2)
@@ -348,7 +351,8 @@ Singleton {
   }
 
   // --------------------------------
-  function taliaWeatherImageFromCode(code, isDay) {
+  function taliaWeatherImageFromCode(code) {
+    var isDay = data.weather ? data.weather.current_weather.is_day : true;
     if (code >= 40 && code <= 49)
       return Quickshell.shellDir + "/Assets/Talia/TaliaDazed.png";
     if (code >= 95 && code <= 99)
